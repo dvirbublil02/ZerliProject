@@ -26,7 +26,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
+//command
 public class CatalogScreenCustomController implements Initializable{
 
     @FXML
