@@ -12,6 +12,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import client_gui.CatalogScreenController;
 import client_gui.CustomerPageController;
 import client_gui.LoginController;
 import communication.Mission;
@@ -144,8 +145,11 @@ public class ClientHandleTransmission {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 
-		LoginController login = new LoginController();
-		login.start(primaryStage);
+		CatalogScreenController catalog = new CatalogScreenController();
+		catalog.start(primaryStage);
+		
+//		LoginController login = new LoginController();
+//		login.start(primaryStage);
 	}
 	
 	public static void DISCONNECT_FROM_SERVER() {

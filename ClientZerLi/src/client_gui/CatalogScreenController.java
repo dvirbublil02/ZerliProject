@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
 import entities_catalog.Product;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,11 +19,18 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
@@ -70,17 +80,29 @@ public class CatalogScreenController  implements Initializable{
 
     @FXML
     private Button searchBtn;
-
+    
+    @FXML
+    private RadioButton customClickRadioBtn;
+    
+    @FXML
+    private ComboBox<String> customProductComboBox;
+    
     @FXML
     private TextField searchLabel;
+    
+    
+    @FXML
+    private ProgressIndicator progressIndicator;
+    
+    
+    
+    
     private String CURRENCY="¤";
     private Image imageCardTmp;
     private MyListenerCatalog myListener;
-    
-    
-    
     private List<Product> itemInCatalog = new ArrayList<Product>();
-
+    private ObservableList<String> customType ;
+   
     
 	public void start(Stage primaryStage) throws Exception {	
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CatalogScreen.fxml"));
@@ -140,6 +162,14 @@ public class CatalogScreenController  implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		customType=FXCollections.observableArrayList("Bouquet","Pot","Collection") ;
+		customProductComboBox.setItems(customType);
+		customProductComboBox.setValue("Bouquet");
+		customProductComboBox.setDisable(true);
+		progressIndicator.setStyle("-fx-color: #D0F6DD ; -fx-accent: green;");
+		progressIndicator.setProgress(0.50f);
+		
+		
 		itemInCatalog.addAll(getDataItems());
 		
 		if(itemInCatalog.size()>0)
@@ -195,6 +225,25 @@ public class CatalogScreenController  implements Initializable{
 	}
 
 	
+    @FXML
+    void customClickRadio(ActionEvent event) {
+    	if(customClickRadioBtn.isSelected()==true) 
+    	{
+    		customProductComboBox.setDisable(false);
+    		addToCartBtn.setText("ADD TO BOUQUET");
+    	}
+    	else
+    	{
+    		customProductComboBox.setDisable(true);
+    		addToCartBtn.setText("ADD TO CART");
+    	}
+    }
+	
+	
+    @FXML
+    void customProductTypeChoice(ActionEvent  event) {
+    	addToCartBtn.setText("ADD TO "+ customProductComboBox.getValue().toUpperCase());
+    }
 	
 	
     
@@ -210,7 +259,7 @@ public class CatalogScreenController  implements Initializable{
 
     @FXML
     void addToCart(ActionEvent event) {
-
+    	
     }
 
     @FXML

@@ -92,11 +92,6 @@
 }
 
 
-
-
-
-
-
 .table-cell {     
     -fx-padding: 0.5em 0.5em 0.1em 0.3em;
     -fx-border-color: -fx-box-border -fx-box-border transparent transparent;  
@@ -177,8 +172,6 @@
     -fx-background-color: #708090;
     -fx-font-size: 12;
     -fx-text-fill: white;
-
-	
 }
 
 .chart-plot-background {
@@ -192,7 +185,9 @@
 }
 
 
-
+.handHover:hover{
+	-fx-cursor:hand;
+}
 
 
 
