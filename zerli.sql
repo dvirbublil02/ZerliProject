@@ -16,6 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `branchmanager`
+--
+
+DROP TABLE IF EXISTS `branchmanager`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `branchmanager` (
+  `branchmanagerID` varchar(256) NOT NULL,
+  `branchID` varchar(256) DEFAULT NULL,
+  `firstName` varchar(256) DEFAULT NULL,
+  `lastName` varchar(256) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `phoneNumber` varchar(256) DEFAULT NULL,
+  `isLoggedIn` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`branchmanagerID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `branchmanager`
+--
+
+LOCK TABLES `branchmanager` WRITE;
+/*!40000 ALTER TABLE `branchmanager` DISABLE KEYS */;
+/*!40000 ALTER TABLE `branchmanager` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `branchs`
 --
 
@@ -23,10 +51,10 @@ DROP TABLE IF EXISTS `branchs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `branchs` (
-  `BranchID` varchar(256) NOT NULL,
-  `BranchManagerID` varchar(256) NOT NULL,
-  `BranchName` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`BranchID`,`BranchManagerID`)
+  `branchID` varchar(256) NOT NULL,
+  `branchManagerID` varchar(256) NOT NULL,
+  `branchName` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`branchID`,`branchManagerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -40,6 +68,56 @@ LOCK TABLES `branchs` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `complaints`
+--
+
+DROP TABLE IF EXISTS `complaints`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `complaints` (
+  `complaintID` varchar(256) NOT NULL,
+  `customerID` varchar(256) DEFAULT NULL,
+  `customerserviceID` varchar(256) DEFAULT NULL,
+  `description` varchar(256) DEFAULT NULL,
+  `branchID` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`complaintID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `complaints`
+--
+
+LOCK TABLES `complaints` WRITE;
+/*!40000 ALTER TABLE `complaints` DISABLE KEYS */;
+/*!40000 ALTER TABLE `complaints` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `creditcards`
+--
+
+DROP TABLE IF EXISTS `creditcards`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `creditcards` (
+  `creditCardNumber` varchar(245) NOT NULL,
+  `creditCardCvvCode` varchar(245) DEFAULT NULL,
+  `creditCardDateOfExpiration` date DEFAULT NULL,
+  PRIMARY KEY (`creditCardNumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `creditcards`
+--
+
+LOCK TABLES `creditcards` WRITE;
+/*!40000 ALTER TABLE `creditcards` DISABLE KEYS */;
+/*!40000 ALTER TABLE `creditcards` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `customer`
 --
 
@@ -47,12 +125,17 @@ DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer` (
-  `CustomerID` varchar(256) NOT NULL,
-  `FirstName` varchar(256) DEFAULT NULL,
-  `LastName` varchar(256) DEFAULT NULL,
-  `AccountStatus` varchar(256) DEFAULT NULL,
-  `RegistrationID` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`CustomerID`)
+  `customerID` varchar(256) NOT NULL,
+  `firstName` varchar(256) DEFAULT NULL,
+  `lastName` varchar(256) DEFAULT NULL,
+  `phoneNumber` varchar(256) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `creditCardNumber` varchar(256) DEFAULT NULL,
+  `accountStatus` enum('CONFIRMED','PENDING_APPROVAL','FROZEN') DEFAULT NULL,
+  `isNewCustomer` tinyint DEFAULT NULL,
+  `isLoggedIn` tinyint DEFAULT NULL,
+  `credit` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`customerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -66,55 +149,86 @@ LOCK TABLES `customer` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `customproduct`
+-- Table structure for table `customerservice`
 --
 
-DROP TABLE IF EXISTS `customproduct`;
+DROP TABLE IF EXISTS `customerservice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `customproduct` (
-  `ID` varchar(256) NOT NULL,
-  `Name` varchar(256) DEFAULT NULL,
-  `Price` varchar(256) DEFAULT NULL,
-  `Type` varchar(256) DEFAULT NULL,
-  `Picture` varchar(256) DEFAULT NULL,
-  `DominateColor` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+CREATE TABLE `customerservice` (
+  `customerserviceID` varchar(256) NOT NULL,
+  `firstName` varchar(256) DEFAULT NULL,
+  `lastName` varchar(256) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `phoneNumber` varchar(256) DEFAULT NULL,
+  `isLoggedIn` tinyint DEFAULT NULL,
+  PRIMARY KEY (`customerserviceID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `customproduct`
+-- Dumping data for table `customerservice`
 --
 
-LOCK TABLES `customproduct` WRITE;
-/*!40000 ALTER TABLE `customproduct` DISABLE KEYS */;
-/*!40000 ALTER TABLE `customproduct` ENABLE KEYS */;
+LOCK TABLES `customerservice` WRITE;
+/*!40000 ALTER TABLE `customerservice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customerservice` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `iteminbranch`
+-- Table structure for table `deliveryagent`
 --
 
-DROP TABLE IF EXISTS `iteminbranch`;
+DROP TABLE IF EXISTS `deliveryagent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `iteminbranch` (
-  `BranchID` varchar(256) NOT NULL,
-  `ProductID` varchar(256) NOT NULL,
-  `Quantity` varchar(256) DEFAULT NULL,
-  `isCustom` tinyint DEFAULT NULL,
-  PRIMARY KEY (`BranchID`,`ProductID`)
+CREATE TABLE `deliveryagent` (
+  `deliveryagentID` varchar(256) NOT NULL,
+  `branchID` varchar(256) DEFAULT NULL,
+  `orderID` varchar(256) DEFAULT NULL,
+  `firstName` varchar(256) DEFAULT NULL,
+  `lastName` varchar(256) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `phoneNumber` varchar(256) DEFAULT NULL,
+  `isLoggedIn` tinyint DEFAULT NULL,
+  PRIMARY KEY (`deliveryagentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `iteminbranch`
+-- Dumping data for table `deliveryagent`
 --
 
-LOCK TABLES `iteminbranch` WRITE;
-/*!40000 ALTER TABLE `iteminbranch` DISABLE KEYS */;
-/*!40000 ALTER TABLE `iteminbranch` ENABLE KEYS */;
+LOCK TABLES `deliveryagent` WRITE;
+/*!40000 ALTER TABLE `deliveryagent` DISABLE KEYS */;
+/*!40000 ALTER TABLE `deliveryagent` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `deliverys`
+--
+
+DROP TABLE IF EXISTS `deliverys`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `deliverys` (
+  `deliveryID` varchar(256) NOT NULL,
+  `orderID` varchar(256) NOT NULL,
+  `receiverName` varchar(256) DEFAULT NULL,
+  `price` varchar(256) DEFAULT NULL,
+  `arrivedDate` varchar(256) DEFAULT NULL,
+  `deliveryStatus` enum('Pending','Sent','Received') DEFAULT NULL,
+  PRIMARY KEY (`deliveryID`,`orderID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `deliverys`
+--
+
+LOCK TABLES `deliverys` WRITE;
+/*!40000 ALTER TABLE `deliverys` DISABLE KEYS */;
+/*!40000 ALTER TABLE `deliverys` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -144,6 +258,60 @@ INSERT INTO `login` VALUES ('dvir','db1234','1','Customer');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `marketingworker`
+--
+
+DROP TABLE IF EXISTS `marketingworker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `marketingworker` (
+  `marketingworkerID` varchar(256) NOT NULL,
+  `firstName` varchar(256) DEFAULT NULL,
+  `lastName` varchar(256) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `phoneNumber` varchar(256) DEFAULT NULL,
+  `isLoggedIn` tinyint DEFAULT NULL,
+  PRIMARY KEY (`marketingworkerID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `marketingworker`
+--
+
+LOCK TABLES `marketingworker` WRITE;
+/*!40000 ALTER TABLE `marketingworker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `marketingworker` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `networkmanager`
+--
+
+DROP TABLE IF EXISTS `networkmanager`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `networkmanager` (
+  `networkManagerID` varchar(256) NOT NULL,
+  `firstName` varchar(256) DEFAULT NULL,
+  `lastName` varchar(256) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `phoneNumber` varchar(256) DEFAULT NULL,
+  `isLoggedIn` tinyint DEFAULT NULL,
+  PRIMARY KEY (`networkManagerID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `networkmanager`
+--
+
+LOCK TABLES `networkmanager` WRITE;
+/*!40000 ALTER TABLE `networkmanager` DISABLE KEYS */;
+/*!40000 ALTER TABLE `networkmanager` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `order`
 --
 
@@ -151,16 +319,16 @@ DROP TABLE IF EXISTS `order`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order` (
-  `OrderNumber` varchar(256) NOT NULL,
-  `CustomerID` varchar(256) NOT NULL,
-  `BranchID` varchar(256) NOT NULL,
-  `Price` varchar(256) DEFAULT NULL,
-  `GreetingCard` varchar(256) DEFAULT NULL,
-  `Items` varchar(1024) DEFAULT NULL,
-  `Status` varchar(256) DEFAULT NULL,
-  `OrderDate` datetime DEFAULT NULL,
-  `ExpectedDelivery` datetime DEFAULT NULL,
-  PRIMARY KEY (`OrderNumber`,`CustomerID`,`BranchID`)
+  `orderID` varchar(256) NOT NULL,
+  `customerID` varchar(256) NOT NULL,
+  `branchID` varchar(256) NOT NULL,
+  `price` varchar(256) DEFAULT NULL,
+  `greetingCard` varchar(256) DEFAULT NULL,
+  `items` varchar(1024) DEFAULT NULL,
+  `status` varchar(256) DEFAULT NULL,
+  `orderDate` datetime DEFAULT NULL,
+  `expectedDelivery` datetime DEFAULT NULL,
+  PRIMARY KEY (`orderID`,`customerID`,`branchID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -181,12 +349,13 @@ DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
-  `ID` varchar(256) NOT NULL,
-  `Name` varchar(256) DEFAULT NULL,
-  `Price` varchar(256) DEFAULT NULL,
-  `Type` varchar(256) DEFAULT NULL,
-  `Picture` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `productID` varchar(256) NOT NULL,
+  `name` varchar(256) DEFAULT NULL,
+  `price` varchar(256) DEFAULT NULL,
+  `itemType` varchar(256) DEFAULT NULL,
+  `picture` varchar(256) DEFAULT NULL,
+  `dominateColor` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`productID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -200,6 +369,57 @@ LOCK TABLES `product` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `productinbranch`
+--
+
+DROP TABLE IF EXISTS `productinbranch`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productinbranch` (
+  `branchID` varchar(256) NOT NULL,
+  `productID` varchar(256) DEFAULT NULL,
+  `quantity` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`branchID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productinbranch`
+--
+
+LOCK TABLES `productinbranch` WRITE;
+/*!40000 ALTER TABLE `productinbranch` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productinbranch` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `refunds`
+--
+
+DROP TABLE IF EXISTS `refunds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `refunds` (
+  `refundID` varchar(256) NOT NULL,
+  `orderID` varchar(256) DEFAULT NULL,
+  `customerID` varchar(256) DEFAULT NULL,
+  `ammount` varchar(256) DEFAULT NULL,
+  `reason` enum('Cancelation','Complaint','Delivery') DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  PRIMARY KEY (`refundID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `refunds`
+--
+
+LOCK TABLES `refunds` WRITE;
+/*!40000 ALTER TABLE `refunds` DISABLE KEYS */;
+/*!40000 ALTER TABLE `refunds` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `registration`
 --
 
@@ -207,13 +427,20 @@ DROP TABLE IF EXISTS `registration`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `registration` (
-  `CustomerID` varchar(256) NOT NULL,
-  `PhoneNumber` varchar(256) DEFAULT NULL,
-  `Email` varchar(256) DEFAULT NULL,
-  `CreditCardNumber` varchar(256) DEFAULT NULL,
-  `CustomerName` varchar(256) DEFAULT NULL,
-  `CustomerLastName` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`CustomerID`)
+  `userID` varchar(256) NOT NULL,
+  `firstName` varchar(256) DEFAULT NULL,
+  `lastName` varchar(256) DEFAULT NULL,
+  `userType` varchar(256) NOT NULL,
+  `phoneNumber` varchar(256) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `userName` varchar(256) NOT NULL,
+  `password` varchar(256) DEFAULT NULL,
+  `creditCardNumber` varchar(256) DEFAULT NULL,
+  `creditCardCvvCode` varchar(256) DEFAULT NULL,
+  `creditCardDateOfExpiration` date DEFAULT NULL,
+  `accountStatus` enum('CONFIRMED','PENDING_APPROVAL','FROZEN','PENDING_REGISTRATION') DEFAULT NULL,
+  `isLoggedIn` tinyint DEFAULT NULL,
+  PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -225,6 +452,126 @@ LOCK TABLES `registration` WRITE;
 /*!40000 ALTER TABLE `registration` DISABLE KEYS */;
 /*!40000 ALTER TABLE `registration` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `reports`
+--
+
+DROP TABLE IF EXISTS `reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `reports` (
+  `reportID` varchar(256) NOT NULL,
+  `reportType` enum('Orders','Income','Speicel','Survey','Complaint') DEFAULT NULL,
+  `branchID` varchar(256) DEFAULT NULL,
+  `reportCreator` varchar(256) DEFAULT NULL,
+  `reportDuration` enum('Montly','Quarterly') DEFAULT NULL,
+  `reportFile` blob,
+  PRIMARY KEY (`reportID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reports`
+--
+
+LOCK TABLES `reports` WRITE;
+/*!40000 ALTER TABLE `reports` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reports` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `serviceexpert`
+--
+
+DROP TABLE IF EXISTS `serviceexpert`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `serviceexpert` (
+  `serviceexpertID` varchar(256) NOT NULL,
+  `firstName` varchar(256) DEFAULT NULL,
+  `lastName` varchar(256) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `phoneNumber` varchar(256) DEFAULT NULL,
+  `isLoggedIn` tinyint DEFAULT NULL,
+  PRIMARY KEY (`serviceexpertID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `serviceexpert`
+--
+
+LOCK TABLES `serviceexpert` WRITE;
+/*!40000 ALTER TABLE `serviceexpert` DISABLE KEYS */;
+/*!40000 ALTER TABLE `serviceexpert` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `shopworker`
+--
+
+DROP TABLE IF EXISTS `shopworker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `shopworker` (
+  `shopworkerID` int NOT NULL,
+  `branchID` varchar(256) DEFAULT NULL,
+  `firstName` varchar(256) DEFAULT NULL,
+  `lastName` varchar(256) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `phoneNumber` varchar(256) DEFAULT NULL,
+  `isLoggedIn` tinyint DEFAULT NULL,
+  PRIMARY KEY (`shopworkerID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shopworker`
+--
+
+LOCK TABLES `shopworker` WRITE;
+/*!40000 ALTER TABLE `shopworker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `shopworker` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `surveys`
+--
+
+DROP TABLE IF EXISTS `surveys`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `surveys` (
+  `surveysresultsID` varchar(256) NOT NULL,
+  `branchID` varchar(256) DEFAULT NULL,
+  `customerID` varchar(256) DEFAULT NULL,
+  `questionNumber1` varchar(256) DEFAULT NULL,
+  `questionNumber2` varchar(256) DEFAULT NULL,
+  `questionNumber3` varchar(256) DEFAULT NULL,
+  `questionNumber4` varchar(256) DEFAULT NULL,
+  `questionNumber5` varchar(256) DEFAULT NULL,
+  `questionNumber6` varchar(256) DEFAULT NULL,
+  `answerNumber1` varchar(256) DEFAULT NULL,
+  `answerNumber2` varchar(256) DEFAULT NULL,
+  `answerNumber3` varchar(256) DEFAULT NULL,
+  `answerNumber4` varchar(256) DEFAULT NULL,
+  `answerNumber5` varchar(256) DEFAULT NULL,
+  `answerNumber6` varchar(256) DEFAULT NULL,
+  `targetAudience` varchar(256) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  PRIMARY KEY (`surveysresultsID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `surveys`
+--
+
+LOCK TABLES `surveys` WRITE;
+/*!40000 ALTER TABLE `surveys` DISABLE KEYS */;
+/*!40000 ALTER TABLE `surveys` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -235,4 +582,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-29 17:02:09
+-- Dump completed on 2022-05-03 18:45:16
