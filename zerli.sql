@@ -29,6 +29,7 @@ CREATE TABLE `branchmanager` (
   `lastName` varchar(256) DEFAULT NULL,
   `email` varchar(256) DEFAULT NULL,
   `phoneNumber` varchar(256) DEFAULT NULL,
+  `userName` varchar(256) DEFAULT NULL,
   `isLoggedIn` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`branchmanagerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -40,6 +41,7 @@ CREATE TABLE `branchmanager` (
 
 LOCK TABLES `branchmanager` WRITE;
 /*!40000 ALTER TABLE `branchmanager` DISABLE KEYS */;
+INSERT INTO `branchmanager` VALUES ('2','1000','mor','ben haim','mor@gmail.com','0545726479','mor','0');
 /*!40000 ALTER TABLE `branchmanager` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,9 +135,10 @@ CREATE TABLE `customer` (
   `creditCardNumber` varchar(256) DEFAULT NULL,
   `accountStatus` enum('CONFIRMED','PENDING_APPROVAL','FROZEN') DEFAULT NULL,
   `isNewCustomer` tinyint DEFAULT NULL,
-  `isLoggedIn` tinyint DEFAULT NULL,
   `credit` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`customerID`)
+  `isLoggedIn` varchar(256) DEFAULT NULL,
+  `userName` varchar(256) NOT NULL,
+  PRIMARY KEY (`customerID`,`userName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -145,6 +148,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+INSERT INTO `customer` VALUES ('1','dvir','asdas','0545131489','dvir@gmail.com','12344566578','CONFIRMED',1,'0','0','dvir');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +165,8 @@ CREATE TABLE `customerservice` (
   `lastName` varchar(256) DEFAULT NULL,
   `email` varchar(256) DEFAULT NULL,
   `phoneNumber` varchar(256) DEFAULT NULL,
-  `isLoggedIn` tinyint DEFAULT NULL,
+  `userName` varchar(256) DEFAULT NULL,
+  `isLoggedIn` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`customerserviceID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -190,7 +195,8 @@ CREATE TABLE `deliveryagent` (
   `lastName` varchar(256) DEFAULT NULL,
   `email` varchar(256) DEFAULT NULL,
   `phoneNumber` varchar(256) DEFAULT NULL,
-  `isLoggedIn` tinyint DEFAULT NULL,
+  `userName` varchar(256) DEFAULT NULL,
+  `isLoggedIn` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`deliveryagentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -239,11 +245,11 @@ DROP TABLE IF EXISTS `login`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `login` (
+  `ID` varchar(250) NOT NULL,
   `userName` varchar(250) NOT NULL,
   `password` varchar(250) DEFAULT NULL,
-  `ID` varchar(250) NOT NULL,
   `userType` varchar(250) DEFAULT NULL,
-  PRIMARY KEY (`userName`,`ID`)
+  PRIMARY KEY (`ID`,`userName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -253,7 +259,7 @@ CREATE TABLE `login` (
 
 LOCK TABLES `login` WRITE;
 /*!40000 ALTER TABLE `login` DISABLE KEYS */;
-INSERT INTO `login` VALUES ('dvir','db1234','1','Customer');
+INSERT INTO `login` VALUES ('1','dvir','db1234','customer'),('2','mor','mor1234','branchmanager');
 /*!40000 ALTER TABLE `login` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -270,7 +276,8 @@ CREATE TABLE `marketingworker` (
   `lastName` varchar(256) DEFAULT NULL,
   `email` varchar(256) DEFAULT NULL,
   `phoneNumber` varchar(256) DEFAULT NULL,
-  `isLoggedIn` tinyint DEFAULT NULL,
+  `userName` varchar(256) DEFAULT NULL,
+  `isLoggedIn` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`marketingworkerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -297,7 +304,8 @@ CREATE TABLE `networkmanager` (
   `lastName` varchar(256) DEFAULT NULL,
   `email` varchar(256) DEFAULT NULL,
   `phoneNumber` varchar(256) DEFAULT NULL,
-  `isLoggedIn` tinyint DEFAULT NULL,
+  `userName` varchar(256) DEFAULT NULL,
+  `isLoggedIn` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`networkManagerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -493,7 +501,8 @@ CREATE TABLE `serviceexpert` (
   `lastName` varchar(256) DEFAULT NULL,
   `email` varchar(256) DEFAULT NULL,
   `phoneNumber` varchar(256) DEFAULT NULL,
-  `isLoggedIn` tinyint DEFAULT NULL,
+  `userName` varchar(256) DEFAULT NULL,
+  `isLoggedIn` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`serviceexpertID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -521,7 +530,8 @@ CREATE TABLE `shopworker` (
   `lastName` varchar(256) DEFAULT NULL,
   `email` varchar(256) DEFAULT NULL,
   `phoneNumber` varchar(256) DEFAULT NULL,
-  `isLoggedIn` tinyint DEFAULT NULL,
+  `userName` varchar(256) DEFAULT NULL,
+  `isLoggedIn` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`shopworkerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -582,4 +592,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-03 18:45:16
+-- Dump completed on 2022-05-04 13:48:22
