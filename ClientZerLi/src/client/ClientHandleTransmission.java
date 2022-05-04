@@ -180,7 +180,12 @@ public class ClientHandleTransmission {
 				break;
 			}
 			case USER_EXIST:
-				loadTheRightScreen(event, tp);
+				try {
+					loadTheRightScreen(event, tp);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 			case USER_NOT_EXIST: {
 				errorLabel.setTextFill(Color.RED);
@@ -212,30 +217,18 @@ public class ClientHandleTransmission {
 			return true;
 	}
 
-	private static void loadTheRightScreen(MouseEvent event, TransmissionPack tp) {
+	private static void loadTheRightScreen(MouseEvent event, TransmissionPack tp) throws Exception {
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
 		switch ((String) tp.getInformation()) {
 		case "customer": {
-			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-			Stage primaryStage = new Stage();
 			CustomerPageController menu = new CustomerPageController();
-			try {
 				menu.start(primaryStage);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			break;
 		}
 		case "branchmanager": {
-			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-			Stage primaryStage = new Stage();
 			BranchManagerPageController menu = new BranchManagerPageController();
-			try {
 				menu.start(primaryStage);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			break;
 		}
 		}
