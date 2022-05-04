@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
@@ -19,7 +18,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -27,17 +25,14 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class CatalogScreenController  implements Initializable{
+
+public class CatalogScreenController implements Initializable{
 
     @FXML
     private VBox ChosenItemCard;
@@ -82,21 +77,16 @@ public class CatalogScreenController  implements Initializable{
     private Button searchBtn;
     
     @FXML
-    private RadioButton customClickRadioBtn;
+    private ProgressIndicator progressIndicator;
     
     @FXML
     private ComboBox<String> customProductComboBox;
     
     @FXML
-    private TextField searchLabel;
+    private RadioButton customClickRadioBtn;
     
-    
-    @FXML
-    private ProgressIndicator progressIndicator;
-    
-    
-    
-    
+ 
+
     private String CURRENCY="¤";
     private Image imageCardTmp;
     private MyListenerCatalog myListener;
@@ -111,8 +101,13 @@ public class CatalogScreenController  implements Initializable{
 	
 		primaryStage.setTitle("ZerLi Catalog");
 		primaryStage.setScene(scene);
+		primaryStage.show();	
+		primaryStage.setOnCloseRequest(event ->{
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+			});
 		
-		primaryStage.show();		
+		
+		
 	}
 	
 	
@@ -283,6 +278,7 @@ public class CatalogScreenController  implements Initializable{
     		quantityTextLable.setText(Integer.toString(quantityValue));
     	}
     }
+
 
     @FXML
     void quantityTextLableUpdate(ActionEvent event) {
