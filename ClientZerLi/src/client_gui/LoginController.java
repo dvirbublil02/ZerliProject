@@ -32,6 +32,9 @@ public class LoginController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setResizable(false);
+		primaryStage.setOnCloseRequest(event ->{
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+			});
 	}
 
 	@FXML

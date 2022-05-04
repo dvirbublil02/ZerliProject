@@ -1,5 +1,6 @@
 package client_gui;
 
+import client.ClientHandleTransmission;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,8 +24,10 @@ public class OrderPageController {
 
 		primaryStage.setTitle("Order Page");
 		primaryStage.setScene(scene);
-
 		primaryStage.show();
+		primaryStage.setOnCloseRequest(event ->{
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+			});	
 	}
 
 	@FXML

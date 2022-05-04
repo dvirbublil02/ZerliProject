@@ -3,6 +3,7 @@ package client_gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import client.ClientHandleTransmission;
 import entities_catalog.Cart;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -55,6 +57,9 @@ public class CartPageController implements Initializable {
 		primaryStage.setTitle("Cart Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setOnCloseRequest(event ->{
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+			});	
 	}
 
 	@FXML
@@ -80,8 +85,11 @@ public class CartPageController implements Initializable {
 	}
 
 	@FXML
-	void confirm(ActionEvent event) {
-
+	void confirm(ActionEvent event) throws Exception {
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		OrderPageController orderPage = new OrderPageController();
+		orderPage.start(primaryStage);
 	}
 
 	@FXML

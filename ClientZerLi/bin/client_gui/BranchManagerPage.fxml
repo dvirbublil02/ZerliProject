@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerPageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerPageController">
    <children>
       <BorderPane prefHeight="600.0" prefWidth="1006.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -199,7 +199,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="viewCatalogBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewCatalog" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="View Reports" textFill="WHITE">
+                                    <Button fx:id="viewReportsBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewReports" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="View Reports" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
@@ -215,7 +215,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
-                                    <Button fx:id="viewCatalogBtn1" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewCatalog" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Add New Customer" textFill="WHITE">
+                                    <Button fx:id="addNewCustomerBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#addNewCustomer" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Add New Customer" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
@@ -231,7 +231,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                                  <children>
-                                    <Button fx:id="cancelOrdersBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#cancelOrders" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Create Report" textFill="WHITE">
+                                    <Button fx:id="createReportBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#createReport" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Create Report" textFill="WHITE">
                                        <font>
                                           <Font name="Calibri Bold Italic" size="14.0" />
                                        </font>
@@ -247,7 +247,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
-                                    <Button fx:id="compliantBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#compliant" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Request Managment" textFill="WHITE">
+                                    <Button fx:id="managmentBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#managment" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Request Managment" textFill="WHITE">
                                        <font>
                                           <Font name="Calibri Bold Italic" size="14.0" />
                                        </font>
@@ -263,7 +263,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
                                  <children>
-                                    <Button fx:id="viewCatalogBtn11" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewCatalog" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Edit Customer Inforamtion" textFill="WHITE">
+                                    <Button fx:id="editCustomerInfoBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#editCustomerInfo" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Edit Customer Inforamtion" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
