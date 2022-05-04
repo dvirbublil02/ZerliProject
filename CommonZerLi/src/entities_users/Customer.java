@@ -1,17 +1,35 @@
 package entities_users;
 
+import entities_general.CreditCard;
+
 public class Customer {
+	private String customerID, FirstName, LastName, Email, Phone, credit, isNewCustomer, isLoggedIn;
+	private CreditCard creditCard;
 
-	private String FirstName, LastName, ID, Email, Phone, CreditCard;
+	enum AccountStatus {
+		CONFIRMED, PENDING_APPROVAL, FROZEN;
+	}
 
-	// enum of new customer
-	public Customer(String FirstName, String LastName, String ID, String Phone, String Email, String CreditCard) {
-		this.FirstName = FirstName;
-		this.LastName = LastName;
-		this.ID = ID;
-		this.Phone = Phone;
-		this.Email = Email;
-		this.CreditCard = CreditCard;
+	public Customer(String customerID, String firstName, String lastName, String email, String phone, String credit,
+			CreditCard creditCard, String isNewCustomer, String isLoggedIn) {
+		super();
+		this.customerID = customerID;
+		FirstName = firstName;
+		LastName = lastName;
+		Email = email;
+		Phone = phone;
+		this.credit = credit;
+		this.creditCard = creditCard;
+		this.isNewCustomer = isNewCustomer;
+		this.isLoggedIn = isLoggedIn;
+	}
+
+	public String getCustomerID() {
+		return customerID;
+	}
+
+	public void setCustomerID(String customerID) {
+		this.customerID = customerID;
 	}
 
 	public String getFirstName() {
@@ -38,22 +56,6 @@ public class Customer {
 		Email = email;
 	}
 
-	public String getID() {
-		return ID;
-	}
-
-	public void setID(String iD) {
-		ID = iD;
-	}
-
-	public String getCreditCard() {
-		return CreditCard;
-	}
-
-	public void setCreditCard(String creditCard) {
-		CreditCard = creditCard;
-	}
-
 	public String getPhone() {
 		return Phone;
 	}
@@ -62,7 +64,60 @@ public class Customer {
 		Phone = phone;
 	}
 
-	public Customer getCustomer() {
-		return this;
+	public String getCredit() {
+		return credit;
+	}
+
+	public void setCredit(String credit) {
+		this.credit = credit;
+	}
+
+	public CreditCard getCreditCard() {
+		return creditCard;
+	}
+
+	public void setCreditCard(CreditCard creditCard) {
+		this.creditCard = creditCard;
+	}
+
+	public String isNewCustomer() {
+		return isNewCustomer;
+	}
+
+	public void setNewCustomer(String isNewCustomer) {
+		this.isNewCustomer = isNewCustomer;
+	}
+
+	public String isLoggedIn() {
+		return isLoggedIn;
+	}
+
+	public void setLoggedIn(String isLoggedIn) {
+		this.isLoggedIn = isLoggedIn;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((customerID == null) ? 0 : customerID.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Customer other = (Customer) obj;
+		if (customerID == null) {
+			if (other.customerID != null)
+				return false;
+		} else if (!customerID.equals(other.customerID))
+			return false;
+		return true;
 	}
 }
