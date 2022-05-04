@@ -1,8 +1,10 @@
 package client_gui;
 
+import client.ClientHandleTransmission;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -32,8 +34,10 @@ public class CustomerPageController {
 
 		primaryStage.setTitle("Customer Menu");
 		primaryStage.setScene(scene);
-
 		primaryStage.show();
+		primaryStage.setOnCloseRequest(event ->{
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+			});	
 	}
 
 	@FXML
@@ -52,8 +56,11 @@ public class CustomerPageController {
 	}
 
 	@FXML
-	void viewCatalog(ActionEvent event) {
-
+	void viewCatalog(ActionEvent event) throws Exception {
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		CatalogScreenController catalog = new CatalogScreenController();
+		catalog.start(primaryStage);
 	}
 
 }
