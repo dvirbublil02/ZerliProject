@@ -205,12 +205,19 @@ public class ServerQuaries {
 			Statement stmt;
 			try {
 				stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT userName , password FROM login;");
+				ResultSet rs = stmt.executeQuery("SELECT userName , password , userType FROM login;");
 				while (rs.next()) {
+
 					if (user.getUserName().equals(rs.getString(1)) && user.getPassword().equals(rs.getString(2))) {
-						obj.setResponse(Response.USER_EXIST);
-						//update that the user is connect, and check if he connected already
-						return;
+						if (checkIfLoggedin(user, rs.getString(3), con) == false) {
+							obj.setResponse(Response.USER_EXIST);
+							obj.setInformation(rs.getString(3));
+
+							return;
+						} else {
+							obj.setResponse(Response.USER_ALREADY_LOGGEDIN);
+							return;
+						}
 					}
 					if (user.getUserName().equals(rs.getString(1)) && !user.getPassword().equals(rs.getString(2))) {
 						obj.setResponse(Response.USER_NAME_OR_PASSWORD_INCORRECT);
@@ -227,7 +234,39 @@ public class ServerQuaries {
 			}
 		}
 	}
-	
+
+	// cheacking if loggin if yes we dont do anything , else we updating that he can
+	// login and update the table that he logged in
+	public static boolean checkIfLoggedin(Login user, String type, Connection con) throws SQLException {
+
+		ResultSet rs;
+		PreparedStatement pstmt, pstmt2;
+		String table = "zerli." + type;
+		boolean flag = false;
+		String query = "SELECT isLoggedIn FROM" + " " + table + " WHERE userName=" + "'" + user.getUserName() + "'"
+				+ ";";
+		String query2 = "UPDATE" + " " + table + " SET isLoggedIn=? WHERE userName=" + "'" + user.getUserName() + "'"
+				+ ";";
+		System.out.println(query);
+		System.out.println(query2);
+		pstmt = con.prepareStatement(query);
+		rs = pstmt.executeQuery(query);
+		rs.next();
+		System.out.println(rs.getString(1));
+		if (rs.getString(1).equals("1"))
+			flag = true;
+		else if (rs.getString(1).equals("0")) {
+			flag = false;
+			pstmt2 = con.prepareStatement(query2);
+			pstmt2.setString(1, "1");
+			pstmt2.executeUpdate();
+
+		}
+
+		return flag;
+
+	}
+
 //	public static void GetProductFromDB(TransmissionPack obj, Connection con) {
 //		if (obj instanceof TransmissionPack) {
 //			List<Product> list = new ArrayList<>();

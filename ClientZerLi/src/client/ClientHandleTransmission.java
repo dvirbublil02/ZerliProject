@@ -12,6 +12,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import client_gui.BranchManagerPageController;
 import client_gui.CatalogScreenController;
 import client_gui.CustomerPageController;
 import client_gui.LoginController;
@@ -85,15 +86,14 @@ public class ClientHandleTransmission {
 			listView.clear();
 			List<Order> list = new ArrayList<Order>();
 			list = (List<Order>) obj.getInformation();
-			for(int i = 0; i < list.size(); i++) {
+			for (int i = 0; i < list.size(); i++) {
 				listView.add(list.get(i));
 			}
-			
+
 			table.setItems(listView);
 			statusLabel.setTextFill(Color.GREEN);
 			statusLabel.setText("Upload Success");
-		}
-		else {
+		} else {
 			statusLabel.setTextFill(Color.RED);
 			statusLabel.setText("Upload Failed");
 		}
@@ -145,15 +145,12 @@ public class ClientHandleTransmission {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 
-		CatalogScreenController catalog = new CatalogScreenController();
-		catalog.start(primaryStage);
-		
-//		LoginController login = new LoginController();
-//		login.start(primaryStage);
+		LoginController login = new LoginController();
+		login.start(primaryStage);
 	}
-	
+
 	public static void DISCONNECT_FROM_SERVER() {
-		
+
 		TransmissionPack obj = new TransmissionPack(Mission.SEND_DISCONNECT_DETAILS, null, null);
 		List<String> details = new ArrayList<>();
 		try {
@@ -163,11 +160,11 @@ public class ClientHandleTransmission {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		obj.setInformation(details);
 		ClientUI.chat.accept(obj);
 	}
-	
+
 	public static void USER_LOGIN(TextField userTxt, TextField passwordTxt, Label errorLabel, MouseEvent event) {
 		userTxt.setStyle(null);
 		passwordTxt.setStyle(null);
@@ -183,19 +180,16 @@ public class ClientHandleTransmission {
 				break;
 			}
 			case USER_EXIST:
-				((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-				Stage primaryStage = new Stage();
-				CustomerPageController menu = new CustomerPageController();
-				try {
-					menu.start(primaryStage);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				loadTheRightScreen(event, tp);
 				break;
 			case USER_NOT_EXIST: {
 				errorLabel.setTextFill(Color.RED);
 				errorLabel.setText("User doesn't exist");
+				break;
+			}
+			case USER_ALREADY_LOGGEDIN:{
+				errorLabel.setTextFill(Color.RED);
+				errorLabel.setText("User Already loggedin");
 				break;
 			}
 			default:
@@ -218,8 +212,34 @@ public class ClientHandleTransmission {
 			return true;
 	}
 
+	private static void loadTheRightScreen(MouseEvent event, TransmissionPack tp) {
+		switch ((String) tp.getInformation()) {
+		case "customer": {
+			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+			Stage primaryStage = new Stage();
+			CustomerPageController menu = new CustomerPageController();
+			try {
+				menu.start(primaryStage);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		}
+		case "branchmanager": {
+			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+			Stage primaryStage = new Stage();
+			BranchManagerPageController menu = new BranchManagerPageController();
+			try {
+				menu.start(primaryStage);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		}
+		}
+
+	}
+
 }
-
-	
-
-
