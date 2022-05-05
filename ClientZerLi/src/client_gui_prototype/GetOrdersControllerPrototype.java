@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
-import entities_catalog.Order;
+import entities_general.Order;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -138,7 +138,7 @@ public class GetOrdersControllerPrototype implements Initializable {
 	@FXML
 	void EditOrder(ActionEvent event) {
 
-		ClientHandleTransmission.EDIT_ORDER(statusLabel, lblEditColor, lblEditDate, lblEditOrderNumber);
+		//ClientHandleTransmission.EDIT_ORDER(statusLabel, lblEditColor, lblEditDate, lblEditOrderNumber);
 	}
 
 }

@@ -3,42 +3,42 @@ package entities_users;
 import entities_general.Login;
 
 @SuppressWarnings("serial")
-public class CustomerService extends Login {
-	private String customerServiceID, firstName, lastName, email, phoneNumber, isLoggedIn;
+public class NetworkManager extends Login {
+	private String networkManagerID, FirstName, LastName, email, phoneNumber, isLoggedIn;
 
-	public CustomerService(String customerServiceID, String firstName, String lastName, String email,
-			String phoneNumber, String isLoggedIn, String userName, String password) {
+	public NetworkManager(String networkManagerID, String firstName, String lastName, String email, String phoneNumber,
+			String isLoggedIn, String userName, String password) {
 		super(userName, password);
-		this.customerServiceID = customerServiceID;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.networkManagerID = networkManagerID;
+		this.FirstName = firstName;
+		this.LastName = lastName;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.isLoggedIn = isLoggedIn;
 	}
 
-	public String getCustomerServiceID() {
-		return customerServiceID;
+	public String getNetworkManagerID() {
+		return networkManagerID;
 	}
 
-	public void setCustomerServiceID(String customerServiceID) {
-		this.customerServiceID = customerServiceID;
+	public void setNetworkManagerID(String networkManagerID) {
+		this.networkManagerID = networkManagerID;
 	}
 
 	public String getFirstName() {
-		return firstName;
+		return FirstName;
 	}
 
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		FirstName = firstName;
 	}
 
 	public String getLastName() {
-		return lastName;
+		return LastName;
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		LastName = lastName;
 	}
 
 	public String getEmail() {
@@ -69,7 +69,7 @@ public class CustomerService extends Login {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((customerServiceID == null) ? 0 : customerServiceID.hashCode());
+		result = prime * result + ((networkManagerID == null) ? 0 : networkManagerID.hashCode());
 		return result;
 	}
 
@@ -81,11 +81,11 @@ public class CustomerService extends Login {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CustomerService other = (CustomerService) obj;
-		if (customerServiceID == null) {
-			if (other.customerServiceID != null)
+		NetworkManager other = (NetworkManager) obj;
+		if (networkManagerID == null) {
+			if (other.networkManagerID != null)
 				return false;
-		} else if (!customerServiceID.equals(other.customerServiceID))
+		} else if (!networkManagerID.equals(other.networkManagerID))
 			return false;
 		return true;
 	}

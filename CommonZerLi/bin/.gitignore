@@ -3,3 +3,6 @@
 /entities_users/
 /entities_general/
 /entities_reports/
+/status_types.class
+/AccountStatus.class
+/enums/
