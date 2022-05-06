@@ -61,6 +61,7 @@ public class ConnectToServerController {
 			}
 			@Override
 			public void ipNotConfirmedForClient() {
+				//TBD: open pop up window
 				System.out.println("popup");
 			}
 		});

@@ -51,16 +51,33 @@ public class MissionAnalyzeClient {
 			break;
 		case REMOVE_ORDER_SUCCESS:
 			break;
-		case USER_EXIST:
+		case USER_EXIST:{
+			switch((String)obj.getInformation()) {
+			case "customer": {
+				System.out.println(obj.getInformation());
+			for (zerliClientListeners client : clientlisteners) {
+				client.userIsCustomer();
+			}
 			break;
+			}
+			case "branchmanager": {
+				for (zerliClientListeners client : clientlisteners) {
+					client.userIsBranchManager();
+				}
+				break;
+				}
+			}
+
+		}
+			
 		case USER_NAME_OR_PASSWORD_INCORRECT:
 			break;
 		case USER_NOT_EXIST:
 			break;
 		default:
 			break;
-		}
-		return false;
+		}return false;
+
 	}
 
 	public static void addClientListener(zerliClientListeners listener) {
