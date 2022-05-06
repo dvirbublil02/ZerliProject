@@ -5,14 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import communication.Response;
 import communication.TransmissionPack;
-import entities_catalog.Order;
-import entities_catalog.Product;
-import entities_users.Login;
+import entities_general.Login;
+import entities_general.Order;
 
 /**
  * In this class there are all the server quarries
@@ -28,42 +25,42 @@ public class ServerQuaries {
 	 * @param obj - the transmission that we got
 	 * @param con - the connection instance for the sql
 	 */
-	public static void AddOrderToDB(TransmissionPack obj, Connection con) {
-		if (obj.getInformation() != null) {
-			if (obj instanceof TransmissionPack) {
-				Order order = (Order) obj.getInformation();
-				Statement stmt, stmt2;
-				try {
-					stmt2 = con.createStatement();
-					ResultSet rs = stmt2.executeQuery("SELECT orderNumber FROM orders;");
-					while (rs.next()) {
-						if (order.getOrderNumber().equals(rs.getString(1)) || order.getOrderNumber().equals("")) {
-							obj.setResponse(Response.INSERT_ORDER_FAILD);
-							return;
-						}
-						if (order.getOrderNumber().equals("") || order.getPrice().equals("")
-								|| order.getColor().equals("") || order.getShop().equals("")
-								|| order.getDate().equals("") || order.getOrderDate().equals("")) {
-							obj.setResponse(Response.INSERT_ORDER_FAILD);
-							return;
-						}
-					}
-					stmt = con.createStatement();
-					stmt.executeUpdate(String.format(
-							"INSERT INTO zerli.orders(orderNumber, price, greetingCard, color, dOrder, shop, date, orderDate) VALUES ('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s');",
-							order.getOrderNumber(), order.getPrice(), order.getGreetingCard(), order.getColor(),
-							order.getDorder(), order.getShop(), order.getDate(), order.getOrderDate()));
-
-				} catch (SQLException e) {
-					e.printStackTrace();
-					obj.setResponse(Response.INSERT_ORDER_FAILD);
-					return;
-				}
-				obj.setResponse(Response.INSERT_ORDER_SUCCESS);
-			}
-		} else
-			obj.setResponse(Response.INSERT_ORDER_FAILD);
-	}
+//	public static void AddOrderToDB(TransmissionPack obj, Connection con) {
+//		if (obj.getInformation() != null) {
+//			if (obj instanceof TransmissionPack) {
+//				Order order = (Order) obj.getInformation();
+//				Statement stmt, stmt2;
+//				try {
+//					stmt2 = con.createStatement();
+//					ResultSet rs = stmt2.executeQuery("SELECT orderNumber FROM orders;");
+//					while (rs.next()) {
+//						if (order.getOrderNumber().equals(rs.getString(1)) || order.getOrderNumber().equals("")) {
+//							obj.setResponse(Response.INSERT_ORDER_FAILD);
+//							return;
+//						}
+//						if (order.getOrderNumber().equals("") || order.getPrice().equals("")
+//								|| order.getColor().equals("") || order.getShop().equals("")
+//								|| order.getDate().equals("") || order.getOrderDate().equals("")) {
+//							obj.setResponse(Response.INSERT_ORDER_FAILD);
+//							return;
+//						}
+//					}
+//					stmt = con.createStatement();
+//					stmt.executeUpdate(String.format(
+//							"INSERT INTO zerli.orders(orderNumber, price, greetingCard, color, dOrder, shop, date, orderDate) VALUES ('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s');",
+//							order.getOrderNumber(), order.getPrice(), order.getGreetingCard(), order.getColor(),
+//							order.getDorder(), order.getShop(), order.getDate(), order.getOrderDate()));
+//
+//				} catch (SQLException e) {
+//					e.printStackTrace();
+//					obj.setResponse(Response.INSERT_ORDER_FAILD);
+//					return;
+//				}
+//				obj.setResponse(Response.INSERT_ORDER_SUCCESS);
+//			}
+//		} else
+//			obj.setResponse(Response.INSERT_ORDER_FAILD);
+//	}
 
 	/**
 	 * In this method we Edit an order in the DB . (the order and the details that
@@ -73,31 +70,31 @@ public class ServerQuaries {
 	 * @param obj - the transmission that we got
 	 * @param con - the connection instance for the sql
 	 */
-	public static void EditOrderOnDB(TransmissionPack obj, Connection con) {
-		if (obj instanceof TransmissionPack) {
-			Order order = (Order) obj.getInformation();
-			try {
-				if (order.getOrderNumber().equals("") || order.getColor().equals("") || order.getDate().equals("")) {
-					obj.setResponse(Response.EDIT_ORDER_FAILD);
-					return;
-				}
-				PreparedStatement pstmt = con
-						.prepareStatement("UPDATE orders SET Color=? , Date=? WHERE OrderNumber=?;");
-				pstmt.setString(1, order.getColor());
-				pstmt.setString(2, order.getDate());
-				pstmt.setString(3, order.getOrderNumber());
-				if (pstmt.executeUpdate() == 0) {
-					obj.setResponse(Response.EDIT_ORDER_FAILD);
-					return;
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-				obj.setResponse(Response.EDIT_ORDER_FAILD);
-				return;
-			}
-			obj.setResponse(Response.EDIT_ORDER_SUCCESS);
-		}
-	}
+//	public static void EditOrderOnDB(TransmissionPack obj, Connection con) {
+//		if (obj instanceof TransmissionPack) {
+//			Order order = (Order) obj.getInformation();
+//			try {
+//				if (order.getOrderNumber().equals("") || order.getColor().equals("") || order.getDate().equals("")) {
+//					obj.setResponse(Response.EDIT_ORDER_FAILD);
+//					return;
+//				}
+//				PreparedStatement pstmt = con
+//						.prepareStatement("UPDATE orders SET Color=? , Date=? WHERE OrderNumber=?;");
+//				pstmt.setString(1, order.getColor());
+//				pstmt.setString(2, order.getDate());
+//				pstmt.setString(3, order.getOrderNumber());
+//				if (pstmt.executeUpdate() == 0) {
+//					obj.setResponse(Response.EDIT_ORDER_FAILD);
+//					return;
+//				}
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//				obj.setResponse(Response.EDIT_ORDER_FAILD);
+//				return;
+//			}
+//			obj.setResponse(Response.EDIT_ORDER_SUCCESS);
+//		}
+//	}
 
 	/**
 	 * In this method we getting orders from the DB . we putting all the orders that
@@ -107,30 +104,30 @@ public class ServerQuaries {
 	 * @param obj - the transmission that we got
 	 * @param con - the connection instance for the sql
 	 */
-	public static void GetOrderFromDB(TransmissionPack obj, Connection con) {
-		if (obj instanceof TransmissionPack) {
-			List<Order> list = new ArrayList<>();
-			Statement stmt;
-			try {
-				stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM orders;");
-				while (rs.next()) {
-					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-							rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8));
-					list.add(order);
-				}
-
-				obj.setInformation(list);
-				rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				obj.setResponse(Response.DIDNT_FOUND_ORDERS);
-				return;
-			}
-			obj.setResponse(Response.FOUND_ORDERS);
-		} else
-			obj.setResponse(Response.DIDNT_FOUND_ORDERS);
-	}
+//	public static void GetOrderFromDB(TransmissionPack obj, Connection con) {
+//		if (obj instanceof TransmissionPack) {
+//			List<Order> list = new ArrayList<>();
+//			Statement stmt;
+//			try {
+//				stmt = con.createStatement();
+//				ResultSet rs = stmt.executeQuery("SELECT * FROM orders;");
+//				while (rs.next()) {
+//					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+//							rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8));
+//					list.add(order);
+//				}
+//
+//				obj.setInformation(list);
+//				rs.close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//				obj.setResponse(Response.DIDNT_FOUND_ORDERS);
+//				return;
+//			}
+//			obj.setResponse(Response.FOUND_ORDERS);
+//		} else
+//			obj.setResponse(Response.DIDNT_FOUND_ORDERS);
+//	}
 
 //	public static ResultSet getUserLoginDetail(Connection con, Login login) throws SQLException {
 //

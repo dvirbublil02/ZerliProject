@@ -18,15 +18,15 @@ public class MissionAnalyze {
 
 		switch (obj.getMission()) {
 		case ADD_ORDER: {
-			ServerQuaries.AddOrderToDB(obj, con);
+		//	ServerQuaries.AddOrderToDB(obj, con);
 			break;
 		}
 		case EDIT_ORDER: {
-			ServerQuaries.EditOrderOnDB(obj, con);
+	//		ServerQuaries.EditOrderOnDB(obj, con);
 			break;
 		}
 		case GET_ORDERS: {
-			ServerQuaries.GetOrderFromDB(obj, con);
+	//		ServerQuaries.GetOrderFromDB(obj, con);
 			break;
 		}
 

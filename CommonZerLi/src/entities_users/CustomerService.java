@@ -3,14 +3,13 @@ package entities_users;
 import entities_general.Login;
 
 @SuppressWarnings("serial")
-public class BranchManager extends Login {
-	private String branchManagerID, BranchID, firstName, lastName, email, phoneNumber, isLoggedIn;
+public class CustomerService extends Login {
+	private String customerServiceID, firstName, lastName, email, phoneNumber, isLoggedIn;
 
-	public BranchManager(String branchManagerID, String branchID, String firstName, String lastName, String email,
+	public CustomerService(String customerServiceID, String firstName, String lastName, String email,
 			String phoneNumber, String isLoggedIn, String userName, String password) {
 		super(userName, password);
-		this.branchManagerID = branchManagerID;
-		this.BranchID = branchID;
+		this.customerServiceID = customerServiceID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -18,20 +17,12 @@ public class BranchManager extends Login {
 		this.isLoggedIn = isLoggedIn;
 	}
 
-	public String getBranchManagerID() {
-		return branchManagerID;
+	public String getCustomerServiceID() {
+		return customerServiceID;
 	}
 
-	public void setBranchManagerID(String branchManagerID) {
-		this.branchManagerID = branchManagerID;
-	}
-
-	public String getBranchID() {
-		return BranchID;
-	}
-
-	public void setBranchID(String branchID) {
-		BranchID = branchID;
+	public void setCustomerServiceID(String customerServiceID) {
+		this.customerServiceID = customerServiceID;
 	}
 
 	public String getFirstName() {
@@ -78,8 +69,7 @@ public class BranchManager extends Login {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((BranchID == null) ? 0 : BranchID.hashCode());
-		result = prime * result + ((branchManagerID == null) ? 0 : branchManagerID.hashCode());
+		result = prime * result + ((customerServiceID == null) ? 0 : customerServiceID.hashCode());
 		return result;
 	}
 
@@ -91,17 +81,13 @@ public class BranchManager extends Login {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BranchManager other = (BranchManager) obj;
-		if (BranchID == null) {
-			if (other.BranchID != null)
+		CustomerService other = (CustomerService) obj;
+		if (customerServiceID == null) {
+			if (other.customerServiceID != null)
 				return false;
-		} else if (!BranchID.equals(other.BranchID))
-			return false;
-		if (branchManagerID == null) {
-			if (other.branchManagerID != null)
-				return false;
-		} else if (!branchManagerID.equals(other.branchManagerID))
+		} else if (!customerServiceID.equals(other.customerServiceID))
 			return false;
 		return true;
 	}
+
 }
