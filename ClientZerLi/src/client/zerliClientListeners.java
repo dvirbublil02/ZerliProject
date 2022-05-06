@@ -9,4 +9,11 @@ public interface zerliClientListeners {
 		return;
 	}
 
+	default void userIsCustomer() {
+		return;
+	}
+	default void userIsBranchManager() {
+		return;
+	}
+
 }

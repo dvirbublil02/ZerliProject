@@ -1,6 +1,8 @@
 package client_gui;
 
 import client.ClientHandleTransmission;
+import client.MissionAnalyzeClient;
+import client.zerliClientListeners;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -32,14 +34,28 @@ public class LoginController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setResizable(false);
-		primaryStage.setOnCloseRequest(event ->{
-			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
-			});
+		MissionAnalyzeClient.addClientListener(new zerliClientListeners() {
+			@Override
+			public void userIsCustomer() {
+				MissionAnalyzeClient.removeClientListener(this);
+				System.out.println("here");
+			}
+			@Override
+			public void userIsBranchManager() {
+				MissionAnalyzeClient.removeClientListener(this);
+			}
+			
+
+		});
+		
+		
+		////////////////////////////////////////////////////////////////////////////////////////////
+		primaryStage.setOnCloseRequest(event -> {ClientHandleTransmission.DISCONNECT_FROM_SERVER();});
 	}
 
 	@FXML
 	void LoginClick(MouseEvent event) {
 		ClientHandleTransmission.USER_LOGIN(userTxt, passwordTxt, errorLabel, event);
-		
+
 	}
 }

@@ -48,23 +48,22 @@ public class ClientHandleTransmission {
 	 * @param orderDate       - order date text field on the gui
 	 * @param statusTxt       - status text field on the gui
 	 */
-/*	public static void ADD_ORDER(TextField orderIdTxt, TextField priceTxt, TextField greetingCardTxt,
-			TextField colorTxt, TextField dOrderTxt, TextField shopTxt, TextField dateTxt, TextField orderDate,
-			Label statusTxt) {
-		Order order = new Order(orderIdTxt.getText(), priceTxt.getText(), greetingCardTxt.getText(), colorTxt.getText(),
-				dOrderTxt.getText(), shopTxt.getText(), dateTxt.getText(), orderDate.getText());
-		TransmissionPack obj = new TransmissionPack(Mission.ADD_ORDER, null, order);
-		ClientUI.chat.accept(obj);
-		obj = ClientUI.chat.getObj();
-		if (obj.getResponse() == Response.INSERT_ORDER_SUCCESS) {
-			statusTxt.setTextFill(Color.GREEN);
-			statusTxt.setText("Insert Success");
-		} else {
-			statusTxt.setTextFill(Color.RED);
-			statusTxt.setText("Insert Failed");
-		}
-
-	}*/
+	/*
+	 * public static void ADD_ORDER(TextField orderIdTxt, TextField priceTxt,
+	 * TextField greetingCardTxt, TextField colorTxt, TextField dOrderTxt, TextField
+	 * shopTxt, TextField dateTxt, TextField orderDate, Label statusTxt) { Order
+	 * order = new Order(orderIdTxt.getText(), priceTxt.getText(),
+	 * greetingCardTxt.getText(), colorTxt.getText(), dOrderTxt.getText(),
+	 * shopTxt.getText(), dateTxt.getText(), orderDate.getText()); TransmissionPack
+	 * obj = new TransmissionPack(Mission.ADD_ORDER, null, order);
+	 * ClientUI.chat.accept(obj); obj = ClientUI.chat.getObj(); if
+	 * (obj.getResponse() == Response.INSERT_ORDER_SUCCESS) {
+	 * statusTxt.setTextFill(Color.GREEN); statusTxt.setText("Insert Success"); }
+	 * else { statusTxt.setTextFill(Color.RED); statusTxt.setText("Insert Failed");
+	 * }
+	 * 
+	 * }
+	 */
 
 	/**
 	 * In this method we are creating Transmission that will contain GETORDERS
@@ -111,44 +110,41 @@ public class ClientHandleTransmission {
 	 * @param lblEditDate        - text field that contain the date to edit
 	 * @param lblEditOrderNumber - text field that contain the order number to edit
 	 */
-	/*public static void EDIT_ORDER(Label statusLabel, TextField lblEditColor, TextField lblEditDate,
-			TextField lblEditOrderNumber) {
-		Order order = new Order();
-		order.setColor(lblEditColor.getText());
-		order.setDate(lblEditDate.getText());
-		order.setOrderNumber(lblEditOrderNumber.getText());
-		System.out.println(order.getOrderNumber() + order.getColor() + order.getDate());
-		TransmissionPack obj = new TransmissionPack(Mission.EDIT_ORDER, null, order);
-		ClientUI.chat.accept(obj);
-		obj = ClientUI.chat.getObj();
-		if (obj.getResponse() == Response.EDIT_ORDER_FAILD) {
-			statusLabel.setTextFill(Color.RED);
-			statusLabel.setText("Edit Failed");
-		} else {
-			statusLabel.setTextFill(Color.GREEN);
-			statusLabel.setText("Edit Success");
-		}
-
-	}*/
+	/*
+	 * public static void EDIT_ORDER(Label statusLabel, TextField lblEditColor,
+	 * TextField lblEditDate, TextField lblEditOrderNumber) { Order order = new
+	 * Order(); order.setColor(lblEditColor.getText());
+	 * order.setDate(lblEditDate.getText());
+	 * order.setOrderNumber(lblEditOrderNumber.getText());
+	 * System.out.println(order.getOrderNumber() + order.getColor() +
+	 * order.getDate()); TransmissionPack obj = new
+	 * TransmissionPack(Mission.EDIT_ORDER, null, order); ClientUI.chat.accept(obj);
+	 * obj = ClientUI.chat.getObj(); if (obj.getResponse() ==
+	 * Response.EDIT_ORDER_FAILD) { statusLabel.setTextFill(Color.RED);
+	 * statusLabel.setText("Edit Failed"); } else {
+	 * statusLabel.setTextFill(Color.GREEN); statusLabel.setText("Edit Success"); }
+	 * 
+	 * }
+	 */
 
 	public static void CONNECT_TO_SERVER(ActionEvent event, String ip, String port) throws Exception {
-		ClientUI.chat = new ClientController(ip, Integer.parseInt(port));
+		ClientUI.chat = new ClientController(ip, Integer.parseInt(port));// logic
 
 		TransmissionPack obj = new TransmissionPack(Mission.SEND_CONNECTION_DETAILS, null, null);
 		List<String> details = new ArrayList<>();
+		// gui for design
 		details.add(InetAddress.getLocalHost().getHostAddress());
 		details.add(InetAddress.getLocalHost().getHostName());
 		obj.setInformation(details);
-
+		// logic: check the response
 		ClientUI.chat.accept(obj);
-		obj=ClientUI.chat.getObj();
-		if(obj.getResponse() == Response.UPDATE_CONNECTION_SUCCESS)  {
-		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-		Stage primaryStage = new Stage();
-		LoginController login = new LoginController();
-		login.start(primaryStage);
-		}
-		else {
+		obj = ClientUI.chat.getObj();
+		if (obj.getResponse() == Response.UPDATE_CONNECTION_SUCCESS) {
+			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+			Stage primaryStage = new Stage();
+			LoginController login = new LoginController();
+			login.start(primaryStage);
+		} else {
 			//
 		}
 	}
@@ -196,7 +192,7 @@ public class ClientHandleTransmission {
 				errorLabel.setText("User doesn't exist");
 				break;
 			}
-			case USER_ALREADY_LOGGEDIN:{
+			case USER_ALREADY_LOGGEDIN: {
 				errorLabel.setTextFill(Color.RED);
 				errorLabel.setText("User Already loggedin");
 				break;
@@ -227,17 +223,18 @@ public class ClientHandleTransmission {
 		switch ((String) tp.getInformation()) {
 		case "customer": {
 			CustomerPageController menu = new CustomerPageController();
-				menu.start(primaryStage);
+			menu.start(primaryStage);
 			break;
 		}
 		case "branchmanager": {
 			BranchManagerPageController menu = new BranchManagerPageController();
-				menu.start(primaryStage);
+			menu.start(primaryStage);
 			break;
 		}
-		
+
 		}
 
 	}
+	
 
 }
