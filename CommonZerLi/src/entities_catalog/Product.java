@@ -6,13 +6,15 @@ public class Product {
 	private double price;
 	private String backGroundColor;
 	private String ID;
+	private String quantity;
 	
-	public Product(String ID,String name, double price, String backGroundColor, String imgSrc) {
+	public Product(String ID,String name, double price, String backGroundColor, String imgSrc,String quantity) {
 		this.ID=ID;
 		this.name = name;
 		this.imgSrc = imgSrc;
 		this.price = price;
 		this.backGroundColor = backGroundColor;
+		this.quantity=quantity;
 		
 	}
 
@@ -54,6 +56,14 @@ public class Product {
 
 	public void setID(String iD) {
 		ID = iD;
+	}
+
+	public String getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(String quantity) {
+		this.quantity = quantity;
 	}
 
 }

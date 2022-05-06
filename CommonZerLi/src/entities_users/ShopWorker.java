@@ -3,51 +3,51 @@ package entities_users;
 import entities_general.Login;
 
 @SuppressWarnings("serial")
-public class BranchManager extends Login {
-	private String branchManagerID, BranchID, firstName, lastName, email, phoneNumber, isLoggedIn;
+public class ShopWorker extends Login {
+	private String shopworkerID, branchID, FirstName, LastName, email, phoneNumber, isLoggedIn;
 
-	public BranchManager(String branchManagerID, String branchID, String firstName, String lastName, String email,
+	public ShopWorker(String shopworkerID, String branchID, String firstName, String lastName, String email,
 			String phoneNumber, String isLoggedIn, String userName, String password) {
 		super(userName, password);
-		this.branchManagerID = branchManagerID;
-		this.BranchID = branchID;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.shopworkerID = shopworkerID;
+		this.branchID = branchID;
+		this.FirstName = firstName;
+		this.LastName = lastName;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.isLoggedIn = isLoggedIn;
 	}
 
-	public String getBranchManagerID() {
-		return branchManagerID;
+	public String getShopworkerID() {
+		return shopworkerID;
 	}
 
-	public void setBranchManagerID(String branchManagerID) {
-		this.branchManagerID = branchManagerID;
+	public void setShopworkerID(String shopworkerID) {
+		this.shopworkerID = shopworkerID;
 	}
 
 	public String getBranchID() {
-		return BranchID;
+		return branchID;
 	}
 
 	public void setBranchID(String branchID) {
-		BranchID = branchID;
+		this.branchID = branchID;
 	}
 
 	public String getFirstName() {
-		return firstName;
+		return FirstName;
 	}
 
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		FirstName = firstName;
 	}
 
 	public String getLastName() {
-		return lastName;
+		return LastName;
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		LastName = lastName;
 	}
 
 	public String getEmail() {
@@ -78,8 +78,7 @@ public class BranchManager extends Login {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((BranchID == null) ? 0 : BranchID.hashCode());
-		result = prime * result + ((branchManagerID == null) ? 0 : branchManagerID.hashCode());
+		result = prime * result + ((shopworkerID == null) ? 0 : shopworkerID.hashCode());
 		return result;
 	}
 
@@ -91,17 +90,13 @@ public class BranchManager extends Login {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BranchManager other = (BranchManager) obj;
-		if (BranchID == null) {
-			if (other.BranchID != null)
+		ShopWorker other = (ShopWorker) obj;
+		if (shopworkerID == null) {
+			if (other.shopworkerID != null)
 				return false;
-		} else if (!BranchID.equals(other.BranchID))
-			return false;
-		if (branchManagerID == null) {
-			if (other.branchManagerID != null)
-				return false;
-		} else if (!branchManagerID.equals(other.branchManagerID))
+		} else if (!shopworkerID.equals(other.shopworkerID))
 			return false;
 		return true;
 	}
+
 }

@@ -99,7 +99,7 @@ public class AddOrderControllerPrototype {
 	@FXML
 	void addOrder(ActionEvent event) {
 
-		ClientHandleTransmission.ADD_ORDER(orderIdTxt, priceTxt, greetingCardTxt, colorTxt, dOrderTxt, shopTxt,
-				dateTxt, orderDate, statusTxt);
+	//	ClientHandleTransmission.ADD_ORDER(orderIdTxt, priceTxt, greetingCardTxt, colorTxt, dOrderTxt, shopTxt,
+//				dateTxt, orderDate, statusTxt);
 	}
 }

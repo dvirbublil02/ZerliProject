@@ -138,16 +138,16 @@ public class CatalogScreenController implements Initializable{
 		List<Product> itemInCatalog = new ArrayList<>();
 		Product item;
 	
-		item = new Product ("1","Rose Bouquet",25.55,"920000","/javafx_images/Catalog/Rose.png");
+		item = new Product ("1","Rose Bouquet",25.55,"920000","/javafx_images/Catalog/Rose.png","53");
 		itemInCatalog.add(item);
 		
-		item = new Product ("2","Cactus Flower",15.55,"526354","/javafx_images/Catalog/cactusflower.png");
+		item = new Product ("2","Cactus Flower",15.55,"526354","/javafx_images/Catalog/cactusflower.png","23");
 		itemInCatalog.add(item);
 		
-		item = new Product ("3","Diamond Flower",23.55,"005063","/javafx_images/Catalog/diamondflower.png");
+		item = new Product ("3","Diamond Flower",23.55,"005063","/javafx_images/Catalog/diamondflower.png","89");
 		itemInCatalog.add(item);
 		
-		item = new Product ("4","Violet Flower",18.55,"29174E","/javafx_images/Catalog/violetflower.png");
+		item = new Product ("4","Violet Flower",18.55,"29174E","/javafx_images/Catalog/violetflower.png","50");
 		itemInCatalog.add(item);
 		
 //		

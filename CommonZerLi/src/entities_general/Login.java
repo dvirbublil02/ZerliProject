@@ -1,4 +1,4 @@
-package entities_users;
+package entities_general;
 
 import java.io.Serializable;
 

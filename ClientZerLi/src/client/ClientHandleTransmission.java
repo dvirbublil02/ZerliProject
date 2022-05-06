@@ -6,27 +6,26 @@
  */
 package client;
 
-import javafx.scene.input.MouseEvent;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
 import client_gui.BranchManagerPageController;
-import client_gui.CatalogScreenController;
 import client_gui.CustomerPageController;
 import client_gui.LoginController;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
-import entities_catalog.Order;
-import entities_users.Login;
+import entities_general.Login;
+import entities_general.Order;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -48,7 +47,7 @@ public class ClientHandleTransmission {
 	 * @param orderDate       - order date text field on the gui
 	 * @param statusTxt       - status text field on the gui
 	 */
-	public static void ADD_ORDER(TextField orderIdTxt, TextField priceTxt, TextField greetingCardTxt,
+/*	public static void ADD_ORDER(TextField orderIdTxt, TextField priceTxt, TextField greetingCardTxt,
 			TextField colorTxt, TextField dOrderTxt, TextField shopTxt, TextField dateTxt, TextField orderDate,
 			Label statusTxt) {
 		Order order = new Order(orderIdTxt.getText(), priceTxt.getText(), greetingCardTxt.getText(), colorTxt.getText(),
@@ -64,7 +63,7 @@ public class ClientHandleTransmission {
 			statusTxt.setText("Insert Failed");
 		}
 
-	}
+	}*/
 
 	/**
 	 * In this method we are creating Transmission that will contain GETORDERS
@@ -111,7 +110,7 @@ public class ClientHandleTransmission {
 	 * @param lblEditDate        - text field that contain the date to edit
 	 * @param lblEditOrderNumber - text field that contain the order number to edit
 	 */
-	public static void EDIT_ORDER(Label statusLabel, TextField lblEditColor, TextField lblEditDate,
+	/*public static void EDIT_ORDER(Label statusLabel, TextField lblEditColor, TextField lblEditDate,
 			TextField lblEditOrderNumber) {
 		Order order = new Order();
 		order.setColor(lblEditColor.getText());
@@ -129,7 +128,7 @@ public class ClientHandleTransmission {
 			statusLabel.setText("Edit Success");
 		}
 
-	}
+	}*/
 
 	public static void CONNECT_TO_SERVER(ActionEvent event, String ip, String port) throws Exception {
 		ClientUI.chat = new ClientController(ip, Integer.parseInt(port));
@@ -231,6 +230,7 @@ public class ClientHandleTransmission {
 				menu.start(primaryStage);
 			break;
 		}
+		
 		}
 
 	}
