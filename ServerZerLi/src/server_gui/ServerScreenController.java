@@ -82,7 +82,7 @@ public class ServerScreenController implements Initializable {
 	private static boolean ifFirstConnector;
 	private static boolean ifFirstMsg;
 	private List<String> data = new ArrayList<String>();
-	static ObservableList<ClientDetails> listView = FXCollections.observableArrayList();
+	static ObservableList<ClientDetails> clients = FXCollections.observableArrayList();
 	static ObservableList<msgClass> listView2 = FXCollections.observableArrayList();
 
 	/**
@@ -140,14 +140,20 @@ public class ServerScreenController implements Initializable {
 	 * @param obj - the transmission
 	 */
 	@SuppressWarnings("unchecked")
-	public static void SetObser(TransmissionPack obj) {
+	public static boolean SetObser(TransmissionPack obj) {
 		ArrayList<String> list = (ArrayList<String>) obj.getInformation();
+		for (int i = 0; i < clients.size(); i++) {
+			if (clients.get(i).getIp().equals(list.get(0)))
+				return false;
+		}
 		ClientDetails client = new ClientDetails(list.get(0), list.get(1), "Connected");
-		listView.add(client);
+		clients.add(client);
 		if (ifFirstConnector == true) {
-			listView.remove(0);
+			clients.remove(0);
 			ifFirstConnector = false;
 		}
+		return true;
+
 	}
 
 	/**
@@ -161,7 +167,7 @@ public class ServerScreenController implements Initializable {
 	void Disconnect(ActionEvent event) {
 
 		listView2.clear();
-		listView.clear();
+		clients.clear();
 		ServerUI.stopServer();
 		BTNDisconnect.setDisable(true);
 		BTNConnect.setDisable(false);
@@ -192,8 +198,8 @@ public class ServerScreenController implements Initializable {
 	 */
 	private void loadInformation() {
 		ClientDetails client = new ClientDetails("", "", "");
-		listView.add(client);
-		table.setItems(listView);
+		clients.add(client);
+		table.setItems(clients);
 		ifFirstConnector = true;
 
 		BTNDisconnect.setDisable(true);
@@ -248,13 +254,14 @@ public class ServerScreenController implements Initializable {
 	private String getport() {
 		return TxtPort.getText();
 	}
-	//in this method we remove client that exist from the program
+
+	// in this method we remove client that exist from the program
 	public static void RemoveObser(TransmissionPack obj) {
 		@SuppressWarnings("unchecked")
 		ArrayList<String> list = (ArrayList<String>) obj.getInformation();
-		for (int i = 0; i < listView.size(); i++) {
-			if (listView.get(i).getIp().equals(list.get(0))) {
-				listView.remove(i);
+		for (int i = 0; i < clients.size(); i++) {
+			if (clients.get(i).getIp().equals(list.get(0))) {
+				clients.remove(i);
 				break;
 			}
 		}

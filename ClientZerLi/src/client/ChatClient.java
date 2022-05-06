@@ -54,6 +54,7 @@ public class ChatClient extends AbstractClient {
 		if (msg instanceof TransmissionPack) {
 			TransmissionPack tr = (TransmissionPack) msg;
 			ClientController.setObj(tr);
+			MissionAnalyzeClient.MissionsAnalyzeClient((TransmissionPack) msg);
 			clientUI.display(tr.getResponse().toString()); // print the response to the client console
 		}
 	}

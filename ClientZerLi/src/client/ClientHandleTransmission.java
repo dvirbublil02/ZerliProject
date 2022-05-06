@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import client_gui.BranchManagerPageController;
+import client_gui.CartPageController;
 import client_gui.CustomerPageController;
 import client_gui.LoginController;
 import communication.Mission;
@@ -140,12 +141,16 @@ public class ClientHandleTransmission {
 		obj.setInformation(details);
 
 		ClientUI.chat.accept(obj);
-
+		obj=ClientUI.chat.getObj();
+		if(obj.getResponse() == Response.UPDATE_CONNECTION_SUCCESS)  {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
-
 		LoginController login = new LoginController();
 		login.start(primaryStage);
+		}
+		else {
+			//
+		}
 	}
 
 	public static void DISCONNECT_FROM_SERVER() {

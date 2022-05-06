@@ -25,6 +25,7 @@ public enum Response {
 	UPDATE_DISCONNECTION_FAILD("UPDATE_DISCONNECTION_FAILD",18),
 	USER_ALREADY_LOGGEDIN("USER_ALREADY_LOGGEDIN",19);
 	
+	
 	private Response(final String response,final int serialNumber) {
 		
 	}

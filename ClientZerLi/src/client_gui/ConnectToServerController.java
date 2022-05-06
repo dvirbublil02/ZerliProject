@@ -1,6 +1,8 @@
 package client_gui;
 
 import client.ClientHandleTransmission;
+import client.MissionAnalyzeClient;
+import client.zerliClientListeners;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,8 +38,8 @@ public class ConnectToServerController {
 	 */
 	@FXML
 	void ConfirmClick(ActionEvent event) throws Exception {
-		ClientHandleTransmission.CONNECT_TO_SERVER(event, IpTxt.getText(), PortTxt.getText());
-
+		
+			ClientHandleTransmission.CONNECT_TO_SERVER(event, IpTxt.getText(), PortTxt.getText());
 	}
 		/**in this method we loading the screen ConnectToServer
 		 * 
@@ -51,6 +53,18 @@ public class ConnectToServerController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setResizable(false);
+		MissionAnalyzeClient.addClientListener(new zerliClientListeners() {
+			@Override
+			public void ipConfirmedForClient() {
+				MissionAnalyzeClient.removeClientListener(this);
+				
+			}
+			@Override
+			public void ipNotConfirmedForClient() {
+				System.out.println("popup");
+			}
+		});
+		
 	}
 
 }
