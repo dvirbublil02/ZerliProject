@@ -1,12 +1,31 @@
 package client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import communication.TransmissionPack;
 
 public class MissionAnalyzeClient {
+	private static final List<zerliClientListeners> clientlisteners = new ArrayList<zerliClientListeners>();
 
 	public static boolean MissionsAnalyzeClient(TransmissionPack obj) {
 		ClientController.setObj(obj);
 		switch (obj.getResponse()) {
+		case UPDATE_CONNECTION_SUCCESS: {
+			for (zerliClientListeners client : clientlisteners) {
+				client.ipConfirmedForClient();
+			}
+			break;
+		}
+		case UPDATE_CONNECTION_FAILD:{
+			for (zerliClientListeners client : clientlisteners) {
+				client.ipNotConfirmedForClient();
+			}
+			break;
+		}
+		case UPDATE_DISCONNECTION_SUCCESS: {
+
+		}
 		case FOUND_ORDERS: {
 
 		}
@@ -42,5 +61,13 @@ public class MissionAnalyzeClient {
 			break;
 		}
 		return false;
+	}
+
+	public static void addClientListener(zerliClientListeners listener) {
+		clientlisteners.add(listener);
+	}
+
+	public static void removeClientListener(zerliClientListeners listener) {
+		clientlisteners.remove(listener);
 	}
 }
