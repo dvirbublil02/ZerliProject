@@ -1,132 +1,99 @@
 package entities_users;
 
 import entities_general.CreditCard;
-import entities_general.Login;
 import enums.AccountStatus;
 
+/**
+ * @author Omri Shalev
+ */
 @SuppressWarnings("serial")
-public class Customer extends Login {
-	private String customerID, FirstName, LastName, email, phoneNumber, credit, isNewCustomer, isLoggedIn, accountStatus;
+public class Customer extends User {
+
+	/**
+	 * Every customer have a balance in his account (debit or credit)
+	 */
+	private String balance;
+	/**
+	 * A state that sign if the user is new customer or not.
+	 */
+	private boolean isNewCustomer;
+	/**
+	 * every customer has credit card
+	 */
 	private CreditCard creditCard;
 
-	public Customer(String customerID, String FirstName, String LastName, String email, String phone, String credit,
-			CreditCard creditCard, String isNewCustomer, String isLoggedIn, String userName, String password, AccountStatus accountStatus) {
-		super(userName, password);
-		this.customerID = customerID;
-		this.FirstName = FirstName;
-		this.LastName = LastName;
-		this.email = email;
-		this.phoneNumber = phone;
-		this.credit = credit;
-		this.creditCard = creditCard;
+	/**
+	 * 
+	 * @param iD
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param phoneNumber
+	 * @param accountStatus
+	 * @param isLoggedIn
+	 * @param balance
+	 * @param isNewCustomer
+	 * @param creditCard
+	 */
+	public Customer(String iD, String firstName, String lastName, String email, String phoneNumber,
+			AccountStatus accountStatus, boolean isLoggedIn, String balance, boolean isNewCustomer,
+			CreditCard creditCard) {
+		super(iD, firstName, lastName, email, phoneNumber, accountStatus, isLoggedIn);
+		this.balance = balance;
 		this.isNewCustomer = isNewCustomer;
-		this.isLoggedIn = isLoggedIn;
-		this.accountStatus = accountStatus.toString();
+		this.creditCard = creditCard;
 	}
 
-	public String getCustomerID() {
-		return customerID;
+	/**
+	 * returns the balance of the customer in the shop
+	 * 
+	 * @return balance
+	 */
+	public String getBalance() {
+		return balance;
 	}
 
-	public void setCustomerID(String customerID) {
-		this.customerID = customerID;
+	/**
+	 * @param balance
+	 */
+	public void setBalance(String balance) {
+		this.balance = balance;
 	}
 
-	public String getFirstName() {
-		return FirstName;
-	}
-
-	public void setFirstName(String firstName) {
-		FirstName = firstName;
-	}
-
-	public String getLastName() {
-		return LastName;
-	}
-
-	public void setLastName(String lastName) {
-		LastName = lastName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getCredit() {
-		return credit;
-	}
-
-	public void setCredit(String credit) {
-		this.credit = credit;
-	}
-
-	public String getIsNewCustomer() {
+	/**
+	 * returns if the customer is new or not
+	 * 
+	 * @return isNewCustomer
+	 */
+	public boolean isNewCustomer() {
 		return isNewCustomer;
 	}
 
-	public void setIsNewCustomer(String isNewCustomer) {
+	/**
+	 * @param isNewCustomer
+	 */
+	public void setNewCustomer(boolean isNewCustomer) {
 		this.isNewCustomer = isNewCustomer;
 	}
 
-	public String getIsLoggedIn() {
-		return isLoggedIn;
-	}
-
-	public void setIsLoggedIn(String isLoggedIn) {
-		this.isLoggedIn = isLoggedIn;
-	}
-
+	/**
+	 * returns the credit card details of the customer
+	 * 
+	 * @return creditCard
+	 */
 	public CreditCard getCreditCard() {
 		return creditCard;
 	}
 
+	/**
+	 * @param creditCard
+	 */
 	public void setCreditCard(CreditCard creditCard) {
 		this.creditCard = creditCard;
 	}
-
-	public String getAccountStatus() {
-		return accountStatus;
-	}
-
-	public void setAccountStatus(String accountStatus) {
-		this.accountStatus = accountStatus;
-	}
-
+	
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((customerID == null) ? 0 : customerID.hashCode());
-		return result;
+	public String toString() {
+		return "Customer: " + FirstName + " " + LastName;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Customer other = (Customer) obj;
-		if (customerID == null) {
-			if (other.customerID != null)
-				return false;
-		} else if (!customerID.equals(other.customerID))
-			return false;
-		return true;
-	}
-
 }
