@@ -118,7 +118,7 @@
                   <VBox prefHeight="0.0" prefWidth="308.0" VBox.vgrow="ALWAYS" />
                   <HBox alignment="CENTER" prefHeight="62.0" prefWidth="304.0">
                      <children>
-                        <Button fx:id="VackButon" mnemonicParsing="false" onAction="#Back" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Back">
+                        <Button fx:id="BackButon" mnemonicParsing="false" onAction="#Back" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Back">
                            <font>
                               <Font name="Candara Bold" size="18.0" />
                            </font>
@@ -269,7 +269,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" prefHeight="159.0" prefWidth="236.0">
                                        <children>
-                                          <Button fx:id="ViewButton" mnemonicParsing="false" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="View">
+                                          <Button fx:id="ViewButton" mnemonicParsing="false" onAction="#View" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="View">
                                              <font>
                                                 <Font name="Candara Bold" size="18.0" />
                                              </font>

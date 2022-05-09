@@ -44,7 +44,7 @@ public class Order {
 	/**
 	 * The list of items in the order
 	 */
-	private  List<Product> items;
+	private List<Product> items;
 	/**
 	 * @param orderID
 	 * @param customerID

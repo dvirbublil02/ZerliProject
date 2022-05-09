@@ -13,9 +13,8 @@ public class Product {
 		this.name = name;
 		this.imgSrc = imgSrc;
 		this.price = price;
-		this.backGroundColor = backGroundColor;
+		this.backGroundColor = backGroundColor; // for image
 		this.quantity=quantity;
-		
 	}
 
 	public String getName() {

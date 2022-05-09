@@ -54,8 +54,11 @@ public class BranchManagerViewReportPageController implements Initializable {
 	private Label QuaterlyYearLabel;
 
 	@FXML
-	private Button VackButon;
+	private Button BackButon;
 
+	@FXML
+    private Button ViewButton;
+	
 	@FXML
 	void Back(ActionEvent event) {
 
@@ -131,4 +134,10 @@ public class BranchManagerViewReportPageController implements Initializable {
 
 		}
 	}
+	
+	  @FXML
+	    void View(ActionEvent event) {
+
+	    }
+
 }
