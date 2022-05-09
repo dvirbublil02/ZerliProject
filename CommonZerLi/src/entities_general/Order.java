@@ -2,12 +2,62 @@ package entities_general;
 
 import java.util.List;
 
+import entities_catalog.Product;
+import enums.OrderStatus;
+/**
+ * @author Omri Shalev
+ */
 public class Order {
-	String orderID, customerID, branchID, price, greetingCard, status, orderDate, expectedDelivery;
-	List<String> items;
-
-	public Order(String orderID, String customerID, String branchID, String price, String greetingCard, String status,
-			String orderDate, String expectedDelivery, List<String> items) {
+	/**
+	 * Every order has its own ID.
+	 */
+	private String orderID;
+	/**
+	 * Every order connected to a customer 
+	 * customer ID is the connection.
+	 */
+	private String customerID;
+	/*
+	 * Every order belongs to one branch with this ID.
+	 */
+	private String branchID;
+	/**
+	 * Every order has a price.
+	 */
+	private String price; 
+	/**
+	 * Every order can have a greeting card if the customer wants.
+	 */
+	private String greetingCard;
+	/**
+	 * Every order has a status: ready, on the way, arrived.
+	 */
+	private OrderStatus status;
+	/**
+	 * Every order save the date and time it was created.
+	 */
+	private String orderDate;
+	/**
+	 * Every order has expected time to arrival.
+	 */
+	private String expectedDelivery;
+	/**
+	 * The list of items in the order
+	 */
+	private  List<Product> items;
+	/**
+	 * @param orderID
+	 * @param customerID
+	 * @param branchID
+	 * @param price
+	 * @param greetingCard
+	 * @param status
+	 * @param orderDate
+	 * @param expectedDelivery
+	 * @param items
+	 */
+	public Order(String orderID, String customerID, String branchID, String price, String greetingCard, OrderStatus status,
+			String orderDate, String expectedDelivery, List<Product> items) {
 		super();
 		this.orderID = orderID;
 		this.customerID = customerID;
@@ -60,11 +110,11 @@ public class Order {
 		this.greetingCard = greetingCard;
 	}
 
-	public String getStatus() {
+	public OrderStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(OrderStatus status) {
 		this.status = status;
 	}
 
@@ -84,11 +134,11 @@ public class Order {
 		this.expectedDelivery = expectedDelivery;
 	}
 
-	public List<String> getItems() {
+	public List<Product> getItems() {
 		return items;
 	}
 
-	public void setItems(List<String> items) {
+	public void setItems(List<Product> items) {
 		this.items = items;
 	}
 
