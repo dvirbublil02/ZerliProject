@@ -1,13 +1,13 @@
 package entities_general;
 
 public class Deliveries {
-	String deliveryID, oredrID, recieverName, price, arrivedDate, deliveryStatus;
+	String deliveryID, orderID, recieverName, price, arrivedDate, deliveryStatus;
 
 	public Deliveries(String deliveryID, String oredrID, String recieverName, String price, String arrivedDate,
 			String deliveryStatus) {
 		super();
 		this.deliveryID = deliveryID;
-		this.oredrID = oredrID;
+		this.orderID = oredrID;
 		this.recieverName = recieverName;
 		this.price = price;
 		this.arrivedDate = arrivedDate;
@@ -23,11 +23,11 @@ public class Deliveries {
 	}
 
 	public String getOredrID() {
-		return oredrID;
+		return orderID;
 	}
 
 	public void setOredrID(String oredrID) {
-		this.oredrID = oredrID;
+		this.orderID = oredrID;
 	}
 
 	public String getRecieverName() {
@@ -66,7 +66,7 @@ public class Deliveries {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((oredrID == null) ? 0 : oredrID.hashCode());
+		result = prime * result + ((orderID == null) ? 0 : orderID.hashCode());
 		return result;
 	}
 
@@ -79,10 +79,10 @@ public class Deliveries {
 		if (getClass() != obj.getClass())
 			return false;
 		Deliveries other = (Deliveries) obj;
-		if (oredrID == null) {
-			if (other.oredrID != null)
+		if (orderID == null) {
+			if (other.orderID != null)
 				return false;
-		} else if (!oredrID.equals(other.oredrID))
+		} else if (!orderID.equals(other.orderID))
 			return false;
 		return true;
 	}

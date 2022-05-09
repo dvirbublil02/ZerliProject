@@ -1,5 +1,6 @@
 package entities_users;
 
+import java.io.Serializable;
 import java.util.List;
 
 import entities_general.Order;
@@ -9,7 +10,7 @@ import enums.AccountStatus;
  * @author User Omri Shalev
  */
 @SuppressWarnings("serial")
-public class DeliveryAgent extends User {
+public class DeliveryAgent extends User implements Serializable{
 	/**
 	 * Delivery agents has their main branch
 	 */

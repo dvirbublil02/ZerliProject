@@ -1,12 +1,14 @@
 package entities_users;
 
+import java.io.Serializable;
+
 import enums.AccountStatus;
 
 /**
  * @author User Omri Shalev
  */
 @SuppressWarnings("serial")
-public class CustomerService extends User {
+public class CustomerService extends User implements Serializable {
 	/**
 	 * 
 	 * @param iD

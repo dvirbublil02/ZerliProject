@@ -1,5 +1,7 @@
 package entities_users;
 
+import java.io.Serializable;
+
 import entities_general.CreditCard;
 import enums.AccountStatus;
 
@@ -7,7 +9,7 @@ import enums.AccountStatus;
  * @author Omri Shalev
  */
 @SuppressWarnings("serial")
-public class Customer extends User {
+public class Customer extends User implements Serializable{
 
 	/**
 	 * Every customer have a balance in his account (debit or credit)

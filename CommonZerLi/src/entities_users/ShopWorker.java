@@ -1,9 +1,11 @@
 package entities_users;
 
+import java.io.Serializable;
+
 import enums.AccountStatus;
 
 @SuppressWarnings("serial")
-public class ShopWorker extends User {
+public class ShopWorker extends User implements Serializable{
 	/**
 	 * the branch that the worker works in.
 	 */
