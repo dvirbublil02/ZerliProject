@@ -164,7 +164,7 @@ public class ClientHandleTransmission {
 		obj.setInformation(details);
 		ClientUI.chat.accept(obj);
 	}
-
+	
 	public static void USER_LOGIN(TextField userTxt, TextField passwordTxt, Label errorLabel, MouseEvent event) {
 		userTxt.setStyle(null);
 		passwordTxt.setStyle(null);
