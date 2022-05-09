@@ -1,6 +1,10 @@
 package client_gui;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
+import client.ClientUI;
+import communication.Mission;
+import communication.TransmissionPack;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,8 +64,15 @@ public class BranchManagerPageController {
     }
 
     @FXML
-    void logOut(ActionEvent event) {
-    	
+    void logOut(ActionEvent event) throws Exception {
+    	TransmissionPack tp = new TransmissionPack(Mission.USER_LOGOUT, null, ClientController.user);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		LoginController login = new LoginController();
+		login.start(primaryStage);
+	
     }
 
     @FXML

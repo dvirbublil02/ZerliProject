@@ -5,7 +5,7 @@ import java.io.Serializable;
 import enums.AccountStatus;
 
 /**
- * @author Omri Shalev
+ * @author Omri Shalev 
  */
 
 @SuppressWarnings("serial")
@@ -22,6 +22,7 @@ public class User implements Serializable {
 	 * Every user has a last name.
 	 */
 	protected String LastName;
+	
 	/**
 	 * Every user has an email.
 	 */

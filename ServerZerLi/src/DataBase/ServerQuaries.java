@@ -8,8 +8,12 @@ import java.sql.Statement;
 
 import communication.Response;
 import communication.TransmissionPack;
+import entities_general.CreditCard;
 import entities_general.Login;
-import entities_general.Order;
+import entities_users.BranchManager;
+import entities_users.Customer;
+import entities_users.User;
+import enums.AccountStatus;
 
 /**
  * In this class there are all the server quarries
@@ -202,14 +206,14 @@ public class ServerQuaries {
 			Statement stmt;
 			try {
 				stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT userName , password , userType FROM login;");
+				ResultSet rs = stmt.executeQuery("SELECT userName , password , userType, ID FROM login;");
 				while (rs.next()) {
-
+					System.out.println(rs.getString(4));
 					if (user.getUserName().equals(rs.getString(1)) && user.getPassword().equals(rs.getString(2))) {
-						if (checkIfLoggedin(user, rs.getString(3), con) == false) {
+						if (checkIfLoggedin(user, rs.getString(3),rs.getString(4),obj , con) == false) {
 							obj.setResponse(Response.USER_EXIST);
-							obj.setInformation(rs.getString(3));
-
+							
+							
 							return;
 						} else {
 							obj.setResponse(Response.USER_ALREADY_LOGGEDIN);
@@ -234,7 +238,8 @@ public class ServerQuaries {
 
 	// cheacking if loggin if yes we dont do anything , else we updating that he can
 	// login and update the table that he logged in
-	public static boolean checkIfLoggedin(Login user, String type, Connection con) throws SQLException {
+	@SuppressWarnings("resource")
+	public static boolean checkIfLoggedin(Login user, String type, String userID,TransmissionPack obj, Connection con) throws SQLException {
 
 		ResultSet rs;
 		PreparedStatement pstmt, pstmt2;
@@ -257,12 +262,63 @@ public class ServerQuaries {
 			pstmt2 = con.prepareStatement(query2);
 			pstmt2.setString(1, "1");
 			pstmt2.executeUpdate();
+			switch(type) {
+			case "customer":{
+				
+				String query3="SELECT * FROM zerli.customer WHERE customerID='"+userID+"'";
+				rs = pstmt.executeQuery(query3);
+				rs.next();
+				Customer customer=new Customer(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(5),rs.getString(4),(AccountStatus.valueOf(rs.getString(7))),rs.getBoolean(10),rs.getString(9),rs.getBoolean(8),(new CreditCard(rs.getString(6),null,null)));
+				
+				obj.setInformation(customer);
+				break;
+			}
+			case "branchmanager":{
+				
+				String query3="SELECT * FROM zerli.branchmanager WHERE branchmanagerID='"+userID+"'";
+				rs = pstmt.executeQuery(query3);
+				rs.next();
+				BranchManager branchmanager=new BranchManager(rs.getString(1),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),null,rs.getBoolean(8),rs.getString(2));
+		
+				obj.setInformation(branchmanager);
+				break;
+			}
+			
+			}
+			
 
 		}
 
 		return flag;
 
 	}
+
+	public static void logout(TransmissionPack obj, Connection con)  {
+		ResultSet rs;
+		PreparedStatement pstmt;
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			String query="SELECT userType FROM login WHERE ID='"+((User)obj.getInformation()).getID()+"'";
+			rs = stmt.executeQuery(query);
+			rs.next();
+			String table = "zerli." + rs.getString(1);
+			String table2=rs.getString(1)+"ID";
+			
+			String query2 = "UPDATE" + " " + table + " SET isLoggedIn=? WHERE "+table2+"='"+((User)obj.getInformation()).getID()+"'";
+			System.out.println(query2);
+			pstmt = con.prepareStatement(query2);
+			pstmt.setString(1, "0");
+			pstmt.executeUpdate();
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
 
 //	public static void GetProductFromDB(TransmissionPack obj, Connection con) {
 //		if (obj instanceof TransmissionPack) {

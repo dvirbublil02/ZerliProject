@@ -47,6 +47,9 @@ public class MissionAnalyze {
 			ServerQuaries.Login(obj, con);
 			break;
 			}
+		case USER_LOGOUT:{
+			ServerQuaries.logout(obj,con);
+		}
 		}
 
 	}

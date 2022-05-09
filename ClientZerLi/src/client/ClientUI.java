@@ -1,5 +1,6 @@
 package client;
 import client_gui.ConnectToServerController;
+import entities_users.User;
 import javafx.application.Application;
 import javafx.stage.Stage;
 /**In this class we starting the first user screen (connecting to the server)
@@ -8,6 +9,7 @@ import javafx.stage.Stage;
  */
 public class ClientUI extends Application {
 	public static ClientController chat; //only one instance
+	
 
 	public static void main( String args[] ) throws Exception
 	   { 

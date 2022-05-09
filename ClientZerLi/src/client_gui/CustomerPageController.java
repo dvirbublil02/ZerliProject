@@ -1,5 +1,6 @@
 package client_gui;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
 import communication.Mission;
@@ -55,7 +56,7 @@ public class CustomerPageController {
 
 	@FXML
 	void logOut(ActionEvent event) throws Exception {
-		TransmissionPack tp = new TransmissionPack(Mission.USER_LOGOUT, null, this);
+		TransmissionPack tp = new TransmissionPack(Mission.USER_LOGOUT, null, ClientController.user);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window

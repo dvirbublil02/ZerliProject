@@ -20,6 +20,9 @@ import communication.Response;
 import communication.TransmissionPack;
 import entities_general.Login;
 import entities_general.Order;
+import entities_users.BranchManager;
+import entities_users.Customer;
+import entities_users.User;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -169,6 +172,7 @@ public class ClientHandleTransmission {
 		userTxt.setStyle(null);
 		passwordTxt.setStyle(null);
 		Login login = new Login(userTxt.getText(), passwordTxt.getText());
+		
 		if (checkLoginValidationFilling(login, userTxt, passwordTxt, errorLabel)) {
 			TransmissionPack tp = new TransmissionPack(Mission.USER_LOGIN, null, login);
 			ClientUI.chat.accept(tp);
@@ -220,13 +224,15 @@ public class ClientHandleTransmission {
 	private static void loadTheRightScreen(MouseEvent event, TransmissionPack tp) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
-		switch ((String) tp.getInformation()) {
-		case "customer": {
+		System.out.println(tp.getInformation().toString());
+		ClientController.user=(User) tp.getInformation();
+		switch (tp.getInformation().toString()) {
+		case "Customer": {
 			CustomerPageController menu = new CustomerPageController();
 			menu.start(primaryStage);
 			break;
 		}
-		case "branchmanager": {
+		case "Branch Manager": {
 			BranchManagerPageController menu = new BranchManagerPageController();
 			menu.start(primaryStage);
 			break;
@@ -235,6 +241,9 @@ public class ClientHandleTransmission {
 		}
 
 	}
+
+		
+	
 	
 
 }
