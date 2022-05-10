@@ -204,7 +204,7 @@
                                           </VBox>
                                           <VBox prefHeight="49.0" prefWidth="227.0">
                                              <children>
-                                                <ComboBox fx:id="MonthlyYear" prefHeight="50.0" prefWidth="212.0" promptText="2022" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
+                                                <ComboBox fx:id="pickYearForMonthlyCB" prefHeight="50.0" prefWidth="212.0" promptText="none" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -218,7 +218,7 @@
                                     </VBox>
                                     <VBox prefHeight="200.0" prefWidth="100.0">
                                        <children>
-                                          <ComboBox fx:id="QuartrtlyYear" prefHeight="50.0" prefWidth="212.0" promptText="Year" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
+                                          <ComboBox fx:id="pickYearForQuarterCB" prefHeight="50.0" prefWidth="212.0" promptText="Year" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -251,7 +251,7 @@
                                                       </VBox>
                                                       <VBox prefHeight="50.0" prefWidth="238.0">
                                                          <children>
-                                                            <ComboBox fx:id="MonthlyMonth" prefHeight="50.0" prefWidth="212.0" promptText="July" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
+                                                            <ComboBox fx:id="pickMonthForMonthlyCB" prefHeight="50.0" prefWidth="212.0" promptText="none" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
                                                          </children>
                                                       </VBox>
                                                    </children>
@@ -263,8 +263,8 @@
                                     <VBox prefHeight="74.0" prefWidth="238.0" />
                                     <VBox prefHeight="113.0" prefWidth="238.0">
                                        <children>
-                                          <Label fx:id="QuaterlyLabel" alignment="CENTER" prefHeight="25.0" prefWidth="211.0" text="Pick Quarterly" />
-                                          <ComboBox fx:id="QuartrtlyReport" prefHeight="50.0" prefWidth="212.0" promptText="Year" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
+                                          <Label fx:id="QuaterlyLabel" alignment="CENTER" prefHeight="25.0" prefWidth="211.0" text="Pick Quarter" />
+                                          <ComboBox fx:id="pickQuarterCB" prefHeight="50.0" prefWidth="212.0" promptText="Quarter" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER" prefHeight="159.0" prefWidth="236.0">
@@ -301,7 +301,7 @@
                                                 </VBox>
                                                 <VBox prefHeight="50.0" prefWidth="211.0">
                                                    <children>
-                                                      <ComboBox fx:id="MonthlyReport" prefHeight="50.0" prefWidth="211.0" promptText="Order Report" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
+                                                      <ComboBox fx:id="pickReportTypeForMonthlyCB" prefHeight="50.0" prefWidth="211.0" promptText="none" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
                                                    </children>
                                                 </VBox>
                                              </children>

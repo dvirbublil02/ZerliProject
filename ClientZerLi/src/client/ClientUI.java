@@ -21,6 +21,7 @@ public class ClientUI extends Application {
 		ConnectToServerController ConnectToServer=new ConnectToServerController();
 		 ConnectToServer.start(primaryStage);
 		 
+		 
 		
 	}
 	
