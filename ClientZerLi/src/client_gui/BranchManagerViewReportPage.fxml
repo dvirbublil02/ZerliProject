@@ -270,7 +270,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" prefHeight="159.0" prefWidth="236.0">
                                        <children>
-                                          <Button fx:id="ViewButton" mnemonicParsing="false" onAction="#View" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="View">
+                                          <Button fx:id="ViewButton" mnemonicParsing="false" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="View">
                                              <font>
                                                 <Font name="Candara Bold" size="18.0" />
                                              </font>
