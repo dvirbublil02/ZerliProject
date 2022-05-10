@@ -52,21 +52,7 @@ public class MissionAnalyzeClient {
 		case REMOVE_ORDER_SUCCESS:
 			break;
 		case USER_EXIST:{
-			switch((String)obj.getInformation()) {
-			case "customer": {
-				System.out.println(obj.getInformation());
-			for (zerliClientListeners client : clientlisteners) {
-				client.userIsCustomer();
-			}
-			break;
-			}
-			case "branchmanager": {
-				for (zerliClientListeners client : clientlisteners) {
-					client.userIsBranchManager();
-				}
-				break;
-				}
-			}
+			notifyAllSpecificListners(obj);
 
 		}
 			
@@ -78,6 +64,60 @@ public class MissionAnalyzeClient {
 			break;
 		}return false;
 
+	}
+
+	private static void notifyAllSpecificListners(TransmissionPack obj) {
+		switch(obj.getInformation().toString()) {
+		case "Customer": {
+			System.out.println(obj.getInformation());
+		for (zerliClientListeners client : clientlisteners) {
+			client.userIsCustomer();
+		}
+		break;
+		}
+		case "Branch Manager": {
+			for (zerliClientListeners client : clientlisteners) {
+				client.userIsBranchManager();
+			}
+			break;
+			}
+////		case "Customer Service": {
+//		for (zerliClientListeners client : clientlisteners) {
+//			client.userIsCustomerService();
+//		}
+////		break;
+////	}
+////	case "Delivery Agent": {
+//		for (zerliClientListeners client : clientlisteners) {
+//			client.userIsDeliveryAgent();
+//		}
+////		break;
+////	}
+////	case "Marketing Worker": {
+//		for (zerliClientListeners client : clientlisteners) {
+//			client.userIsMarketingWorker();
+//		}
+////		break;
+////	}
+////	case "Network Manager": {
+//		for (zerliClientListeners client : clientlisteners) {
+//			client.userIsNetworkManager();
+//		}
+////		break;
+////	}
+////	case "Service Expert": {
+//		for (zerliClientListeners client : clientlisteners) {
+//			client.userIsServiceExpert();
+//		}
+////		break;
+////	}
+////	case "Shop Worker": {
+//		for (zerliClientListeners client : clientlisteners) {
+//			client.userIsShopWorker();
+//		}
+////		break;
+////	}
+		}
 	}
 
 	public static void addClientListener(zerliClientListeners listener) {

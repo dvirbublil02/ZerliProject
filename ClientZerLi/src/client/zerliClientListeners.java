@@ -16,4 +16,28 @@ public interface zerliClientListeners {
 		return;
 	}
 
+	default void userIsCustomerService() {
+		return;
+	}
+
+	default void userIsDeliveryAgent(){
+		return;
+	}
+
+	default void userIsMarketingWorker(){
+		return;
+	}
+
+	default void userIsNetworkManager(){
+		return;
+	}
+
+	default void userIsServiceExpert(){
+		return;
+	}
+
+	default void userIsShopWorker(){
+		return;
+	}
+
 }

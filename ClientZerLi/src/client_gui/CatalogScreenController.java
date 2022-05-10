@@ -126,6 +126,7 @@ public class CatalogScreenController implements Initializable{
 		primaryStage.setScene(scene);
 		primaryStage.show();	
 		primaryStage.setOnCloseRequest(event ->{
+			
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 			});	
 	}

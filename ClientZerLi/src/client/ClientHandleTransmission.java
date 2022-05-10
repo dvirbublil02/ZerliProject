@@ -151,9 +151,12 @@ public class ClientHandleTransmission {
 			//
 		}
 	}
-
+	public static void logoutFromZerLi() {
+		TransmissionPack tp = new TransmissionPack(Mission.USER_LOGOUT, null, ClientController.user);
+		ClientUI.chat.accept(tp);
+	}
 	public static void DISCONNECT_FROM_SERVER() {
-
+		logoutFromZerLi();
 		TransmissionPack obj = new TransmissionPack(Mission.SEND_DISCONNECT_DETAILS, null, null);
 		List<String> details = new ArrayList<>();
 		try {
@@ -237,7 +240,36 @@ public class ClientHandleTransmission {
 			menu.start(primaryStage);
 			break;
 		}
-
+//		case "Customer Service": {
+//			CustomerServicePageController menu = new CustomerServiceController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+//		case "Delivery Agent": {
+//			DeliveryAgentPageController menu = new DeliveryAgentPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+//		case "Marketing Worker": {
+//			MarketingWorkerPageController menu = new MarketingWorkerPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+//		case "Network Manager": {
+//			NetworkManagerPageController menu = new NetworkManagerPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+//		case "Service Expert": {
+//			ServiceExpertPageController menu = new ServiceExpertPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+//		case "Shop Worker": {
+//			ShopWorkerPageController menu = new ShopWorkerPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
 		}
 
 	}

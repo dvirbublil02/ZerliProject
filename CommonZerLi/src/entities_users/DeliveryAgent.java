@@ -3,7 +3,7 @@ package entities_users;
 import java.io.Serializable;
 import java.util.List;
 
-import entities_general.Order;
+
 import enums.AccountStatus;
 
 /**
@@ -18,7 +18,7 @@ public class DeliveryAgent extends User implements Serializable{
 	/**
 	 * Every delivery agent has a list of orders to send
 	 */
-	private List<Order> orders;
+	private List<String> orders;
 
 	/**
 	 * 
@@ -33,7 +33,7 @@ public class DeliveryAgent extends User implements Serializable{
 	 * @param orders
 	 */
 	public DeliveryAgent(String iD, String firstName, String lastName, String email, String phoneNumber,
-			AccountStatus accountStatus, boolean isLoggedIn, String branchID, List<Order> orders) {
+			AccountStatus accountStatus, boolean isLoggedIn, String branchID, List<String> orders) {
 		super(iD, firstName, lastName, email, phoneNumber, accountStatus, isLoggedIn);
 		this.branchID = branchID;
 		this.orders = orders;
@@ -41,7 +41,7 @@ public class DeliveryAgent extends User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Delivery agent " + FirstName + LastName + " of branch: " + branchID;
+		return "Delivery Agent";
 	}
 
 	/**
@@ -65,14 +65,14 @@ public class DeliveryAgent extends User implements Serializable{
 	 * 
 	 * @return
 	 */
-	public List<Order> getOrders() {
+	public List<String> getOrders() {
 		return orders;
 	}
 
 	/**
 	 * @param orders
 	 */
-	public void setOrders(List<Order> orders) {
+	public void setOrders(List<String> orders) {
 		this.orders = orders;
 	}
 

@@ -25,6 +25,6 @@ public class MarketingWorker extends User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Marketing Worker: " + FirstName + " " + LastName;
+		return "Marketing Worker";
 	}
 }

@@ -26,6 +26,6 @@ public class CustomerService extends User implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Customer Service Employee";
+		return "Customer Service";
 	}
 }
