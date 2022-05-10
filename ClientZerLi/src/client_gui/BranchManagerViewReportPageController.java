@@ -19,7 +19,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class BranchManagerViewReportPageController implements Initializable {
-
+//shir changed
 	@FXML
 	private Label MonthlyMonthLabel;
 
