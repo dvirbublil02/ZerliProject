@@ -1,6 +1,5 @@
 package client_gui;
 
-import client.ClientHandleTransmission;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +24,7 @@ public class BranchManagerPageController {
     private Button logOutBtn;
 
     @FXML
-    private Button managmentBtn;
+    private Button requestManagmentBtn;
 
     @FXML
     private Button viewReportsBtn;
@@ -39,14 +38,17 @@ public class BranchManagerPageController {
 		primaryStage.setTitle("Manager Menu");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		primaryStage.setOnCloseRequest(event ->{
-			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
-			});	
+//		primaryStage.setOnCloseRequest(event ->{
+//			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+//			});	
 	}
     
     @FXML
-    void addNewCustomer(ActionEvent event) {
-
+    void addNewCustomer(ActionEvent event) throws Exception {
+    	((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		BranchManagerAddNewCustomerController addNewCustomer = new BranchManagerAddNewCustomerController();
+		addNewCustomer.start(primaryStage);
     }
 
     @FXML
@@ -65,8 +67,11 @@ public class BranchManagerPageController {
     }
 
     @FXML
-    void managment(ActionEvent event) {
-
+    void requestManagment(ActionEvent event) throws Exception {
+    	((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		BranchManagerOrderManagementController requestManagemetPage = new BranchManagerOrderManagementController();
+		requestManagemetPage.start(primaryStage);
     }
 
     @FXML

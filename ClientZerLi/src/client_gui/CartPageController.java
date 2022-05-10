@@ -79,7 +79,7 @@ public class CartPageController implements Initializable {
 		ImageView imageView1 = new ImageView(image1);
 		imageView1.setImage(image1);
 
-		listView.add(new Cart("Rose Bouquet", imageView1, 22.55, 1));
+	//	listView.add(new Cart("Rose Bouquet", imageView1, 22.55, 1));
 		table.setItems(listView);
 
 	}
