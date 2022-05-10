@@ -16,8 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefWidth="999.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" fx:controller="client_gui.BranchManagerOrderManagementController">
+<AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderManagementController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1006.0">
          <children>
@@ -199,36 +198,18 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <HBox prefHeight="300.0" prefWidth="698.0">
+                                    <HBox prefHeight="444.0" prefWidth="698.0">
                                        <children>
                                           <TableView fx:id="Orders" prefHeight="229.0" prefWidth="698.0" HBox.hgrow="ALWAYS">
                                             <columns>
+                                                <TableColumn fx:id="showCol" prefWidth="75.0" text="show" />
                                                 <TableColumn fx:id="statusCol" prefWidth="99.0" text="status" />
                                               <TableColumn fx:id="orderIDCol" prefWidth="70.0" text="orderID" />
-                                              <TableColumn fx:id="customerIDCol" prefWidth="99.0" text="customerID" />
-                                                <TableColumn fx:id="branchIDCol" prefWidth="99.0" text="branchID" />
-                                                <TableColumn fx:id="priceCol" prefWidth="70.0" text="price" />
-                                                <TableColumn fx:id="orderDateCol" prefWidth="110.0" text="orderDate" />
-                                                <TableColumn fx:id="expectedDeliveryCol" prefWidth="125.0" text="expectedDelivery" />
-                                            </columns>
-                                          </TableView>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER" prefHeight="50.0" prefWidth="698.0">
-                                       <children>
-                                          <Label text="Items in order">
-                                             <font>
-                                                <Font name="System Bold" size="13.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                    <HBox prefHeight="300.0" prefWidth="698.0">
-                                       <children>
-                                          <TableView prefHeight="229.0" prefWidth="701.0" HBox.hgrow="ALWAYS">
-                                            <columns>
-                                              <TableColumn prefWidth="75.0" text="C1" />
-                                              <TableColumn prefWidth="75.0" text="C2" />
+                                              <TableColumn fx:id="customerIDCol" prefWidth="77.5999755859375" text="customerID" />
+                                                <TableColumn fx:id="branchIDCol" prefWidth="68.0" text="branchID" />
+                                                <TableColumn fx:id="priceCol" prefWidth="64.800048828125" text="price" />
+                                                <TableColumn fx:id="orderDateCol" prefWidth="117.5999755859375" text="orderDate" />
+                                                <TableColumn fx:id="expectedDeliveryCol" prefWidth="124.00003662109373" text="expectedDelivery" />
                                             </columns>
                                           </TableView>
                                        </children>

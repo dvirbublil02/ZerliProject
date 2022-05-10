@@ -4,6 +4,9 @@ import java.util.List;
 
 import entities_catalog.Product;
 import enums.OrderStatus;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
 /**
  * @author Omri Shalev
  */
@@ -32,7 +35,7 @@ public class Order {
 	/**
 	 * Every order has a status: ready, on the way, arrived.
 	 */
-	private OrderStatus status;
+	private ComboBox<OrderStatus> status;
 	/**
 	 * Every order save the date and time it was created.
 	 */
@@ -56,7 +59,7 @@ public class Order {
 	 * @param expectedDelivery
 	 * @param items
 	 */
-	public Order(String orderID, String customerID, String branchID, String price, String greetingCard, OrderStatus status,
+	public Order(String orderID, String customerID, String branchID, String price, String greetingCard,
 			String orderDate, String expectedDelivery, List<Product> items) {
 		super();
 		this.orderID = orderID;
@@ -64,7 +67,9 @@ public class Order {
 		this.branchID = branchID;
 		this.price = price;
 		this.greetingCard = greetingCard;
-		this.status = status;
+		this.status = new ComboBox<>();
+		ObservableList<OrderStatus> list1=FXCollections.observableArrayList(OrderStatus.READY,OrderStatus.NOT_READY,OrderStatus.ON_THE_WAY);
+		this.status.setItems(list1);
 		this.orderDate = orderDate;
 		this.expectedDelivery = expectedDelivery;
 		this.items = items;
@@ -110,11 +115,11 @@ public class Order {
 		this.greetingCard = greetingCard;
 	}
 
-	public OrderStatus getStatus() {
+	public ComboBox<OrderStatus> getStatus() {
 		return status;
 	}
 
-	public void setStatus(OrderStatus status) {
+	public void setStatus(ComboBox<OrderStatus> status) {
 		this.status = status;
 	}
 

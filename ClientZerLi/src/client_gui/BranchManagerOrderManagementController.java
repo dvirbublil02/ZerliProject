@@ -1,12 +1,15 @@
 package client_gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Observable;
 import java.util.ResourceBundle;
 
 import entities_catalog.Cart;
+import entities_catalog.Product;
 import entities_general.Order;
 import enums.AccountStatus;
 import enums.OrderStatus;
@@ -53,13 +56,14 @@ public class BranchManagerOrderManagementController implements Initializable {
 
 	@FXML
 	private TableColumn<Order, String> priceCol;
+	
+    @FXML
+    private TableColumn<Order,Button> showCol;
 
 	@FXML
-	private TableColumn<Order, String> statusCol;
+	private TableColumn<Order, ComboBox<OrderStatus>> statusCol;
 
-//	ComboBox<String> statusCheck;
-//	
-	ObservableList<String> listView; 
+	private ObservableList<Order> listView = FXCollections.observableArrayList(); 
 	
 	
 
@@ -87,26 +91,27 @@ public class BranchManagerOrderManagementController implements Initializable {
 	 @Override
 		public void initialize(URL location, ResourceBundle resources) {
 		 
-//		 List<OrderStatus> accountStatus = new ArrayList<>();
-//		 accountStatus.add(OrderStatus.ARRIVED);
-//		 accountStatus.add(OrderStatus.ON_THE_WAY);
-//		 accountStatus.add(OrderStatus.NOT_READY);
-//		 accountStatus.add(OrderStatus.READY);
-//		 List<String> list = new ArrayList<>();
-//		 for(OrderStatus orderStatus : accountStatus) {
-//			 int i = orderStatus.ordinal();
-//			 list.add(accountStatus.get(i));
-//		 }
-		// statusList = FXCollections.observableArrayList(accountStatus);
-		// statusCheck.setItems(statusList);
+		 //show button function
+		 showCol.setCellFactory(ShowButtonTableCell.<Order>forTableColumn("Details", (Order o) -> {
+			
+			 
+			// need to send list to screen  
+			//ObservableList<Product> listToNextScreen=FXCollections.observableArrayList(o.getItems()); 
+			
+			//open screen of details -- > need to init before starting
+			Stage primaryStage = new Stage();
+			BranchManagerOrderDetailsController ordersDetails = new BranchManagerOrderDetailsController();
+			try {
+				ordersDetails.start(primaryStage);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			
+			 return o; 
+		    })); 
 		 
-		// statusCol = accountStatus.get(0);
-		// statusCol.setCellValueFactory(new PropertyValueFactory<OrderStatus,List<OrderStatus>>("status"));
-//		 
-//		 listView = FXCollections.observableArrayList("NOT_READY","READY", "ARRIVED", "ON_THE_WAY");
-//		 statusCheck.setItems(listView);
-//		 
-		 statusCol.setCellValueFactory(new PropertyValueFactory<Order,String>("status"));
+		 statusCol.setCellValueFactory(new PropertyValueFactory<Order,ComboBox<OrderStatus>>("status"));
 		 orderIDCol.setCellValueFactory(new PropertyValueFactory<Order,String>("orderID"));
 		 customerIDCol.setCellValueFactory(new PropertyValueFactory<Order,String>("customerID"));
 		 branchIDCol.setCellValueFactory(new PropertyValueFactory<Order,String>("branchID"));
@@ -114,19 +119,11 @@ public class BranchManagerOrderManagementController implements Initializable {
 		 orderDateCol.setCellValueFactory(new PropertyValueFactory<Order,String>("orderDate"));
 		 expectedDeliveryCol.setCellValueFactory(new PropertyValueFactory<Order,String>("expectedDelivery"));
 		 
-		 listView.add(new Order("1", "315838540", "3", "99.5", null, OrderStatus.ARRIVED, "9.5.22-10:00", "10.5.22-10:00", null));
-
+		 List<Order> orders = new ArrayList<>();
+		 orders.add(new Order("1", "315838540", "3", "99.5", null , "9.5.22-10:00", "10.5.22-10:00", null));
+		 listView.addAll(orders);
 		 Orders.setItems(listView);
 		 
-		 //	ItemNameColTbl.setCellValueFactory(new PropertyValueFactory<Cart, String>("Name"));
-//			PriceColTbl.setCellValueFactory(new PropertyValueFactory<Cart, Double>("Price"));
-//			ImgColTbl.setCellValueFactory(new PropertyValueFactory<Cart, ImageView>("ImgSrc"));
-//			QuantityColTbl.setCellValueFactory(new PropertyValueFactory<Cart, Integer>("Quantity"));
-//
-//			
-//		//	listView.add(new Cart("Rose Bouquet", imageView1, 22.55, 1));
-//			table.setItems(listView);
-
 		}
 	 
 	 
