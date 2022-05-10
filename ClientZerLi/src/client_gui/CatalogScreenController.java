@@ -117,6 +117,7 @@ public class CatalogScreenController implements Initializable{
     private ObservableList<String> typeFilter ;
     
     
+    
 	public void start(Stage primaryStage) throws Exception {	
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CatalogScreen.fxml"));
 				
