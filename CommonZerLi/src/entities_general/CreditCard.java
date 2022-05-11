@@ -1,6 +1,9 @@
 package entities_general;
 
-public class CreditCard {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class CreditCard implements Serializable{
 	String creditCardNumber, creditCardCvvCode, creditCardDateOfExpiration;
 
 	public CreditCard(String creditCardNumber, String creditCardCvvCode, String creditCardDateOfExpiration) {

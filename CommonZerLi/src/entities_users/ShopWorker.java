@@ -44,7 +44,7 @@ public class ShopWorker extends User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Shop Worker " + FirstName + LastName + " of branch: " + branchID;
+		return "Shop Worker";
 	}
 
 }

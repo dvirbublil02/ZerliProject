@@ -5,11 +5,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.List;
 
 import communication.Response;
 import communication.TransmissionPack;
+import entities_general.CreditCard;
 import entities_general.Login;
-import entities_general.Order;
+import entities_users.BranchManager;
+import entities_users.Customer;
+import entities_users.CustomerService;
+import entities_users.DeliveryAgent;
+import entities_users.MarketingWorker;
+import entities_users.NetworkManager;
+import entities_users.ServiceExpert;
+import entities_users.ShopWorker;
+import entities_users.User;
+import enums.AccountStatus;
 
 /**
  * In this class there are all the server quarries
@@ -202,13 +214,12 @@ public class ServerQuaries {
 			Statement stmt;
 			try {
 				stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT userName , password , userType FROM login;");
+				ResultSet rs = stmt.executeQuery("SELECT userName , password , userType, ID FROM login;");
 				while (rs.next()) {
-
+					System.out.println(rs.getString(4));
 					if (user.getUserName().equals(rs.getString(1)) && user.getPassword().equals(rs.getString(2))) {
-						if (checkIfLoggedin(user, rs.getString(3), con) == false) {
+						if (checkIfLoggedin(user, rs.getString(3), rs.getString(4), obj, con) == false) {
 							obj.setResponse(Response.USER_EXIST);
-							obj.setInformation(rs.getString(3));
 
 							return;
 						} else {
@@ -232,35 +243,167 @@ public class ServerQuaries {
 		}
 	}
 
-	// cheacking if loggin if yes we dont do anything , else we updating that he can
-	// login and update the table that he logged in
-	public static boolean checkIfLoggedin(Login user, String type, Connection con) throws SQLException {
-
+	/**
+	 * checking if login if yes we don't do anything , else we updating that he can
+	 * login and update the table that he logged in
+	 * 
+	 * @param user
+	 * @param type
+	 * @param userID
+	 * @param obj
+	 * @param con
+	 * @return
+	 * @throws SQLException
+	 */
+	@SuppressWarnings("resource")
+	public static boolean checkIfLoggedin(Login user, String type, String userID, TransmissionPack obj, Connection con)
+			throws SQLException {
+		boolean isLogin = false;
+		String table, userRow, updateSpecificRow;
 		ResultSet rs;
 		PreparedStatement pstmt, pstmt2;
-		String table = "zerli." + type;
-		boolean flag = false;
-		String query = "SELECT isLoggedIn FROM" + " " + table + " WHERE userName=" + "'" + user.getUserName() + "'"
-				+ ";";
-		String query2 = "UPDATE" + " " + table + " SET isLoggedIn=? WHERE userName=" + "'" + user.getUserName() + "'"
-				+ ";";
-		System.out.println(query);
-		System.out.println(query2);
-		pstmt = con.prepareStatement(query);
-		rs = pstmt.executeQuery(query);
+		table = "zerli." + type;
+		userRow = "SELECT isLoggedIn FROM" + " " + table + " WHERE "+type+"ID=" + "'" + userID + "'" + ";";
+		updateSpecificRow = "UPDATE" + " " + table + " SET isLoggedIn=? WHERE "+type+"ID=" + "'" + userID
+				+ "'" + ";";
+		pstmt = con.prepareStatement(userRow);
+		rs = pstmt.executeQuery(userRow);
 		rs.next();
-		System.out.println(rs.getString(1));
 		if (rs.getString(1).equals("1"))
-			flag = true;
+			isLogin = true;
 		else if (rs.getString(1).equals("0")) {
-			flag = false;
-			pstmt2 = con.prepareStatement(query2);
+			isLogin = false;
+			pstmt2 = con.prepareStatement(updateSpecificRow);
 			pstmt2.setString(1, "1");
 			pstmt2.executeUpdate();
+			upadateUserInformation(type, userID, obj, pstmt);//Update the obj to specific userType and his specific information
 
 		}
 
-		return flag;
+		return isLogin;
+
+	}
+
+	/**
+	 * this method is updating the specific userType and his specific information
+	 * it will be update on the client side as well using trancimissionPack setInformation method
+	 * @param type 
+	 * @param userID
+	 * @param obj
+	 * @param pstmt
+	 * @throws SQLException
+	 */
+	private static void upadateUserInformation(String type, String userID, TransmissionPack obj,
+			PreparedStatement pstmt) throws SQLException {
+		ResultSet rs;
+		switch (type) {
+		case "customer": {
+
+			rs = getRowFromTable(userID, type, pstmt);
+			Customer customer = new Customer(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+					rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7), rs.getString(8),
+					rs.getBoolean(9), (new CreditCard(rs.getString(6), null, null)));
+			obj.setInformation(customer);
+			break;
+		}
+		case "branchmanager": {
+
+			rs = getRowFromTable(userID, type, pstmt);
+			BranchManager branchmanager = new BranchManager(rs.getString(1), rs.getString(2), rs.getString(3),
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7), rs.getString(8));
+			obj.setInformation(branchmanager);
+			break;
+		}
+		case "customerservice":{
+			rs = getRowFromTable(userID, type, pstmt);
+			CustomerService customerservice = new CustomerService(rs.getString(1), rs.getString(2), rs.getString(3),
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
+			obj.setInformation(customerservice);
+			break;
+		}
+		case "deliveryagent":{
+			rs = getRowFromTable(userID, type, pstmt);
+			List<String>ordersID=Arrays.asList(rs.getString(9).split("[\\s,]+"));
+			DeliveryAgent deliveryagent = new DeliveryAgent(rs.getString(1), rs.getString(2), rs.getString(3),
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),rs.getString(8),ordersID);
+			obj.setInformation(deliveryagent);
+			break;
+		}
+		case "marketingworker":{
+			rs = getRowFromTable(userID, type, pstmt);
+			
+			MarketingWorker marketingworker = new MarketingWorker(rs.getString(1), rs.getString(2), rs.getString(3),
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
+			obj.setInformation(marketingworker);
+			break;
+		}
+		case "networkmanager":{
+			rs = getRowFromTable(userID, type, pstmt);
+			
+			NetworkManager networkmanager = new NetworkManager(rs.getString(1), rs.getString(2), rs.getString(3),
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
+			obj.setInformation(networkmanager);
+			break;
+		}
+		case "serviceexpert":{
+			rs = getRowFromTable(userID, type, pstmt);
+			
+			ServiceExpert serviceexpert = new ServiceExpert(rs.getString(1), rs.getString(2), rs.getString(3),
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
+			obj.setInformation(serviceexpert);
+			break;
+		}
+		case "shopworker":{
+			rs = getRowFromTable(userID, type, pstmt);
+			
+			ShopWorker shopworker = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3),
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),rs.getString(8));
+			obj.setInformation(shopworker);
+			break;
+		}
+		}
+	}
+
+	/**
+	 * this method return specific row of user from his tale
+	 * 
+	 * @param userID
+	 * @param type
+	 * @param pstmt
+	 * @return
+	 * @throws SQLException
+	 */
+	private static ResultSet getRowFromTable(String userID, String type, PreparedStatement pstmt) throws SQLException {
+		ResultSet rs;
+		String getrow = "SELECT * FROM zerli." + type + " WHERE " + type + "ID='" + userID + "'";
+		rs = pstmt.executeQuery(getrow);
+		rs.next();
+		return rs;
+	}
+
+	public static void logout(TransmissionPack obj, Connection con) {
+		ResultSet rs;
+		PreparedStatement pstmt;
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			String query = "SELECT userType FROM login WHERE ID='" + ((User) obj.getInformation()).getID() + "'";
+			rs = stmt.executeQuery(query);
+			rs.next();
+			String table = "zerli." + rs.getString(1);
+			String table2 = rs.getString(1) + "ID";
+
+			String query2 = "UPDATE" + " " + table + " SET isLoggedIn=? WHERE " + table2 + "='"
+					+ ((User) obj.getInformation()).getID() + "'";
+			System.out.println(query2);
+			pstmt = con.prepareStatement(query2);
+			pstmt.setString(1, "0");
+			pstmt.executeUpdate();
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

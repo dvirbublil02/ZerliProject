@@ -20,6 +20,9 @@ import communication.Response;
 import communication.TransmissionPack;
 import entities_general.Login;
 import entities_general.Order;
+import entities_users.BranchManager;
+import entities_users.Customer;
+import entities_users.User;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -148,9 +151,12 @@ public class ClientHandleTransmission {
 			//
 		}
 	}
-
+	public static void logoutFromZerLi() {
+		TransmissionPack tp = new TransmissionPack(Mission.USER_LOGOUT, null, ClientController.user);
+		ClientUI.chat.accept(tp);
+	}
 	public static void DISCONNECT_FROM_SERVER() {
-
+		logoutFromZerLi();
 		TransmissionPack obj = new TransmissionPack(Mission.SEND_DISCONNECT_DETAILS, null, null);
 		List<String> details = new ArrayList<>();
 		try {
@@ -164,11 +170,12 @@ public class ClientHandleTransmission {
 		obj.setInformation(details);
 		ClientUI.chat.accept(obj);
 	}
-
+	
 	public static void USER_LOGIN(TextField userTxt, TextField passwordTxt, Label errorLabel, MouseEvent event) {
 		userTxt.setStyle(null);
 		passwordTxt.setStyle(null);
 		Login login = new Login(userTxt.getText(), passwordTxt.getText());
+		
 		if (checkLoginValidationFilling(login, userTxt, passwordTxt, errorLabel)) {
 			TransmissionPack tp = new TransmissionPack(Mission.USER_LOGIN, null, login);
 			ClientUI.chat.accept(tp);
@@ -220,21 +227,55 @@ public class ClientHandleTransmission {
 	private static void loadTheRightScreen(MouseEvent event, TransmissionPack tp) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
-		switch ((String) tp.getInformation()) {
-		case "customer": {
+		System.out.println(tp.getInformation().toString());
+		ClientController.user=(User) tp.getInformation();
+		switch (tp.getInformation().toString()) {
+		case "Customer": {
 			CustomerPageController menu = new CustomerPageController();
 			menu.start(primaryStage);
 			break;
 		}
-		case "branchmanager": {
+		case "Branch Manager": {
 			BranchManagerPageController menu = new BranchManagerPageController();
 			menu.start(primaryStage);
 			break;
 		}
-
+//		case "Customer Service": {
+//			CustomerServicePageController menu = new CustomerServiceController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+//		case "Delivery Agent": {
+//			DeliveryAgentPageController menu = new DeliveryAgentPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+//		case "Marketing Worker": {
+//			MarketingWorkerPageController menu = new MarketingWorkerPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+//		case "Network Manager": {
+//			NetworkManagerPageController menu = new NetworkManagerPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+//		case "Service Expert": {
+//			ServiceExpertPageController menu = new ServiceExpertPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+//		case "Shop Worker": {
+//			ShopWorkerPageController menu = new ShopWorkerPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
 		}
 
 	}
+
+		
+	
 	
 
 }

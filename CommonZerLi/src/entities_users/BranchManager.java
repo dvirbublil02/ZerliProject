@@ -49,7 +49,7 @@ public class BranchManager extends User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Manager " + FirstName + LastName + " of branch: " + branchID;
+		return "Branch Manager";
 	}
 
 }

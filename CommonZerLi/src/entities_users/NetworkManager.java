@@ -25,7 +25,7 @@ public class NetworkManager extends User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Network Manager: " + FirstName + " " + LastName;
+		return "Network Manager";
 	}
 
 }

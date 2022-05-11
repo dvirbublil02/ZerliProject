@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import communication.ChatIF;
 import communication.TransmissionPack;
+import entities_users.User;
 
 /**
  * This class constructs the UI for a chat client. It implements the chat
@@ -30,7 +31,9 @@ public class ClientController implements ChatIF {
 	 * The instance of the client that created this ConsoleChat.
 	 */
 	ChatClient client;
-
+	
+	/**general user for all type of client in zerLi*/
+	public static User user;
 	// Constructors ****************************************************
 
 	/**

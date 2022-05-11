@@ -25,6 +25,6 @@ public class ServiceExpert extends User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Service Expert: " + FirstName + " " + LastName;
+		return "Service Expert";
 	}
 }

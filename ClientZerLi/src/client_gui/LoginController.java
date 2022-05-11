@@ -38,11 +38,42 @@ public class LoginController {
 			@Override
 			public void userIsCustomer() {
 				MissionAnalyzeClient.removeClientListener(this);
-				System.out.println("here");
+				
 			}
+			
 			@Override
 			public void userIsBranchManager() {
 				MissionAnalyzeClient.removeClientListener(this);
+			}
+			@Override
+			public void userIsCustomerService() {
+				MissionAnalyzeClient.removeClientListener(this);
+				
+			}
+			@Override
+			public void userIsDeliveryAgent() {
+				MissionAnalyzeClient.removeClientListener(this);
+				
+			}
+			@Override
+			public void userIsMarketingWorker() {
+				MissionAnalyzeClient.removeClientListener(this);
+				
+			}
+			@Override
+			public void userIsNetworkManager() {
+				MissionAnalyzeClient.removeClientListener(this);
+				
+			}
+			@Override
+			public void userIsServiceExpert() {
+				MissionAnalyzeClient.removeClientListener(this);
+				
+			}
+			@Override
+			public void userIsShopWorker() {
+				MissionAnalyzeClient.removeClientListener(this);
+				
 			}
 			
 

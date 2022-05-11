@@ -1,6 +1,10 @@
 package client_gui;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
+import client.ClientUI;
+import communication.Mission;
+import communication.TransmissionPack;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,9 +55,17 @@ public class CustomerPageController {
 	}
 
 	@FXML
-	void logOut(ActionEvent event) {
-
+	void logOut(ActionEvent event) throws Exception {
+		TransmissionPack tp;
+		ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+		tp = ClientUI.chat.getObj();
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		LoginController login = new LoginController();
+		login.start(primaryStage);
 	}
+
+	
 
 	@FXML
 	void viewCatalog(ActionEvent event) throws Exception {
