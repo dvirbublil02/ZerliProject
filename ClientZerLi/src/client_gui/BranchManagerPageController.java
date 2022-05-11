@@ -1,13 +1,11 @@
 package client_gui;
 
-<<<<<<< HEAD
-=======
+
 import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
 import communication.Mission;
 import communication.TransmissionPack;
->>>>>>> logutNew
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,9 +44,9 @@ public class BranchManagerPageController {
 		primaryStage.setTitle("Manager Menu");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-//		primaryStage.setOnCloseRequest(event ->{
-//			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
-//			});	
+		primaryStage.setOnCloseRequest(event ->{
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+			});	
 	}
     
     @FXML
