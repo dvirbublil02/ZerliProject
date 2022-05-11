@@ -35,7 +35,7 @@ public class BranchManagerPageController {
     @FXML
     private Button viewReportsBtn;
     
-    
+    //here
 	public void start(Stage primaryStage) throws Exception {	
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/BranchManagerPage.fxml"));
 				
