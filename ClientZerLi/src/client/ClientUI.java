@@ -11,16 +11,13 @@ import javafx.stage.Stage;
  *
  */
 public class ClientUI extends Application {
-<<<<<<< HEAD
+
 	public static ClientController chat; // only one instance
 
 	public static void main(String args[]) throws Exception {
 		launch(args);
 	} // end main
-=======
-	public static ClientController chat; //only one instance
-	
->>>>>>> logutNew
+
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

@@ -239,6 +239,10 @@ public class ClientHandleTransmission {
 			BranchManagerPageController menu = new BranchManagerPageController();
 			menu.start(primaryStage);
 			break;
+			
+//			CustomerPageController menu = new CustomerPageController();
+//			menu.start(primaryStage);
+//			break;
 		}
 //		case "Customer Service": {
 //			CustomerServicePageController menu = new CustomerServiceController();
