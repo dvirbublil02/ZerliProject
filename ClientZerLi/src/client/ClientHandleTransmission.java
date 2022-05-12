@@ -9,7 +9,9 @@ package client;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import client_gui.BranchManagerPageController;
 import client_gui.CartPageController;
@@ -18,6 +20,7 @@ import client_gui.LoginController;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
+import entities_catalog.Product;
 import entities_general.Login;
 import entities_general.Order;
 import entities_users.BranchManager;
@@ -151,10 +154,12 @@ public class ClientHandleTransmission {
 			//
 		}
 	}
+
 	public static void logoutFromZerLi() {
 		TransmissionPack tp = new TransmissionPack(Mission.USER_LOGOUT, null, ClientController.user);
 		ClientUI.chat.accept(tp);
 	}
+
 	public static void DISCONNECT_FROM_SERVER() {
 		logoutFromZerLi();
 		TransmissionPack obj = new TransmissionPack(Mission.SEND_DISCONNECT_DETAILS, null, null);
@@ -170,12 +175,12 @@ public class ClientHandleTransmission {
 		obj.setInformation(details);
 		ClientUI.chat.accept(obj);
 	}
-	
+
 	public static void USER_LOGIN(TextField userTxt, TextField passwordTxt, Label errorLabel, MouseEvent event) {
 		userTxt.setStyle(null);
 		passwordTxt.setStyle(null);
 		Login login = new Login(userTxt.getText(), passwordTxt.getText());
-		
+
 		if (checkLoginValidationFilling(login, userTxt, passwordTxt, errorLabel)) {
 			TransmissionPack tp = new TransmissionPack(Mission.USER_LOGIN, null, login);
 			ClientUI.chat.accept(tp);
@@ -228,7 +233,7 @@ public class ClientHandleTransmission {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		System.out.println(tp.getInformation().toString());
-		ClientController.user=(User) tp.getInformation();
+		ClientController.user = (User) tp.getInformation();
 		switch (tp.getInformation().toString()) {
 		case "Customer": {
 			CustomerPageController menu = new CustomerPageController();
@@ -239,7 +244,7 @@ public class ClientHandleTransmission {
 			BranchManagerPageController menu = new BranchManagerPageController();
 			menu.start(primaryStage);
 			break;
-			
+
 //			CustomerPageController menu = new CustomerPageController();
 //			menu.start(primaryStage);
 //			break;
@@ -278,8 +283,49 @@ public class ClientHandleTransmission {
 
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Product> getDataProduct() {
+		TransmissionPack tp = new TransmissionPack(Mission.DATA_PRODUCTS, null, null);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+
+		switch (tp.getResponse()) {
+		case GET_DATA_PRODUCTS: {
+			return (List<Product>) tp.getInformation();
+		}
+
+		case FAILD_DATA_PRODUCTS: {
+			return null;
+		}
+		}
+		return null;
+	}
+
+	// COLLCET PRODUCT BY FILTERS
+	public static List<Product> getDataProductByFilter(String color, String price, String type) {
+		TransmissionPack tp = new TransmissionPack(Mission.DATA_PRODUCTS_BY_FILTER, null, null);
 		
-	
-	
+		// initilaze filters 
+		Map<String,String> filters = new HashMap<>();
+		filters.put("color",color);
+		filters.put("price",price);
+		filters.put("type",type);
+
+		//send to server side and get information.
+		tp.setInformation(filters);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+
+		switch (tp.getResponse()) {
+			case GET_DATA_PRODUCTS_BY_FILTER: {
+				return (List<Product>) tp.getInformation();
+			}
+
+			case FAILD_DATA_PRODUCTS_BY_FILTER: {
+				return null;
+			}
+		}
+		return null;
+	}
 
 }

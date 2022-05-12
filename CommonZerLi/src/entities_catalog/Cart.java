@@ -9,7 +9,7 @@ public class Cart {
 	private double price;
 	private int quantity;
 	private String cartID;
-	private List<ProductInCart> cartList;
+	private List<ProductInOrder> cartList;
 	/**
 	 * @param name
 	 * @param object
@@ -17,7 +17,7 @@ public class Cart {
 	 * @param quantity
 	 * @param cartList
 	 */
- 	public Cart(String name, ImageView object, double price, int quantity,List<ProductInCart> cartList) {
+ 	public Cart(String name, ImageView object, double price, int quantity,List<ProductInOrder> cartList) {
 		this.imgSrc = object;
 		this.price = price;
 		this.quantity = quantity;
@@ -56,11 +56,11 @@ public class Cart {
 		this.cartID = cartID;
 	}
 
-	public List<ProductInCart> getCartList() {
+	public List<ProductInOrder> getCartList() {
 		return cartList;
 	}
 
-	public void setCartList(List<ProductInCart> cartList) {
+	public void setCartList(List<ProductInOrder> cartList) {
 		this.cartList = cartList;
 	}
 

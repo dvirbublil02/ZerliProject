@@ -107,7 +107,7 @@ public class CatalogScreenController implements Initializable{
     private Button addToCustomBtn;
     
 
-    private String CURRENCY="¤";
+    private String CURRENCY="â‚ª";
     private Image imageCardTmp;
     private MyListenerCatalog myListener;
     private List<Product> itemInCatalog = new ArrayList<Product>();
@@ -127,30 +127,33 @@ public class CatalogScreenController implements Initializable{
 		primaryStage.setScene(scene);
 		primaryStage.show();	
 		primaryStage.setOnCloseRequest(event ->{
-			
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 			});	
 	}
 	
 	
 	
-	// build list of item
-	private List<Product> getDataItems()
+	// build list of item regular or by filter
+	private List<Product> getDataItems(String color , String price , String type)
 	{
-		List<Product> itemInCatalog = new ArrayList<>();
-		Product item;
+		if( color.equals("None") && price.equals("None") && type.equals("None"))
+			return ClientHandleTransmission.getDataProduct();
+		
+		return ClientHandleTransmission.getDataProductByFilter(color,price,type);
+	}
 	
-		item = new Product ("1","Rose Bouquet",25.55,"920000","/javafx_images/Catalog/Rose.png","53");
-		itemInCatalog.add(item);
-		
-		item = new Product ("2","Cactus Flower",15.55,"526354","/javafx_images/Catalog/cactusflower.png","23");
-		itemInCatalog.add(item);
-		
-		item = new Product ("3","Diamond Flower",23.55,"005063","/javafx_images/Catalog/diamondflower.png","89");
-		itemInCatalog.add(item);
-		
-		item = new Product ("4","Violet Flower",18.55,"29174E","/javafx_images/Catalog/violetflower.png","50");
-		itemInCatalog.add(item);
+	
+//		item = new Product ("1","Rose Bouquet",25.55,"920000","/javafx_images/Catalog/Rose.png","53");
+//		itemInCatalog.add(item);
+//		
+//		item = new Product ("2","Cactus Flower",15.55,"526354","/javafx_images/Catalog/cactusflower.png","23");
+//		itemInCatalog.add(item);
+//		
+//		item = new Product ("3","Diamond Flower",23.55,"005063","/javafx_images/Catalog/diamondflower.png","89");
+//		itemInCatalog.add(item);
+//		
+//		item = new Product ("4","Violet Flower",18.55,"29174E","/javafx_images/Catalog/violetflower.png","50");
+//		itemInCatalog.add(item);
 		
 //		
 //		item = new Product ("Spa Flower","/javafx_images/Catalog/spaflower.png",35.55,"A45814");
@@ -167,8 +170,7 @@ public class CatalogScreenController implements Initializable{
 //		item = new Product ("Violet Flower","/javafx_images/Catalog/violetflower.png",18.55,"29174E");
 //		itemInCatalog.add(item);
 		
-		return itemInCatalog;
-	}
+		
 	
 	
 	private void setChosenItemCard(Product item) {
@@ -186,11 +188,11 @@ public class CatalogScreenController implements Initializable{
 		vboxAddToCustom.setVisible(false);
 
 		//filter ComboBox section - color , price , type -- > check for release type here!! 
-		colorFilter=FXCollections.observableArrayList("None","Black","Yellow","Red","Blue");
+		colorFilter=FXCollections.observableArrayList("None","Black","Yellow","Red","Blue","Green");
 		itemColorComboBox.setItems(colorFilter);
-		priceFilter=FXCollections.observableArrayList("None","10-100 ¤","100-200 ¤","200-500 ¤");
+		priceFilter=FXCollections.observableArrayList("None","10-100â‚ª","100-200â‚ª","200-500â‚ª");
 		itemPriceComboBox.setItems(priceFilter);
-		typeFilter=FXCollections.observableArrayList("None","Flowers","Plant");
+		typeFilter=FXCollections.observableArrayList("None","Product","Item");
 		itemTypeComboBox.setItems(typeFilter);
 		
 		//Progress bar state - 50%
@@ -206,7 +208,18 @@ public class CatalogScreenController implements Initializable{
 			
 		
 		// catalog item initialize
-		itemInCatalog.addAll(getDataItems());
+		InitilizeProductGrid("None","None","None");
+		
+	}
+
+	
+	// grid dynamic 
+	private void InitilizeProductGrid(String color,String price,String type) {
+		try {
+			  itemInCatalog.addAll(getDataItems(color,price,type));
+		}catch (NullPointerException e) {
+				// here will be popup massage no products !!
+		}
 		
 		if(itemInCatalog.size()>0)
 		{
@@ -257,7 +270,6 @@ public class CatalogScreenController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	
@@ -328,7 +340,7 @@ public class CatalogScreenController implements Initializable{
 
     @FXML
     void update(ActionEvent event) {
-
+    	InitilizeProductGrid(itemColorComboBox.getValue(),itemPriceComboBox.getValue(),itemTypeComboBox.getValue());  	
     }
     
     @FXML
