@@ -49,7 +49,18 @@ public class MissionAnalyze {
 			}
 		case USER_LOGOUT:{
 			ServerQuaries.logout(obj,con);
+			break;
 		}
+		case DATA_PRODUCTS :{
+			ServerQuaries.GetProducts(obj,con);
+			break;
+		}
+		case DATA_PRODUCTS_BY_FILTER :{
+			ServerQuaries.GetProductsByFilter(obj,con);
+			break;
+		}
+		
+		
 		}
 
 	}

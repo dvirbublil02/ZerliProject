@@ -3,6 +3,7 @@ package entities_general;
 import java.util.List;
 
 import entities_catalog.Product;
+import entities_catalog.ProductInOrder;
 import enums.OrderStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,7 +48,7 @@ public class Order {
 	/**
 	 * The list of items in the order
 	 */
-	private List<Product> items;
+	private List<ProductInOrder> items;
 	/**
 	 * @param orderID
 	 * @param customerID
@@ -60,7 +61,7 @@ public class Order {
 	 * @param items
 	 */
 	public Order(String orderID, String customerID, String branchID, String price, String greetingCard,
-			String orderDate, String expectedDelivery, List<Product> items) {
+			String orderDate, String expectedDelivery, List<ProductInOrder> items) {
 		super();
 		this.orderID = orderID;
 		this.customerID = customerID;
@@ -72,8 +73,7 @@ public class Order {
 		this.status.setItems(list1);
 		this.orderDate = orderDate;
 		this.expectedDelivery = expectedDelivery;
-		this.items = items;
-	}
+		this.items = items;	}
 
 	public String getOrderID() {
 		return orderID;
@@ -139,11 +139,11 @@ public class Order {
 		this.expectedDelivery = expectedDelivery;
 	}
 
-	public List<Product> getItems() {
+	public List<ProductInOrder> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Product> items) {
+	public void setItems(List<ProductInOrder> items) {
 		this.items = items;
 	}
 

@@ -5,11 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import communication.Response;
 import communication.TransmissionPack;
+import entities_catalog.Product;
 import entities_general.CreditCard;
 import entities_general.Login;
 import entities_users.BranchManager;
@@ -407,6 +410,129 @@ public class ServerQuaries {
 
 	}
 
+	
+	// get products to catalog without filter .
+	public static void GetProducts(TransmissionPack obj, Connection con) {
+		// TODO Auto-generated method stub
+		if (obj instanceof TransmissionPack) {
+			List<Product> list = new ArrayList<>();
+			
+			Statement stmt;
+		    try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM product;");
+			while (rs.next()) {
+				Product product = new Product(rs.getString(1), rs.getString(2), Double.parseDouble(rs.getString(3)), rs.getString(4),rs.getString(5),
+						rs.getDouble(6),rs.getString(7),rs.getString(8),rs.getBoolean(9),rs.getDouble(10));
+						
+				list.add(product);
+			}			
+			
+			if(list.size()==0)
+				throw new SQLException();
+
+			obj.setInformation(list);
+			rs.close();
+		    } catch (SQLException e) {
+		    	e.printStackTrace();
+		    	obj.setResponse(Response.FAILD_DATA_PRODUCTS);
+		    	return;
+		    }
+		    obj.setResponse(Response.GET_DATA_PRODUCTS);
+			}
+		
+		else
+			obj.setResponse(Response.FAILD_DATA_PRODUCTS);
+	}
+
+	
+	//get products by filter of color \ price \ type
+	public static void GetProductsByFilter(TransmissionPack obj, Connection con) {
+		
+		if (obj instanceof TransmissionPack) {
+			@SuppressWarnings("unchecked")
+			Map<String,String> filters = (Map<String, String>) obj.getInformation();
+			List<Product> products = new ArrayList<>();
+			int lowValuePrice=0 , highValuePrice=0;
+			String colorFilter , priceFilter , typeFilter;
+			String query; 
+		
+			//get Filters from HashMap
+			colorFilter=filters.get("color");
+			priceFilter=filters.get("price");
+			typeFilter=filters.get("type");
+		
+		
+			//split price to 2 section lowValuePrice and highValuePrice
+			if(!priceFilter.equals("None"))
+			{	
+				String [] tmp = priceFilter.split("-");
+				int lastIndex=tmp[1].length()-1;
+				lowValuePrice=Integer.parseInt(tmp[0]);
+				highValuePrice=Integer.parseInt(tmp[1].substring(0,lastIndex));
+			}
+		
+		
+			// query of color + price + filter
+			if(!colorFilter.equals("None") && !priceFilter.equals("None") && !typeFilter.equals("None") ) {
+				query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"' AND price > "+ lowValuePrice +" AND price<"+highValuePrice +" AND itemType = '"+typeFilter+"' ;";
+			}
+			// color + price
+			else if(!colorFilter.equals("None") && !priceFilter.equals("None")) {
+	    		query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"' AND price > "+ lowValuePrice +" AND price<"+highValuePrice +";";
+	    	}
+			//color + type
+	    	else if (!colorFilter.equals("None") && !typeFilter.equals("None") ) {
+	    		query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"' AND itemType = '"+typeFilter+"' ;";
+	    	}
+			//price + type
+	    	else if(!priceFilter.equals("None") && !typeFilter.equals("None") ) {
+	    		 query = "SELECT * FROM zerli.product WHERE price > "+ lowValuePrice +" AND price<"+highValuePrice +" AND itemType = '"+typeFilter+"' ;";
+	    	}
+			//color
+	    	else if(!colorFilter.equals("None")) {
+	    		query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"';";
+	    	}
+			//price
+	    	else if(!priceFilter.equals("None")) {
+	    		query = "SELECT * FROM zerli.product WHERE  price > "+ lowValuePrice +" AND price<"+highValuePrice +";";
+	    	}
+			//type
+	    	else 
+	    		query = "SELECT * FROM zerli.product WHERE itemType = '"+typeFilter+"' ;";
+	    		
+	    	System.out.println(query);
+            
+            
+			Statement stmt;
+			try {
+			    	stmt = con.createStatement();
+			    	ResultSet rs = stmt.executeQuery(query);
+			    	while (rs.next()) {
+			    	Product product = new Product(rs.getString(1), rs.getString(2), Double.parseDouble(rs.getString(3)), rs.getString(4),rs.getString(5),
+							rs.getDouble(6),rs.getString(7),rs.getString(8),rs.getBoolean(9),rs.getDouble(10));
+							
+			    	products.add(product);
+				}			
+			
+			    	if(products.size()==0)
+					throw new SQLException();
+			    	obj.setInformation(products);
+			    	rs.close();
+			    } catch (SQLException e) {
+			    	e.printStackTrace();
+			    	obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
+			    	return;
+			    }
+			    	obj.setResponse(Response.GET_DATA_PRODUCTS_BY_FILTER);
+			}
+		else
+			obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
+		}
+
+}		
+	
+
 //	public static void GetProductFromDB(TransmissionPack obj, Connection con) {
 //		if (obj instanceof TransmissionPack) {
 //			List<Product> list = new ArrayList<>();
@@ -431,4 +557,3 @@ public class ServerQuaries {
 //		} else
 //			obj.setResponse(Response.DIDNT_FOUND_ORDERS);
 //	}
-}

@@ -19,9 +19,9 @@ public class ItemInCatalogController {
     private Label itemPriceScrollArea;
       
     private Product item;
-    private String CURRENCY="¤";
+    private String CURRENCY="â‚ª";
     private MyListenerCatalog myListener; 
-    
+   
     @FXML
     private void clickItem(MouseEvent mouseEvent) {
     	myListener.onClickListener(item);	

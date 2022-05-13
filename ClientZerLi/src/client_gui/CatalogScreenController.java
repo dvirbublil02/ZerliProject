@@ -37,7 +37,9 @@ import javafx.stage.Stage;
 
 public class CatalogScreenController implements Initializable{
 
-    @FXML
+    private static final String Stage = null;
+
+	@FXML
     private VBox ChosenItemCard;
 
     @FXML
@@ -107,7 +109,7 @@ public class CatalogScreenController implements Initializable{
     private Button addToCustomBtn;
     
 
-    private String CURRENCY="¤";
+    private String CURRENCY="â‚ª";
     private Image imageCardTmp;
     private MyListenerCatalog myListener;
     private List<Product> itemInCatalog = new ArrayList<Product>();
@@ -127,49 +129,21 @@ public class CatalogScreenController implements Initializable{
 		primaryStage.setScene(scene);
 		primaryStage.show();	
 		primaryStage.setOnCloseRequest(event ->{
-			
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 			});	
 	}
 	
 	
 	
-	// build list of item
-	private List<Product> getDataItems()
+	// build list of item regular or by filter
+	private List<Product> getDataItems(String color , String price , String type)
 	{
-		List<Product> itemInCatalog = new ArrayList<>();
-		Product item;
-	
-		item = new Product ("1","Rose Bouquet",25.55,"920000","/javafx_images/Catalog/Rose.png","53");
-		itemInCatalog.add(item);
+		if( color.equals("None") && price.equals("None") && type.equals("None"))
+			return ClientHandleTransmission.getDataProduct();
 		
-		item = new Product ("2","Cactus Flower",15.55,"526354","/javafx_images/Catalog/cactusflower.png","23");
-		itemInCatalog.add(item);
-		
-		item = new Product ("3","Diamond Flower",23.55,"005063","/javafx_images/Catalog/diamondflower.png","89");
-		itemInCatalog.add(item);
-		
-		item = new Product ("4","Violet Flower",18.55,"29174E","/javafx_images/Catalog/violetflower.png","50");
-		itemInCatalog.add(item);
-		
-//		
-//		item = new Product ("Spa Flower","/javafx_images/Catalog/spaflower.png",35.55,"A45814");
-//		itemInCatalog.add(item);
-//		
-//		item = new Product ("Sun Flower","/javafx_images/Catalog/sunflower.png",45.55,"A07D10");
-//		itemInCatalog.add(item);
-//		
-//		
-//		item = new Product ("3Leaf clover","/javafx_images/Catalog/threeleafclover.png",38.55,"3E684E");
-//		itemInCatalog.add(item);
-//		
-//		
-//		item = new Product ("Violet Flower","/javafx_images/Catalog/violetflower.png",18.55,"29174E");
-//		itemInCatalog.add(item);
-		
-		return itemInCatalog;
+		return ClientHandleTransmission.getDataProductByFilter(color,price,type);
 	}
-	
+		
 	
 	private void setChosenItemCard(Product item) {
 		itemCardNameLable.setText(item.getName());
@@ -185,13 +159,17 @@ public class CatalogScreenController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {	
 		vboxAddToCustom.setVisible(false);
 
-		//filter ComboBox section - color , price , type -- > check for release type here!! 
-		colorFilter=FXCollections.observableArrayList("None","Black","Yellow","Red","Blue");
+		//filter ComboBox section - color , price , type 
+		colorFilter=FXCollections.observableArrayList("None","Black","Yellow","Red","Blue","Green");
 		itemColorComboBox.setItems(colorFilter);
-		priceFilter=FXCollections.observableArrayList("None","10-100 ¤","100-200 ¤","200-500 ¤");
+		itemColorComboBox.setValue("None");
+		priceFilter=FXCollections.observableArrayList("None","10-100â‚ª","100-200â‚ª","200-500â‚ª");
 		itemPriceComboBox.setItems(priceFilter);
-		typeFilter=FXCollections.observableArrayList("None","Flowers","Plant");
+    	itemPriceComboBox.setValue("None");
+		typeFilter=FXCollections.observableArrayList("None","Product","Item");
 		itemTypeComboBox.setItems(typeFilter);
+    	itemTypeComboBox.setValue("None");
+		
 		
 		//Progress bar state - 50%
 		progressIndicator.setStyle("-fx-color: #D0F6DD ; -fx-accent: green;");
@@ -204,9 +182,19 @@ public class CatalogScreenController implements Initializable{
 		customProductComboBox.setValue("Bouquet");
 		customProductComboBox.setDisable(true);
 			
-		
 		// catalog item initialize
-		itemInCatalog.addAll(getDataItems());
+		InitilizeProductGrid("None","None","None");
+		
+	}
+
+	
+	// grid dynamic 
+	private void InitilizeProductGrid(String color,String price,String type) {
+		try {
+			  itemInCatalog.addAll(getDataItems(color,price,type));
+		}catch (NullPointerException e) {
+				// here will be popup massage no products !!
+		}
 		
 		if(itemInCatalog.size()>0)
 		{
@@ -257,7 +245,6 @@ public class CatalogScreenController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	
@@ -326,16 +313,24 @@ public class CatalogScreenController implements Initializable{
     	}
     }
 
+    
+    // update screen release all productCards 
     @FXML
     void update(ActionEvent event) {
-
+    	ObservableList<Node> productCards = grid.getChildren();
+    	productCards.clear();
+    	itemInCatalog.clear();
+    	InitilizeProductGrid(itemColorComboBox.getValue(),itemPriceComboBox.getValue(),itemTypeComboBox.getValue());  	
     }
     
+    
+    //clear and update screen
     @FXML
     void clear(ActionEvent event) {
     	itemColorComboBox.setValue("None");
     	itemPriceComboBox.setValue("None");
     	itemTypeComboBox.setValue("None");
+    	update(event);
     }
     
    
