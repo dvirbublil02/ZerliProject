@@ -10,7 +10,13 @@ import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
 
+
 import client.OrderHandleController;
+
+import client.ClientUI;
+import communication.Mission;
+import communication.TransmissionPack;
+
 
 import client.ClientUI;
 import communication.Mission;
@@ -171,9 +177,11 @@ public class CatalogScreenController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {	
 		vboxAddToCustom.setVisible(false);
 
+
 		customTextField.setDisable(true);
 
 		
+
 
 		//filter ComboBox section - color , price , type 
 		colorFilter=FXCollections.observableArrayList("None");
