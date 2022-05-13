@@ -7,10 +7,10 @@ public class ProductInOrder extends Product {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String cartID;
-	private String productQuantityInOrder;
+	private Double productQuantityInOrder;
 	
 	public ProductInOrder(String ID, String name, double price, String backGroundColor, String imgSrc, double quantity,
-			String itemType, String dominateColor , String cartID ,String productQuantityInOrder,boolean isOnSale,double fixPrice ) {
+			String itemType, String dominateColor , String cartID ,Double productQuantityInOrder,boolean isOnSale,double fixPrice ) {
 		super(ID, name, price, backGroundColor, imgSrc, quantity, itemType, dominateColor, isOnSale, fixPrice);
 		this.cartID=cartID;
 		this.productQuantityInOrder=productQuantityInOrder;
@@ -25,13 +25,21 @@ public class ProductInOrder extends Product {
 	}
 
 
-	public String getProductQuantityInCart() {
+	public Double getProductQuantityInCart() {
 		return productQuantityInOrder;
 	}
 
 	
-	public void setProductQuantityInCart(String productQuantityInCart) {
+	public void setProductQuantityInCart(Double productQuantityInCart) {
 		this.productQuantityInOrder = productQuantityInCart;
 	}
+
+	@Override
+	public String toString() {
+		return "ProductInOrder [getName()=" + getName() + "getQuantity()="+ getQuantity() + ", productQuantityInOrder=" + getProductQuantityInCart();
+				
+	}
 	
+
+
 }

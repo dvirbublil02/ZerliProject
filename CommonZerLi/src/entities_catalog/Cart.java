@@ -7,8 +7,10 @@ import javafx.scene.image.ImageView;
 public class Cart {
 	private ImageView imgSrc;
 	private double price;
-	private int quantity;
-	private String cartID;
+	private Double quantity;
+	private String Description;
+	private String name;
+
 	private List<ProductInOrder> cartList;
 	/**
 	 * @param name
@@ -17,11 +19,21 @@ public class Cart {
 	 * @param quantity
 	 * @param cartList
 	 */
- 	public Cart(String name, ImageView object, double price, int quantity,List<ProductInOrder> cartList) {
+ 	public Cart(String name, ImageView object, double price, Double quantity,List<ProductInOrder> cartList,String Description) {
 		this.imgSrc = object;
 		this.price = price;
 		this.quantity = quantity;
 		this.cartList = cartList;
+		this.Description=Description;
+		this.name=name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public ImageView getImgSrc() {
@@ -40,21 +52,14 @@ public class Cart {
 		this.price = price;
 	}
 
-	public int getQuantity() {
+	public double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
 
-	public String getCartID() {
-		return cartID;
-	}
-
-	public void setCartID(String cartID) {
-		this.cartID = cartID;
-	}
 
 	public List<ProductInOrder> getCartList() {
 		return cartList;
@@ -64,6 +69,12 @@ public class Cart {
 		this.cartList = cartList;
 	}
 
-	
+	public String getDescription() {
+		return Description;
+	}
+
+	public void setDescription(String description) {
+		Description = description;
+	}
 
 }

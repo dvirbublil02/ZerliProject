@@ -1,6 +1,7 @@
 package entities_catalog;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Product  implements Serializable{
 	/**
@@ -76,6 +77,7 @@ public class Product  implements Serializable{
 		return quantity;
 	}
 
+
 	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
@@ -104,7 +106,7 @@ public class Product  implements Serializable{
 		this.dominateColor = dominateColor;
 	}
 
-	public boolean isOnSale() {
+	public boolean getIsOnSale() {
 		return isOnSale;
 	}
 
@@ -119,6 +121,22 @@ public class Product  implements Serializable{
 	public void setFixPrice(double fixPrice) {
 		this.fixPrice = fixPrice;
 	}
-	
+	@Override
+	public int hashCode() {
+		return Objects.hash(ID);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		return Objects.equals(ID, other.ID);
+	}
+
 	
 }

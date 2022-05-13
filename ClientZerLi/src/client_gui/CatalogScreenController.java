@@ -3,11 +3,15 @@ package client_gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
+import client.OrderHandleController;
 import entities_catalog.Product;
+import entities_catalog.ProductInOrder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,6 +30,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -87,9 +92,7 @@ public class CatalogScreenController implements Initializable{
     @FXML
     private ProgressIndicator progressIndicator;
     
-    @FXML
-    private ComboBox<String> customProductComboBox;
-    
+
     @FXML
     private RadioButton customClickRadioBtn;
     
@@ -107,7 +110,9 @@ public class CatalogScreenController implements Initializable{
     
     @FXML
     private Button addToCustomBtn;
-    
+    @FXML
+    private TextField customTextField;
+   
 
     private String CURRENCY="₪";
     private Image imageCardTmp;
@@ -117,8 +122,8 @@ public class CatalogScreenController implements Initializable{
     private ObservableList<String> colorFilter ;
     private ObservableList<String> priceFilter ;
     private ObservableList<String> typeFilter ;
-    
-    
+   
+    private static ProductInOrder productInOrder;
     
 	public void start(Stage primaryStage) throws Exception {	
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CatalogScreen.fxml"));
@@ -158,7 +163,7 @@ public class CatalogScreenController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {	
 		vboxAddToCustom.setVisible(false);
-
+		customTextField.setDisable(true);
 		//filter ComboBox section - color , price , type 
 		colorFilter=FXCollections.observableArrayList("None","Black","Yellow","Red","Blue","Green");
 		itemColorComboBox.setItems(colorFilter);
@@ -176,11 +181,7 @@ public class CatalogScreenController implements Initializable{
 		progressIndicator.setProgress(0.50f);
 		
 		
-		// custom product type ComboBox 
-		customType=FXCollections.observableArrayList("Bouquet","Pot","Collection") ;
-		customProductComboBox.setItems(customType);
-		customProductComboBox.setValue("Bouquet");
-		customProductComboBox.setDisable(true);
+		
 			
 		// catalog item initialize
 		InitilizeProductGrid("None","None","None");
@@ -203,7 +204,11 @@ public class CatalogScreenController implements Initializable{
 				@Override
 				public void onClickListener(Product item) {
 					setChosenItemCard(item);
-					
+					 productInOrder=new ProductInOrder(item.getID(),
+							 item.getName(),item.getPrice(),
+							 item.getbackGroundColor(),item.getImgSrc(),
+							 item.getQuantity(),item.getItemType(),item.getDominateColor(),
+			    			null,Double.parseDouble(quantityTextLable.getText()),item.getIsOnSale(),item.getFixPrice());
 				}
 			};
 			
@@ -252,23 +257,22 @@ public class CatalogScreenController implements Initializable{
     void customClickRadio(ActionEvent event) {
     	if(customClickRadioBtn.isSelected()==true) 
     	{
-    		customProductComboBox.setDisable(false);
-    		addToCustomBtn.setText("ADD TO BOUQUET");
+    		customTextField.setDisable(false);
+    		addToCustomBtn.setVisible(true);
+    		addToCustomBtn.setText("ADD TO ...");
     		vboxAddToCustom.setVisible(true);
+    		
     	}
     	else
     	{
-    		customProductComboBox.setDisable(true);
+    		customTextField.setDisable(true);
     		vboxAddToCustom.setVisible(false);
-    		//addToCartBtn.setText("ADD TO CART");
+    		addToCustomBtn.setVisible(false);
+    		
     	}
     }
 	
 	
-    @FXML
-    void customProductTypeChoice(ActionEvent  event) {
-    	addToCustomBtn.setText("ADD TO "+ customProductComboBox.getValue().toUpperCase());
-    }
 
     
     @FXML
@@ -286,9 +290,26 @@ public class CatalogScreenController implements Initializable{
 
     @FXML
     void addToCart(ActionEvent event) {
-    	
     	Integer tmp= Integer.parseInt(cartItemCounter.getText())+1;
     	cartItemCounter.setText(tmp.toString());
+    	if(!customClickRadioBtn.isSelected()) {
+    	productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
+    	if(OrderHandleController.getProductInOrder().contains(productInOrder)) {
+    		OrderHandleController.addToExistItemOnListNotCustom(productInOrder);
+    		
+    	}else {
+    		
+    		OrderHandleController.getProductInOrder().add(productInOrder);
+    	}
+    	}
+    	else {
+    		List<ProductInOrder> moveToCart=new ArrayList<>();
+    		moveToCart=OrderHandleController.getCustomProductInOrder().get(customTextField.getText().toUpperCase());
+    		OrderHandleController.setCustomProductInOrderFinallCart(customTextField.getText().toUpperCase(),moveToCart);
+    		System.out.println(OrderHandleController.getCustomProductInOrderFinallCart().toString());
+    	}
+    	
+    	
     }
 
     @FXML
@@ -344,7 +365,16 @@ public class CatalogScreenController implements Initializable{
     
     @FXML
     void addToCustom(ActionEvent event) {
-
+    	productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
+    	if(OrderHandleController.getCustomProductInOrder().containsKey(customTextField.getText().toUpperCase())) {
+    		OrderHandleController.addToExistItemOnList(customTextField.getText().toUpperCase(),productInOrder);
+    		
+    	}else {
+    		List<ProductInOrder> productInOrderList=new ArrayList<>();
+    		productInOrderList.add(productInOrder);
+    		OrderHandleController.getCustomProductInOrder().put(customTextField.getText().toUpperCase(), productInOrderList);
+    	}
+    	
     }
     
     
@@ -353,7 +383,13 @@ public class CatalogScreenController implements Initializable{
     void quantityTextLableUpdate(ActionEvent event) {
 
     }
-    
-    
+    //fix this action
+    @FXML
+    void customField(ActionEvent event) {
+    	addToCustomBtn.setText("ADD TO "+ customTextField.getText().toUpperCase());
+    	
+    }
+
+  
 
 }
