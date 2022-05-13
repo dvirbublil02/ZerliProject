@@ -23,6 +23,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 public class CartPageController implements Initializable {
 
+
+    @FXML
+    private TableColumn<Cart, String> DescriptionColTbl1;
+
 	@FXML
 	private TableColumn<Cart, String> ItemNameColTbl;
 
@@ -33,7 +37,7 @@ public class CartPageController implements Initializable {
 	private TableColumn<Cart, ImageView> ImgColTbl;
 
 	@FXML
-	private TableColumn<Cart, Integer> QuantityColTbl;
+	private TableColumn<Cart, Double> QuantityColTbl;
 
 	@FXML
 	private Button backBtn;
@@ -71,10 +75,10 @@ public class CartPageController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 		ItemNameColTbl.setCellValueFactory(new PropertyValueFactory<Cart, String>("Name"));
-		PriceColTbl.setCellValueFactory(new PropertyValueFactory<Cart, Double>("Price"));
 		ImgColTbl.setCellValueFactory(new PropertyValueFactory<Cart, ImageView>("ImgSrc"));
-		QuantityColTbl.setCellValueFactory(new PropertyValueFactory<Cart, Integer>("Quantity"));
-
+		DescriptionColTbl1.setCellValueFactory(new PropertyValueFactory<Cart,String>("Description"));
+		QuantityColTbl.setCellValueFactory(new PropertyValueFactory<Cart, Double>("Quantity"));
+		PriceColTbl.setCellValueFactory(new PropertyValueFactory<Cart, Double>("Price"));
 		Image image1 = new Image("/javafx_images/Catalog/Rose.png", 50, 200, true, true);
 		ImageView imageView1 = new ImageView(image1);
 		imageView1.setImage(image1);

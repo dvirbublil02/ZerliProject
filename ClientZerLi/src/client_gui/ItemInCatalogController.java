@@ -1,6 +1,8 @@
 package client_gui;
 
+import client.OrderHandleController;
 import entities_catalog.Product;
+import entities_catalog.ProductInOrder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -25,6 +27,7 @@ public class ItemInCatalogController {
     @FXML
     private void clickItem(MouseEvent mouseEvent) {
     	myListener.onClickListener(item);	
+    
     }
     
     

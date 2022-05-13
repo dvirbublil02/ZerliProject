@@ -22,7 +22,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CatalogScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CatalogScreenController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -145,12 +145,12 @@
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="38.0" prefWidth="101.0">
-                                       <children>
-                                          <ComboBox fx:id="customProductComboBox" onAction="#customProductTypeChoice" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" styleClass="handHover" stylesheets="@Style.css" />
-                                       </children>
                                        <HBox.margin>
                                           <Insets right="10.0" />
                                        </HBox.margin>
+                                       <children>
+                                          <TextField fx:id="customTextField" onAction="#customField" />
+                                       </children>
                                     </HBox>
                                  </children>
                               </HBox>
@@ -382,7 +382,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <ScrollPane prefHeight="495.0" prefWidth="682.0" HBox.hgrow="ALWAYS">
+                        <ScrollPane fx:id="sp" prefHeight="495.0" prefWidth="682.0" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
