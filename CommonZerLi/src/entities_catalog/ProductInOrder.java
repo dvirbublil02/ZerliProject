@@ -10,8 +10,8 @@ public class ProductInOrder extends Product {
 	private String productQuantityInOrder;
 	
 	public ProductInOrder(String ID, String name, double price, String backGroundColor, String imgSrc, double quantity,
-			String itemType, String dominateColor , String cartID ,String productQuantityInOrder ) {
-		super(ID, name, price, backGroundColor, imgSrc, quantity, itemType, dominateColor);
+			String itemType, String dominateColor , String cartID ,String productQuantityInOrder,boolean isOnSale,double fixPrice ) {
+		super(ID, name, price, backGroundColor, imgSrc, quantity, itemType, dominateColor, isOnSale, fixPrice);
 		this.cartID=cartID;
 		this.productQuantityInOrder=productQuantityInOrder;
 	}

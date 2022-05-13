@@ -15,9 +15,11 @@ public class Product  implements Serializable{
 	private double quantity;
 	private String itemType;
 	private String dominateColor;
+	private boolean isOnSale;
+	private double fixPrice;
 	
 	public Product(String ID,String name, double price, String backGroundColor, String imgSrc,double quantity,
-			String itemType , String dominateColor ) {
+			String itemType , String dominateColor,boolean isOnSale,double fixPrice ) {
 		this.ID=ID;
 		this.name = name;
 		this.imgSrc = imgSrc;
@@ -26,6 +28,8 @@ public class Product  implements Serializable{
 		this.quantity=quantity;
 		this.itemType=itemType;
 		this.dominateColor=dominateColor;
+		this.isOnSale=isOnSale;
+		this.fixPrice=fixPrice;
 	}
 
 	public String getName() {
@@ -99,4 +103,22 @@ public class Product  implements Serializable{
 	public void setDominateColor(String dominateColor) {
 		this.dominateColor = dominateColor;
 	}
+
+	public boolean isOnSale() {
+		return isOnSale;
+	}
+
+	public void setOnSale(boolean isOnSale) {
+		this.isOnSale = isOnSale;
+	}
+
+	public double getFixPrice() {
+		return fixPrice;
+	}
+
+	public void setFixPrice(double fixPrice) {
+		this.fixPrice = fixPrice;
+	}
+	
+	
 }
