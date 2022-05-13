@@ -22,7 +22,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CatalogScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CatalogScreenController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -107,7 +107,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="62.0" prefWidth="50.0">
                                        <children>
-                                          <TextField fx:id="quantityTextLable" onAction="#quantityTextLableUpdate" prefHeight="26.0" prefWidth="51.0" promptText="0" style="-fx-background-color: #FFFFFF;" text="0" />
+                                          <TextField fx:id="quantityTextLable" prefHeight="26.0" prefWidth="51.0" promptText="0" style="-fx-background-color: #FFFFFF;" text="0" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="62.0" prefWidth="46.0">
@@ -149,7 +149,7 @@
                                           <Insets right="10.0" />
                                        </HBox.margin>
                                        <children>
-                                          <TextField fx:id="customTextField" onAction="#customField" />
+                                          <TextField fx:id="customTextField" />
                                        </children>
                                     </HBox>
                                  </children>
