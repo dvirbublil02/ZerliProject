@@ -1,5 +1,9 @@
 /communication/
 /entities_catalog/
 /entities_general/
+<<<<<<< HEAD
+=======
+/entities_reports/
+>>>>>>> 9c5532d (combox logic)
 /entities_users/
 /enums/

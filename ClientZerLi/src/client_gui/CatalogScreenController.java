@@ -9,7 +9,13 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
+
 import client.OrderHandleController;
+
+import client.ClientUI;
+import communication.Mission;
+import communication.TransmissionPack;
+
 import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
 import javafx.collections.FXCollections;
@@ -160,12 +166,18 @@ public class CatalogScreenController implements Initializable{
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {	
 		vboxAddToCustom.setVisible(false);
+
 		customTextField.setDisable(true);
+
+		
+
 		//filter ComboBox section - color , price , type 
-		colorFilter=FXCollections.observableArrayList("None","Black","Yellow","Red","Blue","Green");
+		colorFilter=FXCollections.observableArrayList("None");
+		colorFilter.addAll(ClientHandleTransmission.getColorsForFilter());
 		itemColorComboBox.setItems(colorFilter);
 		itemColorComboBox.setValue("None");
 		priceFilter=FXCollections.observableArrayList("None","10-100₪","100-200₪","200-500₪");
@@ -187,6 +199,10 @@ public class CatalogScreenController implements Initializable{
 		InitilizeProductGrid("None","None","None");
 		
 	}
+
+
+
+
 
 	
 	// grid dynamic 

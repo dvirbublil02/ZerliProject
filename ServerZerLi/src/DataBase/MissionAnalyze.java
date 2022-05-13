@@ -18,6 +18,8 @@ public class MissionAnalyze {
 
 		switch (obj.getMission()) {
 		case ADD_ORDER: {
+			ServerQuaries.addOrderInDB(obj, con);
+			
 		//	ServerQuaries.AddOrderToDB(obj, con);
 			break;
 		}
@@ -25,8 +27,10 @@ public class MissionAnalyze {
 	//		ServerQuaries.EditOrderOnDB(obj, con);
 			break;
 		}
-		case GET_ORDERS: {
-	//		ServerQuaries.GetOrderFromDB(obj, con);
+		case GET_ORDER: {
+			System.out.println(5);
+			ServerQuaries.getOrders(obj,con);
+			
 			break;
 		}
 
@@ -57,6 +61,10 @@ public class MissionAnalyze {
 		}
 		case DATA_PRODUCTS_BY_FILTER :{
 			ServerQuaries.GetProductsByFilter(obj,con);
+			break;
+		}
+		case GET_COLORS:{
+			ServerQuaries.getColors(obj,con);
 			break;
 		}
 		
