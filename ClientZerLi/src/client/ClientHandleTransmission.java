@@ -8,6 +8,7 @@ package client;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
 import entities_catalog.Product;
+import entities_catalog.ProductInOrder;
 import entities_general.Login;
 import entities_general.Order;
 import entities_users.BranchManager;
@@ -84,10 +86,10 @@ public class ClientHandleTransmission {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void GET_ORDERS(ObservableList<Order> listView, TableView<Order> table, Label statusLabel) {
-		TransmissionPack obj = new TransmissionPack(Mission.GET_ORDERS, null, null);
+		TransmissionPack obj = new TransmissionPack(Mission.GET_ORDER, null, null);
 		ClientUI.chat.accept(obj);
 		obj = ClientUI.chat.getObj();
-		if (obj.getResponse() == Response.FOUND_ORDERS) {
+		if (obj.getResponse() == Response.FOUND_ORDER) {
 			listView.clear();
 			List<Order> list = new ArrayList<Order>();
 			list = (List<Order>) obj.getInformation();
@@ -227,6 +229,31 @@ public class ClientHandleTransmission {
 			return false;
 		} else
 			return true;
+	}
+	/**
+	 * get the colors filter for catalog initilizedProductGrid
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<String> getColorsForFilter() {
+		TransmissionPack tp=new TransmissionPack(Mission.GET_COLORS,null,null);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		if(tp.getResponse()==Response.DID_NOT_FIND_COLORS) {
+			//adding pop screen
+		}
+		return (ArrayList<String>)tp.getInformation();
+	}
+	/**
+	 * this method is adding the pending order of the specific customer
+	 * the order is waiting for approve from the branch manager
+	 */
+	public static void addOrder() {
+		List<ProductInOrder>in=new ArrayList<>();
+		in.add(new ProductInOrder("6", "Almog", 23.3, "black","path", 4.0, "bouqet", "red","5","rose",false,0.0));
+		
+		Order order=new Order("6", "3", "4","23.3","happy",LocalDateTime.now().toString(),LocalDateTime.now().toString().toString(),in);
+		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
+		ClientUI.chat.accept(tp);
 	}
 
 	private static void loadTheRightScreen(MouseEvent event, TransmissionPack tp) throws Exception {

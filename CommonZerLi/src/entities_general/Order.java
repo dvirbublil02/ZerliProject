@@ -1,5 +1,6 @@
 package entities_general;
 
+import java.io.Serializable;
 import java.util.List;
 
 import entities_catalog.Product;
@@ -11,7 +12,16 @@ import javafx.scene.control.ComboBox;
 /**
  * @author Omri Shalev
  */
-public class Order {
+
+public class Order implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	
 	/**
 	 * Every order has its own ID.
 	 */
@@ -36,7 +46,7 @@ public class Order {
 	/**
 	 * Every order has a status: ready, on the way, arrived.
 	 */
-	private ComboBox<OrderStatus> status;
+	private OrderStatus status;
 	/**
 	 * Every order save the date and time it was created.
 	 */
@@ -68,9 +78,9 @@ public class Order {
 		this.branchID = branchID;
 		this.price = price;
 		this.greetingCard = greetingCard;
-		this.status = new ComboBox<>();
-		ObservableList<OrderStatus> list1=FXCollections.observableArrayList(OrderStatus.READY,OrderStatus.NOT_READY,OrderStatus.ON_THE_WAY);
-		this.status.setItems(list1);
+		this.status = OrderStatus.PENDING;
+//		ObservableList<OrderStatus> list1=FXCollections.observableArrayList(OrderStatus.READY,OrderStatus.NOT_READY,OrderStatus.ON_THE_WAY);
+//		this.status.setItems(list1);
 		this.orderDate = orderDate;
 		this.expectedDelivery = expectedDelivery;
 		this.items = items;	}
@@ -115,11 +125,11 @@ public class Order {
 		this.greetingCard = greetingCard;
 	}
 
-	public ComboBox<OrderStatus> getStatus() {
+	public OrderStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(ComboBox<OrderStatus> status) {
+	public void setStatus(OrderStatus status) {
 		this.status = status;
 	}
 

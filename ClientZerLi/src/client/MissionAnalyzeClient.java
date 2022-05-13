@@ -26,10 +26,10 @@ public class MissionAnalyzeClient {
 		case UPDATE_DISCONNECTION_SUCCESS: {
 
 		}
-		case FOUND_ORDERS: {
+		case FOUND_ORDER: {
 
 		}
-		case DIDNT_FOUND_ORDERS: {
+		case DIDNT_FOUND_ORDER: {
 
 		}
 		case INSERT_ORDER_SUCCESS: {
@@ -55,6 +55,13 @@ public class MissionAnalyzeClient {
 			notifyAllSpecificListners(obj);
 
 		}
+		case FOUND_COLORS:{
+		break;	
+		}
+		case DID_NOT_FIND_COLORS:{
+			break;
+		}
+		
 			
 		case USER_NAME_OR_PASSWORD_INCORRECT:
 			break;

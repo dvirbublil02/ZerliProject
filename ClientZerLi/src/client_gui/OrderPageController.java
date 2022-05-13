@@ -1,6 +1,15 @@
 package client_gui;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import client.ClientHandleTransmission;
+import client.ClientUI;
+import communication.Mission;
+import communication.TransmissionPack;
+import entities_catalog.ProductInOrder;
+import entities_general.Order;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +17,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-
+/**
+ * @author Mor Ben Haim
+ * */
 public class OrderPageController {
 
 	@FXML
@@ -34,10 +45,20 @@ public class OrderPageController {
 	void back(ActionEvent event) {
 
 	}
-
+	/**
+	 * event when customer press confirm this event 
+	 * adding the order to the DB after the customer 
+	 * finish his order
+	 * 
+	 * @param event
+	 */
 	@FXML
 	void confirm(ActionEvent event) {
-
+		
+		ClientHandleTransmission.addOrder();
+		
 	}
+
+	
 
 }
