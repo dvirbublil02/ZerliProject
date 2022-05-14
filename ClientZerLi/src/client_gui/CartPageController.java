@@ -1,13 +1,19 @@
 package client_gui;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import client.ClientHandleTransmission;
+import client.OrderHandleController;
 import entities_catalog.Cart;
 import entities_catalog.ProductInOrder;
 import entities_general.Order;
+import entities_general.OrderCustomCartPreview;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,33 +32,28 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 public class CartPageController implements Initializable {
 
+	
+	
+	//OrderCustomCartPreview - > Image , Name , Quantity , Description 
+	
     @FXML
-    private TableColumn<Cart,List<ProductInOrder>> DescriptionColTbl;
+    private TableColumn<?, ?> ImgColRegularTbl;
 
     @FXML
-    private TableColumn<Cart,ImageView> ImgColTbl;
+    private TableColumn<OrderCustomCartPreview, ImageView> ImgCustomColTbl;
 
     @FXML
-    private TableColumn<Cart, String> ItemNameColTbl;
+    private TableColumn<?, ?> ItemNameColRegularTbl;
 
     @FXML
-    private TableColumn<Cart, Integer> QuantityColTbl;
-    
-    @FXML
-    private TableView<Cart> table;
+    private TableColumn<OrderCustomCartPreview, String> ItemNameCustomColTbl;
 
     @FXML
-    private TableColumn<Cart, Double> totalPriceColTbl;
+    private TableColumn<?, ?> QuantityColRegularTbl;
 
     @FXML
-    private TableColumn<ProductInOrder, String> nameProductInOrderColTbl;
+    private TableColumn<OrderCustomCartPreview, Integer> QuantityCustomColTbl;
 
-    @FXML
-    private TableColumn<ProductInOrder, Double> priceProductInOrderColTbl;
-
-    @FXML
-    private TableColumn<ProductInOrder, Integer> quantityProducInOrderColTbl;
-    
     @FXML
     private Button backBtn;
 
@@ -60,10 +61,28 @@ public class CartPageController implements Initializable {
     private Button confirmBtn;
 
     @FXML
-    private Button removeBtn;
+    private Button removeCustomProductBtn;
 
+    @FXML
+    private Button removeRegularBtn;
 
-	ObservableList<Cart> listView = FXCollections.observableArrayList();
+    @FXML
+    private TableColumn<OrderCustomCartPreview, Button> showCustomTbl;
+
+    @FXML
+    private TableView<OrderCustomCartPreview> tableCustom;
+
+    @FXML
+    private TableView<?> tableRegular;
+
+    @FXML
+    private TableColumn<?, ?> totalPriceColRegularTbl;
+
+    @FXML
+    private TableColumn<OrderCustomCartPreview, Double> totalPriceCustomColTbl;
+    
+
+	private ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
 
 	
 
@@ -78,38 +97,67 @@ public class CartPageController implements Initializable {
 			});	
 	}
 
-	@FXML
-	void back(ActionEvent event) {
-
-	}
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		//cart
-		ImgColTbl.setCellValueFactory(new PropertyValueFactory<Cart, ImageView>("ImgSrc"));
-		ItemNameColTbl.setCellValueFactory(new PropertyValueFactory<Cart, String>("Name"));
-		DescriptionColTbl.setCellValueFactory(new PropertyValueFactory<Cart,List<ProductInOrder>>("Description"));
-		QuantityColTbl.setCellValueFactory(new PropertyValueFactory<Cart, Integer>("Quantity"));
-		totalPriceColTbl.setCellValueFactory(new PropertyValueFactory<Cart, Double>("Price"));
-		//productInOrder
-		nameProductInOrderColTbl.setCellValueFactory(new PropertyValueFactory<ProductInOrder, String>("name"));
-		priceProductInOrderColTbl.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("price"));
-		quantityProducInOrderColTbl.setCellValueFactory(new PropertyValueFactory<ProductInOrder,Integer>("productQuantityInCart"));
-		
-		Image image1 = new Image("/javafx_images/Catalog/Rose.png", 50, 200, true, true);
-		ImageView imageView1 = new ImageView(image1);
-		imageView1.setImage(image1);
+		// show button function
+		showCustomTbl.setCellFactory(ShowButtonTableCell.<OrderCustomCartPreview>forTableColumn("Details", (OrderCustomCartPreview o) -> {
 
-		//listView.add(new Cart("Rose Bouquet", imageView1, 22.55, 1));
+			// new windows add send him the productInOrder list with the info
+			Stage primaryStage = new Stage();
+			CustomerViewCustomProductInfoController customProductDetails = new CustomerViewCustomProductInfoController();
+			try {
+				System.out.println(o.getCartList());
+				customProductDetails.setProductDetails(o.getCartList());
+				customProductDetails.start(primaryStage);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return o;
+		}));
 		
 		
-		ProductInOrder p = new ProductInOrder("1","Rose Bouquet",25.55, "920000","/javafx_images/Catalog/Rose.png", 53, "Product", "Red","5", 5.0, false, 0);
-		ObservableList<ProductInOrder>products=FXCollections.observableArrayList(p);
-		listView.addAll(new Cart("Almog Zerli", imageView1,85.0, 1.0, products,"hello"));
-		table.setItems(listView);
+		//Cart Table Initilaze
+		ImgCustomColTbl.setCellValueFactory(new PropertyValueFactory<OrderCustomCartPreview, ImageView>("imgSrc"));
+		ItemNameCustomColTbl.setCellValueFactory(new PropertyValueFactory<OrderCustomCartPreview, String>("name"));
+		QuantityCustomColTbl.setCellValueFactory(new PropertyValueFactory<OrderCustomCartPreview, Integer>("quantity"));
+		totalPriceCustomColTbl.setCellValueFactory(new PropertyValueFactory<OrderCustomCartPreview, Double>("totalprice"));
+		
+		
+		//add all Custom product to screen 
+		Map<String,List<ProductInOrder>> customProductInOrderFinallCart = OrderHandleController.getCustomProductInOrderFinallCart();
+		for(String customName : customProductInOrderFinallCart.keySet())
+		{
+			Image image1 = new Image("/javafx_images/CustomOrderPicture.png", 60, 60, true, true);
+			ImageView imageView1 = new ImageView(image1);
+			imageView1.setImage(image1);
+			listViewCustom.add(new OrderCustomCartPreview(imageView1,customName, 50, 50.0, customProductInOrderFinallCart.get(customName)));
+		}
+		
+		//set table to show products 
+		tableCustom.setItems(listViewCustom);
 
 	}
+	
+	
+	
+	@FXML
+	void back(ActionEvent event) {
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		CatalogScreenController catalogPage = new CatalogScreenController();
+		try {
+			catalogPage.start(primaryStage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
 
 	@FXML
 	void confirm(ActionEvent event) throws Exception {
@@ -119,8 +167,13 @@ public class CartPageController implements Initializable {
 		orderPage.start(primaryStage);
 	}
 
-	@FXML
-	void remove(ActionEvent event) {
+    @FXML
+    void removeCustom(ActionEvent event) {
 
-	}
+    }
+
+    @FXML
+    void removeRegular(ActionEvent event) {
+
+    }
 }

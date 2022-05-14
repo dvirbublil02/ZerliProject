@@ -240,7 +240,9 @@ public class CatalogScreenController implements Initializable{
 		
 		if(itemInCatalog.size()>0)
 		{
-			setChosenItemCard(itemInCatalog.get(0));
+			Product p=new Product("0", "No Item Choosen", 0, "172D42", "/javafx_images/CustomOrderPicture.png", 0, "Product", "Blue", false, 0);
+			//setChosenItemCard(itemInCatalog.get(0));
+			setChosenItemCard(p);
 			myListener = new MyListenerCatalog() {
 				@Override
 				public void onClickListener(Product item) {
@@ -444,6 +446,7 @@ public class CatalogScreenController implements Initializable{
 		Stage primaryStage = new Stage();
 		CartPageController cartPage = new CartPageController();
 		cartPage.start(primaryStage);
+		
     }
     
     /** Add product to dynamic Map the store all custom products.
