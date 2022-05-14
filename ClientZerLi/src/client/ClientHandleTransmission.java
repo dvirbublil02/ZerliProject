@@ -250,10 +250,10 @@ public class ClientHandleTransmission {
 	public static void addOrder() {
 		List<ProductInOrder>in=new ArrayList<>();
 
-		in.add(new ProductInOrder("6", "rose", 23.3, "black","path", 4.0, "bouqet", "red","3",5.0,false,0.0));
+		in.add(new ProductInOrder("8", "rose", 23.3, "black","path", 4.0, "bouqet", "red","3",5.0,false,0.0));
 
 		
-		Order order=new Order("6", "3", "4","23.3","happy",LocalDateTime.now().toString(),LocalDateTime.now().toString().toString(),in);
+		Order order=new Order("9", "3", "4","23.3","happy",LocalDateTime.now().toString(),LocalDateTime.now().toString().toString(),in);
 		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
 		ClientUI.chat.accept(tp);
 	}
