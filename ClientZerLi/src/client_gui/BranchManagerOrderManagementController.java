@@ -11,6 +11,7 @@ import client.ClientUI;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
+import entities_general.Order;
 import entities_general.OrderPrivew;
 import enums.OrderStatus;
 import javafx.collections.FXCollections;
@@ -86,47 +87,42 @@ public class BranchManagerOrderManagementController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		
-		// show button function
-//		showCol.setCellFactory(ShowButtonTableCell.<Order>forTableColumn("Details", (Order o) -> {
-//
-//			// need to send list to screen
-//			// ObservableList<Product>
-//			// listToNextScreen=FXCollections.observableArrayList(o.getItems());
-//
-//			// open screen of details -- > need to init before starting
-//			Stage primaryStage = new Stage();
-//			BranchManagerOrderDetailsController ordersDetails = new BranchManagerOrderDetailsController();
-//			try {
-//				ordersDetails.start(primaryStage);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//
-//			return o;
-//		}));
 
-		statusCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, ComboBox<OrderStatus>>("status"));
+		// show button function
+		showCol.setCellFactory(ShowButtonTableCell.<OrderPrivew>forTableColumn("Details", (OrderPrivew o) -> {
+
+			// need to send list to screen
+			// ObservableList<Product>
+			// listToNextScreen=FXCollections.observableArrayList(o.getItems());
+
+			// open screen of details -- > need to init before starting
+			Stage primaryStage = new Stage();
+			BranchManagerOrderDetailsController ordersDetails = new BranchManagerOrderDetailsController();
+
+			try {
+//				ordersDetails.list.addAll(orderPrivie.getItems());
+				ordersDetails.start(primaryStage);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			return o;
+		}));
+
+		statusCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, ComboBox<OrderStatus>>("comboStatus"));
 		orderIDCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("orderID"));
 		customerIDCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("customerID"));
 		branchIDCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("branchID"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("price"));
 		orderDateCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("orderDate"));
 		expectedDeliveryCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("expectedDelivery"));
-	TransmissionPack tp = new TransmissionPack(Mission.GET_ORDER, null, null);
+
 //		
-		ClientUI.chat.accept(tp);
-//		tp = ClientUI.chat.getObj();
-//		if(tp.getResponse()==Response.FOUND_ORDER) {
-//			listView=(ObservableList<OrderPrivew>)tp.getInformation();
-//			Orders.setItems(listView);
-//		}
-//		List<Order> orders = new ArrayList<>();
-//		orders.add(new Order("1", "315838540", "3", "99.5", null, "9.5.22-10:00", "10.5.22-10:00", null));
-//		listView.addAll(orders);
-//		Orders.setItems(listView);
+
+		listView.addAll(ClientHandleTransmission.getListOrderPrivew());
+		Orders.setItems(listView);
 
 	}
+
 
 }

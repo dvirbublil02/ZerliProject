@@ -18,6 +18,7 @@ import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
 import entities_general.CreditCard;
 import entities_general.Login;
+import entities_general.Order;
 import entities_users.BranchManager;
 import entities_users.Customer;
 import entities_users.CustomerService;
@@ -27,8 +28,6 @@ import entities_users.NetworkManager;
 import entities_users.ServiceExpert;
 import entities_users.ShopWorker;
 import entities_users.User;
-import entities_general.Order;
-import entities_general.OrderPrivew;
 import enums.AccountStatus;
 import enums.OrderStatus;
 
@@ -634,15 +633,17 @@ public class ServerQuaries {
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs;
 			Statement stmt;
-			List<OrderPrivew>orders=new ArrayList<>();
-			String query="SELECT * FROM zerli.order;";
+			List<Order>orders=new ArrayList<>();
+			String query="SELECT * FROM zerli.order WHERE status='PENDING'";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while(rs.next()) {
-					System.out.printf(rs.getString(1)+rs.getString(2)+rs.getString(3)+rs.getString(4)+rs.getString(5)+rs.getTimestamp(7).toString()+rs.getTimestamp(8));
-					OrderPrivew order=new OrderPrivew(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getDate(7).toString(),rs.getDate(8).toString(),null);
+					System.out.println(rs.toString());
+					System.out.printf(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getString(4)+" "+rs.getString(5)+" "+OrderStatus.valueOf(rs.getString(6))+" "+rs.getTimestamp(7).toString()+" "+rs.getTimestamp(8));
+					Order order=new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getTimestamp(7).toString(),rs.getTimestamp(8).toString(),new ArrayList<ProductInOrder>());
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
+					
 					orders.add(order);
 				}
 				rs.close();

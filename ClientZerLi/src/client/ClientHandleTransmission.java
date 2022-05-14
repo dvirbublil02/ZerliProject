@@ -25,6 +25,7 @@ import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
 import entities_general.Login;
 import entities_general.Order;
+import entities_general.OrderPrivew;
 import entities_users.BranchManager;
 import entities_users.Customer;
 import entities_users.User;
@@ -256,6 +257,31 @@ public class ClientHandleTransmission {
 		Order order=new Order("9", "3", "4","23.3","happy",LocalDateTime.now().toString(),LocalDateTime.now().toString().toString(),in);
 		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
 		ClientUI.chat.accept(tp);
+	}
+	/**
+	 * this method return the ObserverList of the order that was not approved yet
+	 * @return
+	 */
+	public static List<OrderPrivew> getListOrderPrivew() {
+		TransmissionPack tp = new TransmissionPack(Mission.GET_ORDER, null, null);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		List<OrderPrivew> orderPrivie = new ArrayList<>();
+		if (tp.getResponse() == Response.FOUND_ORDER) {
+
+			@SuppressWarnings("unchecked")
+			List<Order> orders = (List<Order>) tp.getInformation();
+			for (Order order : orders) {
+				OrderPrivew screen = new OrderPrivew(order.getOrderID(), order.getCustomerID(), order.getBranchID(),
+						order.getPrice(), order.getGreetingCard(), order.getOrderDate(), order.getExpectedDelivery(),
+						order.getItems());
+				screen.getComboStatus().setValue(order.getStatus());
+				orderPrivie.add(screen);
+
+			}
+
+		}
+		return orderPrivie;
 	}
 
 	private static void loadTheRightScreen(MouseEvent event, TransmissionPack tp) throws Exception {
