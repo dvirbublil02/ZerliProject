@@ -2,16 +2,16 @@ package entities_catalog;
 
 import java.util.List;
 
+import javafx.collections.ObservableList;
 import javafx.scene.image.ImageView;
 
 public class Cart {
 	private ImageView imgSrc;
 	private double price;
-	private Double quantity;
+	private double quantity;
 	private String Description;
 	private String name;
-
-	private List<ProductInOrder> cartList;
+	private ObservableList<ProductInOrder> cartList;
 	/**
 	 * @param name
 	 * @param object
@@ -19,13 +19,14 @@ public class Cart {
 	 * @param quantity
 	 * @param cartList
 	 */
- 	public Cart(String name, ImageView object, double price, Double quantity,List<ProductInOrder> cartList,String Description) {
+ 	
+	public Cart(String name, ImageView object, double price, Double quantity,ObservableList<ProductInOrder> cartList,String Description) {
+		this.name=name;
 		this.imgSrc = object;
 		this.price = price;
 		this.quantity = quantity;
 		this.cartList = cartList;
 		this.Description=Description;
-		this.name=name;
 	}
 
 	public String getName() {
@@ -61,11 +62,11 @@ public class Cart {
 	}
 
 
-	public List<ProductInOrder> getCartList() {
+	public ObservableList<ProductInOrder> getCartList() {
 		return cartList;
 	}
 
-	public void setCartList(List<ProductInOrder> cartList) {
+	public void setCartList(ObservableList<ProductInOrder> cartList) {
 		this.cartList = cartList;
 	}
 

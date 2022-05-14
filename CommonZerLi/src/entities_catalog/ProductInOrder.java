@@ -8,6 +8,8 @@ public class ProductInOrder extends Product {
 	private static final long serialVersionUID = 1L;
 	private String cartID;
 	private Double productQuantityInOrder;
+	private boolean isOnSale;
+	private double fixPrice;
 	
 	public ProductInOrder(String ID, String name, double price, String backGroundColor, String imgSrc, double quantity,
 			String itemType, String dominateColor , String cartID ,Double productQuantityInOrder,boolean isOnSale,double fixPrice ) {
@@ -33,13 +35,32 @@ public class ProductInOrder extends Product {
 	public void setProductQuantityInCart(Double productQuantityInCart) {
 		this.productQuantityInOrder = productQuantityInCart;
 	}
+	
+	
+	public boolean isOnSale() {
+		return isOnSale;
+	}
+
+	public void setOnSale(boolean isOnSale) {
+		this.isOnSale = isOnSale;
+	}
+
+	public double getFixPrice() {
+		return fixPrice;
+	}
+
+	public void setFixPrice(double fixPrice) {
+		this.fixPrice = fixPrice;
+	}
+	
 
 	@Override
 	public String toString() {
 		return "ProductInOrder [getName()=" + getName() + "getQuantity()="+ getQuantity() + ", productQuantityInOrder=" + getProductQuantityInCart();
 				
 	}
-	
+
+
 
 
 }
