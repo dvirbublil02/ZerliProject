@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import client.OrderHandleController;
 import entities_catalog.Cart;
 import entities_catalog.ProductInOrder;
 import entities_general.Order;
+import entities_general.OrderCartPreview;
 import entities_general.OrderCustomCartPreview;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -37,19 +40,19 @@ public class CartPageController implements Initializable {
 	//OrderCustomCartPreview - > Image , Name , Quantity , Description 
 	
     @FXML
-    private TableColumn<?, ?> ImgColRegularTbl;
+    private TableColumn<OrderCartPreview, ImageView> ImgColRegularTbl;
 
     @FXML
     private TableColumn<OrderCustomCartPreview, ImageView> ImgCustomColTbl;
 
     @FXML
-    private TableColumn<?, ?> ItemNameColRegularTbl;
+    private TableColumn<OrderCartPreview, String> ItemNameColRegularTbl;
 
     @FXML
     private TableColumn<OrderCustomCartPreview, String> ItemNameCustomColTbl;
 
     @FXML
-    private TableColumn<?, ?> QuantityColRegularTbl;
+    private TableColumn<OrderCartPreview, Double> QuantityColRegularTbl;
 
     @FXML
     private TableColumn<OrderCustomCartPreview, Integer> QuantityCustomColTbl;
@@ -65,6 +68,12 @@ public class CartPageController implements Initializable {
 
     @FXML
     private Button removeRegularBtn;
+    
+    @FXML
+    private Label massageLabel;
+    
+    @FXML
+    private Label massageLabelRegular;
 
     @FXML
     private TableColumn<OrderCustomCartPreview, Button> showCustomTbl;
@@ -73,16 +82,16 @@ public class CartPageController implements Initializable {
     private TableView<OrderCustomCartPreview> tableCustom;
 
     @FXML
-    private TableView<?> tableRegular;
+    private TableView<OrderCartPreview> tableRegular;
 
     @FXML
-    private TableColumn<?, ?> totalPriceColRegularTbl;
+    private TableColumn<OrderCartPreview, Double> totalPriceColRegularTbl;
 
     @FXML
     private TableColumn<OrderCustomCartPreview, Double> totalPriceCustomColTbl;
     
-
 	private ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
+	private ObservableList<OrderCartPreview> listViewRegular = FXCollections.observableArrayList();
 
 	
 
@@ -120,11 +129,16 @@ public class CartPageController implements Initializable {
 		}));
 		
 		
-		//Cart Table Initilaze
+		//Cart Table Initialize custom
 		ImgCustomColTbl.setCellValueFactory(new PropertyValueFactory<OrderCustomCartPreview, ImageView>("imgSrc"));
 		ItemNameCustomColTbl.setCellValueFactory(new PropertyValueFactory<OrderCustomCartPreview, String>("name"));
 		QuantityCustomColTbl.setCellValueFactory(new PropertyValueFactory<OrderCustomCartPreview, Integer>("quantity"));
 		totalPriceCustomColTbl.setCellValueFactory(new PropertyValueFactory<OrderCustomCartPreview, Double>("totalprice"));
+		//Cart Table Initialize regular
+		ImgColRegularTbl.setCellValueFactory(new PropertyValueFactory<OrderCartPreview, ImageView>("imgSrc"));
+		ItemNameColRegularTbl.setCellValueFactory(new PropertyValueFactory<OrderCartPreview, String>("name"));
+		QuantityColRegularTbl.setCellValueFactory(new PropertyValueFactory<OrderCartPreview, Double>("quantity"));
+		totalPriceColRegularTbl.setCellValueFactory(new PropertyValueFactory<OrderCartPreview, Double>("totalprice"));
 		
 		
 		//add all Custom product to screen 
@@ -134,10 +148,20 @@ public class CartPageController implements Initializable {
 			Image image1 = new Image("/javafx_images/CustomOrderPicture.png", 60, 60, true, true);
 			ImageView imageView1 = new ImageView(image1);
 			imageView1.setImage(image1);
-			listViewCustom.add(new OrderCustomCartPreview(imageView1,customName, 50, 50.0, customProductInOrderFinallCart.get(customName)));
+			listViewCustom.add(new OrderCustomCartPreview(imageView1,customName, 1, 50.0, customProductInOrderFinallCart.get(customName)));
+		}
+				
+		//add all regular product to regular list
+		for(ProductInOrder p : OrderHandleController.getProductInOrder())
+		{
+			Image image1 = new Image(p.getImgSrc(), 60, 60, true, true);
+			ImageView imageView1 = new ImageView(image1);
+			imageView1.setImage(image1);
+			listViewRegular.add(new OrderCartPreview(imageView1, p.getName(),(int)p.getProductQuantityInCart(), 0,p));
 		}
 		
-		//set table to show products 
+		//set tables to show products 
+		tableRegular.setItems(listViewRegular);
 		tableCustom.setItems(listViewCustom);
 
 	}
@@ -158,7 +182,6 @@ public class CartPageController implements Initializable {
 	}
 
 
-
 	@FXML
 	void confirm(ActionEvent event) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
@@ -169,11 +192,31 @@ public class CartPageController implements Initializable {
 
     @FXML
     void removeCustom(ActionEvent event) {
-
+    	ObservableList<OrderCustomCartPreview> productSelected , allProducts;
+		allProducts=tableCustom.getItems();
+		productSelected=tableCustom.getSelectionModel().getSelectedItems();
+		
+		if(allProducts.isEmpty())
+			massageLabel.setText("Cart Allready Empty");
+		try {
+			productSelected.forEach(allProducts::remove);
+		} catch (NoSuchElementException e) {
+			massageLabel.setText("Cart empty!!");
+		}
     }
 
     @FXML
     void removeRegular(ActionEvent event) {
-
+    	ObservableList<OrderCartPreview> productSelected , allProducts;
+		allProducts=tableRegular.getItems();
+		productSelected=tableRegular.getSelectionModel().getSelectedItems();
+		
+		if(allProducts.isEmpty())
+			massageLabelRegular.setText("Cart Allready Empty");
+		try {
+			productSelected.forEach(allProducts::remove);
+		} catch (NoSuchElementException e) {
+			massageLabelRegular.setText("Cart empty!!");
+		}
     }
 }

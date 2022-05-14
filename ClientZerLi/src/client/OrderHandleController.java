@@ -12,6 +12,8 @@ public class OrderHandleController {
 	//this table will handle only custom products.
 	private static Map<String,List<ProductInOrder>> customProductInOrder=new HashMap<>();
 	private static Map<String,List<ProductInOrder>> customProductInOrderFinallCart=new HashMap<>();
+	private static List<ProductInOrder> productInOrder=new ArrayList<>();
+	
 	
 	public static Map<String, List<ProductInOrder>> getCustomProductInOrderFinallCart() {
 		return customProductInOrderFinallCart;
@@ -19,8 +21,6 @@ public class OrderHandleController {
 	public static void setCustomProductInOrderFinallCart(String key, List<ProductInOrder> customProductInOrderFinallCart) {
 		OrderHandleController.customProductInOrderFinallCart.put(key, customProductInOrderFinallCart);
 	}
-	private static List<ProductInOrder> productInOrder=new ArrayList<>();
-
 	
 	public static Map<String, List<ProductInOrder>> getCustomProductInOrder() {
 		return customProductInOrder;

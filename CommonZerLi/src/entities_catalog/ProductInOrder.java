@@ -7,7 +7,7 @@ public class ProductInOrder extends Product {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String cartID;
-	private Double productQuantityInOrder;
+	private double productQuantityInOrder;
 	private boolean isOnSale;
 	private double fixPrice;
 	
@@ -27,12 +27,12 @@ public class ProductInOrder extends Product {
 	}
 
 
-	public Double getProductQuantityInCart() {
+	public double getProductQuantityInCart() {
 		return productQuantityInOrder;
 	}
 
 	
-	public void setProductQuantityInCart(Double productQuantityInCart) {
+	public void setProductQuantityInCart(double productQuantityInCart) {
 		this.productQuantityInOrder = productQuantityInCart;
 	}
 	

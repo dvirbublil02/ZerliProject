@@ -92,7 +92,6 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 		
     }
     
-    
     public ObservableList<ProductInOrder> getProductDetails() {
 		return productDetails;
 	}
