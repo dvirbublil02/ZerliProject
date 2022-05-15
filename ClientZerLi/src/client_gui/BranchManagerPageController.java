@@ -63,8 +63,11 @@ public class BranchManagerPageController {
     }
 
     @FXML
-    void editCustomerInfo(ActionEvent event) {
-    	
+    void editCustomerInfo(ActionEvent event) throws Exception {
+    	((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		BranchManagerEditUserController editUserController = new BranchManagerEditUserController();
+		editUserController.start(primaryStage);
     }
 
     @FXML
