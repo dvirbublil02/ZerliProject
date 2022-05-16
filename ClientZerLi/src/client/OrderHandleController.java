@@ -9,6 +9,7 @@ import java.util.Map;
 import entities_catalog.ProductInOrder;
 
 public class OrderHandleController {
+	
 	//this table will handle only custom products.
 	private static Map<String,List<ProductInOrder>> customProductInOrder=new HashMap<>();
 	private static Map<String,List<ProductInOrder>> customProductInOrderFinallCart=new HashMap<>();
@@ -31,10 +32,15 @@ public class OrderHandleController {
 	public static List<ProductInOrder> getProductInOrder() {
 		return productInOrder;
 	}
+	
+	
 	public static void setProductInOrder(ProductInOrder productInOrder) {
 		OrderHandleController.productInOrder.add(productInOrder);
+		//OrderHandleController.quantityOfRegularProducts += productInOrder.getProductQuantityInCart();
 	}
+	
 	//to manage the custome item hashmap
+	// add productInOrder to Custom product that exist. 
 	public static void addToExistItemOnList(String key ,ProductInOrder productInOrder){
 		List<ProductInOrder> productlist=customProductInOrder.get(key);
 		if(productlist.contains(productInOrder)) {
@@ -52,13 +58,18 @@ public class OrderHandleController {
 		}
 		
 	}
+	
 	//to manage the not custom item list
+	//add to regualr item quntity to same one. 
 	public static void addToExistItemOnListNotCustom(ProductInOrder productInOrder2) {
 		
 			for(int i=0;i<productInOrder.size();i++) {
 				if(productInOrder.get(i).equals(productInOrder2)) {
 				Double temp=productInOrder.get(i).getProductQuantityInCart()+productInOrder2.getProductQuantityInCart();
 				productInOrder.get(i).setProductQuantityInCart(temp);
+				
+				// add to total quantity of regular item 
+				//OrderHandleController.quantityOfRegularProducts+=productInOrder2.getProductQuantityInCart();
 				return;
 				}
 			
@@ -66,5 +77,12 @@ public class OrderHandleController {
 		
 	}
 	
+	public static int getQuantityOfCustomProducts() {
+		return customProductInOrder.size();
+	}
+
+	public static int getQuantityOfRegularProducts() {
+		return productInOrder.size();
+	}	
 }
     

@@ -13,17 +13,18 @@ public class OrderCustomCartPreview {
 	private ImageView imgSrc;
 	private String name;
 	private int quantity;
-	private double totalprice;
+	public static double totalprice=0;
 	private ObservableList<ProductInOrder> cartList=FXCollections.observableArrayList();
 	
 	
-	public OrderCustomCartPreview(ImageView imgSrc, String name, int quantity, double totalprice,
+	public OrderCustomCartPreview(ImageView imgSrc, String name, int quantity, double price,
 			List<ProductInOrder> cartList) {
 		this.imgSrc = imgSrc;
 		this.name = name;
 		this.quantity = quantity;
-		this.totalprice = totalprice;
 		this.cartList.addAll(cartList);
+		for(ProductInOrder p :cartList)
+			OrderCustomCartPreview.totalprice+=p.getPrice()*p.getProductQuantityInCart();
 	}
 
 	public ImageView getImgSrc() {

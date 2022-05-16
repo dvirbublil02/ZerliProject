@@ -11,15 +11,17 @@ public class OrderCartPreview {
 	private ImageView imgSrc;
 	private String name;
 	private int quantity;
-	private double totalprice;
+	private double price;
+	public static double totalprice;
 	private ProductInOrder product;
 	
-	public OrderCartPreview(ImageView imgSrc, String name, int quantity, double totalprice,
+	public OrderCartPreview(ImageView imgSrc, String name, int quantity, double price,
 			ProductInOrder product) {
 		this.imgSrc = imgSrc;
 		this.name = name;
 		this.quantity = quantity;
-		this.totalprice = totalprice;
+		this.price = price;
+		OrderCartPreview.totalprice+=price*quantity;
 		this.product=product;
 	}
 
@@ -52,6 +54,14 @@ public class OrderCartPreview {
 		this.quantity = quantity;
 	}
 
+	
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
 	public double getTotalprice() {
 		return totalprice;
@@ -59,7 +69,7 @@ public class OrderCartPreview {
 
 
 	public void setTotalprice(double totalprice) {
-		this.totalprice = totalprice;
+		OrderCartPreview.totalprice = totalprice;
 	}
 	
 	public ProductInOrder getProduct() {

@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CartPageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CartPageController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -212,7 +212,7 @@
                                                                   <TableColumn fx:id="ImgCustomColTbl" prefWidth="191.20001828670502" text="Image" />
                                                                   <TableColumn fx:id="ItemNameCustomColTbl" prefWidth="178.40005493164062" text="ItemName" />
                                                                   <TableColumn fx:id="QuantityCustomColTbl" minWidth="0.0" prefWidth="117.5999755859375" text="Quantity" />
-                                                                  <TableColumn fx:id="totalPriceCustomColTbl" prefWidth="115.19992065429688" text="Total Price" />
+                                                                  <TableColumn fx:id="priceCustomColTbl" prefWidth="115.19992065429688" text="Price" />
                                                                   <TableColumn fx:id="showCustomTbl" prefWidth="75.0" text="Show" />
                                                                </columns>
                                                             </TableView>
@@ -220,7 +220,7 @@
                                                       </VBox>
                                                       <HBox prefHeight="100.0" prefWidth="200.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="76.0" prefWidth="463.0" HBox.hgrow="ALWAYS">
+                                                            <HBox alignment="CENTER_RIGHT" prefHeight="64.0" prefWidth="297.0" HBox.hgrow="ALWAYS">
                                                                <children>
                                                                   <Button fx:id="removeCustomProductBtn" mnemonicParsing="false" onAction="#removeCustom" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Remove">
                                                                      <font>
@@ -234,11 +234,11 @@
                                                                   </Button>
                                                                </children>
                                                             </HBox>
-                                                            <HBox alignment="CENTER" prefHeight="76.0" prefWidth="354.0">
+                                                            <HBox alignment="CENTER" prefHeight="64.0" prefWidth="434.0">
                                                                <children>
-                                                                  <Label fx:id="massageLabel" prefHeight="22.0" prefWidth="230.0" textFill="#bf0808">
+                                                                  <Label fx:id="massageLabel" prefHeight="22.0" prefWidth="230.0" textFill="#cb0606">
                                                                      <font>
-                                                                        <Font name="Calibri Bold" size="18.0" />
+                                                                        <Font name="Cambria Bold" size="16.0" />
                                                                      </font>
                                                                   </Label>
                                                                </children>
@@ -264,14 +264,14 @@
                                                                   <TableColumn fx:id="ImgColRegularTbl" prefWidth="191.20001828670502" text="Image" />
                                                                   <TableColumn fx:id="ItemNameColRegularTbl" prefWidth="178.40005493164062" text="ItemName" />
                                                                   <TableColumn fx:id="QuantityColRegularTbl" minWidth="0.0" prefWidth="169.59994506835938" text="Quantity" />
-                                                                  <TableColumn fx:id="totalPriceColRegularTbl" prefWidth="142.39996337890625" text="Total Price" />
+                                                                  <TableColumn fx:id="priceColRegularTbl" prefWidth="142.39996337890625" text="Price" />
                                                                </columns>
                                                             </TableView>
                                                          </children>
                                                       </VBox>
                                                       <HBox prefHeight="100.0" prefWidth="200.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                                            <HBox alignment="CENTER_RIGHT" prefHeight="64.0" prefWidth="297.0" HBox.hgrow="ALWAYS">
                                                                <children>
                                                                   <Button fx:id="removeRegularBtn" mnemonicParsing="false" onAction="#removeRegular" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Remove">
                                                                      <font>
@@ -285,11 +285,11 @@
                                                                   </Button>
                                                                </children>
                                                             </HBox>
-                                                            <HBox alignment="CENTER" prefHeight="76.0" prefWidth="354.0">
+                                                            <HBox alignment="CENTER" prefHeight="64.0" prefWidth="434.0">
                                                                <children>
-                                                                  <Label fx:id="massageLabelRegular" prefHeight="22.0" prefWidth="230.0" textFill="#bf0808">
+                                                                  <Label fx:id="massageLabelRegular" prefHeight="22.0" prefWidth="230.0" textFill="#cb0606">
                                                                      <font>
-                                                                        <Font name="Calibri Bold" size="18.0" />
+                                                                        <Font name="Cambria" size="16.0" />
                                                                      </font>
                                                                   </Label>
                                                                </children>
@@ -311,19 +311,46 @@
                         </HBox>
                      </children>
                   </HBox>
-                  <VBox alignment="CENTER" prefHeight="79.0" prefWidth="692.0" stylesheets="@Style.css" VBox.vgrow="ALWAYS">
+                  <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="confirmBtn" mnemonicParsing="false" onAction="#confirm" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Confirm Cart">
-                           <font>
-                              <Font name="Candara Bold" size="18.0" />
-                           </font>
-                           <styleClass>
-                              <String fx:value="buttonConfirm" />
-                              <String fx:value="shadow" />
-                              <String fx:value="transparent" />
-                           </styleClass>
-                        </Button>
-                     </children></VBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="96.0" prefWidth="328.0">
+                           <children>
+                              <Button fx:id="confirmBtn" mnemonicParsing="false" onAction="#confirm" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Confirm Cart">
+                                 <font>
+                                    <Font name="Candara Bold" size="18.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="buttonConfirm" />
+                                    <String fx:value="shadow" />
+                                    <String fx:value="transparent" />
+                                 </styleClass>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="96.0" prefWidth="466.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="96.0" prefWidth="131.0">
+                                 <children>
+                                    <Label text="Total Price : ">
+                                       <font>
+                                          <Font name="Cambria Bold Italic" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label fx:id="priceLabel" textFill="#cb0606">
+                                       <font>
+                                          <Font name="Cambria Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </center>

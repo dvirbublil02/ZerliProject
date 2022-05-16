@@ -353,7 +353,10 @@ public class CatalogScreenController implements Initializable{
     void addToCart(ActionEvent event) {
     	Integer tmp= Integer.parseInt(cartItemCounter.getText())+1;
     	cartItemCounter.setText(tmp.toString());
+    	
+    	
     	if(!customClickRadioBtn.isSelected()) {
+    		//regular ProductInOrder
     		productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
     		if(OrderHandleController.getProductInOrder().contains(productInOrder)) {
     			OrderHandleController.addToExistItemOnListNotCustom(productInOrder);
