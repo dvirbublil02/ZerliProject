@@ -10,11 +10,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+//import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
+
 import communication.Response;
 import communication.TransmissionPack;
 import entities_catalog.Product;
+import entities_catalog.ProductInOrder;
 import entities_general.CreditCard;
 import entities_general.Login;
+import entities_general.Order;
 import entities_users.BranchManager;
 import entities_users.Customer;
 import entities_users.CustomerService;
@@ -25,9 +29,11 @@ import entities_users.ServiceExpert;
 import entities_users.ShopWorker;
 import entities_users.User;
 import enums.AccountStatus;
+import enums.OrderStatus;
 
 /**
  * In this class there are all the server quarries
+ *@author Mor Ben Haim
  *
  */
 public class ServerQuaries {
@@ -529,6 +535,131 @@ public class ServerQuaries {
 		else
 			obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
 		}
+	/**
+	 * this method is getting the colors for the catalog screen for choosing
+	 * dominate color for filtering
+	 * @param obj
+	 * @param con
+	 */
+	public static void getColors(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			ResultSet rs;
+			Statement stmt;
+			List<String>colors=new ArrayList<>();
+			/**
+			 * Distinct query to getting colors from product table
+			 */
+			String query="SELECT DISTINCT dominateColor FROM zerli.product";
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				
+				while(rs.next()) {
+					colors.add(rs.getString(1));/**add the color to the the arrayList*/
+					
+					
+					
+				}
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			System.out.println(colors.toString());
+			if(colors.size()>0) {
+				
+			obj.setInformation(colors);
+			obj.setResponse(Response.FOUND_COLORS);
+			}
+			else {
+				obj.setResponse(Response.DID_NOT_FIND_COLORS);
+			}
+			
+				
+		}
+		
+	}
+
+	/**
+	 * this method is insert order that customer performed and save it to wate for branch manger for improving
+	 * it save also the order details that in progress 
+	 * @param obj
+	 * @param con
+	 */
+	@SuppressWarnings("null")
+	public static void addOrderInDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			
+			Statement stmt=null;
+			if(obj.getInformation() instanceof Order) {
+				Order order=(Order)obj.getInformation();
+				order.getOrderID();
+			
+			String query=String.format("INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", order.getOrderID(),order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
+			
+			try {
+				stmt = con.createStatement();
+				System.out.println(query);
+				stmt.executeUpdate(query);
+				for(ProductInOrder p:order.getItems()) {
+					stmt = con.createStatement();
+					String query2=String.format("INSERT INTO zerli.productinorder(productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, cartID, productQuantityInOrder) VALUES('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s','%s','%s');", p.getID(),p.getName(),p.getPrice(),p.getBackGroundColor(),p.getImgSrc(),p.getQuantity(),p.getItemType(),p.getDominateColor(),p.getCartID(),p.getProductQuantityInCart());
+					System.out.println(query2);
+					stmt.executeUpdate(query2);
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			}
+			
+//			stmt.executeUpdate(String.format(
+//					"INSERT INTO zerli.orders(orderNumber, price, greetingCard, color, dOrder, shop, date, orderDate) VALUES ('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s');",
+//					order.getOrderNumber(), order.getPrice(), order.getGreetingCard(), order.getColor(),
+//					order.getDorder(), order.getShop(), order.getDate(), order.getOrderDate()));
+			try {
+				stmt = con.createStatement();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+	public static void getOrders(TransmissionPack obj, Connection con) {
+		System.out.println(6);
+		if (obj instanceof TransmissionPack) {
+			ResultSet rs;
+			Statement stmt;
+			List<Order>orders=new ArrayList<>();
+			String query="SELECT * FROM zerli.order WHERE status='PENDING'";
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while(rs.next()) {
+					System.out.println(rs.toString());
+					System.out.printf(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getString(4)+" "+rs.getString(5)+" "+OrderStatus.valueOf(rs.getString(6))+" "+rs.getTimestamp(7).toString()+" "+rs.getTimestamp(8));
+					Order order=new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getTimestamp(7).toString(),rs.getTimestamp(8).toString(),new ArrayList<ProductInOrder>());
+					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
+					
+					orders.add(order);
+				}
+				rs.close();
+				System.out.println(orders);
+				if(orders.size()>0) {
+					obj.setResponse(Response.FOUND_ORDER);
+					obj.setInformation(orders);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
 
 }		
 	
