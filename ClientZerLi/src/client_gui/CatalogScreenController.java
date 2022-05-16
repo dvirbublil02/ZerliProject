@@ -134,9 +134,14 @@ public class CatalogScreenController implements Initializable{
     private ObservableList<String> colorFilter ;
     private ObservableList<String> priceFilter ;
     private ObservableList<String> typeFilter ;
-   
+    private boolean firstTimeLoadAddtoCard=true;
     private static ProductInOrder productInOrder;
     
+    /**
+     * 
+     * @param primaryStage main of catalog screen 
+     * @throws Exception if there is problem with start of this stage
+     */
 	public void start(Stage primaryStage) throws Exception {	
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CatalogScreen.fxml"));
 				
@@ -152,7 +157,13 @@ public class CatalogScreenController implements Initializable{
 	
 	
 	
-	// build list of item regular or by filter
+	/** Get Products data information to preview on screen.
+	 * 	Can bring Product with Filter or with them. 
+	 * @param color filter of color (blue,green..)
+	 * @param price filter of price (10 to 100 .. )
+	 * @param type  filter of type (Product or Item)
+	 * @return List of Product by this parameters
+	 */
 	private List<Product> getDataItems(String color , String price , String type)
 	{
 		if( color.equals("None") && price.equals("None") && type.equals("None"))
@@ -170,18 +181,17 @@ public class CatalogScreenController implements Initializable{
 		ChosenItemCard.setStyle("-fx-background-color: #"+item.getbackGroundColor()+ "; -fx-background-radius: 30;" );
 	}
 	
+		
 	
-	
+	/** initialize Screen and all Features to preview in start
+	 *  Catalog Products , ComboBox of filters , setChosenItemCard on left side 
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {	
+		//initialize setChosenItemCard
 		vboxAddToCustom.setVisible(false);
-
-
 		customTextField.setDisable(true);
-
-		
-
 
 		//filter ComboBox section - color , price , type 
 		colorFilter=FXCollections.observableArrayList("None");
@@ -195,25 +205,32 @@ public class CatalogScreenController implements Initializable{
 		itemTypeComboBox.setItems(typeFilter);
     	itemTypeComboBox.setValue("None");
 		
+    	//Close Button until first chosen of Product
+    	addToCartBtn.setDisable(true);
+    	
+    	//change Add to button to Add to (Text)
+    	customTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+    	    //System.out.println("textfield changed from " + oldValue + " to " + newValue);
+    	    addToCustomBtn.setText("ADD TO "+ customTextField.getText().toUpperCase());
+    	});
 		
 		//Progress bar state - 50%
 		progressIndicator.setStyle("-fx-color: #D0F6DD ; -fx-accent: green;");
 		progressIndicator.setProgress(0.50f);
 		
-		
-		
-			
 		// catalog item initialize
 		InitilizeProductGrid("None","None","None");
 		
 	}
 
-
-
-
-
 	
-	// grid dynamic 
+	/** Initialize Products Grid by filter or without.
+	 * 	Grid of 3 Products in each line . 
+	 * 
+	 * @param color filter of color (blue,green..)
+	 * @param price filter of price (10 to 100 .. )
+	 * @param type  filter of type (Product or Item)
+	 */
 	private void InitilizeProductGrid(String color,String price,String type) {
 		try {
 			  itemInCatalog.addAll(getDataItems(color,price,type));
@@ -223,10 +240,17 @@ public class CatalogScreenController implements Initializable{
 		
 		if(itemInCatalog.size()>0)
 		{
-			setChosenItemCard(itemInCatalog.get(0));
+			Product p=new Product("0", "No Item Choosen", 0, "172D42", "/javafx_images/CustomOrderPicture.png", 0, "Product", "Blue", false, 0);
+			//setChosenItemCard(itemInCatalog.get(0));
+			setChosenItemCard(p);
 			myListener = new MyListenerCatalog() {
 				@Override
 				public void onClickListener(Product item) {
+					
+					//open addToCart button first time 
+					if(firstTimeLoadAddtoCard)
+						addToCartBtn.setDisable(false);
+					//load chosenCard and ProductInOrder that chosen
 					setChosenItemCard(item);
 					 productInOrder=new ProductInOrder(item.getID(),
 							 item.getName(),item.getPrice(),
@@ -277,6 +301,9 @@ public class CatalogScreenController implements Initializable{
 	}
 
 	
+	/** Click On Radio Button on open the option for custom order.
+	 * @param event click on Custom Button 
+	 */
     @FXML
     void customClickRadio(ActionEvent event) {
     	if(customClickRadioBtn.isSelected()==true) 
@@ -296,9 +323,11 @@ public class CatalogScreenController implements Initializable{
     	}
     }
 	
-	
-
     
+	/** This Back Button will bring us Back to previous screen 
+	 * @param event back to previous screen .
+	 * @throws Exception
+	 */
     @FXML
     void Back(ActionEvent event) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
@@ -307,35 +336,55 @@ public class CatalogScreenController implements Initializable{
 		customerPage.start(primaryStage);
     }
 
+    /**
+     * will be using in the future for searching .
+     * @param event
+     */
     @FXML
     void Search(ActionEvent event) {
 
     }
 
+    /** Add to Cart the custom\regular product
+     * 
+     * @param event click on Add to cart button
+     */
     @FXML
     void addToCart(ActionEvent event) {
     	Integer tmp= Integer.parseInt(cartItemCounter.getText())+1;
     	cartItemCounter.setText(tmp.toString());
+    	
+    	
     	if(!customClickRadioBtn.isSelected()) {
-    	productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
-    	if(OrderHandleController.getProductInOrder().contains(productInOrder)) {
-    		OrderHandleController.addToExistItemOnListNotCustom(productInOrder);
-    		
-    	}else {
-    		
-    		OrderHandleController.getProductInOrder().add(productInOrder);
-    	}
+    		//regular ProductInOrder
+    		productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
+    		if(OrderHandleController.getProductInOrder().contains(productInOrder)) {
+    			OrderHandleController.addToExistItemOnListNotCustom(productInOrder);
+    		}
+    		else {
+    			OrderHandleController.getProductInOrder().add(productInOrder);
+    			}    	
     	}
     	else {
     		List<ProductInOrder> moveToCart=new ArrayList<>();
     		moveToCart=OrderHandleController.getCustomProductInOrder().get(customTextField.getText().toUpperCase());
     		OrderHandleController.setCustomProductInOrderFinallCart(customTextField.getText().toUpperCase(),moveToCart);
     		System.out.println(OrderHandleController.getCustomProductInOrderFinallCart().toString());
+    		
+    		//clear custom selection
+    		vboxAddToCustom.setVisible(false);
+    		customTextField.setText("");
+    		customTextField.setDisable(true);
+    		customClickRadioBtn.setSelected(false);
     	}
-    	
     	
     }
 
+    
+    /** click on minus button to decrease product quantity value
+     * 
+     * @param event click on minus button
+     */
     @FXML
     void minusBtnClick(ActionEvent event) {
     	int quantityValue=Integer.valueOf(quantityTextLable.getText());
@@ -347,6 +396,11 @@ public class CatalogScreenController implements Initializable{
     	}
     }
 
+    
+    /** click on minus button to increase product quantity value
+     * 
+     * @param event click on minus button
+     */
     @FXML
     void pluseBtnClick(ActionEvent event) {
     	int quantityValue=Integer.valueOf(quantityTextLable.getText());
@@ -359,7 +413,10 @@ public class CatalogScreenController implements Initializable{
     }
 
     
-    // update screen release all productCards 
+    /** Update products on catalog by filter that collected or without him  
+     * 
+     * @param event update the products on catalog 
+     */
     @FXML
     void update(ActionEvent event) {
     	ObservableList<Node> productCards = grid.getChildren();
@@ -368,8 +425,10 @@ public class CatalogScreenController implements Initializable{
     	InitilizeProductGrid(itemColorComboBox.getValue(),itemPriceComboBox.getValue(),itemTypeComboBox.getValue());  	
     }
     
-    
-    //clear and update screen
+    /**	Clear and Update screen to all Products in Network
+     * 
+     * @param event clear previous and load all Product
+     */
     @FXML
     void clear(ActionEvent event) {
     	itemColorComboBox.setValue("None");
@@ -379,14 +438,24 @@ public class CatalogScreenController implements Initializable{
     }
     
    
+    /** Open Cart Page screen with all Products preview.
+     * 
+     * @param event click on cart will open here .
+     * @throws Exception  when page will not bring well.
+     */
     @FXML
     void cartPageMove(MouseEvent event) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		CartPageController cartPage = new CartPageController();
 		cartPage.start(primaryStage);
+		
     }
     
+    /** Add product to dynamic Map the store all custom products.
+     * 	Only when user will add the custom product to cart it will move the relevant one to the cart Map.
+     * @param event add products to custom product .
+     */
     @FXML
     void addToCustom(ActionEvent event) {
     	productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
@@ -402,18 +471,4 @@ public class CatalogScreenController implements Initializable{
     }
     
     
-    
-    @FXML
-    void quantityTextLableUpdate(ActionEvent event) {
-
-    }
-    //fix this action
-    @FXML
-    void customField(ActionEvent event) {
-    	addToCustomBtn.setText("ADD TO "+ customTextField.getText().toUpperCase());
-    	
-    }
-
-  
-
 }

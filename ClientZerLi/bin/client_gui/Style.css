@@ -184,14 +184,30 @@
 	
 }
 
-
 .handHover:hover{
 	-fx-cursor:hand;
 }
 
 
-.imageViewCatalog {
-  border-radius: 50%;
+.tab-pane *.tab-header-area *.tab-header-background {
+  -fx-background-color:#F4F4F4;
+}
+
+.tab-pane {
+  -fx-tab-min-width:60px;
+  -fx-tab-max-width:60px;
+  -fx-tab-min-height:40px;
+  -fx-tab-max-height:40px;
+}
+ 
+.tab {
+  -fx-font-family: Segoe UI;
+  -fx-font-size: 13;
+  -fx-background-color:#C8C8C8 ;
+}
+
+.tab:selected {
+    -fx-background-color:#708090 ;
 }
 
 
