@@ -14,14 +14,23 @@ public class OrderPrivew extends Order {
 	 * 
 	 */
 	
-	private ComboBox<OrderStatus> status;
+	private ComboBox<OrderStatus> comboStatus=new ComboBox<>();
+	
+	public ComboBox<OrderStatus> getComboStatus() {
+		return comboStatus;
+	}
+
+	public void setComboStatus(ComboBox<OrderStatus> comboStatus) {
+		this.comboStatus = comboStatus;
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	public OrderPrivew(String orderID, String customerID, String branchID, String price, String greetingCard,
 			String orderDate, String expectedDelivery, List<ProductInOrder> items) {
 		super(orderID, customerID, branchID, price, greetingCard, orderDate, expectedDelivery, items);
 		ObservableList<OrderStatus> list1=FXCollections.observableArrayList(OrderStatus.APPROVE,OrderStatus.CANCEL,OrderStatus.PENDING);
-		this.status.setItems(list1);
+		this.comboStatus.setItems(list1);
 	}
 
 }
