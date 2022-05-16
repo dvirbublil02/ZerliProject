@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import entities_users.ServiceExpert;
 import entities_users.ShopWorker;
 import entities_users.User;
 import enums.AccountStatus;
+import enums.ShopWorkerActivity;
 
 /**
  * In this class there are all the server quarries
@@ -357,7 +359,7 @@ public class ServerQuaries {
 			rs = getRowFromTable(userID, type, pstmt);
 			
 			ShopWorker shopworker = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3),
-					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),rs.getString(8));
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),rs.getString(8),ShopWorkerActivity.valueOf(rs.getString(9)));
 			obj.setInformation(shopworker);
 			break;
 		}
@@ -404,9 +406,69 @@ public class ServerQuaries {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public static void GetShopWorkersFromDB(TransmissionPack obj, Connection con) {
+		//the method gets workers from the specific branch of the connected user(branch manager), from DB
+		if(obj instanceof TransmissionPack)
+		{
+			List<ShopWorker> list= new ArrayList<>();
+			Statement stmt;
+			User user= (User)obj.getInformation();//user=branch manager
+			String branchID=getBranchId(user,con);
+			if(branchID==null)
+			{
+				obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
+				return;
+			}
+			
+			try {
+				stmt = con.createStatement();
+				ResultSet rs;
+				//String getColumns = "SELECT shopworkerID,firstName, lastName,accountStatus, branchID FROM shopworker;";
+				String getColumns = "SELECT * FROM zerli.shopworker WHERE branchID='"+branchID+"';";
+				rs = stmt.executeQuery(getColumns);
+				
+				while (rs.next()) {
+					ShopWorker sw= new ShopWorker(rs.getString(1),rs.getString(2),rs.getString(3),
+							rs.getString(4),rs.getString(5),(AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7), rs.getString(8),
+							ShopWorkerActivity.valueOf(rs.getString(9)));
+					
+					list.add(sw);
+				}
+				if(list.size()>0)
+				{
+					obj.setResponse(Response.SHOP_WORKER_ARRIVED);
+					obj.setInformation(list);
+				}
+				else
+					obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
+				rs.close();
 
+				
+				
+			}catch(SQLException e) {
+				obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
+			}	
+		}
 	}
 
+	private static String getBranchId(User user, Connection con) {
+		ResultSet rs;
+		Statement stmt;
+		String branchId=null;
+		String getBranchID = "SELECT branchID FROM zerli.branchmanager WHERE branchmanagerID='"+user.getID()+"';";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(getBranchID);
+			rs.next();
+			branchId=rs.getString(1);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return branchId;
+	}
+	
 //	public static void GetProductFromDB(TransmissionPack obj, Connection con) {
 //		if (obj instanceof TransmissionPack) {
 //			List<Product> list = new ArrayList<>();

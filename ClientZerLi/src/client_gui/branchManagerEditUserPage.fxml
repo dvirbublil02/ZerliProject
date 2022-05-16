@@ -212,13 +212,13 @@
                                                                   </HBox>
                                                                   <HBox prefHeight="362.0" prefWidth="600.0">
                                                                      <children>
-                                                                        <TableView fx:id="Orders" prefHeight="338.0" prefWidth="507.0" HBox.hgrow="ALWAYS">
+                                                                        <TableView fx:id="workers" prefHeight="338.0" prefWidth="507.0" HBox.hgrow="ALWAYS">
                                                                            <columns>
-                                                                              <TableColumn fx:id="productIDCol" prefWidth="113.60003662109375" text="shop workerID" />
-                                                                              <TableColumn fx:id="nameCol" prefWidth="96.0" text="first name" />
-                                                                              <TableColumn fx:id="branchIDCol" minWidth="0.0" prefWidth="104.800048828125" text="last name" />
-                                                                              <TableColumn fx:id="totalquantityCol" prefWidth="156.0" text="email" />
-                                                                              <TableColumn fx:id="quantityInCartCol" prefWidth="130.39996337890625" text="job" />
+                                                                              <TableColumn fx:id="shopWorkerIDCol" prefWidth="113.60003662109375" text="shop workerID" />
+                                                                              <TableColumn fx:id="firstNameCol" prefWidth="96.0" text="first name" />
+                                                                              <TableColumn fx:id="lastNameCol" minWidth="0.0" prefWidth="104.800048828125" text="last name" />
+                                                                              <TableColumn fx:id="branchIDcol" prefWidth="156.0" text="branchID" />
+                                                                              <TableColumn fx:id="activityStatusCol" prefWidth="130.39996337890625" text="activity status" />
                                                                            </columns>
                                                                         </TableView>
                                                                      </children>
@@ -255,7 +255,7 @@
                                                                <children>
                                                                   <HBox alignment="CENTER" prefHeight="38.0" prefWidth="600.0">
                                                                      <children>
-                                                                        <Label text="edit worker details:">
+                                                                        <Label text="edit customer details:">
                                                                            <font>
                                                                               <Font name="System Bold Italic" size="18.0" />
                                                                            </font>
@@ -264,12 +264,12 @@
                                                                   </HBox>
                                                                   <HBox prefHeight="362.0" prefWidth="600.0">
                                                                      <children>
-                                                                        <TableView fx:id="Orders1" prefHeight="362.0" prefWidth="636.0" HBox.hgrow="ALWAYS">
+                                                                        <TableView fx:id="customer" prefHeight="362.0" prefWidth="636.0" HBox.hgrow="ALWAYS">
                                                                            <columns>
-                                                                              <TableColumn fx:id="productIDCol1" prefWidth="113.60003662109375" text="customer ID" />
-                                                                              <TableColumn fx:id="totalquantityCol1" prefWidth="184.00003814697266" text="email" />
-                                                                              <TableColumn fx:id="quantityInCartCol1" prefWidth="143.20001220703125" text="balance" />
-                                                                              <TableColumn fx:id="nameCol1" prefWidth="158.39987182617188" text="account status" />
+                                                                              <TableColumn fx:id="customerIDCol" prefWidth="113.60003662109375" text="customer ID" />
+                                                                              <TableColumn fx:id="emailCol" prefWidth="184.00003814697266" text="email" />
+                                                                              <TableColumn fx:id="balanceCol" prefWidth="143.20001220703125" text="balance" />
+                                                                              <TableColumn fx:id="accountStatusCol" prefWidth="158.39987182617188" text="account status" />
                                                                            </columns>
                                                                         </TableView>
                                                                      </children>

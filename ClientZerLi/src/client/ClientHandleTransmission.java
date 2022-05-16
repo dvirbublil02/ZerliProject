@@ -22,6 +22,7 @@ import entities_general.Login;
 import entities_general.Order;
 import entities_users.BranchManager;
 import entities_users.Customer;
+import entities_users.ShopWorker;
 import entities_users.User;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -278,8 +279,26 @@ public class ClientHandleTransmission {
 
 	}
 
+	public static List<ShopWorker> getShopWorkers() {
+		TransmissionPack tp= new TransmissionPack(Mission.GET_SHOP_WORKERS,null,ClientController.user);
+		ClientUI.chat.accept(tp);//tp sent to server and list of workers in the specific branch enters the tp
+		tp= ClientUI.chat.getObj();
 		
-	
-	
+		
+		return (List<ShopWorker>) tp.getInformation();
+	}
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

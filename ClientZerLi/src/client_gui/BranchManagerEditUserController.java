@@ -1,8 +1,13 @@
 package client_gui;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientHandleTransmission;
+import entities_general.WorkersPreview;
+import entities_users.ShopWorker;
+import enums.ShopWorkerActivity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,59 +18,58 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 public class BranchManagerEditUserController implements Initializable{
 
+//need to update colomns in gui
+	   @FXML
+	    private TableColumn<?, ?> accountStatusCol;
 
-    @FXML
-    private TableView<?> Orders;
+	    @FXML
+	    private TableColumn<WorkersPreview, ComboBox<ShopWorkerActivity>> activityStatusCol;
 
-    @FXML
-    private TableView<?> Orders1;
+	    @FXML
+	    private Button approveEditBTN;//for worker edit
 
-    @FXML
-    private Button approveEditBTN;
+	    @FXML
+	    private Button approveEditBTN1;//for customer edit
 
-    @FXML
-    private Button approveEditBTN1;
+	    @FXML
+	    private Button backBTN;
 
-    @FXML
-    private Button backBTN;
+	    @FXML
+	    private TableColumn<?, ?> balanceCol;
 
-    @FXML
-    private TableColumn<?, ?> branchIDCol;
+	    @FXML
+	    private TableColumn<WorkersPreview, String> branchIDcol;
 
-    @FXML
-    private TableColumn<?, ?> nameCol;
+	    @FXML
+	    private TableColumn<?, ?> customerIDCol;
 
-    @FXML
-    private TableColumn<?, ?> nameCol1;
+	    @FXML
+	    private TableColumn<?, ?> emailCol;//of customer
 
-    @FXML
-    private TableColumn<?, ?> productIDCol;
+	    @FXML
+	    private TableColumn<WorkersPreview, String> firstNameCol;//of worker
 
-    @FXML
-    private TableColumn<?, ?> productIDCol1;
+	    @FXML
+	    private TableColumn<WorkersPreview, String> lastNameCol;
 
-    @FXML
-    private TableColumn<?, ?> quantityInCartCol;
+	    @FXML
+	    private TableColumn<WorkersPreview, String> shopWorkerIDCol;
 
-    @FXML
-    private TableColumn<?, ?> quantityInCartCol1;
-
-    @FXML
-    private TableColumn<?, ?> totalquantityCol;
-
-    @FXML
-    private TableColumn<?, ?> totalquantityCol1;
-
-
+	    @FXML
+	    private TableView<WorkersPreview> workers;
+	    @FXML
+	    private TableView<?> customer;
+	    
+	    private ObservableList<WorkersPreview> workersListView=FXCollections.observableArrayList();
+	    
     @FXML
 	void back(ActionEvent event) throws Exception {
 
@@ -86,8 +90,23 @@ public class BranchManagerEditUserController implements Initializable{
 	}
     
     @Override
-	public void initialize(URL location, ResourceBundle resources) {
-
+	public void initialize(URL location, ResourceBundle resources) 
+    {
+    	firstNameCol.setCellValueFactory(new PropertyValueFactory<WorkersPreview,String>("firstName"));
+    	lastNameCol.setCellValueFactory(new PropertyValueFactory<WorkersPreview,String>("lastName"));
+    	shopWorkerIDCol.setCellValueFactory(new PropertyValueFactory<WorkersPreview,String>("ID"));
+    	branchIDcol.setCellValueFactory(new PropertyValueFactory<WorkersPreview,String>("branchID"));
+    	activityStatusCol.setCellValueFactory(new PropertyValueFactory<WorkersPreview,ComboBox<ShopWorkerActivity>>("activityStatusCB"));
+    	List<ShopWorker> list=ClientHandleTransmission.getShopWorkers();
+    	if(list.size()>0)
+    	{
+    		for(ShopWorker sw:list)
+    		{
+    			workersListView.add(new WorkersPreview(sw.getID(),sw.getFirstName(),sw.getLastName(),sw.getEmail(),sw.getPhoneNumber(),sw.getAccountStatus(),sw.getIsLoggedIn(),sw.getBranchID(),sw.getActivityStatus()));
+    		}
+    		
+    		workers.setItems(workersListView);
+    	}
 	}
     @FXML
     void approveEdit(ActionEvent event) {
