@@ -8,7 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 
-public class OrderPrivew extends Order {
+public class OrderPreview extends Order {
 
 	/**
 	 * 
@@ -26,7 +26,7 @@ public class OrderPrivew extends Order {
 
 	private static final long serialVersionUID = 1L;
 
-	public OrderPrivew(String orderID, String customerID, String branchID, String price, String greetingCard,
+	public OrderPreview(String orderID, String customerID, String branchID, String price, String greetingCard,
 			String orderDate, String expectedDelivery, List<ProductInOrder> items) {
 		super(orderID, customerID, branchID, price, greetingCard, orderDate, expectedDelivery, items);
 		ObservableList<OrderStatus> list1=FXCollections.observableArrayList(OrderStatus.APPROVE,OrderStatus.CANCEL,OrderStatus.PENDING);

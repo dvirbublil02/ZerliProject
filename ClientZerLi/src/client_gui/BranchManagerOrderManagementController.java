@@ -12,7 +12,7 @@ import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
 import entities_general.Order;
-import entities_general.OrderPrivew;
+import entities_general.OrderPreview;
 import enums.OrderStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,33 +36,33 @@ public class BranchManagerOrderManagementController implements Initializable {
 	private Button Back;
 
 	@FXML
-	private TableView<OrderPrivew> Orders;
+	private TableView<OrderPreview> Orders;
 
 	@FXML
-	private TableColumn<OrderPrivew, String> branchIDCol;
+	private TableColumn<OrderPreview, String> branchIDCol;
 
 	@FXML
-	private TableColumn<OrderPrivew, String> customerIDCol;
+	private TableColumn<OrderPreview, String> customerIDCol;
 
 	@FXML
-	private TableColumn<OrderPrivew, String> expectedDeliveryCol;
+	private TableColumn<OrderPreview, String> expectedDeliveryCol;
 
 	@FXML
-	private TableColumn<OrderPrivew, String> orderDateCol;
+	private TableColumn<OrderPreview, String> orderDateCol;
 
 	@FXML
-	private TableColumn<OrderPrivew, String> orderIDCol;
+	private TableColumn<OrderPreview, String> orderIDCol;
 
 	@FXML
-	private TableColumn<OrderPrivew, String> priceCol;
+	private TableColumn<OrderPreview, String> priceCol;
 
 	@FXML
-	private TableColumn<OrderPrivew, Button> showCol;
+	private TableColumn<OrderPreview, Button> showCol;
 
 	@FXML
-	private TableColumn<OrderPrivew, ComboBox<OrderStatus>> statusCol;
+	private TableColumn<OrderPreview, ComboBox<OrderStatus>> statusCol;
 
-	private ObservableList<OrderPrivew> listView = FXCollections.observableArrayList();
+	private ObservableList<OrderPreview> listView = FXCollections.observableArrayList();
 
 	@FXML
 	public void start(Stage primaryStage) throws Exception {
@@ -89,7 +89,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		// show button function
-		showCol.setCellFactory(ShowButtonTableCell.<OrderPrivew>forTableColumn("Details", (OrderPrivew o) -> {
+		showCol.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("Details", (OrderPreview o) -> {
 
 			// need to send list to screen
 			// ObservableList<Product>
@@ -109,17 +109,17 @@ public class BranchManagerOrderManagementController implements Initializable {
 			return o;
 		}));
 
-		statusCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, ComboBox<OrderStatus>>("comboStatus"));
-		orderIDCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("orderID"));
-		customerIDCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("customerID"));
-		branchIDCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("branchID"));
-		priceCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("price"));
-		orderDateCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("orderDate"));
-		expectedDeliveryCol.setCellValueFactory(new PropertyValueFactory<OrderPrivew, String>("expectedDelivery"));
+		statusCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, ComboBox<OrderStatus>>("comboStatus"));
+		orderIDCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderID"));
+		customerIDCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("customerID"));
+		branchIDCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("branchID"));
+		priceCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("price"));
+		orderDateCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderDate"));
+		expectedDeliveryCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("expectedDelivery"));
 
 //		
 
-		listView.addAll(ClientHandleTransmission.getListOrderPrivew());
+		listView.addAll(ClientHandleTransmission.getListOrderPreview());
 		Orders.setItems(listView);
 
 	}

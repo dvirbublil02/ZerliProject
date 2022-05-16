@@ -263,7 +263,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
                                  <children>
-                                    <Button fx:id="editCustomerInfoBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#editCustomerInfo" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Edit Customer Inforamtion" textFill="WHITE">
+                                    <Button fx:id="editCustomerInfoBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#editCustomerInfo" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Edit User Inforamtion" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
