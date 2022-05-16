@@ -16,7 +16,9 @@ public enum Mission {
 	USER_LOGOUT("USER_LOGOUT",8), 
 	DATA_PRODUCTS("DATA_PRODUCTS",9), 
 	DATA_PRODUCTS_BY_FILTER("DATA_PRODUCTS_BY_FILTER",10),
-	GET_COLORS("GETCOLORS",11);
+	GET_COLORS("GET_COLORS",11),
+	GET_SHOP_WORKERS("GET_SHOP_WORKERS",12);
+
 	
 	private Mission (final String mission,final int serialNumber ) {
 	}

@@ -54,6 +54,12 @@ public class MissionAnalyze {
 		case USER_LOGOUT:{
 			ServerQuaries.logout(obj,con);
 			break;
+
+		}
+		case GET_SHOP_WORKERS:{
+			ServerQuaries.GetShopWorkersFromDB(obj, con);
+			break;
+
 		}
 		case DATA_PRODUCTS :{
 			ServerQuaries.GetProducts(obj,con);

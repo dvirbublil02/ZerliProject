@@ -28,6 +28,7 @@ import entities_general.Order;
 import entities_general.OrderPrivew;
 import entities_users.BranchManager;
 import entities_users.Customer;
+import entities_users.ShopWorker;
 import entities_users.User;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -338,6 +339,7 @@ public class ClientHandleTransmission {
 
 	}
 
+
 	@SuppressWarnings("unchecked")
 	public static List<Product> getDataProduct() {
 		TransmissionPack tp = new TransmissionPack(Mission.DATA_PRODUCTS, null, null);
@@ -359,28 +361,48 @@ public class ClientHandleTransmission {
 	// COLLCET PRODUCT BY FILTERS
 	public static List<Product> getDataProductByFilter(String color, String price, String type) {
 		TransmissionPack tp = new TransmissionPack(Mission.DATA_PRODUCTS_BY_FILTER, null, null);
-		
 		// initilaze filters 
-		Map<String,String> filters = new HashMap<>();
-		filters.put("color",color);
-		filters.put("price",price);
-		filters.put("type",type);
+				Map<String,String> filters = new HashMap<>();
+				filters.put("color",color);
+				filters.put("price",price);
+				filters.put("type",type);
 
-		//send to server side and get information.
-		tp.setInformation(filters);
-		ClientUI.chat.accept(tp);
-		tp = ClientUI.chat.getObj();
+				//send to server side and get information.
+				tp.setInformation(filters);
+				ClientUI.chat.accept(tp);
+				tp = ClientUI.chat.getObj();
 
-		switch (tp.getResponse()) {
-			case GET_DATA_PRODUCTS_BY_FILTER: {
-				return (List<Product>) tp.getInformation();
-			}
+				switch (tp.getResponse()) {
+					case GET_DATA_PRODUCTS_BY_FILTER: {
+						return (List<Product>) tp.getInformation();
+					}
 
-			case FAILD_DATA_PRODUCTS_BY_FILTER: {
+					case FAILD_DATA_PRODUCTS_BY_FILTER: {
+						return null;
+					}
+				}
 				return null;
-			}
-		}
-		return null;
 	}
 
+	public static List<ShopWorker> getShopWorkers() {
+		TransmissionPack tp= new TransmissionPack(Mission.GET_SHOP_WORKERS,null,ClientController.user);
+		ClientUI.chat.accept(tp);//tp sent to server and list of workers in the specific branch enters the tp
+		tp= ClientUI.chat.getObj();
+		return (List<ShopWorker>) tp.getInformation();
+	}
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
