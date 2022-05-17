@@ -136,6 +136,7 @@ public class CatalogScreenController implements Initializable{
     private ObservableList<String> typeFilter ;
     private boolean firstTimeLoadAddtoCard=true;
     private static ProductInOrder productInOrder;
+    private static int cartCounter=0;
     
     /**
      * 
@@ -351,24 +352,35 @@ public class CatalogScreenController implements Initializable{
      */
     @FXML
     void addToCart(ActionEvent event) {
-    	Integer tmp= Integer.parseInt(cartItemCounter.getText())+1;
-    	cartItemCounter.setText(tmp.toString());
+    	
+    	Integer howMuchQuantity=Integer.parseInt(quantityTextLable.getText());
+    	
     	
     	
     	if(!customClickRadioBtn.isSelected()) {
-    		//regular ProductInOrder
+    		//regular ProductInOrder 
+    		cartCounter+=howMuchQuantity;
+    		OrderHandleController.quantityOfRegularProducts+=howMuchQuantity;
+        
+    		//regular and exist
     		productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
+    		System.out.println("regularInside->"+productInOrder);
+    		
     		if(OrderHandleController.getProductInOrder().contains(productInOrder)) {
     			OrderHandleController.addToExistItemOnListNotCustom(productInOrder);
     		}
-    		else {
-    			OrderHandleController.getProductInOrder().add(productInOrder);
+    		else { 
+    			//regular and new 
+    			OrderHandleController.addProductInOrder(productInOrder);
     			}    	
     	}
     	else {
+    		cartCounter+=1;
+    		OrderHandleController.quantityOfCustomProducts++;
+        	
     		List<ProductInOrder> moveToCart=new ArrayList<>();
     		moveToCart=OrderHandleController.getCustomProductInOrder().get(customTextField.getText().toUpperCase());
-    		OrderHandleController.setCustomProductInOrderFinallCart(customTextField.getText().toUpperCase(),moveToCart);
+    		OrderHandleController.addCustomProductInOrderFinallCart(customTextField.getText().toUpperCase(),moveToCart);
     		System.out.println(OrderHandleController.getCustomProductInOrderFinallCart().toString());
     		
     		//clear custom selection
@@ -378,6 +390,12 @@ public class CatalogScreenController implements Initializable{
     		customClickRadioBtn.setSelected(false);
     	}
     	
+    	//cartCounterUpdate
+    	cartItemCounter.setText(""+cartCounter);
+    	System.out.println("custom->"+OrderHandleController.quantityOfCustomProducts);
+    	System.out.println("regualr->"+OrderHandleController.quantityOfRegularProducts);
+    	System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
+    
     }
 
     
@@ -465,7 +483,7 @@ public class CatalogScreenController implements Initializable{
     	}else {
     		List<ProductInOrder> productInOrderList=new ArrayList<>();
     		productInOrderList.add(productInOrder);
-    		OrderHandleController.getCustomProductInOrder().put(customTextField.getText().toUpperCase(), productInOrderList);
+    		OrderHandleController.addCustomProductInOrder(customTextField.getText().toUpperCase(), productInOrderList);
     	}
     	
     }

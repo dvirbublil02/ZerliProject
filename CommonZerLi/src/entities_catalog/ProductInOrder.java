@@ -53,12 +53,19 @@ public class ProductInOrder extends Product {
 		this.fixPrice = fixPrice;
 	}
 	
+	
+	@Override
+	public boolean equals(Object obj) {
+		ProductInOrder p=(ProductInOrder) obj;
+		return this.getID() != p.getID() ? false : this.getName() != p.getName() ? false:true; 
+	}
 
 	@Override
 	public String toString() {
 		return "ProductInOrder [getName()=" + getName() + "getQuantity()="+ getQuantity() + ", productQuantityInOrder=" + getProductQuantityInCart();
 				
 	}
+	
 
 
 
