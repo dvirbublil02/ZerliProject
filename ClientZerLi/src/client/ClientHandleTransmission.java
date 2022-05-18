@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 import client_gui.BranchManagerPageController;
-import client_gui.CartPageController;
 import client_gui.CustomerPageController;
+import client_gui.CustomerServicePageController;
 import client_gui.LoginController;
 import communication.Mission;
 import communication.Response;
@@ -26,8 +26,6 @@ import entities_catalog.ProductInOrder;
 import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
-import entities_users.BranchManager;
-import entities_users.Customer;
 import entities_users.ShopWorker;
 import entities_users.User;
 import javafx.collections.ObservableList;
@@ -305,11 +303,11 @@ public class ClientHandleTransmission {
 //			menu.start(primaryStage);
 //			break;
 		}
-//		case "Customer Service": {
-//			CustomerServicePageController menu = new CustomerServiceController();
-//			menu.start(primaryStage);
-//			break;
-//		}
+		case "Customer Service": {
+			CustomerServicePageController menu = new CustomerServicePageController();
+			menu.start(primaryStage);
+			break;
+		}
 //		case "Delivery Agent": {
 //			DeliveryAgentPageController menu = new DeliveryAgentPageController();
 //			menu.start(primaryStage);
