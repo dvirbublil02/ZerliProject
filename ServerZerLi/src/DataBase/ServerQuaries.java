@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-
 import communication.Response;
 import communication.TransmissionPack;
 import entities_catalog.Product;
@@ -33,10 +32,10 @@ import enums.OrderStatus;
 
 import enums.ShopWorkerActivity;
 
-
 /**
  * In this class there are all the server quarries
- *@author Mor Ben Haim
+ * 
+ * @author Mor Ben Haim
  *
  */
 public class ServerQuaries {
@@ -275,9 +274,9 @@ public class ServerQuaries {
 		ResultSet rs;
 		PreparedStatement pstmt, pstmt2;
 		table = "zerli." + type;
-		userRow = "SELECT isLoggedIn FROM" + " " + table + " WHERE "+type+"ID=" + "'" + userID + "'" + ";";
-		updateSpecificRow = "UPDATE" + " " + table + " SET isLoggedIn=? WHERE "+type+"ID=" + "'" + userID
-				+ "'" + ";";
+		userRow = "SELECT isLoggedIn FROM" + " " + table + " WHERE " + type + "ID=" + "'" + userID + "'" + ";";
+		updateSpecificRow = "UPDATE" + " " + table + " SET isLoggedIn=? WHERE " + type + "ID=" + "'" + userID + "'"
+				+ ";";
 		pstmt = con.prepareStatement(userRow);
 		rs = pstmt.executeQuery(userRow);
 		rs.next();
@@ -288,7 +287,8 @@ public class ServerQuaries {
 			pstmt2 = con.prepareStatement(updateSpecificRow);
 			pstmt2.setString(1, "1");
 			pstmt2.executeUpdate();
-			upadateUserInformation(type, userID, obj, pstmt);//Update the obj to specific userType and his specific information
+			upadateUserInformation(type, userID, obj, pstmt);// Update the obj to specific userType and his specific
+																// information
 
 		}
 
@@ -297,9 +297,11 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * this method is updating the specific userType and his specific information
-	 * it will be update on the client side as well using trancimissionPack setInformation method
-	 * @param type 
+	 * this method is updating the specific userType and his specific information it
+	 * will be update on the client side as well using trancimissionPack
+	 * setInformation method
+	 * 
+	 * @param type
 	 * @param userID
 	 * @param obj
 	 * @param pstmt
@@ -322,54 +324,57 @@ public class ServerQuaries {
 
 			rs = getRowFromTable(userID, type, pstmt);
 			BranchManager branchmanager = new BranchManager(rs.getString(1), rs.getString(2), rs.getString(3),
-					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7), rs.getString(8));
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
+					rs.getString(8));
 			obj.setInformation(branchmanager);
 			break;
 		}
-		case "customerservice":{
+		case "customerservice": {
 			rs = getRowFromTable(userID, type, pstmt);
 			CustomerService customerservice = new CustomerService(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
 			obj.setInformation(customerservice);
 			break;
 		}
-		case "deliveryagent":{
+		case "deliveryagent": {
 			rs = getRowFromTable(userID, type, pstmt);
-			List<String>ordersID=Arrays.asList(rs.getString(9).split("[\\s,]+"));
+			List<String> ordersID = Arrays.asList(rs.getString(9).split("[\\s,]+"));
 			DeliveryAgent deliveryagent = new DeliveryAgent(rs.getString(1), rs.getString(2), rs.getString(3),
-					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),rs.getString(8),ordersID);
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
+					rs.getString(8), ordersID);
 			obj.setInformation(deliveryagent);
 			break;
 		}
-		case "marketingworker":{
+		case "marketingworker": {
 			rs = getRowFromTable(userID, type, pstmt);
-			
+
 			MarketingWorker marketingworker = new MarketingWorker(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
 			obj.setInformation(marketingworker);
 			break;
 		}
-		case "networkmanager":{
+		case "networkmanager": {
 			rs = getRowFromTable(userID, type, pstmt);
-			
+
 			NetworkManager networkmanager = new NetworkManager(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
 			obj.setInformation(networkmanager);
 			break;
 		}
-		case "serviceexpert":{
+		case "serviceexpert": {
 			rs = getRowFromTable(userID, type, pstmt);
-			
+
 			ServiceExpert serviceexpert = new ServiceExpert(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
 			obj.setInformation(serviceexpert);
 			break;
 		}
-		case "shopworker":{
+		case "shopworker": {
 			rs = getRowFromTable(userID, type, pstmt);
-			
-			ShopWorker shopworker = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3),
-					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),rs.getString(8),ShopWorkerActivity.valueOf(rs.getString(9)));
+
+			ShopWorker shopworker = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+					rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7), rs.getString(8),
+					ShopWorkerActivity.valueOf(rs.getString(9)));
 			obj.setInformation(shopworker);
 			break;
 		}
@@ -417,173 +422,172 @@ public class ServerQuaries {
 			e.printStackTrace();
 		}
 	}
+
 	public static void GetShopWorkersFromDB(TransmissionPack obj, Connection con) {
-		//the method gets workers from the specific branch of the connected user(branch manager), from DB
-		if(obj instanceof TransmissionPack)
-		{
-			List<ShopWorker> list= new ArrayList<>();
+		// the method gets workers from the specific branch of the connected user(branch
+		// manager), from DB
+		if (obj instanceof TransmissionPack) {
+			List<ShopWorker> list = new ArrayList<>();
 			Statement stmt;
-			User user= (User)obj.getInformation();//user=branch manager
-			String branchID=getBranchId(user,con);
-			if(branchID==null)
-			{
+			User user = (User) obj.getInformation();// user=branch manager
+			String branchID = getBranchId(user, con);
+			if (branchID == null) {
 				obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
 				return;
 			}
-			
+
 			try {
 				stmt = con.createStatement();
 				ResultSet rs;
-				//String getColumns = "SELECT shopworkerID,firstName, lastName,accountStatus, branchID FROM shopworker;";
-				String getColumns = "SELECT * FROM zerli.shopworker WHERE branchID='"+branchID+"';";
+				// String getColumns = "SELECT shopworkerID,firstName, lastName,accountStatus,
+				// branchID FROM shopworker;";
+				String getColumns = "SELECT * FROM zerli.shopworker WHERE branchID='" + branchID + "';";
 				rs = stmt.executeQuery(getColumns);
-				
+
 				while (rs.next()) {
-					ShopWorker sw= new ShopWorker(rs.getString(1),rs.getString(2),rs.getString(3),
-							rs.getString(4),rs.getString(5),(AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7), rs.getString(8),
-							ShopWorkerActivity.valueOf(rs.getString(9)));
-					
+					ShopWorker sw = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+							rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
+							rs.getString(8), ShopWorkerActivity.valueOf(rs.getString(9)));
+
 					list.add(sw);
 				}
-				if(list.size()>0)
-				{
+				if (list.size() > 0) {
 					obj.setResponse(Response.SHOP_WORKER_ARRIVED);
 					obj.setInformation(list);
-				}
-				else
+				} else
 					obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
 				rs.close();
 
-				
-				
-			}catch(SQLException e) {
+			} catch (SQLException e) {
 				obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
-			}	
+			}
 		}
 	}
 
-	
 	// get products to catalog without filter .
 	public static void GetProducts(TransmissionPack obj, Connection con) {
 		// TODO Auto-generated method stub
 		if (obj instanceof TransmissionPack) {
 			List<Product> list = new ArrayList<>();
-			
-			Statement stmt;
-		    try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM product;");
-			while (rs.next()) {
-				Product product = new Product(rs.getString(1), rs.getString(2), Double.parseDouble(rs.getString(3)), rs.getString(4),rs.getString(5),
-						rs.getDouble(6),rs.getString(7),rs.getString(8),rs.getBoolean(9),rs.getDouble(10));
-						
-				list.add(product);
-			}			
-			
-			if(list.size()==0)
-				throw new SQLException();
 
-			obj.setInformation(list);
-			rs.close();
-		    } catch (SQLException e) {
-		    	e.printStackTrace();
-		    	obj.setResponse(Response.FAILD_DATA_PRODUCTS);
-		    	return;
-		    }
-		    obj.setResponse(Response.GET_DATA_PRODUCTS);
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM product;");
+				while (rs.next()) {
+					Product product = new Product(rs.getString(1), rs.getString(2), Double.parseDouble(rs.getString(3)),
+							rs.getString(4), rs.getString(5), rs.getDouble(6), rs.getString(7), rs.getString(8),
+							rs.getBoolean(9), rs.getDouble(10));
+
+					list.add(product);
+				}
+
+				if (list.size() == 0)
+					throw new SQLException();
+
+				obj.setInformation(list);
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				obj.setResponse(Response.FAILD_DATA_PRODUCTS);
+				return;
 			}
-		
+			obj.setResponse(Response.GET_DATA_PRODUCTS);
+		}
+
 		else
 			obj.setResponse(Response.FAILD_DATA_PRODUCTS);
 	}
 
-	
-	//get products by filter of color \ price \ type
+	// get products by filter of color \ price \ type
 	public static void GetProductsByFilter(TransmissionPack obj, Connection con) {
-		
+
 		if (obj instanceof TransmissionPack) {
 			@SuppressWarnings("unchecked")
-			Map<String,String> filters = (Map<String, String>) obj.getInformation();
+			Map<String, String> filters = (Map<String, String>) obj.getInformation();
 			List<Product> products = new ArrayList<>();
-			int lowValuePrice=0 , highValuePrice=0;
-			String colorFilter , priceFilter , typeFilter;
-			String query; 
-		
-			//get Filters from HashMap
-			colorFilter=filters.get("color");
-			priceFilter=filters.get("price");
-			typeFilter=filters.get("type");
-		
-		
-			//split price to 2 section lowValuePrice and highValuePrice
-			if(!priceFilter.equals("None"))
-			{	
-				String [] tmp = priceFilter.split("-");
-				int lastIndex=tmp[1].length()-1;
-				lowValuePrice=Integer.parseInt(tmp[0]);
-				highValuePrice=Integer.parseInt(tmp[1].substring(0,lastIndex));
+			int lowValuePrice = 0, highValuePrice = 0;
+			String colorFilter, priceFilter, typeFilter;
+			String query;
+
+			// get Filters from HashMap
+			colorFilter = filters.get("color");
+			priceFilter = filters.get("price");
+			typeFilter = filters.get("type");
+
+			// split price to 2 section lowValuePrice and highValuePrice
+			if (!priceFilter.equals("None")) {
+				String[] tmp = priceFilter.split("-");
+				int lastIndex = tmp[1].length() - 1;
+				lowValuePrice = Integer.parseInt(tmp[0]);
+				highValuePrice = Integer.parseInt(tmp[1].substring(0, lastIndex));
 			}
-		
-		
+
 			// query of color + price + filter
-			if(!colorFilter.equals("None") && !priceFilter.equals("None") && !typeFilter.equals("None") ) {
-				query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"' AND price > "+ lowValuePrice +" AND price<"+highValuePrice +" AND itemType = '"+typeFilter+"' ;";
+			if (!colorFilter.equals("None") && !priceFilter.equals("None") && !typeFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE dominateColor = '" + colorFilter + "' AND price > "
+						+ lowValuePrice + " AND price<" + highValuePrice + " AND itemType = '" + typeFilter + "' ;";
 			}
 			// color + price
-			else if(!colorFilter.equals("None") && !priceFilter.equals("None")) {
-	    		query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"' AND price > "+ lowValuePrice +" AND price<"+highValuePrice +";";
-	    	}
-			//color + type
-	    	else if (!colorFilter.equals("None") && !typeFilter.equals("None") ) {
-	    		query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"' AND itemType = '"+typeFilter+"' ;";
-	    	}
-			//price + type
-	    	else if(!priceFilter.equals("None") && !typeFilter.equals("None") ) {
-	    		 query = "SELECT * FROM zerli.product WHERE price > "+ lowValuePrice +" AND price<"+highValuePrice +" AND itemType = '"+typeFilter+"' ;";
-	    	}
-			//color
-	    	else if(!colorFilter.equals("None")) {
-	    		query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"';";
-	    	}
-			//price
-	    	else if(!priceFilter.equals("None")) {
-	    		query = "SELECT * FROM zerli.product WHERE  price > "+ lowValuePrice +" AND price<"+highValuePrice +";";
-	    	}
-			//type
-	    	else 
-	    		query = "SELECT * FROM zerli.product WHERE itemType = '"+typeFilter+"' ;";
-	    		
-	    	System.out.println(query);
-            
-            
+			else if (!colorFilter.equals("None") && !priceFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE dominateColor = '" + colorFilter + "' AND price > "
+						+ lowValuePrice + " AND price<" + highValuePrice + ";";
+			}
+			// color + type
+			else if (!colorFilter.equals("None") && !typeFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE dominateColor = '" + colorFilter + "' AND itemType = '"
+						+ typeFilter + "' ;";
+			}
+			// price + type
+			else if (!priceFilter.equals("None") && !typeFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE price > " + lowValuePrice + " AND price<" + highValuePrice
+						+ " AND itemType = '" + typeFilter + "' ;";
+			}
+			// color
+			else if (!colorFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE dominateColor = '" + colorFilter + "';";
+			}
+			// price
+			else if (!priceFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE  price > " + lowValuePrice + " AND price<" + highValuePrice
+						+ ";";
+			}
+			// type
+			else
+				query = "SELECT * FROM zerli.product WHERE itemType = '" + typeFilter + "' ;";
+
+			System.out.println(query);
+
 			Statement stmt;
 			try {
-			    	stmt = con.createStatement();
-			    	ResultSet rs = stmt.executeQuery(query);
-			    	while (rs.next()) {
-			    	Product product = new Product(rs.getString(1), rs.getString(2), Double.parseDouble(rs.getString(3)), rs.getString(4),rs.getString(5),
-							rs.getDouble(6),rs.getString(7),rs.getString(8),rs.getBoolean(9),rs.getDouble(10));
-							
-			    	products.add(product);
-				}			
-			
-			    	if(products.size()==0)
+				stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					Product product = new Product(rs.getString(1), rs.getString(2), Double.parseDouble(rs.getString(3)),
+							rs.getString(4), rs.getString(5), rs.getDouble(6), rs.getString(7), rs.getString(8),
+							rs.getBoolean(9), rs.getDouble(10));
+
+					products.add(product);
+				}
+
+				if (products.size() == 0)
 					throw new SQLException();
-			    	obj.setInformation(products);
-			    	rs.close();
-			    } catch (SQLException e) {
-			    	e.printStackTrace();
-			    	obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
-			    	return;
-			    }
-			    	obj.setResponse(Response.GET_DATA_PRODUCTS_BY_FILTER);
+				obj.setInformation(products);
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
+				return;
 			}
-		else
+			obj.setResponse(Response.GET_DATA_PRODUCTS_BY_FILTER);
+		} else
 			obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
-		}
+	}
+
 	/**
 	 * this method is getting the colors for the catalog screen for choosing
 	 * dominate color for filtering
+	 * 
 	 * @param obj
 	 * @param con
 	 */
@@ -591,75 +595,79 @@ public class ServerQuaries {
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs;
 			Statement stmt;
-			List<String>colors=new ArrayList<>();
+			List<String> colors = new ArrayList<>();
 			/**
 			 * Distinct query to getting colors from product table
 			 */
-			String query="SELECT DISTINCT dominateColor FROM zerli.product";
+			String query = "SELECT DISTINCT dominateColor FROM zerli.product";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-				
-				while(rs.next()) {
-					colors.add(rs.getString(1));/**add the color to the the arrayList*/
-					
-					
-					
+
+				while (rs.next()) {
+					colors.add(rs.getString(1));/** add the color to the the arrayList */
+
 				}
 				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			System.out.println(colors.toString());
-			if(colors.size()>0) {
-				
-			obj.setInformation(colors);
-			obj.setResponse(Response.FOUND_COLORS);
-			}
-			else {
+			if (colors.size() > 0) {
+
+				obj.setInformation(colors);
+				obj.setResponse(Response.FOUND_COLORS);
+			} else {
 				obj.setResponse(Response.DID_NOT_FIND_COLORS);
 			}
-			
-				
+
 		}
-		
+
 	}
 
 	/**
-	 * this method is insert order that customer performed and save it to wate for branch manger for improving
-	 * it save also the order details that in progress 
+	 * this method is insert order that customer performed and save it to wate for
+	 * branch manger for improving it save also the order details that in progress
+	 * 
 	 * @param obj
 	 * @param con
 	 */
 	@SuppressWarnings("null")
 	public static void addOrderInDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-			
-			Statement stmt=null;
-			if(obj.getInformation() instanceof Order) {
-				Order order=(Order)obj.getInformation();
+
+			Statement stmt = null;
+			if (obj.getInformation() instanceof Order) {
+				Order order = (Order) obj.getInformation();
 				order.getOrderID();
-			
-			String query=String.format("INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", order.getOrderID(),order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
-			
-			try {
-				stmt = con.createStatement();
-				System.out.println(query);
-				stmt.executeUpdate(query);
-				for(ProductInOrder p:order.getItems()) {
+
+				String query = String.format(
+						"INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');",
+						order.getOrderID(), order.getCustomerID(), order.getBranchID(), order.getPrice(),
+						order.getGreetingCard(), order.getStatus(), order.getOrderDate(), order.getExpectedDelivery());
+
+				try {
 					stmt = con.createStatement();
-					String query2=String.format("INSERT INTO zerli.productinorder(productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, cartID, productQuantityInOrder) VALUES('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s','%s','%s');", p.getID(),p.getName(),p.getPrice(),p.getBackGroundColor(),p.getImgSrc(),p.getQuantity(),p.getItemType(),p.getDominateColor(),p.getCartID(),p.getProductQuantityInCart());
-					System.out.println(query2);
-					stmt.executeUpdate(query2);
+					System.out.println(query);
+					stmt.executeUpdate(query);
+					for (ProductInOrder p : order.getItems()) {
+						stmt = con.createStatement();
+						String query2 = String.format(
+								"INSERT INTO zerli.productinorder(productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, cartID, productQuantityInOrder) VALUES('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s','%s','%s');",
+								p.getID(), p.getName(), p.getPrice(), p.getBackGroundColor(), p.getImgSrc(),
+								p.getQuantity(), p.getItemType(), p.getDominateColor(), p.getCartID(),
+								p.getProductQuantityInCart());
+						System.out.println(query2);
+						stmt.executeUpdate(query2);
+					}
+
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
 			}
-			
-			}
-			
+
 //			stmt.executeUpdate(String.format(
 //					"INSERT INTO zerli.orders(orderNumber, price, greetingCard, color, dOrder, shop, date, orderDate) VALUES ('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s');",
 //					order.getOrderNumber(), order.getPrice(), order.getGreetingCard(), order.getColor(),
@@ -671,7 +679,7 @@ public class ServerQuaries {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
 	public static void getOrders(TransmissionPack obj, Connection con) {
@@ -679,22 +687,26 @@ public class ServerQuaries {
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs;
 			Statement stmt;
-			List<Order>orders=new ArrayList<>();
-			String query="SELECT * FROM zerli.order WHERE status='PENDING'";
+			List<Order> orders = new ArrayList<>();
+			String query = "SELECT * FROM zerli.order WHERE status='PENDING'";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-				while(rs.next()) {
+				while (rs.next()) {
 					System.out.println(rs.toString());
-					System.out.printf(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getString(4)+" "+rs.getString(5)+" "+OrderStatus.valueOf(rs.getString(6))+" "+rs.getTimestamp(7).toString()+" "+rs.getTimestamp(8));
-					Order order=new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getTimestamp(7).toString(),rs.getTimestamp(8).toString(),new ArrayList<ProductInOrder>());
+					System.out.printf(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " "
+							+ rs.getString(4) + " " + rs.getString(5) + " " + OrderStatus.valueOf(rs.getString(6)) + " "
+							+ rs.getTimestamp(7).toString() + " " + rs.getTimestamp(8));
+					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+							rs.getString(5), rs.getTimestamp(7).toString(), rs.getTimestamp(8).toString(),
+							new ArrayList<ProductInOrder>());
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
-					
+
 					orders.add(order);
 				}
 				rs.close();
 				System.out.println(orders);
-				if(orders.size()>0) {
+				if (orders.size() > 0) {
 					obj.setResponse(Response.FOUND_ORDER);
 					obj.setInformation(orders);
 				}
@@ -702,31 +714,64 @@ public class ServerQuaries {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		}
-		
-	}
 
-		
-	
+		}
+
+	}
 
 	private static String getBranchId(User user, Connection con) {
 		ResultSet rs;
 		Statement stmt;
-		String branchId=null;
-		String getBranchID = "SELECT branchID FROM zerli.branchmanager WHERE branchmanagerID='"+user.getID()+"';";
+		String branchId = null;
+		String getBranchID = "SELECT branchID FROM zerli.branchmanager WHERE branchmanagerID='" + user.getID() + "';";
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(getBranchID);
 			rs.next();
-			branchId=rs.getString(1);
-			
+			branchId = rs.getString(1);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return branchId;
 	}
+
+	public static void getCustomerFromDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			Customer customer = (Customer) obj.getInformation();
+			ResultSet rs;
+			Statement stmt;
+			String getCustomer = "SELECT * FROM zerli.customer WHERE customerID = " + customer.getID()
+					+ "AND accountStatus = 'PENDING_APPROVAL' ;";
+			if(customer.getID() == null) {
+				obj.setResponse(Response.GET_CUSTOMER_FAILED);
+			}
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(getCustomer);
+				if(rs == null) { // if rs is null so the status of the customer is NOT 'pending_approval'
+					obj.setResponse(Response.GET_CUSTOMER_FAILED);
+				}
+				customer.setFirstName(rs.getString(2));
+				customer.setLastName(rs.getString(3));
+				customer.setEmail(rs.getString(4));
+				customer.setPhoneNumber(rs.getString(5));
+				customer.setAccountStatus(AccountStatus.valueOf(rs.getString(6)));
+				customer.setIsLoggedIn(rs.getBoolean(7));
+				customer.setBalance("0");
+				customer.setNewCustomer(rs.getBoolean(9));
+				rs.close();
+				System.out.println(customer);
+			} catch (SQLException e) {
+				obj.setResponse(Response.GET_CUSTOMER_FAILED);
+				return;
+			}
+			obj.setResponse(Response.GET_CUSTOMER_SUCCESS);
+		}
+		obj.setResponse(Response.GET_CUSTOMER_FAILED);
+	}
 }
+
 //	public static void GetProductFromDB(TransmissionPack obj, Connection con) {
 //		if (obj instanceof TransmissionPack) {
 //			List<Product> list = new ArrayList<>();

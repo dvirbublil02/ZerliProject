@@ -390,8 +390,14 @@ public class ClientHandleTransmission {
 		tp= ClientUI.chat.getObj();
 		return (List<ShopWorker>) tp.getInformation();
 	}
-
-
+	
+	
+	public static Customer findCustomerbyID() {
+		TransmissionPack tp= new TransmissionPack(Mission.GET_CUSTOMER,null,ClientController.user); // The user is Branch manager
+		ClientUI.chat.accept(tp);
+		tp= ClientUI.chat.getObj();
+		return (Customer) tp.getInformation();
+	}
 
 }
 

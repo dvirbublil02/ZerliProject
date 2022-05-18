@@ -73,7 +73,9 @@ public class MissionAnalyze {
 			ServerQuaries.getColors(obj,con);
 			break;
 		}
-		
+		case GET_CUSTOMER:{
+			ServerQuaries.getCustomerFromDB(obj, con);
+		}
 		
 		}
 
