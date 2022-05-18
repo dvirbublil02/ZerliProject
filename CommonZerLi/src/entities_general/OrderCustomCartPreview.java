@@ -24,7 +24,7 @@ public class OrderCustomCartPreview {
 		this.quantity = quantity;
 		this.cartList.addAll(cartList);
 		for(ProductInOrder p :cartList)
-			OrderCustomCartPreview.totalprice+=p.getPrice()*p.getProductQuantityInCart();
+			OrderCustomCartPreview.totalprice+=p.getPrice()*p.getProductQuantityInOrder();
 	}
 
 	public ImageView getImgSrc() {

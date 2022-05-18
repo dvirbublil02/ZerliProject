@@ -10,9 +10,11 @@ public class ProductInOrder extends Product {
 	private double productQuantityInOrder;
 	private boolean isOnSale;
 	private double fixPrice;
+	private String nameOfproduct;
 	
-	public ProductInOrder(String ID, String name, double price, String backGroundColor, String imgSrc, double quantity,
-			String itemType, String dominateColor , String cartID ,Double productQuantityInOrder,boolean isOnSale,double fixPrice ) {
+
+	public ProductInOrder(String ID, String nameOfproduct, double price, String backGroundColor, String imgSrc, double quantity,
+			String itemType, String dominateColor , String cartID ,Double productQuantityInOrder,boolean isOnSale,double fixPrice,String name ) {
 		super(ID, name, price, backGroundColor, imgSrc, quantity, itemType, dominateColor, isOnSale, fixPrice);
 		this.cartID=cartID;
 		this.productQuantityInOrder=productQuantityInOrder;
@@ -27,12 +29,12 @@ public class ProductInOrder extends Product {
 	}
 
 
-	public double getProductQuantityInCart() {
+	public double getProductQuantityInOrder() {
 		return productQuantityInOrder;
 	}
 
 	
-	public void setProductQuantityInCart(double productQuantityInCart) {
+	public void setProductQuantityInOrder(double productQuantityInCart) {
 		this.productQuantityInOrder = productQuantityInCart;
 	}
 	
@@ -54,13 +56,20 @@ public class ProductInOrder extends Product {
 	}
 	
 
-	@Override
-	public String toString() {
-		return "ProductInOrder [getName()=" + getName() + "getQuantity()="+ getQuantity() + ", productQuantityInOrder=" + getProductQuantityInCart();
-				
+
+	public String getNameOfproduct() {
+		return nameOfproduct;
+	}
+	
+	public void setNameOfproduct(String nameOfproduct) {
+		this.nameOfproduct = nameOfproduct;
 	}
 
-
+	@Override
+	public String toString() {
+		return "ProductInOrder [getName()=" + getName() + "getQuantity()="+ getQuantity() + ", productQuantityInOrder=" + getProductQuantityInOrder();
+		
+	}
 
 
 }

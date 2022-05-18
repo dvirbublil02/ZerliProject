@@ -243,22 +243,22 @@ public class CatalogScreenController implements Initializable{
 			Product p=new Product("0", "No Item Choosen", 0, "172D42", "/javafx_images/CustomOrderPicture.png", 0, "Product", "Blue", false, 0);
 			//setChosenItemCard(itemInCatalog.get(0));
 			setChosenItemCard(p);
-			myListener = new MyListenerCatalog() {
-				@Override
-				public void onClickListener(Product item) {
-					
-					//open addToCart button first time 
-					if(firstTimeLoadAddtoCard)
-						addToCartBtn.setDisable(false);
-					//load chosenCard and ProductInOrder that chosen
-					setChosenItemCard(item);
-					 productInOrder=new ProductInOrder(item.getID(),
-							 item.getName(),item.getPrice(),
-							 item.getbackGroundColor(),item.getImgSrc(),
-							 item.getQuantity(),item.getItemType(),item.getDominateColor(),
-			    			null,Double.parseDouble(quantityTextLable.getText()),item.getIsOnSale(),item.getFixPrice());
-				}
-			};
+//			myListener = new MyListenerCatalog() {
+////				@Override
+////				public void onClickListener(Product item) {
+////					
+////					//open addToCart button first time 
+////					if(firstTimeLoadAddtoCard)
+////						addToCartBtn.setDisable(false);
+////					//load chosenCard and ProductInOrder that chosen
+////					setChosenItemCard(item);
+////					 productInOrder=new ProductInOrder(item.getID(),
+////							 item.getName(),item.getPrice(),
+////							 item.getbackGroundColor(),item.getImgSrc(),
+////							 item.getQuantity(),item.getItemType(),item.getDominateColor(),
+////			    			null,Double.parseDouble(quantityTextLable.getText()),item.getIsOnSale(),item.getFixPrice());
+////				}
+//			};
 			
 		}
 		
@@ -357,7 +357,7 @@ public class CatalogScreenController implements Initializable{
     	
     	if(!customClickRadioBtn.isSelected()) {
     		//regular ProductInOrder
-    		productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
+    		productInOrder.setProductQuantityInOrder(Double.parseDouble(quantityTextLable.getText()));
     		if(OrderHandleController.getProductInOrder().contains(productInOrder)) {
     			OrderHandleController.addToExistItemOnListNotCustom(productInOrder);
     		}
@@ -458,7 +458,7 @@ public class CatalogScreenController implements Initializable{
      */
     @FXML
     void addToCustom(ActionEvent event) {
-    	productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
+    	productInOrder.setProductQuantityInOrder(Double.parseDouble(quantityTextLable.getText()));
     	if(OrderHandleController.getCustomProductInOrder().containsKey(customTextField.getText().toUpperCase())) {
     		OrderHandleController.addToExistItemOnList(customTextField.getText().toUpperCase(),productInOrder);
     		

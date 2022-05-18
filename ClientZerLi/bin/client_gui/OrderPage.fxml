@@ -146,15 +146,6 @@
                                     </Line>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="116.0">
-                                 <children>
-                                    <Label prefHeight="17.0" prefWidth="98.0" text="Customer Menu">
-                                       <padding>
-                                          <Insets left="5.0" />
-                                       </padding>
-                                    </Label>
-                                 </children>
-                              </HBox>
                               <HBox alignment="CENTER" prefHeight="66.0" prefWidth="113.0">
                                  <children>
                                     <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0">
@@ -248,7 +239,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="60.0" prefWidth="490.0">
                            <children>
-                              <TextField alignment="CENTER" prefHeight="26.0" prefWidth="436.0" promptText="Happy Anniversary " style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" text="Happy Anniversary " />
+                              <TextField fx:id="greetingCard" alignment="CENTER" prefHeight="26.0" prefWidth="436.0" promptText="Happy Anniversary " style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" text="Happy Anniversary " />
                            </children>
                         </HBox>
                      </children>
@@ -271,7 +262,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="56.0" prefWidth="184.0">
                                  <children>
-                                    <ComboBox prefWidth="150.0" promptText="&quot;Karmiel Branch&quot;" style="-fx-background-color: #FFFFFF;" />
+                                    <ComboBox fx:id="getBranchName" prefWidth="150.0" promptText="&quot;Karmiel Branch&quot;" style="-fx-background-color: #FFFFFF;" />
                                  </children></HBox>
                               <HBox alignment="CENTER" prefHeight="56.0" prefWidth="190.0">
                                  <children>
@@ -400,5 +391,14 @@
             </VBox>
          </center>
       </BorderPane>
+      <HBox alignment="CENTER" layoutX="294.0" layoutY="-58.0" prefHeight="66.0" prefWidth="116.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="98.0" text="Customer Menu">
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

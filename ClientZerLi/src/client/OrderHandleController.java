@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import entities_catalog.ProductInOrder;
+import entities_general.OrderPreview;
 
 public class OrderHandleController {
 	
@@ -14,8 +14,21 @@ public class OrderHandleController {
 	private static Map<String,List<ProductInOrder>> customProductInOrder=new HashMap<>();
 	private static Map<String,List<ProductInOrder>> customProductInOrderFinallCart=new HashMap<>();
 	private static List<ProductInOrder> productInOrder=new ArrayList<>();
+	private static List<OrderPreview>ordersForBranchManager=new ArrayList<>();
+	private static OrderPreview order;
 	
-	
+	public static OrderPreview getOrder() {
+		return order;
+	}
+	public static void setOrder(OrderPreview order) {
+		OrderHandleController.order = order;
+	}
+	public static List<OrderPreview> getOrdersForBranchManager() {
+		return ordersForBranchManager;
+	}
+	public static void setOrdersForBranchManager(List<OrderPreview> ordersForBranchManager) {
+		OrderHandleController.ordersForBranchManager = ordersForBranchManager;
+	}
 	public static Map<String, List<ProductInOrder>> getCustomProductInOrderFinallCart() {
 		return customProductInOrderFinallCart;
 	}
@@ -46,9 +59,9 @@ public class OrderHandleController {
 		if(productlist.contains(productInOrder)) {
 			for(ProductInOrder i:productlist) {
 				if(i.equals(productInOrder)) {
-					i.setProductQuantityInCart(productInOrder.getProductQuantityInCart()+i.getProductQuantityInCart());
+					i.setProductQuantityInOrder(productInOrder.getProductQuantityInOrder()+i.getProductQuantityInOrder());
 					customProductInOrder.get(key).remove(productInOrder);
-					productInOrder.setProductQuantityInCart(i.getProductQuantityInCart());
+					productInOrder.setProductQuantityInOrder(i.getProductQuantityInOrder());
 					customProductInOrder.get(key).add(productInOrder);
 					return;
 				}
@@ -65,8 +78,8 @@ public class OrderHandleController {
 		
 			for(int i=0;i<productInOrder.size();i++) {
 				if(productInOrder.get(i).equals(productInOrder2)) {
-				Double temp=productInOrder.get(i).getProductQuantityInCart()+productInOrder2.getProductQuantityInCart();
-				productInOrder.get(i).setProductQuantityInCart(temp);
+				Double temp=productInOrder.get(i).getProductQuantityInOrder()+productInOrder2.getProductQuantityInOrder();
+				productInOrder.get(i).setProductQuantityInOrder(temp);
 				
 				// add to total quantity of regular item 
 				//OrderHandleController.quantityOfRegularProducts+=productInOrder2.getProductQuantityInCart();
@@ -83,6 +96,10 @@ public class OrderHandleController {
 
 	public static int getQuantityOfRegularProducts() {
 		return productInOrder.size();
+	}
+	public static String getTotalPrice() {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }
     

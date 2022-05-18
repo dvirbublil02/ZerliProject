@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
 import client.ClientUI;
+import client.OrderHandleController;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
@@ -94,6 +95,14 @@ public class BranchManagerOrderManagementController implements Initializable {
 			// need to send list to screen
 			// ObservableList<Product>
 			// listToNextScreen=FXCollections.observableArrayList(o.getItems());
+			List<OrderPreview>details=OrderHandleController.getOrdersForBranchManager();
+			for(OrderPreview or:details) {
+				if(or.equals(o)) {
+					OrderHandleController.setOrder(or);
+					System.out.println(or);
+					break;
+				}
+			}
 
 			// open screen of details -- > need to init before starting
 			Stage primaryStage = new Stage();
@@ -118,8 +127,8 @@ public class BranchManagerOrderManagementController implements Initializable {
 		expectedDeliveryCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("expectedDelivery"));
 
 //		
-
-		listView.addAll(ClientHandleTransmission.getListOrderPreview());
+		OrderHandleController.setOrdersForBranchManager(ClientHandleTransmission.getListOrderPreview());
+		listView.addAll(OrderHandleController.getOrdersForBranchManager());
 		Orders.setItems(listView);
 
 	}

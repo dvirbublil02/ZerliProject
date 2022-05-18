@@ -78,7 +78,10 @@ public class CartPageController implements Initializable {
     @FXML
     private Label priceLabel;
 
-    @FXML
+  
+
+
+	@FXML
     private TableColumn<OrderCustomCartPreview, Button> showCustomTbl;
 
     @FXML
@@ -160,7 +163,7 @@ public class CartPageController implements Initializable {
 			Image image1 = new Image(p.getImgSrc(), 60, 60, true, true);
 			ImageView imageView1 = new ImageView(image1);
 			imageView1.setImage(image1);
-			listViewRegular.add(new OrderCartPreview(imageView1, p.getName(),(int)p.getProductQuantityInCart(),p.getPrice() ,p));
+			listViewRegular.add(new OrderCartPreview(imageView1, p.getName(),(int)p.getProductQuantityInOrder(),p.getPrice() ,p));
 		}
 		
 		//set tables to show products 
