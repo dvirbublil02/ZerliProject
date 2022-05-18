@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 import client.OrderHandleController;
 import entities_catalog.ProductInOrder;
 import entities_general.OrderPreview;
-import enums.OrderStatus;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,11 +17,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+/**
+ * this class is presenting to the branch manager the relevant products in order 
+ * @author Mor Ben Haim
+ * @author Dvir Bulil
+ *
+ */
 
 public class BranchManagerOrderDetailsController implements Initializable{
 
@@ -60,25 +66,29 @@ public class BranchManagerOrderDetailsController implements Initializable{
 	}
 
 
-
+	/**
+	 * this method is initialize the relevant products in the order details
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		productIDCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, String>("iD"));
 		nameCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, String>("name"));
-		branchIDCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, String>("cartID"));
+		branchIDCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, String>("cartID"));//need to change the column name from cartID
 		totalquantityCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("quantity"));
 		quantityInCartCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("productQuantityInOrder"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("price"));
 		OrderPreview order=OrderHandleController.getOrder();
 		System.out.println(order.getItems());
-		List<ProductInOrder>l=new ArrayList<>();
+		List<ProductInOrder>products=new ArrayList<>();
+		/**
+		 *adding relevant product to the observable table 
+		 */
 		for(String key:order.getItems().keySet()) {
-			l.addAll(order.getItems().get(key));
+			products.addAll(order.getItems().get(key));
 		}
-		System.out.println(l);
 		
-		System.out.println(OrderHandleController.getOrdersForBranchManager());
-			listView.addAll(l);
+
+			listView.addAll(products);
 			Orders.setItems(listView);
 		
 	}
