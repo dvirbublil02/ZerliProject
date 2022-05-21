@@ -1,18 +1,65 @@
 package entities_reports;
 
-public class Complaint {
-	String complaintID, customerID, customerServiceID, description, branchID;
+import java.io.Serializable;
+
+import enums.ComplaintsStatus;
+
+public class Complaint implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String complaintID, customerID, customerServiceID, description, branchID, complaintOpening, treatmentUntil;
+	private ComplaintsStatus complaintsStatus, complainState;
 
 	public Complaint(String complaintID, String customerID, String customerServiceID, String description,
-			String branchID) {
+			String branchID, String complaintOpening, String treatmentUntil, ComplaintsStatus complainState,
+			ComplaintsStatus complaintsStatus) {
 		super();
 		this.complaintID = complaintID;
 		this.customerID = customerID;
 		this.customerServiceID = customerServiceID;
 		this.description = description;
 		this.branchID = branchID;
+		this.complaintOpening = complaintOpening;
+		this.treatmentUntil = treatmentUntil;
+		this.complainState = complainState;
+		this.complaintsStatus = complaintsStatus;
 	}
-	
+
+	public ComplaintsStatus getComplainState() {
+		return complainState;
+	}
+
+	public void setComplainState(ComplaintsStatus complainState) {
+		this.complainState = complainState;
+	}
+
+	public ComplaintsStatus getComplaintsStatus() {
+		return complaintsStatus;
+	}
+
+	public void setComplaintsStatus(ComplaintsStatus complaintsStatus) {
+		this.complaintsStatus = complaintsStatus;
+	}
+
+	public String getComplaintOpening() {
+		return complaintOpening;
+	}
+
+	public void setComplaintOpening(String complaintOpening) {
+		this.complaintOpening = complaintOpening;
+	}
+
+	public String getTreatmentUntil() {
+		return treatmentUntil;
+	}
+
+	public void setTreatmentUntil(String treatmentUntil) {
+		this.treatmentUntil = treatmentUntil;
+	}
+
 	public String getComplaintID() {
 		return complaintID;
 	}
@@ -77,5 +124,5 @@ public class Complaint {
 			return false;
 		return true;
 	}
-	
+
 }

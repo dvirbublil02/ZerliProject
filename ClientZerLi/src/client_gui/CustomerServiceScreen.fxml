@@ -49,7 +49,7 @@
                               <Font name="Corbel Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label text="Manager" textFill="#323232">
+                        <Label text="Customer Service" textFill="#323232">
                            <font>
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>

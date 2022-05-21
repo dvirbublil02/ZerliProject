@@ -26,6 +26,7 @@ import entities_catalog.ProductInOrder;
 import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
+import entities_reports.Complaint;
 import entities_users.ShopWorker;
 import entities_users.User;
 import javafx.collections.ObservableList;
@@ -230,35 +231,39 @@ public class ClientHandleTransmission {
 		} else
 			return true;
 	}
+
 	/**
 	 * get the colors filter for catalog initilizedProductGrid
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<String> getColorsForFilter() {
-		TransmissionPack tp=new TransmissionPack(Mission.GET_COLORS,null,null);
+		TransmissionPack tp = new TransmissionPack(Mission.GET_COLORS, null, null);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
-		if(tp.getResponse()==Response.DID_NOT_FIND_COLORS) {
-			//adding pop screen
+		if (tp.getResponse() == Response.DID_NOT_FIND_COLORS) {
+			// adding pop screen
 		}
-		return (ArrayList<String>)tp.getInformation();
+		return (ArrayList<String>) tp.getInformation();
 	}
+
 	/**
-	 * this method is adding the pending order of the specific customer
-	 * the order is waiting for approve from the branch manager
+	 * this method is adding the pending order of the specific customer the order is
+	 * waiting for approve from the branch manager
 	 */
 	public static void addOrder() {
-		List<ProductInOrder>in=new ArrayList<>();
+		List<ProductInOrder> in = new ArrayList<>();
 
-		in.add(new ProductInOrder("8", "rose", 23.3, "black","path", 4.0, "bouqet", "red","3",5.0,false,0.0));
+		in.add(new ProductInOrder("8", "rose", 23.3, "black", "path", 4.0, "bouqet", "red", "3", 5.0, false, 0.0));
 
-		
-		Order order=new Order("9", "3", "4","23.3","happy",LocalDateTime.now().toString(),LocalDateTime.now().toString().toString(),in);
-		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
+		Order order = new Order("9", "3", "4", "23.3", "happy", LocalDateTime.now().toString(),
+				LocalDateTime.now().toString().toString(), in);
+		TransmissionPack tp = new TransmissionPack(Mission.ADD_ORDER, null, order);
 		ClientUI.chat.accept(tp);
 	}
+
 	/**
 	 * this method return the ObserverList of the order that was not approved yet
+	 * 
 	 * @return
 	 */
 	public static List<OrderPreview> getListOrderPreview() {
@@ -337,7 +342,6 @@ public class ClientHandleTransmission {
 
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public static List<Product> getDataProduct() {
 		TransmissionPack tp = new TransmissionPack(Mission.DATA_PRODUCTS, null, null);
@@ -359,48 +363,42 @@ public class ClientHandleTransmission {
 	// COLLCET PRODUCT BY FILTERS
 	public static List<Product> getDataProductByFilter(String color, String price, String type) {
 		TransmissionPack tp = new TransmissionPack(Mission.DATA_PRODUCTS_BY_FILTER, null, null);
-		// initilaze filters 
-				Map<String,String> filters = new HashMap<>();
-				filters.put("color",color);
-				filters.put("price",price);
-				filters.put("type",type);
+		// initilaze filters
+		Map<String, String> filters = new HashMap<>();
+		filters.put("color", color);
+		filters.put("price", price);
+		filters.put("type", type);
 
-				//send to server side and get information.
-				tp.setInformation(filters);
-				ClientUI.chat.accept(tp);
-				tp = ClientUI.chat.getObj();
+		// send to server side and get information.
+		tp.setInformation(filters);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
 
-				switch (tp.getResponse()) {
-					case GET_DATA_PRODUCTS_BY_FILTER: {
-						return (List<Product>) tp.getInformation();
-					}
+		switch (tp.getResponse()) {
+		case GET_DATA_PRODUCTS_BY_FILTER: {
+			return (List<Product>) tp.getInformation();
+		}
 
-					case FAILD_DATA_PRODUCTS_BY_FILTER: {
-						return null;
-					}
-				}
-				return null;
+		case FAILD_DATA_PRODUCTS_BY_FILTER: {
+			return null;
+		}
+		}
+		return null;
 	}
 
 	public static List<ShopWorker> getShopWorkers() {
-		TransmissionPack tp= new TransmissionPack(Mission.GET_SHOP_WORKERS,null,ClientController.user);
-		ClientUI.chat.accept(tp);//tp sent to server and list of workers in the specific branch enters the tp
-		tp= ClientUI.chat.getObj();
+		TransmissionPack tp = new TransmissionPack(Mission.GET_SHOP_WORKERS, null, ClientController.user);
+		ClientUI.chat.accept(tp);// tp sent to server and list of workers in the specific branch enters the tp
+		tp = ClientUI.chat.getObj();
 		return (List<ShopWorker>) tp.getInformation();
 	}
 
-
-
+	public static List<Complaint> getComplaintsForCustomerService(String ID) {
+		System.out.println(ID);
+		TransmissionPack tp = new TransmissionPack(Mission.GET_COMPLAINTS, null, ID);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		List<Complaint> complaints = (List<Complaint>) tp.getInformation();
+		return complaints;
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-

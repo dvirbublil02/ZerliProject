@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
-import entities_general.OrderPreview;
+import entities_reports.Complaint;
+import entities_users.CustomerService;
 import enums.OrderStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +20,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -26,41 +29,51 @@ import javafx.stage.Stage;
 public class ComplaintsPageController implements Initializable{
 	@FXML
 	private Button Back;
+	@FXML
+	private Label employeeName;
+	@FXML
+	private Label entryGreeting;
 
 	@FXML
-	private TableView<OrderPreview> Orders;
+	private Label accountStatus;
+	@FXML
+	private Label phoneNumber;
+    @FXML
+    private Label employeeType;
 
 	@FXML
-	private TableColumn<OrderPreview, String> branchIDCol;
+	private TableView<Complaint> Complaints;
 
 	@FXML
-	private TableColumn<OrderPreview, String> customerIDCol;
+	private TableColumn<Complaint, String> complaintIDCol;
 
 	@FXML
-	private TableColumn<OrderPreview, String> expectedDeliveryCol;
+	private TableColumn<Complaint, String> customerIDCol;
 
 	@FXML
-	private TableColumn<OrderPreview, String> orderDateCol;
+	private TableColumn<Complaint, String> complaintOpeningCol;
 
 	@FXML
-	private TableColumn<OrderPreview, String> orderIDCol;
+	private TableColumn<Complaint, String> treatmentUntilCol;
+
+	
 
 	@FXML
-	private TableColumn<OrderPreview, String> priceCol;
+	private TableColumn<Complaint, String> priceCol;
 
 	@FXML
-	private TableColumn<OrderPreview, Button> showCol;
+	private TableColumn<Complaint, Button> showCol;
 
 	@FXML
-	private TableColumn<OrderPreview, ComboBox<OrderStatus>> statusCol;
+	private TableColumn<Complaint, ComboBox<OrderStatus>> statusCol;
 
-	private ObservableList<OrderPreview> listView = FXCollections.observableArrayList();
+	private ObservableList<Complaint> listView = FXCollections.observableArrayList();
 
 	@FXML
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/RequestManagementPage.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/ComplaintsPage.fxml"));
 		Scene scene = new Scene(root);
-		primaryStage.setTitle("Add New Customer");
+		primaryStage.setTitle("Complaints");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(event -> {
@@ -72,16 +85,15 @@ public class ComplaintsPageController implements Initializable{
 	void Back(ActionEvent event) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
-		BranchManagerPageController branchManagerPage = new BranchManagerPageController();
-		branchManagerPage.start(primaryStage);
+		CustomerServicePageController customerServicePageController = new CustomerServicePageController();
+		customerServicePageController.start(primaryStage);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		// show button function
-		showCol.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("Details", (OrderPreview o) -> {
+		showCol.setCellFactory(ShowButtonTableCell.<Complaint>forTableColumn("description", (Complaint c) -> {
 
 			// need to send list to screen
 			// ObservableList<Product>
@@ -89,30 +101,32 @@ public class ComplaintsPageController implements Initializable{
 
 			// open screen of details -- > need to init before starting
 			Stage primaryStage = new Stage();
-			BranchManagerOrderDetailsController ordersDetails = new BranchManagerOrderDetailsController();
+			ComplaintsDescriptionPageController complaintsDescriptionPageController = new ComplaintsDescriptionPageController();
 
-			try {
-//				ordersDetails.list.addAll(orderPrivie.getItems());
-				ordersDetails.start(primaryStage);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			
+//				
+				try {
+					complaintsDescriptionPageController.start(primaryStage);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
 
-			return o;
+			return c;
 		}));
-
-		statusCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, ComboBox<OrderStatus>>("comboStatus"));
-		orderIDCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderID"));
-		customerIDCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("customerID"));
-		branchIDCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("branchID"));
-		priceCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("price"));
-		orderDateCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderDate"));
-		expectedDeliveryCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("expectedDelivery"));
+		complaintIDCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("complaintID"));
+		customerIDCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("customerID"));
+		complaintOpeningCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("complaintOpening"));
+		treatmentUntilCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("treatmentUntil"));
+		// show button function
+	
 
 //		
-
-		listView.addAll(ClientHandleTransmission.getListOrderPreview());
-		Orders.setItems(listView);
+		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus,entryGreeting);
+		System.out.println((CustomerService)ClientController.user);
+		listView.addAll(ClientHandleTransmission.getComplaintsForCustomerService(ClientController.user.getID()));
+		Complaints.setItems(listView);
 
 	}
 }

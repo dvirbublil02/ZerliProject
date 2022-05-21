@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefWidth="999.0" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.ComplaintsPageController">
 	 <children>
       <AnchorPane prefHeight="600.0" prefWidth="1006.0">
          <children>
@@ -42,7 +42,7 @@
                                     <Image url="@../javafx_images/userImageSideScreen.png" />
                                  </image>
                               </ImageView>
-                              <Label text="Eran Smith" textFill="WHITE">
+                              <Label fx:id="employeeName" text="Eran Smith" textFill="WHITE">
                                  <VBox.margin>
                                     <Insets top="2.0" />
                                  </VBox.margin>
@@ -55,7 +55,7 @@
                                     <Font name="Corbel Bold Italic" size="16.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back Eran!" textFill="#3c3131">
+                              <Label fx:id="entryGreeting" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back Eran!" textFill="#3c3131">
                                  <font>
                                     <Font name="Cambria" size="16.0" />
                                  </font>
@@ -86,7 +86,7 @@
                                     <Insets left="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="+972-524676188" textFill="#9a9a9a">
+                              <Label fx:id="phoneNumber" text="+972-524676188" textFill="#9a9a9a">
                                  <font>
                                     <Font name="Corbel Bold" size="18.0" />
                                  </font>
@@ -102,7 +102,7 @@
                                     <Insets left="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="CONFIRMED" textFill="#9a9a9a">
+                              <Label fx:id="accountStatus" text="CONFIRMED" textFill="#9a9a9a">
                                  <font>
                                     <Font name="Corbel Bold" size="18.0" />
                                  </font>
@@ -191,7 +191,7 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="50.0" prefWidth="698.0">
                                        <children>
-                                          <Label text="Order Requests">
+                                          <Label text="Complaints">
                                              <font>
                                                 <Font name="System Bold" size="13.0" />
                                              </font>
@@ -200,16 +200,14 @@
                                     </HBox>
                                     <HBox prefHeight="444.0" prefWidth="698.0">
                                        <children>
-                                          <TableView fx:id="Orders" prefHeight="229.0" prefWidth="698.0" HBox.hgrow="ALWAYS">
+                                          <TableView fx:id="Complaints" prefHeight="229.0" prefWidth="698.0">
                                             <columns>
-                                                <TableColumn fx:id="showCol" prefWidth="75.0" text="show" />
-                                                <TableColumn fx:id="statusCol" prefWidth="99.0" text="status" />
-                                              <TableColumn fx:id="orderIDCol" prefWidth="70.0" text="orderID" />
+                                                <TableColumn fx:id="showCol" prefWidth="75.0" text="description" />
+                                              <TableColumn fx:id="complaintIDCol" prefWidth="70.0" text="complaintID" />
                                               <TableColumn fx:id="customerIDCol" prefWidth="77.5999755859375" text="customerID" />
-                                                <TableColumn fx:id="branchIDCol" prefWidth="68.0" text="branchID" />
-                                                <TableColumn fx:id="priceCol" prefWidth="64.800048828125" text="price" />
-                                                <TableColumn fx:id="orderDateCol" prefWidth="117.5999755859375" text="orderDate" />
-                                                <TableColumn fx:id="expectedDeliveryCol" prefWidth="124.00003662109373" text="expectedDelivery" />
+                                            
+                                                <TableColumn fx:id="complaintOpeningCol" prefWidth="99.0" text="complaintOpening" />
+                                                <TableColumn fx:id="treatmentUntilCol" prefWidth="124.00003662109373" text="treatmentUntil" />
                                             </columns>
                                           </TableView>
                                        </children>
@@ -231,4 +229,3 @@
       </AnchorPane>
    </children>
 </AnchorPane>
-

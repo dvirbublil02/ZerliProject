@@ -32,9 +32,9 @@ public class CustomerServicePageController implements Initializable {
 	private Label accountStatus;
 	@FXML
 	private Label phoneNumber;
+    @FXML
+    private Label employeeType;
 
-	@FXML
-	private Button requestSpecialReportBtn;
 
 	@FXML
 	private Button viewcomplaintsBtn;
@@ -42,8 +42,7 @@ public class CustomerServicePageController implements Initializable {
 	@FXML
 	private Button viewQuarterlyReportBtn;
 
-	@FXML
-	private Button viewSpecialReportBtn;
+	
 
 	public void start(Stage primaryStage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CustomerServiceScreen.fxml"));
@@ -83,13 +82,17 @@ public class CustomerServicePageController implements Initializable {
 	}
 
 	@FXML
-	void viewcomplaintsBtn(ActionEvent event) {
-
+	void viewcomplaintsBtn(ActionEvent event) throws Exception {
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		ComplaintsPageController complaintsPageController = new ComplaintsPageController();
+		complaintsPageController.start(primaryStage);
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus,entryGreeting);
+		
 	}
 
 }
