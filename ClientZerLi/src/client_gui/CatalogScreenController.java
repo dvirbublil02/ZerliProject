@@ -136,7 +136,7 @@ public class CatalogScreenController implements Initializable{
     private ObservableList<String> typeFilter ;
     private boolean firstTimeLoadAddtoCard=true;
     private static ProductInOrder productInOrder;
-    private static int cartCounter=0;
+    private int cartCounter=0;
     
     /**
      * 
@@ -194,6 +194,13 @@ public class CatalogScreenController implements Initializable{
 		vboxAddToCustom.setVisible(false);
 		customTextField.setDisable(true);
 
+		
+		System.out.println("cartCounter->"+OrderHandleController.getCartCounter());
+		
+		cartCounter=OrderHandleController.getCartCounter();
+		cartItemCounter.setText(""+cartCounter);
+		
+		
 		//filter ComboBox section - color , price , type 
 		colorFilter=FXCollections.observableArrayList("None");
 		colorFilter.addAll(ClientHandleTransmission.getColorsForFilter());
@@ -353,14 +360,13 @@ public class CatalogScreenController implements Initializable{
     @FXML
     void addToCart(ActionEvent event) {
     	
-    	Integer howMuchQuantity=Integer.parseInt(quantityTextLable.getText());
-    	
+    	Integer howMuchQuantityToAdd=Integer.parseInt(quantityTextLable.getText());
     	
     	
     	if(!customClickRadioBtn.isSelected()) {
     		//regular ProductInOrder 
-    		cartCounter+=howMuchQuantity;
-    		OrderHandleController.quantityOfRegularProducts+=howMuchQuantity;
+    		cartCounter+=howMuchQuantityToAdd;
+    		OrderHandleController.quantityOfRegularProducts+=howMuchQuantityToAdd;
         
     		//regular and exist
     		productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
@@ -392,6 +398,7 @@ public class CatalogScreenController implements Initializable{
     	
     	//cartCounterUpdate
     	cartItemCounter.setText(""+cartCounter);
+    	
     	System.out.println("custom->"+OrderHandleController.quantityOfCustomProducts);
     	System.out.println("regualr->"+OrderHandleController.quantityOfRegularProducts);
     	System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
@@ -462,7 +469,7 @@ public class CatalogScreenController implements Initializable{
      * @throws Exception  when page will not bring well.
      */
     @FXML
-    void cartPageMove(MouseEvent event) throws Exception {
+    void cartPageMove(MouseEvent event) throws Exception {	
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		CartPageController cartPage = new CartPageController();

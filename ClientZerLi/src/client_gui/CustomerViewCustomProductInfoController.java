@@ -59,7 +59,7 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 		
 		//need to update list of product inside OrderHandleController 
 		primaryStage.setOnCloseRequest(event ->{
-			
+			productDetails.clear();
 			});	
 	}
     
@@ -100,7 +100,7 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 	public void setProductDetails(ObservableList<ProductInOrder> productDetails) {
 		CustomerViewCustomProductInfoController.productDetails.addAll(productDetails);
 		//set table to show products 
-		System.out.println("here-->"+productDetails);
+		System.out.println("here-->"+CustomerViewCustomProductInfoController.productDetails);
 	}
 
 

@@ -12,7 +12,6 @@ public class OrderCartPreview {
 	private String name;
 	private int quantity;
 	private double price;
-	public static double totalprice;
 	private ProductInOrder product;
 	
 	public OrderCartPreview(ImageView imgSrc, String name, int quantity, double price,
@@ -21,7 +20,6 @@ public class OrderCartPreview {
 		this.name = name;
 		this.quantity = quantity;
 		this.price = price;
-		OrderCartPreview.totalprice+=price*quantity;
 		this.product=product;
 	}
 
@@ -62,15 +60,6 @@ public class OrderCartPreview {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-
-	public double getTotalprice() {
-		return totalprice;
-	}
-
-
-	public void setTotalprice(double totalprice) {
-		OrderCartPreview.totalprice = totalprice;
-	}
 	
 	public ProductInOrder getProduct() {
 		return product;
@@ -78,6 +67,12 @@ public class OrderCartPreview {
 
 	public void setProduct(ProductInOrder product) {
 		this.product = product;
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return getName().toString();
 	}
 
 }

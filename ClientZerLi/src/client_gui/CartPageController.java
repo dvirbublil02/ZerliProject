@@ -35,9 +35,12 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 public class CartPageController implements Initializable {
 
-    // IDorder / zerli dvir / rose /
+	
+	
+	
+    // IDorder / (nameOfProdcut) zerli dvir / (nameOfItem) rose bouget /
     // IDorder / regular / rose / 
-	//OrderCustomCartPreview - > Image , Name , Quantity , Description 
+	// OrderCustomCartPreview - > Image , Name , Quantity , Description 
 	
     @FXML
     private TableColumn<OrderCartPreview, ImageView> ImgColRegularTbl;
@@ -96,7 +99,8 @@ public class CartPageController implements Initializable {
 	private ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
 	private ObservableList<OrderCartPreview> listViewRegular = FXCollections.observableArrayList();
 
-	
+	//Cart is the publisher , orderHandelController is the subscriber
+	private List<OrderHandleController> subscribers = new ArrayList<>();
 
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CartPage.fxml"));
@@ -166,12 +170,19 @@ public class CartPageController implements Initializable {
 		//set tables to show products 
 		tableRegular.setItems(listViewRegular);
 		tableCustom.setItems(listViewCustom);
-		priceLabel.setText(OrderCustomCartPreview.totalprice+OrderCartPreview.totalprice+"");
+		priceLabel.setText(OrderHandleController.getTotalPrice()+"");
+		
+		//add listener to OrderHandleController to perform remove on background
+		addSubscriber(new OrderHandleController());
 	}
 	
 	
 	@FXML
 	void back(ActionEvent event) {
+		
+		// remove all listener in background 
+		removeSubscribers();
+		
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		CatalogScreenController catalogPage = new CatalogScreenController();
@@ -198,10 +209,20 @@ public class CartPageController implements Initializable {
 		allProducts=tableCustom.getItems();
 		productSelected=tableCustom.getSelectionModel().getSelectedItems();
 		
+		System.out.println("productSelected regular->"+productSelected);
+		
 		if(allProducts.isEmpty())
 			massageLabel.setText("Cart Allready Empty");
 		try {
+			
+			
+			//remove all custom product in orderHandler
+			notifyRemoveCustomProduct(productSelected);
+		
+			//remove preview on screen
 			productSelected.forEach(allProducts::remove);
+			System.out.println("productSelected regular->"+productSelected);
+			
 		} catch (NoSuchElementException e) {
 			massageLabel.setText("Cart empty!!");
 		}
@@ -214,12 +235,46 @@ public class CartPageController implements Initializable {
 		allProducts=tableRegular.getItems();
 		productSelected=tableRegular.getSelectionModel().getSelectedItems();
 		
+		System.out.println("productSelected regular->"+productSelected);
+		
 		if(allProducts.isEmpty())
 			massageLabelRegular.setText("Cart Allready Empty");
 		try {
+			
+			//remove all regular productInOrder in orderHandler
+			notifyRemoveRegularProductInOrder(productSelected);
+			
+			//remove preview on screen
 			productSelected.forEach(allProducts::remove);
+			System.out.println("productSelected regular->"+productSelected);
+
 		} catch (NoSuchElementException e) {
 			massageLabelRegular.setText("Cart empty!!");
 		}
     }
+    
+    
+    // add Subscriber
+	public void addSubscriber(OrderHandleController s) {
+		subscribers.add(s);
+	}
+	
+	// remove Subscriber
+	public void removeSubscribers() {
+		subscribers.clear();
+	
+	}
+	
+	// notify all subscribers to remove productSelected list from there local list
+	public void notifyRemoveRegularProductInOrder(ObservableList<OrderCartPreview> productSelected) {
+		for( OrderHandleController s : subscribers)
+			s.removeFromOrderRegular(productSelected);
+	}
+	
+	// notify all subscribers to remove productSelected list from there local hashMap
+	public void notifyRemoveCustomProduct(ObservableList<OrderCustomCartPreview> productSelected) {
+		for( OrderHandleController s : subscribers)
+			s.removeFromOrderCustom(productSelected);
+	}
+    
 }

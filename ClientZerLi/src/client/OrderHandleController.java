@@ -7,8 +7,11 @@ import java.util.Map;
 
 
 import entities_catalog.ProductInOrder;
+import entities_general.OrderCartPreview;
+import entities_general.OrderCustomCartPreview;
+import javafx.collections.ObservableList;
 
-public class OrderHandleController {
+public class OrderHandleController implements nofityOrderListner {
 
 	
 	//this table will handle only custom products.
@@ -50,7 +53,6 @@ public class OrderHandleController {
 	
 	public static void addProductInOrder(ProductInOrder productInOrder) {
 		OrderHandleController.productInOrder.add(productInOrder);
-		//OrderHandleController.quantityOfRegularProducts += productInOrder.getProductQuantityInCart();
 		OrderHandleController.totalPrice+=productInOrder.getProductQuantityInCart()*productInOrder.getPrice();
 	}
 		
@@ -77,7 +79,7 @@ public class OrderHandleController {
 	}
 	
 	//to manage the not custom item list
-	//add to regualr item quntity to same one. 
+	//add to regular item quantity to same one. 
 	public static void addToExistItemOnListNotCustom(ProductInOrder productInOrder2) {
 		
 			for(int i=0;i<productInOrder.size();i++) {
@@ -118,6 +120,47 @@ public class OrderHandleController {
 		OrderHandleController.totalPrice = totalPrice;
 	}
 	
+	public static int getCartCounter() {
+		return quantityOfRegularProducts+quantityOfCustomProducts;
+	}
+	
+	
+	
+	// remove Custom product on the screen , need to remove on the back side also.
+	@Override
+	public void removeFromOrderCustom(ObservableList<OrderCustomCartPreview> productSelected) {
+		// TODO Auto-generated method stub
+		
+		for(OrderCustomCartPreview ocp : productSelected)
+		{
+			customProductInOrderFinallCart.remove(ocp.getName());
+			quantityOfCustomProducts--;
+		}
+		
+		System.out.println("remove listner custom hashmap->"+customProductInOrderFinallCart);
+		
+	}
+	
+	
+	// remove regular product on the screen , need to remove on the back side also.
+	@Override
+	public void removeFromOrderRegular(ObservableList<OrderCartPreview> productSelected) {
+		// TODO Auto-generated method stub
+		for(OrderCartPreview ocp : productSelected)
+		{
+			for(ProductInOrder pd : productInOrder)
+			{
+				if(pd.getName().equals(ocp.getName()))
+				{
+					productInOrder.remove(pd);
+					quantityOfRegularProducts--;
+				}	
+				break;
+			}
+		}
+		
+		System.out.println("remove listner regular list->"+productInOrder);
+	}
 	
 }
     
