@@ -31,6 +31,7 @@ import enums.AccountStatus;
 import enums.OrderStatus;
 
 import enums.ShopWorkerActivity;
+import javafx.collections.ObservableList;
 
 /**
  * In this class there are all the server quarries
@@ -736,63 +737,107 @@ public class ServerQuaries {
 		return branchId;
 	}
 
-	public static void getCustomerFromDB(TransmissionPack obj, Connection con) {
+	@SuppressWarnings("null")
+	public static void getPendingCustomersFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-			Customer customer = (Customer) obj.getInformation();
+			List<Customer> PendingcustomersList = new ArrayList<Customer>();
 			ResultSet rs;
 			Statement stmt;
-			String getCustomer = "SELECT * FROM zerli.customer WHERE customerID = " + customer.getID()
-					+ "AND accountStatus = 'PENDING_APPROVAL' ;";
-			if(customer.getID() == null) {
-				obj.setResponse(Response.GET_CUSTOMER_FAILED);
-			}
+			String getCustomers = "SELECT * FROM zerli.customer WHERE accountStatus ='PENDING_APPROVAL';"; // The query
 			try {
 				stmt = con.createStatement();
-				rs = stmt.executeQuery(getCustomer);
-				if(rs == null) { // if rs is null so the status of the customer is NOT 'pending_approval'
-					obj.setResponse(Response.GET_CUSTOMER_FAILED);
+				rs = stmt.executeQuery(getCustomers);
+				while (rs.next()) {
+					// print all the customers to check if we get them right
+					System.out.println(rs.getString(1));
+					System.out.println(rs.getString(2));
+					System.out.println(rs.getString(3));
+					System.out.println(rs.getString(4));
+					System.out.println(rs.getString(5));
+					System.out.println(AccountStatus.valueOf(rs.getString(6)));
+					System.out.println(rs.getBoolean(7));
+					System.out.println(rs.getString(8));
+					System.out.println(rs.getBoolean(9));
+					System.out.println(new CreditCard(rs.getString(10), null, null));
+
+					// create new customer with the details from DB
+					Customer customer = new Customer(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+							rs.getString(5), AccountStatus.valueOf(rs.getString(6)), rs.getBoolean(7), rs.getString(8),
+							rs.getBoolean(9), new CreditCard(rs.getString(10), null, null));
+					// add to the pending customers list
+					PendingcustomersList.add(customer);
 				}
-				customer.setFirstName(rs.getString(2));
-				customer.setLastName(rs.getString(3));
-				customer.setEmail(rs.getString(4));
-				customer.setPhoneNumber(rs.getString(5));
-				customer.setAccountStatus(AccountStatus.valueOf(rs.getString(6)));
-				customer.setIsLoggedIn(rs.getBoolean(7));
-				customer.setBalance("0");
-				customer.setNewCustomer(rs.getBoolean(9));
 				rs.close();
-				System.out.println(customer);
+				obj.setInformation(PendingcustomersList);
+				obj.setResponse(Response.GET_PENDING_CUSTOMERS_SUCCESS);
+				System.out.println(PendingcustomersList);
+				return;
 			} catch (SQLException e) {
-				obj.setResponse(Response.GET_CUSTOMER_FAILED);
+				obj.setResponse(Response.GET_PENDING_CUSTOMERS_FAILED);
 				return;
 			}
-			obj.setResponse(Response.GET_CUSTOMER_SUCCESS);
 		}
-		obj.setResponse(Response.GET_CUSTOMER_FAILED);
+		obj.setResponse(Response.GET_PENDING_CUSTOMERS_FAILED);
+	}
+
+	public static void getCreditCardsFromDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			ResultSet rs;
+			Statement stmt;
+			List<String> cardsNumbers = new ArrayList<>();
+			String getCards = "SELECT creditCardNumber FROM zerli.creditcards;";
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(getCards);
+				while (rs.next()) {
+					String card = rs.getString(1);
+					cardsNumbers.add(card);
+				}
+				rs.close();
+				obj.setInformation(cardsNumbers);
+				obj.setResponse(Response.GET_CREDIT_CARDS_SUCCESS);
+//				System.out.println(cardsNumbers);
+				return;
+			} catch (SQLException e) {
+				obj.setResponse(Response.GET_CREDIT_CARDS_FAILED);
+				return;
+			}
+		}
+		obj.setResponse(Response.GET_CREDIT_CARDS_FAILED);
+	}
+
+	public static void approveNewCustomerToDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			Customer customer = (Customer) obj.getInformation(); // get the customer updated
+			String approveCuStomer = "UPDATE zerli.customer SET accountStatus= 'CONFIRMED', balance= '0', isNewCustomer= '1', creditCardNumber="
+					+ customer.getCreditCard().getCreditCardNumber() + " WHERE customerID=" + customer.getID() + ";";
+			String addCreditCard = String.format(
+					"INSERT INTO zerli.creditcards(creditCardNumber, creditCardCvvCode, creditCardDateOfExpiration) VALUES ('%s','%s', '%s');",
+					customer.getCreditCard().getCreditCardNumber(), customer.getCreditCard().getCreditCardCvvCode(),
+					customer.getCreditCard().getCreditCardDateOfExpiration());
+			System.out.println(addCreditCard); // check string
+			try {
+				PreparedStatement pstmt1 = con.prepareStatement(approveCuStomer);
+				PreparedStatement pstmt2 = con.prepareStatement(addCreditCard);
+				if (pstmt1.executeUpdate() == 0) { // check if the query failed
+					System.out.println("query 1 failed");
+					obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
+					return;
+				} else if (pstmt2.executeUpdate() == 0) { // check if the query failed
+					System.out.println("query 2 failed");
+					obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
+					return;
+				} else {
+					obj.setResponse(Response.APPROVE_NEW_CUSTOMER_SUCCESS);
+					return;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
+				return;
+			}
+		} else {
+			obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
+		}
 	}
 }
-
-//	public static void GetProductFromDB(TransmissionPack obj, Connection con) {
-//		if (obj instanceof TransmissionPack) {
-//			List<Product> list = new ArrayList<>();
-//			Statement stmt;
-//			try {
-//				stmt = con.createStatement();
-//				ResultSet rs = stmt.executeQuery("SELECT * FROM product;");
-//				while (rs.next()) {
-//					Product product = new Product(rs.getString(1), rs.getString(2), Double.parseDouble(rs.getString(3)), rs.getString(4),rs.getString(5));
-//							
-//					list.add(product);
-//				}
-//
-//				obj.setInformation(list);
-//				rs.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//				obj.setResponse(Response.DIDNT_FOUND_ORDERS);
-//				return;
-//			}
-//			obj.setResponse(Response.FOUND_ORDERS);
-//		} else
-//			obj.setResponse(Response.DIDNT_FOUND_ORDERS);
-//	}

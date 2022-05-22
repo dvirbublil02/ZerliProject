@@ -67,7 +67,7 @@ public class Customer extends User implements Serializable{
 	 * 
 	 * @return isNewCustomer
 	 */
-	public boolean isNewCustomer() {
+	public boolean getIsNewCustomer() {
 		return isNewCustomer;
 	}
 

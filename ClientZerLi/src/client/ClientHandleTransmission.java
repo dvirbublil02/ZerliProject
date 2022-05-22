@@ -23,6 +23,7 @@ import communication.Response;
 import communication.TransmissionPack;
 import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
+import entities_general.CreditCard;
 import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
@@ -98,7 +99,6 @@ public class ClientHandleTransmission {
 			for (int i = 0; i < list.size(); i++) {
 				listView.add(list.get(i));
 			}
-
 			table.setItems(listView);
 			statusLabel.setTextFill(Color.GREEN);
 			statusLabel.setText("Upload Success");
@@ -392,11 +392,43 @@ public class ClientHandleTransmission {
 	}
 	
 	
-	public static Customer findCustomerbyID() {
-		TransmissionPack tp= new TransmissionPack(Mission.GET_CUSTOMER,null,ClientController.user); // The user is Branch manager
+	
+	/**
+	 * Get all the customers who has PENDING_APPROVAL status
+	 * @return return the list of those customers 
+	 */
+	public static List<Customer> getPendingCustomers() {
+		TransmissionPack tp= new TransmissionPack(Mission.GET_PENDING_CUSTOMERS,null,ClientController.user); // The user is Branch manager
 		ClientUI.chat.accept(tp);
 		tp= ClientUI.chat.getObj();
-		return (Customer) tp.getInformation();
+		return (List<Customer>)tp.getInformation();
+	}
+	
+	/**
+	 * Send an updated customer after changed his status and added him credit card, to the DB
+	 * @param updatedCustomer
+	 */
+	public static boolean approveNewCustomer(Customer updatedCustomer) {
+		TransmissionPack tp= new TransmissionPack(Mission.APPROVE_NEW_CUSTOMER,null,updatedCustomer); // The user is Branch manager
+		ClientUI.chat.accept(tp);
+		tp= ClientUI.chat.getObj();
+		if (tp.getResponse() == Response.APPROVE_NEW_CUSTOMER_SUCCESS) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Get a list of the Credit cards we have in the DB 
+	 * @return return the list of the credit cards numbers
+	 */
+	public static List<String> getCreditCards() {
+		TransmissionPack tp= new TransmissionPack(Mission.GET_CREDIT_CARDS,null,ClientController.user); // The user is Branch manager
+		ClientUI.chat.accept(tp);
+		tp= ClientUI.chat.getObj();
+		return (List<String>)tp.getInformation();
+			
 	}
 
 }

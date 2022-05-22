@@ -73,10 +73,18 @@ public class MissionAnalyze {
 			ServerQuaries.getColors(obj,con);
 			break;
 		}
-		case GET_CUSTOMER:{
-			ServerQuaries.getCustomerFromDB(obj, con);
+		case GET_PENDING_CUSTOMERS:{
+			ServerQuaries.getPendingCustomersFromDB(obj, con);
+			break;
 		}
-		
+		case APPROVE_NEW_CUSTOMER:{
+			ServerQuaries.approveNewCustomerToDB(obj,con);
+			break;
+		}
+		case GET_CREDIT_CARDS:{
+			ServerQuaries.getCreditCardsFromDB(obj, con);
+			break;
+		}
 		}
 
 	}
