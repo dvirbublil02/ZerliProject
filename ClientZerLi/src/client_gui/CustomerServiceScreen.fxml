@@ -49,7 +49,7 @@
                               <Font name="Corbel Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label text="Customer Service" textFill="#323232">
+                        <Label fx:id="employeeType" text="Customer Service" textFill="#323232">
                            <font>
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>
@@ -134,7 +134,7 @@
                <children>
                   <HBox prefHeight="66.0" prefWidth="592.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="189.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="264.0">
                            <children>
                               <Label prefHeight="17.0" prefWidth="66.0" text="ZerLi Login">
                                  <HBox.margin>
@@ -142,9 +142,9 @@
                                  </HBox.margin>
                               </Label>
                               <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
-                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="91.0">
+                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="149.0">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="117.0" text="Customer Service Menu" textFill="RED">
+                                    <Label prefHeight="18.0" prefWidth="138.0" text="Customer Service Menu" textFill="RED">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
@@ -155,17 +155,7 @@
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin></HBox>
-                        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="83.0" />
-                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="90.0" />
-                        <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0">
-                                 <children>
-                                    <HBox alignment="CENTER" prefHeight="54.0" prefWidth="78.0" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="38.0" />
                         <HBox alignment="CENTER" prefHeight="65.0" prefWidth="232.0">
                            <children>
                               <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0" />

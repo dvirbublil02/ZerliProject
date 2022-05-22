@@ -399,6 +399,7 @@ public class ClientHandleTransmission {
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		List<Complaint> complaints = (List<Complaint>) tp.getInformation();
+		ComplaintsDataHandle.setComlaints(complaints);
 		return complaints;
 	}
 }

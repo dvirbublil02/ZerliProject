@@ -50,7 +50,7 @@
                               <Font name="Corbel Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label text="Customer" textFill="#323232">
+                        <Label fx:id="employeeType" text="Customer" textFill="#323232">
                            <font>
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>

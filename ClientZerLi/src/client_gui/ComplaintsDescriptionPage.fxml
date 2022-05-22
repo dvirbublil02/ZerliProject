@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" fx:controller="client_gui.ComplaintsDescriptionPageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.ComplaintsDescriptionPageController">
 	<children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -41,7 +41,7 @@
                               <Image url="@../javafx_images/userImageSideScreen.png" />
                            </image>
                         </ImageView>
-                        <Label text="Bob Alice" textFill="WHITE">
+                        <Label fx:id="employeeName" text="Bob Alice" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="2.0" />
                            </VBox.margin>
@@ -49,7 +49,7 @@
                               <Font name="Corbel Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label text="Customer" textFill="#323232">
+                        <Label fx:id="employeeType" text="Customer" textFill="#323232">
                            <font>
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>
@@ -80,7 +80,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="+972-524676188" textFill="#9a9a9a">
+                        <Label fx:id="phoneNumber" text="+972-524676188" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -96,7 +96,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="CONFIRMED" textFill="#9a9a9a">
+                        <Label fx:id="accountStatus" text="CONFIRMED" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -132,75 +132,37 @@
                                     </Line>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="116.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="146.0">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="98.0" text="Customer Menu">
+                                    <Label prefHeight="18.0" prefWidth="134.0" text="Customer Service Menu">
                                        <padding>
                                           <Insets left="5.0" />
                                        </padding>
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="113.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="18.0">
                                  <children>
-                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0">
-                                       <HBox.margin>
-                                          <Insets left="5.0" />
-                                       </HBox.margin>
-                                    </Line>
-                                    <Label prefHeight="17.0" prefWidth="88.0" text="ZerLi Catalog">
-                                       <padding>
-                                          <Insets left="5.0" />
-                                       </padding>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="92.0">
-                                 <children>
-                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0">
-                                       <HBox.margin>
-                                          <Insets left="5.0" />
-                                       </HBox.margin>
-                                    </Line>
-                                    <Label text="Cart Page">
-                                       <HBox.margin>
-                                          <Insets left="5.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="100.0">
-                                 <children>
-                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0">
-                                       <HBox.margin>
-                                          <Insets left="5.0" />
-                                       </HBox.margin>
-                                    </Line>
-                                    <Label text="Order Page" textFill="RED">
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                       <padding>
-                                          <Insets left="5.0" />
-                                       </padding>
-                                    </Label>
-                                 </children>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
-                                 <children>
-                                    <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="18.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="66.0" prefWidth="58.0" />
+                                          <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
                                        </children>
                                     </HBox>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="65.0" prefWidth="232.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="64.0">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0" />
+                                    <Label text="Complaits" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="10.0">
+                                 <children>
+                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Complaint details:" textFill="RED" />
                                  </children>
                               </HBox>
                            </children>
@@ -289,7 +251,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="60.0" prefWidth="58.0">
                                  <children>
-                                    <RadioButton fx:id="refoundCheck" mnemonicParsing="false" />
+                                    <RadioButton fx:id="refoundCheck" mnemonicParsing="false" onAction="#refoundCheck" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="60.0" prefWidth="138.0">

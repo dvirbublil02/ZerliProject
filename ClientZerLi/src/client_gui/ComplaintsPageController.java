@@ -1,11 +1,11 @@
 package client_gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import client.ClientController;
 import client.ClientHandleTransmission;
+import client.ComplaintsDataHandle;
 import entities_reports.Complaint;
 import entities_users.CustomerService;
 import enums.OrderStatus;
@@ -24,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class ComplaintsPageController implements Initializable{
@@ -40,6 +41,7 @@ public class ComplaintsPageController implements Initializable{
 	private Label phoneNumber;
     @FXML
     private Label employeeType;
+  
 
 	@FXML
 	private TableView<Complaint> Complaints;
@@ -95,15 +97,16 @@ public class ComplaintsPageController implements Initializable{
 
 		showCol.setCellFactory(ShowButtonTableCell.<Complaint>forTableColumn("description", (Complaint c) -> {
 
-			// need to send list to screen
-			// ObservableList<Product>
-			// listToNextScreen=FXCollections.observableArrayList(o.getItems());
-
-			// open screen of details -- > need to init before starting
+			
 			Stage primaryStage = new Stage();
 			ComplaintsDescriptionPageController complaintsDescriptionPageController = new ComplaintsDescriptionPageController();
 
-			
+			for(Complaint co:ComplaintsDataHandle.getComlaints()) {
+				if(co.equals(c)) {
+					ComplaintsDataHandle.setComplaint(co);
+					break;
+				}
+			}
 //				
 				try {
 					complaintsDescriptionPageController.start(primaryStage);
@@ -112,21 +115,24 @@ public class ComplaintsPageController implements Initializable{
 					e.printStackTrace();
 				}
 			
-
+				
 			return c;
 		}));
 		complaintIDCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("complaintID"));
+		
 		customerIDCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("customerID"));
 		complaintOpeningCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("complaintOpening"));
 		treatmentUntilCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("treatmentUntil"));
 		// show button function
 	
 
-//		
-		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus,entryGreeting);
+		
+		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus,entryGreeting,employeeType,((CustomerService)ClientController.user).toString());
 		System.out.println((CustomerService)ClientController.user);
 		listView.addAll(ClientHandleTransmission.getComplaintsForCustomerService(ClientController.user.getID()));
+		
 		Complaints.setItems(listView);
+		
 
 	}
 }

@@ -88,11 +88,17 @@ public class ClientController implements ChatIF {
 	public static void setObj(TransmissionPack obj) {
 		ClientController.obj = obj;
 	}
-	public static void initalizeUserDetails(Label employeeName,Label phoneNumber, Label accountStatus,Label entryGreeting) {
+	public static void initalizeUserDetails(Label employeeName,Label phoneNumber, Label accountStatus,Label entryGreeting,Label employeeType,String user) {
+		
+		if(entryGreeting!=null) {
+			entryGreeting.setText(entryGreeting.getText()+" "+ClientController.user.getFirstName()+" !");
+		}
+	
 		employeeName.setText(ClientController.user.getFirstName()+" "+ClientController.user.getLastName());
 		phoneNumber.setText(ClientController.user.getPhoneNumber());
 		accountStatus.setText(ClientController.user.getAccountStatus().name());
-		entryGreeting.setText(entryGreeting.getText()+" "+ClientController.user.getFirstName()+" !");
+		employeeType.setText(user);
+		
 		
 	}
 }

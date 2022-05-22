@@ -9,6 +9,7 @@ import client.ClientHandleTransmission;
 import client.ClientUI;
 import communication.Mission;
 import communication.TransmissionPack;
+import entities_users.CustomerService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class CustomerServicePageController implements Initializable {
@@ -34,6 +36,7 @@ public class CustomerServicePageController implements Initializable {
 	private Label phoneNumber;
     @FXML
     private Label employeeType;
+ 
 
 
 	@FXML
@@ -91,7 +94,8 @@ public class CustomerServicePageController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus,entryGreeting);
+		
+		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus,entryGreeting,employeeType,((CustomerService)ClientController.user).toString());
 		
 	}
 

@@ -50,14 +50,9 @@
                                     <Font name="Corbel Bold" size="28.0" />
                                  </font>
                               </Label>
-                              <Label text="Branch Manager" textFill="#323232">
+                              <Label fx:id="employeeType" text="Branch Manager" textFill="#323232">
                                  <font>
                                     <Font name="Corbel Bold Italic" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="entryGreeting" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back Eran!" textFill="#3c3131">
-                                 <font>
-                                    <Font name="Cambria" size="16.0" />
                                  </font>
                               </Label>
                            </children>
@@ -110,16 +105,6 @@
                                     <Insets left="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="Branch">
-                                 <font>
-                                    <Font name="Corbel Bold" size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label text="&quot;Karmial&quot;, B.id 5" textFill="#9a9a9a">
-                                 <font>
-                                    <Font name="Corbel Bold" size="18.0" />
-                                 </font>
-                              </Label>
                            </children>
                         </VBox>
                         <VBox prefHeight="0.0" prefWidth="308.0" VBox.vgrow="ALWAYS" />
@@ -145,7 +130,7 @@
                      <children>
                         <HBox prefHeight="66.0" prefWidth="592.0">
                            <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="224.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="212.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="65.0" text="ZerLi Login">
                                        <HBox.margin>
@@ -155,7 +140,7 @@
                                     <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
                                     <HBox alignment="CENTER" prefHeight="59.0" prefWidth="137.0">
                                        <children>
-                                          <Label prefHeight="17.0" prefWidth="126.0" text="Branch Manager Menu" textFill="RED">
+                                          <Label prefHeight="17.0" prefWidth="126.0" text="Customer Service Menu" textFill="#151515">
                                              <HBox.margin>
                                                 <Insets left="5.0" />
                                              </HBox.margin>
@@ -167,20 +152,13 @@
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="83.0" />
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="90.0" />
-                              <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
+                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="13.0">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0">
-                                       <children>
-                                          <HBox alignment="CENTER" prefHeight="54.0" prefWidth="78.0" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </HBox>
+                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
+                                 </children></HBox>
                               <HBox alignment="CENTER" prefHeight="65.0" prefWidth="232.0">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0" />
+                                    <Label prefHeight="18.0" prefWidth="230.0" text="Complaits" textFill="RED" />
                                  </children>
                               </HBox>
                            </children>
@@ -198,16 +176,16 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <HBox prefHeight="444.0" prefWidth="698.0">
+                                    <HBox alignment="CENTER" prefHeight="444.0" prefWidth="698.0">
                                        <children>
                                           <TableView fx:id="Complaints" prefHeight="229.0" prefWidth="698.0">
                                             <columns>
-                                                <TableColumn fx:id="showCol" prefWidth="75.0" text="description" />
-                                              <TableColumn fx:id="complaintIDCol" prefWidth="70.0" text="complaintID" />
-                                              <TableColumn fx:id="customerIDCol" prefWidth="77.5999755859375" text="customerID" />
+                                                <TableColumn fx:id="showCol" prefWidth="109.5999755859375" text="description" />
+                                              <TableColumn fx:id="complaintIDCol" prefWidth="137.60006713867188" text="complaintID" />
+                                              <TableColumn fx:id="customerIDCol" prefWidth="135.20001220703125" text="customerID" />
                                             
-                                                <TableColumn fx:id="complaintOpeningCol" prefWidth="99.0" text="complaintOpening" />
-                                                <TableColumn fx:id="treatmentUntilCol" prefWidth="124.00003662109373" text="treatmentUntil" />
+                                                <TableColumn fx:id="complaintOpeningCol" prefWidth="156.800048828125" text="complaintOpening" />
+                                                <TableColumn fx:id="treatmentUntilCol" prefWidth="159.199951171875" text="treatmentUntil" />
                                             </columns>
                                           </TableView>
                                        </children>
