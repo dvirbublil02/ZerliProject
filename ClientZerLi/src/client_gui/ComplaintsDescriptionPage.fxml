@@ -289,7 +289,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="60.0" prefWidth="58.0">
                                  <children>
-                                    <RadioButton mnemonicParsing="false" />
+                                    <RadioButton fx:id="refoundCheck" mnemonicParsing="false" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="60.0" prefWidth="138.0">
