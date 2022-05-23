@@ -2,6 +2,7 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,8 +125,7 @@ public class CatalogScreenController implements Initializable{
     private Button addToCustomBtn;
     @FXML
     private TextField customTextField;
-   
-
+    
     private String CURRENCY="₪";
     private Image imageCardTmp;
     private MyListenerCatalog myListener;

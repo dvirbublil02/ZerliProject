@@ -96,7 +96,7 @@ public class CartPageController implements Initializable {
     @FXML
     private TableColumn<OrderCustomCartPreview, Double> priceCustomColTbl;
     
-	private ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
+	private static ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
 	private ObservableList<OrderCartPreview> listViewRegular = FXCollections.observableArrayList();
 
 	//Cart is the publisher , orderHandelController is the subscriber
@@ -123,7 +123,7 @@ public class CartPageController implements Initializable {
 			CustomerViewCustomProductInfoController customProductDetails = new CustomerViewCustomProductInfoController();
 			try {
 				System.out.println(o.getCartList());
-				customProductDetails.setProductDetails(o.getCartList());
+				customProductDetails.setProductDetails(o);
 				customProductDetails.start(primaryStage);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -183,6 +183,9 @@ public class CartPageController implements Initializable {
 		// remove all listener in background 
 		removeSubscribers();
 		
+		//clear static screen
+		listViewCustom.clear();
+		
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		CatalogScreenController catalogPage = new CatalogScreenController();
@@ -212,7 +215,7 @@ public class CartPageController implements Initializable {
 		System.out.println("productSelected regular->"+productSelected);
 		
 		if(allProducts.isEmpty())
-			massageLabel.setText("Cart Allready Empty");
+			massageLabel.setText("Custom Cart Allready Empty");
 		try {
 			
 			
@@ -224,8 +227,11 @@ public class CartPageController implements Initializable {
 			System.out.println("productSelected regular->"+productSelected);
 			
 		} catch (NoSuchElementException e) {
-			massageLabel.setText("Cart empty!!");
+			massageLabel.setText("Custom Cart Empty!!");
 		}
+		
+		//System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
+		updateTotalPrice();
     }
     
  
@@ -238,21 +244,52 @@ public class CartPageController implements Initializable {
 		System.out.println("productSelected regular->"+productSelected);
 		
 		if(allProducts.isEmpty())
-			massageLabelRegular.setText("Cart Allready Empty");
+			massageLabelRegular.setText("Regular Cart Allready Empty");
 		try {
 			
 			//remove all regular productInOrder in orderHandler
 			notifyRemoveRegularProductInOrder(productSelected);
-			
 			//remove preview on screen
 			productSelected.forEach(allProducts::remove);
 			System.out.println("productSelected regular->"+productSelected);
+			
+			System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
+			updateTotalPrice();
 
 		} catch (NoSuchElementException e) {
-			massageLabelRegular.setText("Cart empty!!");
+			massageLabelRegular.setText("Regular Cart Empty!!");
 		}
+		
+		//System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
+		updateTotalPrice();
+
     }
     
+    
+    public void updateTotalPrice() {
+		//update price label after remove regualr product
+		priceLabel.setText(OrderHandleController.getTotalPrice()+"");
+    }
+    
+    
+   // action to remove product selected on details tiny screen in cartPage also
+    public static void removeProductFromListViewCustom (OrderCustomCartPreview oCustomCP , ObservableList<ProductInOrder> productSelected) {
+    	for(OrderCustomCartPreview customUpdate:listViewCustom) {
+    		if(customUpdate.getName()==oCustomCP.getName())
+    		{
+    			customUpdate.removeProductInOrderInsideCustom(productSelected);
+    			
+    			//remove and add to refresh object on screen 
+    			listViewCustom.remove(customUpdate);
+    			listViewCustom.add(customUpdate);
+    			
+    			//if object without product release him 
+    			if(customUpdate.getCartList().size()==0)
+    				listViewCustom.remove(customUpdate);
+    			break;
+    		}
+    	}
+    }
     
     // add Subscriber
 	public void addSubscriber(OrderHandleController s) {

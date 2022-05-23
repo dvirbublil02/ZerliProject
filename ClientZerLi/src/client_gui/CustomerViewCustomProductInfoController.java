@@ -2,11 +2,15 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
+import client.OrderHandleController;
 import entities_catalog.ProductInOrder;
+import entities_general.OrderCartPreview;
 import entities_general.OrderCustomCartPreview;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,6 +52,12 @@ public class CustomerViewCustomProductInfoController implements Initializable {
     private TableColumn<ProductInOrder, Integer> totalquantityCol;
 
     private static ObservableList<ProductInOrder> productDetails = FXCollections.observableArrayList();
+    private static OrderCustomCartPreview orderCustomCartPreview;
+    private static String customName;
+    
+    
+	//Cart is the publisher , orderHandelController is the subscriber
+	private List<OrderHandleController> subscribers = new ArrayList<>();
     
 	public void start(Stage primaryStage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CustomerViewCustomProductInfo.fxml"));
@@ -60,6 +70,9 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 		//need to update list of product inside OrderHandleController 
 		primaryStage.setOnCloseRequest(event ->{
 			productDetails.clear();
+			
+			// remove all listener in background - orderHandle 
+			removeSubscribers();
 			});	
 	}
     
@@ -71,6 +84,9 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 		quantityInCartCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Integer>("productQuantityInCart"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("price"));
 		customProductTable.setItems(productDetails);
+		
+		//add listener to OrderHandleController to perform remove on background
+		addSubscriber(new OrderHandleController());
 	}
 	
 	
@@ -84,12 +100,15 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 		if(allProducts.isEmpty())
 			massageLabel.setText("Table Allready Empty");
 		try {
+			
+			notifyRemoveProductInOrderInsideCustom(productSelected);
+			//adding this part--->need to change to remove from observerlist themself;
+			/////////////////////---->> need to remove from back if only one !!
+			CartPageController.removeProductFromListViewCustom(orderCustomCartPreview, productSelected);
 			productSelected.forEach(allProducts::remove);
 		} catch (NoSuchElementException e) {
 			massageLabel.setText("Table empty!!");
 		}
-		
-		
     }
     
     public ObservableList<ProductInOrder> getProductDetails() {
@@ -97,16 +116,34 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 	}
 
 
-	public void setProductDetails(ObservableList<ProductInOrder> productDetails) {
-		CustomerViewCustomProductInfoController.productDetails.addAll(productDetails);
+	public void setProductDetails(OrderCustomCartPreview orderCustomCartPreview) {
+		
+		// set ObservableList of productDeatails
+		CustomerViewCustomProductInfoController.productDetails.addAll(orderCustomCartPreview.getCartList());
+		CustomerViewCustomProductInfoController.customName=orderCustomCartPreview.getName();
+		CustomerViewCustomProductInfoController.orderCustomCartPreview=orderCustomCartPreview;
+		
 		//set table to show products 
-		System.out.println("here-->"+CustomerViewCustomProductInfoController.productDetails);
+		System.out.println("Custom:"+customName+"-->"+CustomerViewCustomProductInfoController.productDetails);
 	}
 
 
+    // add Subscriber
+	public void addSubscriber(OrderHandleController s) {
+		subscribers.add(s);
+	}
+	
+	// remove Subscriber
+	public void removeSubscribers() {
+		subscribers.clear();
+	
+	}
 
-
-
+	// notify all subscribers to remove productSelected list from there local list
+	public void notifyRemoveProductInOrderInsideCustom(ObservableList<ProductInOrder> productSelected) {
+		for( OrderHandleController s : subscribers)
+			s.removeProductInOrderInsideCustom(productSelected,customName);
+	}
 
 
 }

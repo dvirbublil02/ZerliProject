@@ -133,6 +133,7 @@ public class OrderHandleController implements nofityOrderListner {
 		
 		for(OrderCustomCartPreview ocp : productSelected)
 		{
+			totalPrice-=ocp.getTotalprice();
 			customProductInOrderFinallCart.remove(ocp.getName());
 			quantityOfCustomProducts--;
 		}
@@ -152,6 +153,7 @@ public class OrderHandleController implements nofityOrderListner {
 			{
 				if(pd.getName().equals(ocp.getName()))
 				{
+					totalPrice-=ocp.getPrice();
 					productInOrder.remove(pd);
 					quantityOfRegularProducts--;
 				}	
@@ -160,6 +162,31 @@ public class OrderHandleController implements nofityOrderListner {
 		}
 		
 		System.out.println("remove listner regular list->"+productInOrder);
+	}
+	
+	//remove productInOrder inside custom product on screen ,need to remove on the back side also.
+	@Override
+	public void removeProductInOrderInsideCustom(ObservableList<ProductInOrder> productSelected, String customName) {
+		// TODO Auto-generated method stub
+		List<ProductInOrder> customProducts=customProductInOrderFinallCart.get(customName); 
+		List<ProductInOrder> productSelectedRegualrList = new ArrayList<ProductInOrder>();
+		//change from ObservableList to List  
+		productSelectedRegualrList.addAll(productSelected);
+		//remove on the back side it productInOrder inside custom
+		customProducts.removeAll(productSelectedRegualrList);
+		
+		//if we remove the last one in custom product
+		if(customProducts.size()==0)
+			customProductInOrderFinallCart.remove(customName);
+		
+		//calculate total price
+		for(ProductInOrder p: productSelectedRegualrList)
+			totalPrice-=p.getPrice()*p.getProductQuantityInCart();
+	
+		
+		System.out.println("customProducts list->"+customProducts);
+		System.out.println("after remove deatails page ->"+customProductInOrderFinallCart.get(customName));
+		System.out.println("total custom products ->"+customProductInOrderFinallCart);
 	}
 	
 }

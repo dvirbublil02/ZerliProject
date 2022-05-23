@@ -76,6 +76,20 @@ public class OrderCustomCartPreview {
 		this.cartList = cartList;
 	}
 	
+	public void removeProductInOrderInsideCustom(ObservableList<ProductInOrder> productsToRemove) {
+		for(ProductInOrder p : productsToRemove) {
+			totalprice-=p.getPrice()*p.getProductQuantityInCart();
+		}
+		cartList.removeAll(productsToRemove);
+		
+		System.out.println("totalPrice->"+totalprice+" cartList->"+cartList);
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return name.toString()+" "+totalprice;
+	}
 	
 	
 	
