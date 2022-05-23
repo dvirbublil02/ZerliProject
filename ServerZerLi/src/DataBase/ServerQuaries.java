@@ -37,7 +37,6 @@ import entities_users.User;
 import enums.AccountStatus;
 import enums.ComplaintsStatus;
 import enums.OrderStatus;
-
 import enums.ShopWorkerActivity;
 
 /**
@@ -746,7 +745,7 @@ public class ServerQuaries {
 					
 					
 					Complaint complaint = new Complaint(rs.getString(1), rs.getString(2), rs.getString(3),
-							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7),ComplaintsStatus.valueOf(rs.getString(8)) ,getSatus(rs.getString(6),rs.getString(7)));
+							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7),rs.getString(8),ComplaintsStatus.valueOf(rs.getString(9)) ,getSatus(rs.getString(7),rs.getString(8)));
 
 					complaints.add(complaint);
 				}
@@ -838,7 +837,88 @@ public class ServerQuaries {
 		}
 		return branchId;
 	}
+	/**
+	 * update all the complaint status in the DB
+	 * @param obj
+	 * @param con
+	 */
+	@SuppressWarnings("unchecked")
+	public static void updateComplaints(TransmissionPack obj, Connection con) {
+		if(obj instanceof TransmissionPack) {
+			ResultSet rs;
+			PreparedStatement pstmt,pstmt2,pstmt3;
+			List<Complaint>complaintsToUpdate=(List<Complaint>) obj.getInformation();
+			String updateSpecificRow = "UPDATE zerli.complaints SET status=? WHERE complaintID='";
+			for(Complaint c:complaintsToUpdate) {
+				
+				try {
+					
+					updateComlaint(con, updateSpecificRow, c);
+					System.out.println(c.getRefoundAmount());
+					if(!c.getRefoundAmount().isEmpty()) {
+						insertNewRefund(con, c); 
+						updateRefundInSpecificCustomer(con, c);
+						
+					}
+				} catch (SQLException e) {
+					obj.setResponse(Response.COMPLAINTS_UPDATE_FAILED);
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			obj.setResponse(Response.COMPLAINTS_UPDATE_SUCCEED);
+					
+		}
+		
+	}
+	/**
+	 * update specific complaint row
+	 * @param con
+	 * @param updateSpecificRow
+	 * @param c
+	 * @throws SQLException
+	 */
+	private static void updateComlaint(Connection con, String updateSpecificRow, Complaint c) throws SQLException {
+		PreparedStatement pstmt;
+		pstmt = con.prepareStatement(updateSpecificRow+c.getComplaintID()+"'");
+		pstmt.setString(1, c.getComplainState().name());
+		pstmt.executeUpdate();
+	}
+	/**
+	 * if there is refund in the complaint it will update the customer balance
+	 * @param con
+	 * @param c
+	 * @throws SQLException
+	 */
+	private static void updateRefundInSpecificCustomer(Connection con, Complaint c) throws SQLException {
+		PreparedStatement pstmt3;
+		String query2="UPDATE zerli.customer SET balance=balance+? WHERE customerID='"+c.getCustomerID()+"'";
+		pstmt3=con.prepareStatement(query2);
+		pstmt3.setString(1, c.getRefoundAmount());
+		pstmt3.executeUpdate();
+	}
+	/**
+	 * if in the complaint have a refund it create new refund row in 
+	 * the refung row
+	 * @param con
+	 * @param c
+	 * @throws SQLException
+	 */
+	private static void insertNewRefund(Connection con, Complaint c) throws SQLException {
+		PreparedStatement pstmt2;
+		String query="INSERT INTO zerli.refunds(refundID,orderID, customerID, ammount, reason, date) VALUES (?,?,?,?,?,?)";
+		pstmt2=con.prepareStatement(query);
+		pstmt2.setString(1, null);
+		pstmt2.setString(2, c.getOrderID());
+		pstmt2.setString(3, c.getCustomerID());
+		pstmt2.setString(4, c.getRefoundAmount());
+		pstmt2.setString(5, "Complaint");
+		DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+		pstmt2.setString(6,dateFormat.format(Calendar.getInstance().getTime()));
+		pstmt2.executeUpdate();
+	}
 }
+
 //	public static void GetProductFromDB(TransmissionPack obj, Connection con) {
 //		if (obj instanceof TransmissionPack) {
 //			List<Product> list = new ArrayList<>();

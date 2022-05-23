@@ -1,13 +1,17 @@
 package client_gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ComplaintsDataHandle;
-import entities_reports.Complaint;
+import communication.Response;
+import entities_reports.ComplaintPreview;
 import entities_users.CustomerService;
+import enums.ComplaintsStatus;
 import enums.OrderStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +31,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class ComplaintsPageController implements Initializable{
+/**
+ * controller for CustomerServiceComplaintPage this class create an
+ * ObservableList table that contain all the complaints of the specific
+ * CustomerService
+ * 
+ * @author Mor Ben Haim
+ *
+ */
+public class ComplaintsPageController implements Initializable {
 	@FXML
 	private Button Back;
 	@FXML
@@ -39,37 +51,38 @@ public class ComplaintsPageController implements Initializable{
 	private Label accountStatus;
 	@FXML
 	private Label phoneNumber;
-    @FXML
-    private Label employeeType;
-  
+	@FXML
+	private Label employeeType;
 
 	@FXML
-	private TableView<Complaint> Complaints;
+	private TableView<ComplaintPreview> Complaints;
 
 	@FXML
-	private TableColumn<Complaint, String> complaintIDCol;
+	private TableColumn<ComplaintPreview, String> complaintIDCol;
 
 	@FXML
-	private TableColumn<Complaint, String> customerIDCol;
+	private TableColumn<ComplaintPreview, String> customerIDCol;
+	@FXML
+	private TableColumn<ComplaintPreview, String> orderIDCol;
 
 	@FXML
-	private TableColumn<Complaint, String> complaintOpeningCol;
+	private TableColumn<ComplaintPreview, String> complaintOpeningCol;
 
 	@FXML
-	private TableColumn<Complaint, String> treatmentUntilCol;
-
-	
+	private TableColumn<ComplaintPreview, String> treatmentUntilCol;
+	@FXML
+	private Label feedbackMsg;
 
 	@FXML
-	private TableColumn<Complaint, String> priceCol;
+	private TableColumn<ComplaintPreview, String> priceCol;
 
 	@FXML
-	private TableColumn<Complaint, Button> showCol;
+	private TableColumn<ComplaintPreview, Button> showCol;
 
 	@FXML
-	private TableColumn<Complaint, ComboBox<OrderStatus>> statusCol;
+	private TableColumn<ComplaintPreview, ComboBox<ComplaintsStatus>> statusCol;
 
-	private ObservableList<Complaint> listView = FXCollections.observableArrayList();
+	private ObservableList<ComplaintPreview> listView = FXCollections.observableArrayList();
 
 	@FXML
 	public void start(Stage primaryStage) throws Exception {
@@ -83,6 +96,12 @@ public class ComplaintsPageController implements Initializable{
 		});
 	}
 
+	/**
+	 * go back the customerService menu
+	 * 
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	void Back(ActionEvent event) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
@@ -91,48 +110,73 @@ public class ComplaintsPageController implements Initializable{
 		customerServicePageController.start(primaryStage);
 	}
 
+	/**
+	 * initialize the screen with all the complaints of the specific CustomerSerivce
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		showCol.setCellFactory(ShowButtonTableCell.<Complaint>forTableColumn("description", (Complaint c) -> {
+		showCol.setCellFactory(
+				ShowButtonTableCell.<ComplaintPreview>forTableColumn("description", (ComplaintPreview c) -> {
 
-			
-			Stage primaryStage = new Stage();
-			ComplaintsDescriptionPageController complaintsDescriptionPageController = new ComplaintsDescriptionPageController();
+					Stage primaryStage = new Stage();
+					ComplaintsDescriptionPageController complaintsDescriptionPageController = new ComplaintsDescriptionPageController();
+					/**
+					 * loop that find the specific complaits from the table
+					 */
+					for (ComplaintPreview co : ComplaintsDataHandle.getComlaints()) {
+						if (co.equals(c)) {
+							ComplaintsDataHandle.setComplaint(c);
 
-			for(Complaint co:ComplaintsDataHandle.getComlaints()) {
-				if(co.equals(c)) {
-					ComplaintsDataHandle.setComplaint(co);
-					break;
-				}
-			}
+							break;
+						}
+					}
 //				
-				try {
-					complaintsDescriptionPageController.start(primaryStage);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			
-				
-			return c;
-		}));
-		complaintIDCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("complaintID"));
-		
-		customerIDCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("customerID"));
-		complaintOpeningCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("complaintOpening"));
-		treatmentUntilCol.setCellValueFactory(new PropertyValueFactory<Complaint, String>("treatmentUntil"));
-		// show button function
-	
+					try {
+						complaintsDescriptionPageController.start(primaryStage);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
-		
-		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus,entryGreeting,employeeType,((CustomerService)ClientController.user).toString());
-		System.out.println((CustomerService)ClientController.user);
+					return c;
+				}));
+		complaintIDCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, String>("complaintID"));
+
+		customerIDCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, String>("customerID"));
+		orderIDCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, String>("orderID"));
+
+		complaintOpeningCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, String>("complaintOpening"));
+		treatmentUntilCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, String>("treatmentUntil"));
+
+		statusCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, ComboBox<ComplaintsStatus>>("status"));
+
+		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
+				((CustomerService) ClientController.user).toString());
+
 		listView.addAll(ClientHandleTransmission.getComplaintsForCustomerService(ClientController.user.getID()));
-		
+
 		Complaints.setItems(listView);
-		
+
+	}
+	/**
+	 * update event that send to the db all the complaints to update there status
+	 * @param event
+	 */
+	@FXML
+	void update(ActionEvent event) {
+		/**
+		 * check if the updated mission was finish and display the user feed back message with the specific details
+		 */
+		if (ClientHandleTransmission
+				.updateComplaints(ComplaintsDataHandle.getComlaints()) == Response.COMPLAINTS_UPDATE_SUCCEED) {
+			feedbackMsg.setText("Update Succeed");
+			feedbackMsg.setTextFill(Color.GREEN);
+		} else {
+			feedbackMsg.setText("Update Failed");
+			feedbackMsg.setTextFill(Color.RED);
+		}
 
 	}
 }

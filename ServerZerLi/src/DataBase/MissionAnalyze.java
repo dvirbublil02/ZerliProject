@@ -75,6 +75,11 @@ public class MissionAnalyze {
 		}
 		case GET_COMPLAINTS:{
 			ServerQuaries.getComlaints(obj, con);
+			break;
+		}
+		case UPDATE_COMPLAINTS:{
+			ServerQuaries.updateComplaints(obj, con);
+			break;
 		}
 		
 		

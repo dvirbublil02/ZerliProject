@@ -272,6 +272,20 @@
                                     <TextField fx:id="refound" alignment="CENTER" prefHeight="30.0" prefWidth="218.0" promptText="Refound" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" />
                                  </children>
                               </HBox>
+                              <HBox alignment="CENTER" prefHeight="49.0" prefWidth="194.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="49.0" prefWidth="50.0" />
+                                    <HBox alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="208.0">
+                                       <children>
+                                          <Label fx:id="validCheck" prefHeight="26.0" prefWidth="201.0">
+                                             <font>
+                                                <Font name="Candara Bold" size="17.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="91.0" prefWidth="692.0">

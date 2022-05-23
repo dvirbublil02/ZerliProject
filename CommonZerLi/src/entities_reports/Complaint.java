@@ -4,21 +4,45 @@ import java.io.Serializable;
 
 import enums.ComplaintsStatus;
 
+/**
+ * class for the complain
+ * 
+ * @author Mor Ben Haim
+ *
+ */
 public class Complaint implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	/**
+	 * every complaint have his complaintID, customerID,orderID, customerServiceID,
+	 * description, branchID, complaintOpening, treatmentUntil,refoundAmount
+	 */
+	private String complaintID, customerID, orderID, customerServiceID, description, branchID, complaintOpening,
+			treatmentUntil, refoundAmount;
+	/**
+	 * every complaint have his complaintsStatus, complainState
+	 */
+	private ComplaintsStatus complaintsStatus, complainState;
 	/**
 	 * 
+	 * @param complaintID
+	 * @param customerID
+	 * @param orderID
+	 * @param customerServiceID
+	 * @param description
+	 * @param branchID
+	 * @param complaintOpening
+	 * @param treatmentUntil
+	 * @param complainState
+	 * @param complaintsStatus
 	 */
-	private static final long serialVersionUID = 1L;
-	private String complaintID, customerID, customerServiceID, description, branchID, complaintOpening, treatmentUntil;
-	private ComplaintsStatus complaintsStatus, complainState;
-
-	public Complaint(String complaintID, String customerID, String customerServiceID, String description,
-			String branchID, String complaintOpening, String treatmentUntil, ComplaintsStatus complainState,
-			ComplaintsStatus complaintsStatus) {
+	public Complaint(String complaintID, String customerID, String orderID, String customerServiceID,
+			String description, String branchID, String complaintOpening, String treatmentUntil,
+			ComplaintsStatus complainState, ComplaintsStatus complaintsStatus) {
 		super();
 		this.complaintID = complaintID;
 		this.customerID = customerID;
+		this.orderID = orderID;
 		this.customerServiceID = customerServiceID;
 		this.description = description;
 		this.branchID = branchID;
@@ -26,6 +50,22 @@ public class Complaint implements Serializable {
 		this.treatmentUntil = treatmentUntil;
 		this.complainState = complainState;
 		this.complaintsStatus = complaintsStatus;
+	}
+	
+	public String getOrderID() {
+		return orderID;
+	}
+
+	public void setOrderID(String orderID) {
+		this.orderID = orderID;
+	}
+
+	public String getRefoundAmount() {
+		return refoundAmount;
+	}
+
+	public void setRefoundAmount(String refoundAmount) {
+		this.refoundAmount = refoundAmount;
 	}
 
 	public ComplaintsStatus getComplainState() {

@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 import client_gui.BranchManagerPageController;
 import client_gui.CustomerPageController;
 import client_gui.CustomerServicePageController;
@@ -26,6 +28,7 @@ import entities_catalog.ProductInOrder;
 import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
+import entities_reports.ComplaintPreview;
 import entities_reports.Complaint;
 import entities_users.ShopWorker;
 import entities_users.User;
@@ -392,14 +395,48 @@ public class ClientHandleTransmission {
 		tp = ClientUI.chat.getObj();
 		return (List<ShopWorker>) tp.getInformation();
 	}
-
-	public static List<Complaint> getComplaintsForCustomerService(String ID) {
+	/**
+	 * sending mission the the server for get all the complaints of the specific 
+	 * Customer Service employee
+	 * @param ID-CustomerSerive ID
+	 * @return- list of Complaints of Complaints for the screen
+	 */
+	public static List<ComplaintPreview> getComplaintsForCustomerService(String ID) {
 		System.out.println(ID);
 		TransmissionPack tp = new TransmissionPack(Mission.GET_COMPLAINTS, null, ID);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		List<Complaint> complaints = (List<Complaint>) tp.getInformation();
-		ComplaintsDataHandle.setComlaints(complaints);
-		return complaints;
+		List<ComplaintPreview>complainPreview=new ArrayList<>();
+		for(Complaint c:complaints) {
+			ComplaintPreview cp=new ComplaintPreview(c.getComplaintID(),c.getCustomerID(),c.getOrderID() , c.getCustomerServiceID(), c.getDescription(), c.getBranchID(), c.getComplaintOpening(), c.getTreatmentUntil(), c.getComplainState(), c.getComplaintsStatus());
+			cp.getStatus().setValue(c.getComplainState());
+			complainPreview.add(cp);
+		}
+		ComplaintsDataHandle.setComlaints(complainPreview);
+		
+		return complainPreview;
+	}
+	/**
+	 * sending mission to the server to update all the complaints cases
+	 * and if there is refund amount it will create new refund row in the
+	 * refund row and update to the specific customer his new balance
+	 * @param complaintsUpdate
+	 * @return
+	 */
+	public static Response updateComplaints(List<ComplaintPreview> complaintsUpdate) {
+		List<ComplaintPreview> complainPreview =complaintsUpdate;
+		List<Complaint>complain=new ArrayList<>();
+		for(ComplaintPreview c:complainPreview) {
+			Complaint cp=new Complaint(c.getComplaintID(),c.getCustomerID(),c.getOrderID() , c.getCustomerServiceID(), c.getDescription(), c.getBranchID(), c.getComplaintOpening(), c.getTreatmentUntil(), c.getComplainState(), c.getComplaintsStatus());
+			cp.setComplainState(c.getStatus().getValue());
+			cp.setRefoundAmount(c.getRefoundAmount());
+			complain.add(cp);
+		}
+		TransmissionPack tp = new TransmissionPack(Mission.UPDATE_COMPLAINTS, null, complain);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		return tp.getResponse();
+		
 	}
 }

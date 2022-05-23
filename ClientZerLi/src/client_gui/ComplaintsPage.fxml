@@ -178,14 +178,17 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="444.0" prefWidth="698.0">
                                        <children>
-                                          <TableView fx:id="Complaints" prefHeight="229.0" prefWidth="698.0">
+                                          <TableView fx:id="Complaints" prefHeight="428.0" prefWidth="704.0">
                                             <columns>
-                                                <TableColumn fx:id="showCol" prefWidth="109.5999755859375" text="description" />
-                                              <TableColumn fx:id="complaintIDCol" prefWidth="137.60006713867188" text="complaintID" />
-                                              <TableColumn fx:id="customerIDCol" prefWidth="135.20001220703125" text="customerID" />
+                                                <TableColumn fx:id="showCol" prefWidth="100.0" text="description" />
+                                              <TableColumn fx:id="complaintIDCol" prefWidth="108.0" text="complaintID" />
+                                              <TableColumn fx:id="customerIDCol" prefWidth="75.0" text="customerID" />
+                                             <TableColumn fx:id="orderIDCol" prefWidth="57.0" text="orderID" />
                                             
-                                                <TableColumn fx:id="complaintOpeningCol" prefWidth="156.800048828125" text="complaintOpening" />
-                                                <TableColumn fx:id="treatmentUntilCol" prefWidth="159.199951171875" text="treatmentUntil" />
+                                                <TableColumn fx:id="complaintOpeningCol" prefWidth="119.0" text="complaintOpening" />
+                                                <TableColumn fx:id="treatmentUntilCol" minWidth="0.0" prefWidth="122.0" text="treatmentUntil" />
+                                                <TableColumn fx:id="statusCol" prefWidth="111.0" text="complainState" />
+                                           
                                             </columns>
                                           </TableView>
                                        </children>
@@ -194,9 +197,31 @@
                               </VBox>
                            </children>
                         </HBox>
-                        <VBox alignment="CENTER" prefHeight="25.0" prefWidth="692.0" VBox.vgrow="ALWAYS">
+                        <VBox alignment="CENTER" prefHeight="135.0" prefWidth="698.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <Button mnemonicParsing="false" text="Button" />
+                              <VBox alignment="CENTER" prefHeight="74.0" prefWidth="698.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#update" prefHeight="24.0" prefWidth="84.0" stylesheets="@Style.css" text="Update">
+                                       <font>
+                                          <Font name="Candara Bold" size="18.0" />
+                                       </font>
+                                       <styleClass>
+                                          <String fx:value="buttonBack" />
+                                          <String fx:value="shadow" />
+                                          <String fx:value="transparent" />
+                                       </styleClass>
+                                    </Button>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="feedbackMsg">
+                                             <font>
+                                                <Font name="Candara Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
                            </children>
                         </VBox>
                      </children>
