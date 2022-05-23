@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 import client.ClientHandleTransmission;
 import entities_general.CreditCard;
 import entities_users.Customer;
-import enums.AccountStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -97,6 +96,10 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 
 	CreditCard cc = null;
 
+	/**
+	 * initialize the page at the start create the pending customer table and fill
+	 * the combo box options
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		ApproveBtn.setDisable(true);
@@ -121,6 +124,12 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		table.setItems(customers);
 	}
 
+	/**
+	 * upload the page AddNewCustomer
+	 * 
+	 * @param primaryStage
+	 * @throws Exception
+	 */
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/AddNewCustomerPage.fxml"));
 		Scene scene = new Scene(root);
@@ -132,6 +141,12 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		});
 	}
 
+	/**
+	 * Approve new customer choose the customer we want to approve, insert credit
+	 * card details and approve him. in the process we check that the credit card is
+	 * and the numbers are correct without letters
+	 * @param event
+	 */
 	@FXML
 	public void ApproveCustomer(ActionEvent event) {
 
@@ -157,21 +172,29 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		System.out.println("Card number is not exist in DB");
 
 		// if one of the fields is empty we can not approve this account
-		if (creditCardNumTxt.getText().length() != 16) {
+		if (creditCardNumTxt.getText().length() != 16) { 
 			CreditCardNumberLbl.setText("Incorrect number!");
 			CreditCardNumberLbl.setTextFill(Color.RED);
-		} else {
+		} else if (DigitsAreNumbers(creditCardNumTxt.getText()) == true){
 			number = true;
 			CreditCardNumberLbl.setText("");
 			CreditCardNumberLbl.setTextFill(Color.GREEN);
 		}
-		if (CvvTxt.getText().length() != 3) {
+		else {
+			CreditCardNumberLbl.setText("Can not write letters!");
+			CreditCardNumberLbl.setTextFill(Color.RED);
+		}
+		if (CvvTxt.getText().length() != 3) { 
 			CvvLbl.setText("Incorrect number!");
 			CvvLbl.setTextFill(Color.RED);
-		} else {
+		} else if (DigitsAreNumbers(CvvTxt.getText()) == true) {
 			cvv = true;
 			CvvLbl.setText("");
 			CvvLbl.setTextFill(Color.GREEN);
+		}
+		else {
+			CvvLbl.setText("Can not write letters!");
+			CvvLbl.setTextFill(Color.RED);
 		}
 		if (MonthComboBox.getValue() == "--" || MonthComboBox.getValue() == null || YearComboBox.getValue() == "----"
 				|| YearComboBox.getValue() == null) {
@@ -210,10 +233,34 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		}
 	}
 
+	/**
+	 * check if the digits of the credit card are numbers. if there are letters -
+	 * return false. else return true.
+	 * @param creditCardNunmber
+	 * @return
+	 */
+	private boolean DigitsAreNumbers(String data) {
+		if (data == null) {
+			return false;
+		}
+		try {
+			Long.parseLong(data);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * every click the user will choose a customer 
+	 * to deal with. can swap between customers.
+	 * @param event
+	 */
 	@FXML
 	public void OnMouseClickChooseCustomer(MouseEvent event) {
 		try {
 			customer = table.getSelectionModel().getSelectedItem();
+			System.out.println("index " + table.getSelectionModel().getSelectedIndex());
 			if (customer != null)
 				ApproveBtn.setDisable(false);
 			// check the customer we point on
@@ -235,6 +282,11 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		}
 	}
 
+	/**
+	 * go back to branch manager page by loading this page.
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void Back(ActionEvent event) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window

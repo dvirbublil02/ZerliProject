@@ -18,6 +18,7 @@ import client_gui.BranchManagerPageController;
 import client_gui.CartPageController;
 import client_gui.CustomerPageController;
 import client_gui.LoginController;
+import client_gui.NetworkManagerPageController;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
@@ -320,11 +321,11 @@ public class ClientHandleTransmission {
 //			menu.start(primaryStage);
 //			break;
 //		}
-//		case "Network Manager": {
-//			NetworkManagerPageController menu = new NetworkManagerPageController();
-//			menu.start(primaryStage);
-//			break;
-//		}
+		case "Network Manager": {
+			NetworkManagerPageController menu = new NetworkManagerPageController();
+			menu.start(primaryStage);
+			break;
+		}
 //		case "Service Expert": {
 //			ServiceExpertPageController menu = new ServiceExpertPageController();
 //			menu.start(primaryStage);
