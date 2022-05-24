@@ -33,7 +33,27 @@ import javafx.stage.Stage;
  *
  */
 public class BranchManagerAddNewCustomerController implements Initializable {
+/**
+ * those labels are to update the left side of the screen with the user details 
+ */
+	@FXML
+	private Label accountStatusLbl;
 
+	@FXML
+	private Label branchLbl;
+
+	@FXML
+	private Label branchManagerNameLbl;
+	
+	@FXML
+	private Label phoneNumberLbl;
+	
+	@FXML
+	private Label userRoleLbl;
+
+	@FXML
+	private Label welcomeBackUserNameLbl;
+//////////////////////////////////////////////////////////////
 	@FXML
 	private Label CreditCardNumberLbl;
 
@@ -82,15 +102,33 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	@FXML
 	private TableColumn<Customer, String> accountStatusCol;
 
+	/**
+	 * table view to show the pending customers
+	 */
 	@FXML
 	private TableView<Customer> table;
 
+	/**
+	 * observable list that contains the pending customers that we will present on
+	 * the screen
+	 */
 	private ObservableList<Customer> customers = FXCollections.observableArrayList();
 
+	/**
+	 * observable list that contains the years that the credit card can expired
+	 */
 	private ObservableList<String> years;
+
+	/**
+	 * observable list that contains the months that the credit card can expired
+	 */
 	private ObservableList<String> months;
 
-	List<Customer> pendingCustomers; // the list that will contain the customers from DB
+	/**
+	 * the list that will contain the customers from DB we will use this list to get
+	 * details from the DB and then send this details to an observable list.
+	 */
+	List<Customer> pendingCustomers; //
 
 	Customer customer = null;
 
@@ -145,6 +183,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	 * Approve new customer choose the customer we want to approve, insert credit
 	 * card details and approve him. in the process we check that the credit card is
 	 * and the numbers are correct without letters
+	 * 
 	 * @param event
 	 */
 	@FXML
@@ -169,30 +208,28 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 				return;
 			}
 		}
-		System.out.println("Card number is not exist in DB");
+		System.out.println("Card number is not exist in DB"); // check
 
 		// if one of the fields is empty we can not approve this account
-		if (creditCardNumTxt.getText().length() != 16) { 
+		if (creditCardNumTxt.getText().length() != 16) {
 			CreditCardNumberLbl.setText("Incorrect number!");
 			CreditCardNumberLbl.setTextFill(Color.RED);
-		} else if (DigitsAreNumbers(creditCardNumTxt.getText()) == true){
+		} else if (DigitsAreNumbers(creditCardNumTxt.getText()) == true) {
 			number = true;
 			CreditCardNumberLbl.setText("");
 			CreditCardNumberLbl.setTextFill(Color.GREEN);
-		}
-		else {
+		} else {
 			CreditCardNumberLbl.setText("Can not write letters!");
 			CreditCardNumberLbl.setTextFill(Color.RED);
 		}
-		if (CvvTxt.getText().length() != 3) { 
+		if (CvvTxt.getText().length() != 3) {
 			CvvLbl.setText("Incorrect number!");
 			CvvLbl.setTextFill(Color.RED);
 		} else if (DigitsAreNumbers(CvvTxt.getText()) == true) {
 			cvv = true;
 			CvvLbl.setText("");
 			CvvLbl.setTextFill(Color.GREEN);
-		}
-		else {
+		} else {
 			CvvLbl.setText("Can not write letters!");
 			CvvLbl.setTextFill(Color.RED);
 		}
@@ -236,6 +273,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	/**
 	 * check if the digits of the credit card are numbers. if there are letters -
 	 * return false. else return true.
+	 * 
 	 * @param creditCardNunmber
 	 * @return
 	 */
@@ -252,8 +290,9 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	}
 
 	/**
-	 * every click the user will choose a customer 
-	 * to deal with. can swap between customers.
+	 * every click the user will choose a customer to deal with. can swap between
+	 * customers.
+	 * 
 	 * @param event
 	 */
 	@FXML
@@ -284,6 +323,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 
 	/**
 	 * go back to branch manager page by loading this page.
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */

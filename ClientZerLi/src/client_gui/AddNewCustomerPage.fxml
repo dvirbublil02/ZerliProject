@@ -43,7 +43,7 @@
                                     <Image url="@../javafx_images/userImageSideScreen.png" />
                                  </image>
                               </ImageView>
-                              <Label text="Eran Smith" textFill="WHITE">
+                              <Label fx:id="branchManagerNameLbl" textFill="WHITE">
                                  <VBox.margin>
                                     <Insets top="2.0" />
                                  </VBox.margin>
@@ -51,12 +51,12 @@
                                     <Font name="Corbel Bold" size="28.0" />
                                  </font>
                               </Label>
-                              <Label text="Branch Manager" textFill="#323232">
+                              <Label fx:id="userRoleLbl" textFill="#323232">
                                  <font>
                                     <Font name="Corbel Bold Italic" size="16.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back Eran!" textFill="#3c3131">
+                              <Label fx:id="welcomeBackUserNameLbl" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back" textFill="#3c3131">
                                  <font>
                                     <Font name="Cambria" size="16.0" />
                                  </font>
@@ -87,7 +87,7 @@
                                     <Insets left="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="+972-524676188" textFill="#9a9a9a">
+                              <Label fx:id="phoneNumberLbl" textFill="#9a9a9a">
                                  <font>
                                     <Font name="Corbel Bold" size="18.0" />
                                  </font>
@@ -103,7 +103,7 @@
                                     <Insets left="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="CONFIRMED" textFill="#9a9a9a">
+                              <Label fx:id="accountStatusLbl" textFill="#9a9a9a">
                                  <font>
                                     <Font name="Corbel Bold" size="18.0" />
                                  </font>
@@ -116,7 +116,7 @@
                                     <Font name="Corbel Bold" size="18.0" />
                                  </font>
                               </Label>
-                              <Label text="&quot;Karmial&quot;, B.id 5" textFill="#9a9a9a">
+                              <Label fx:id="branchLbl" textFill="#9a9a9a">
                                  <font>
                                     <Font name="Corbel Bold" size="18.0" />
                                  </font>
@@ -169,9 +169,9 @@
                            <children>
                               <VBox alignment="CENTER" prefHeight="67.0" prefWidth="698.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Enter Customer details" textAlignment="JUSTIFY" textFill="#0009ff" textOverrun="CLIP">
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Approve New Customer" textAlignment="JUSTIFY" textFill="#0f803a" textOverrun="CLIP">
                                        <font>
-                                          <Font name="Cambria Bold Italic" size="14.0" />
+                                          <Font name="Cambria Bold Italic" size="20.0" />
                                        </font>
                                     </Label>
                                  </children>
@@ -198,9 +198,9 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <Label text="Enter Customer Credit Card details" textFill="#2109fa">
+                                          <Label text="Enter Customer Credit Card details" textFill="#0f803a">
                                              <font>
-                                                <Font name="System Bold" size="12.0" />
+                                                <Font name="System Bold" size="16.0" />
                                              </font>
                                           </Label>
                                        </children>

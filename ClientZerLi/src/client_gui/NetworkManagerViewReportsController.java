@@ -20,74 +20,76 @@ import javafx.stage.Stage;
 
 public class NetworkManagerViewReportsController implements Initializable {
 
-	 @FXML
-	    private Button BackBtn;
+	@FXML
+	private Button BackBtn;
 
-	    @FXML
-	    private CheckBox monthlyReportsRadioBtn;
+	@FXML
+	private Label accountStatusLbl;
 
-	    @FXML
-	    private Label networkManagerName;
+	@FXML
+	private CheckBox monthlyReportsRadioBtn;
 
-	    @FXML
-	    private Label phoneNumber;
+	@FXML
+	private Label networkManagerNameLbl;
 
-	    @FXML
-	    private ComboBox<?> pickMonthMonthlyCB;
+	@FXML
+	private Label phoneNumberLbl;
 
-	    @FXML
-	    private ComboBox<?> pickMonthSpecial;
+	@FXML
+	private ComboBox<?> pickMonthMonthlyCB;
 
-	    @FXML
-	    private ComboBox<?> pickQuarterQuarterlyCB;
+	@FXML
+	private ComboBox<?> pickMonthSpecial;
 
-	    @FXML
-	    private ComboBox<?> pickTypeMonthlyCB;
+	@FXML
+	private ComboBox<?> pickQuarterQuarterlyCB;
 
-	    @FXML
-	    private ComboBox<?> pickTypeQuarterlyCB;
+	@FXML
+	private ComboBox<?> pickTypeMonthlyCB;
 
-	    @FXML
-	    private ComboBox<?> pickYearForMonthlyCB;
+	@FXML
+	private ComboBox<?> pickTypeQuarterlyCB;
 
-	    @FXML
-	    private ComboBox<?> pickYearQuarterlyCB;
+	@FXML
+	private ComboBox<?> pickYearForMonthlyCB;
 
-	    @FXML
-	    private ComboBox<?> pickYearSpecialCB;
+	@FXML
+	private ComboBox<?> pickYearQuarterlyCB;
 
-	    @FXML
-	    private CheckBox quarterlyReportsRadioBtn;
+	@FXML
+	private ComboBox<?> pickYearSpecialCB;
 
-	    @FXML
-	    private CheckBox specialReportsRadioBtn;
+	@FXML
+	private CheckBox quarterlyReportsRadioBtn;
 
-	    @FXML
-	    private Button submitBtn;
+	@FXML
+	private CheckBox specialReportsRadioBtn;
 
-	    @FXML
-	    private Label userRole;
+	@FXML
+	private Button submitBtn;
 
-	    @FXML
-	    private Label userStatus;
+	@FXML
+	private Label userRoleLbl;
 
-	    @FXML
-	    private Label welcomeBackUserName;
+	@FXML
+	private Label welcomeBackUserNameLbl;
 
-
-    public void start(Stage stage) throws IOException {
+	/**
+	 * load the page to the screen
+	 * @param stage
+	 * @throws IOException
+	 */
+	public void start(Stage stage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/NetworkManagerViewReports.fxml"));
 		Scene scene = new Scene(root);
 		stage.setTitle("Network Manager View Reports");
 		stage.setScene(scene);
 		stage.show();
 	}
-    
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		
 //		pickMonthForMonthlyCB.setDisable(true);
 //		pickReportTypeForMonthlyCB.setDisable(true);
 //		pickYearForMonthlyCB.setDisable(true);
@@ -120,34 +122,37 @@ public class NetworkManagerViewReportsController implements Initializable {
 //		pickYearForQuarterCB.setItems(quarterlyYearList);
 
 	}
-    
-    
-    @FXML
-    void Back(ActionEvent event) throws Exception {
-    	((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+	
+	/**
+	 * @param event
+	 * @throws Exception
+	 */
+	@FXML
+	void Back(ActionEvent event) throws Exception {
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		NetworkManagerPageController networkManagerPageController = new NetworkManagerPageController();
 		networkManagerPageController.start(primaryStage);
-    }
+	}
 
-    @FXML
-    void ShowMonthlyReports(ActionEvent event) {
+	@FXML
+	void ShowMonthlyReports(ActionEvent event) {
 
-    }
+	}
 
-    @FXML
-    void ShowQuarterlyReports(ActionEvent event) {
+	@FXML
+	void ShowQuarterlyReports(ActionEvent event) {
 
-    }
+	}
 
-    @FXML
-    void ShowSpecialReports(ActionEvent event) {
+	@FXML
+	void ShowSpecialReports(ActionEvent event) {
 
-    }
+	}
 
-    @FXML
-    void Submit(ActionEvent event) {
+	@FXML
+	void Submit(ActionEvent event) {
 
-    }
+	}
 
 }

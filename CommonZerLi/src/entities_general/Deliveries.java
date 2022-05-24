@@ -1,15 +1,26 @@
 package entities_general;
 
-public class Deliveries {
+import java.util.List;
+
+import entities_catalog.ProductInOrder;
+
+public class Deliveries extends Order {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String deliveryID, orderID, recieverName, price, arrivedDate, deliveryStatus;
 
-	public Deliveries(String deliveryID, String oredrID, String recieverName, String price, String arrivedDate,
-			String deliveryStatus) {
-		super();
+	
+
+	public Deliveries(String orderID, String customerID, String branchID, String price, String greetingCard,
+			String orderDate, String expectedDelivery, List<ProductInOrder> items, String deliveryID, String orderID2,
+			String recieverName, String price2, String arrivedDate, String deliveryStatus) {
+		super(orderID, customerID, branchID, price, greetingCard, orderDate, expectedDelivery, items);
 		this.deliveryID = deliveryID;
-		this.orderID = oredrID;
+		orderID = orderID2;
 		this.recieverName = recieverName;
-		this.price = price;
+		price = price2;
 		this.arrivedDate = arrivedDate;
 		this.deliveryStatus = deliveryStatus;
 	}

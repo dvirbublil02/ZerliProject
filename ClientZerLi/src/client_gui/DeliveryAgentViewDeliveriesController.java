@@ -8,26 +8,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class NetworkManagerRequestSpecialReportController {
+public class DeliveryAgentViewDeliveriesController {
 
-    @FXML
-    private Button BackBtn;
-
-    @FXML
-    private TextField reportTypeTxt;
-
-    @FXML
-    private ComboBox<?> selectBranchComboBox;
-
-    @FXML
-    private Button submitBtn;
-
-    /**
+	
+	
+	
+	
+	/**
      * 
      * @param stage
      * @throws IOException
@@ -52,10 +41,4 @@ public class NetworkManagerRequestSpecialReportController {
 		NetworkManagerPageController networkManagerPageController = new NetworkManagerPageController();
 		networkManagerPageController.start(primaryStage);
     }
-
-    @FXML
-    void Submit(ActionEvent event) {
-
-    }
-
 }
