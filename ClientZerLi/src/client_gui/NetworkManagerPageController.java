@@ -59,7 +59,7 @@ public class NetworkManagerPageController {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		NetworkManagerViewReportsController networkManagerViewReportsController = new NetworkManagerViewReportsController();
-	//	networkManagerViewReportsController.start(primaryStage);
+		networkManagerViewReportsController.start(primaryStage);
 	}
 
 }
