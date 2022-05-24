@@ -742,10 +742,10 @@ public class ServerQuaries {
 				rs = stmt.executeQuery(query);
 				while (rs.next()) {
 					System.out.println(rs.toString());
-					
-					
+
 					Complaint complaint = new Complaint(rs.getString(1), rs.getString(2), rs.getString(3),
-							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7),rs.getString(8),ComplaintsStatus.valueOf(rs.getString(9)) ,getSatus(rs.getString(7),rs.getString(8)));
+							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
+							ComplaintsStatus.valueOf(rs.getString(9)), getSatus(rs.getString(7)));
 
 					complaints.add(complaint);
 				}
@@ -783,42 +783,38 @@ public class ServerQuaries {
 		Date currentDatePlusOne = c.getTime();
 		return dateFormat.format(currentDatePlusOne);
 	}
-	private static ComplaintsStatus getSatus(String start_date, String end_date) {
-		 long difference_In_Days=0;
-        // SimpleDateFormat converts the
-        // string format to date object
-     
-  
-        // Try Class
-        try {
-  
-            DateFormat sdf =new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+
+	private static ComplaintsStatus getSatus(String start_date) {
+		long difference_In_Days = 0;
+		// SimpleDateFormat converts the
+		// string format to date object
+
+		// Try Class
+		try {
+
+			DateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
 			// parse method is used to parse
-            // the text from a string to
-            // produce the date
-            Date d1 = sdf.parse(start_date);
-            Date d2 = sdf.parse(end_date);
-            System.out.println(d1);
-  
-            // Calucalte time difference
-            // in milliseconds
-            long difference_In_Time
-                = d2.getTime() - d1.getTime();
+			// the text from a string to
+			// produce the date
+			Date d1 = sdf.parse(start_date);
+			Date d2 = Calendar.getInstance().getTime();
+			System.out.println(sdf.format(d1));
 
-             difference_In_Days
-                = TimeUnit
-                      .MILLISECONDS
-                      .toDays(difference_In_Time)
-                  % 365;
+			// Calucalte time difference
+			// in milliseconds
+			long difference_In_Time = d2.getTime() - d1.getTime();
 
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if(difference_In_Days>=1) {
-        	return ComplaintsStatus.DELAY;
-        }
-        return ComplaintsStatus.STILL_GOT_TIME;
+			difference_In_Days = TimeUnit.MILLISECONDS.toDays(difference_In_Time) % 365;
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		if (difference_In_Days >= 1) {
+			System.out.println(ComplaintsStatus.DELAY);
+			return ComplaintsStatus.DELAY;
+		}
+		System.out.println(ComplaintsStatus.STILL_GOT_TIME);
+		return ComplaintsStatus.STILL_GOT_TIME;
 	}
 
 	private static String getBranchId(User user, Connection con) {
@@ -837,28 +833,30 @@ public class ServerQuaries {
 		}
 		return branchId;
 	}
+
 	/**
 	 * update all the complaint status in the DB
+	 * 
 	 * @param obj
 	 * @param con
 	 */
 	@SuppressWarnings("unchecked")
 	public static void updateComplaints(TransmissionPack obj, Connection con) {
-		if(obj instanceof TransmissionPack) {
+		if (obj instanceof TransmissionPack) {
 			ResultSet rs;
-			PreparedStatement pstmt,pstmt2,pstmt3;
-			List<Complaint>complaintsToUpdate=(List<Complaint>) obj.getInformation();
+			PreparedStatement pstmt, pstmt2, pstmt3;
+			List<Complaint> complaintsToUpdate = (List<Complaint>) obj.getInformation();
 			String updateSpecificRow = "UPDATE zerli.complaints SET status=? WHERE complaintID='";
-			for(Complaint c:complaintsToUpdate) {
-				
+			for (Complaint c : complaintsToUpdate) {
+
 				try {
-					
+
 					updateComlaint(con, updateSpecificRow, c);
 					System.out.println(c.getRefoundAmount());
-					if(!c.getRefoundAmount().isEmpty()) {
-						insertNewRefund(con, c); 
+					if (!c.getRefoundAmount().isEmpty()) {
+						insertNewRefund(con, c);
 						updateRefundInSpecificCustomer(con, c);
-						
+
 					}
 				} catch (SQLException e) {
 					obj.setResponse(Response.COMPLAINTS_UPDATE_FAILED);
@@ -867,12 +865,14 @@ public class ServerQuaries {
 				}
 			}
 			obj.setResponse(Response.COMPLAINTS_UPDATE_SUCCEED);
-					
+
 		}
-		
+
 	}
+
 	/**
 	 * update specific complaint row
+	 * 
 	 * @param con
 	 * @param updateSpecificRow
 	 * @param c
@@ -880,42 +880,91 @@ public class ServerQuaries {
 	 */
 	private static void updateComlaint(Connection con, String updateSpecificRow, Complaint c) throws SQLException {
 		PreparedStatement pstmt;
-		pstmt = con.prepareStatement(updateSpecificRow+c.getComplaintID()+"'");
+		pstmt = con.prepareStatement(updateSpecificRow + c.getComplaintID() + "'");
 		pstmt.setString(1, c.getComplainState().name());
 		pstmt.executeUpdate();
 	}
+
 	/**
 	 * if there is refund in the complaint it will update the customer balance
+	 * 
 	 * @param con
 	 * @param c
 	 * @throws SQLException
 	 */
 	private static void updateRefundInSpecificCustomer(Connection con, Complaint c) throws SQLException {
 		PreparedStatement pstmt3;
-		String query2="UPDATE zerli.customer SET balance=balance+? WHERE customerID='"+c.getCustomerID()+"'";
-		pstmt3=con.prepareStatement(query2);
+		String query2 = "UPDATE zerli.customer SET balance=balance+? WHERE customerID='" + c.getCustomerID() + "'";
+		pstmt3 = con.prepareStatement(query2);
 		pstmt3.setString(1, c.getRefoundAmount());
 		pstmt3.executeUpdate();
 	}
+
 	/**
-	 * if in the complaint have a refund it create new refund row in 
-	 * the refung row
+	 * if in the complaint have a refund it create new refund row in the refung row
+	 * 
 	 * @param con
 	 * @param c
 	 * @throws SQLException
 	 */
 	private static void insertNewRefund(Connection con, Complaint c) throws SQLException {
 		PreparedStatement pstmt2;
-		String query="INSERT INTO zerli.refunds(refundID,orderID, customerID, ammount, reason, date) VALUES (?,?,?,?,?,?)";
-		pstmt2=con.prepareStatement(query);
+		String query = "INSERT INTO zerli.refunds(refundID,orderID, customerID, ammount, reason, date) VALUES (?,?,?,?,?,?)";
+		pstmt2 = con.prepareStatement(query);
 		pstmt2.setString(1, null);
 		pstmt2.setString(2, c.getOrderID());
 		pstmt2.setString(3, c.getCustomerID());
 		pstmt2.setString(4, c.getRefoundAmount());
 		pstmt2.setString(5, "Complaint");
 		DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-		pstmt2.setString(6,dateFormat.format(Calendar.getInstance().getTime()));
+		pstmt2.setString(6, dateFormat.format(Calendar.getInstance().getTime()));
 		pstmt2.executeUpdate();
+	}
+	/**
+	 * insert new complaint to the DB from 
+	 * @param obj
+	 * @param con
+	 * @throws ParseException
+	 */
+	public static void openComplaint(TransmissionPack obj, Connection con) throws ParseException {
+		if (obj instanceof TransmissionPack) {
+			Complaint c = (Complaint) obj.getInformation();
+			PreparedStatement pstmt;
+		
+			try {
+				String query = "INSERT INTO zerli.complaints(complaintID, customerID, orderID, customerserviceID, description, branchID, complaintOpening, treatmentUntil, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1, null);
+				pstmt.setString(2, c.getCustomerID());
+				pstmt.setString(3, c.getOrderID());
+				pstmt.setString(4, c.getCustomerServiceID());
+				pstmt.setString(5, c.getDescription());
+				pstmt.setString(6, c.getBranchID());
+				pstmt.setString(7, c.getComplaintOpening());
+				Date d = new Date();
+				DateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+				d = sdf.parse(c.getComplaintOpening());
+
+				Calendar cl = Calendar.getInstance();
+				cl.setTime(d);
+				cl.add(Calendar.DATE, 1);
+				Date currentDatePlusOne = cl.getTime();
+				pstmt.setString(8, sdf.format(currentDatePlusOne));
+				pstmt.setString(9, c.getComplainState().name());
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
+				e.printStackTrace();
+			}
+			obj.setResponse(Response.OPEN_COMPLAINT_SUCCEED);
+			
+			
+
+			
+		}else {
+		obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
+		}
+
 	}
 }
 

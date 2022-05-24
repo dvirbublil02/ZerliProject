@@ -56,7 +56,7 @@ public class ComplaintsDataHandle {
 		return status;
 	}
 	/**
-	 * set the combobo
+	 * set the combobox
 	 * @param status
 	 */
 	public static void setStatus(ComboBox<ComplaintsStatus> status) {

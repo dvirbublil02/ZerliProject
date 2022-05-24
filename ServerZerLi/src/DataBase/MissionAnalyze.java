@@ -1,6 +1,8 @@
 package DataBase;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import communication.TransmissionPack;
@@ -80,6 +82,16 @@ public class MissionAnalyze {
 		case UPDATE_COMPLAINTS:{
 			ServerQuaries.updateComplaints(obj, con);
 			break;
+		}
+		case OPEN_COMPLAINT:{
+			
+				try {
+					ServerQuaries.openComplaint(obj, con);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
 		}
 		
 		

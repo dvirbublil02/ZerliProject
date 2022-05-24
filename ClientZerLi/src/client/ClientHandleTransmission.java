@@ -439,4 +439,16 @@ public class ClientHandleTransmission {
 		return tp.getResponse();
 		
 	}
+	/**
+	 * create new mission to the server to create new complaint case
+	 * @param c
+	 * @return
+	 */
+	public static Response createComplaint(Complaint c) {
+		TransmissionPack tp = new TransmissionPack(Mission.OPEN_COMPLAINT, null,c);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		return tp.getResponse();
+		
+	}
 }

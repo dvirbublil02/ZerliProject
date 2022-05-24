@@ -104,6 +104,7 @@
     -fx-background-color: #9900ff;
 }
 
+
  
 .table-row-cell:empty, .table-cell:empty:hover {
     -fx-background-color: whitesmoke;
@@ -209,6 +210,8 @@
 .tab:selected {
     -fx-background-color:#708090 ;
 }
+
+
 
 
 

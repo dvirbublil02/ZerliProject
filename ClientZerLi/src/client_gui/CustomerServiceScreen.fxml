@@ -194,7 +194,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
-                                    <Button fx:id="viewQuarterlyReportBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewQuarterlyReport" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="View Quarterly Report" textFill="WHITE">
+                                    <Button fx:id="openComplaintBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#openComplaintBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="OpenComplaint" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
@@ -208,38 +208,8 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                 <children>
-                                    <Button fx:id="requestSpecialReportBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#requestSpecialReport" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Request Special Report" textFill="WHITE">
-                                       <font>
-                                          <Font name="Calibri Bold Italic" size="14.0" />
-                                       </font>
-                                       <graphic>
-                                          <ImageView fitHeight="69.0" fitWidth="86.0">
-                                             <image>
-                                                <Image url="@../javafx_images/requestSpecialReport.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <children>
-                                    <Button fx:id="viewSpecialReportBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewSpecialReport" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="View Special Report" textFill="WHITE">
-                                       <font>
-                                          <Font name="Calibri Bold Italic" size="14.0" />
-                                       </font>
-                                       <graphic>
-                                          <ImageView fitHeight="69.0" fitWidth="86.0">
-                                             <image>
-                                                <Image url="@../javafx_images/ViewSpecialReport.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </children>
