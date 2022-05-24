@@ -1,5 +1,6 @@
 package client;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,8 @@ import entities_catalog.ProductInOrder;
 import entities_general.OrderCartPreview;
 import entities_general.OrderCustomCartPreview;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 public class OrderHandleController implements nofityOrderListner {
 
@@ -21,6 +24,7 @@ public class OrderHandleController implements nofityOrderListner {
 	public static int quantityOfRegularProducts=0;
 	public static int quantityOfCustomProducts=0;
 	private static double totalPrice=0;
+    private static Label priceLabel= new Label("0");
 	
 	
 	public static Map<String, List<ProductInOrder>> getCustomProductInOrderFinallCart() {
@@ -42,8 +46,9 @@ public class OrderHandleController implements nofityOrderListner {
 		OrderHandleController.customProductInOrder.put(key, productInOrderList);
 		int price=0 ;
 		for(ProductInOrder p: productInOrderList)
-			price+=p.getProductQuantityInCart()*p.getPrice();
+			price+=(double)p.getProductQuantityInCart()*p.getPrice();
 		OrderHandleController.totalPrice+=price;
+		priceLabel.setText(String.valueOf(totalPrice));
 	}
 	
 	
@@ -53,7 +58,8 @@ public class OrderHandleController implements nofityOrderListner {
 	
 	public static void addProductInOrder(ProductInOrder productInOrder) {
 		OrderHandleController.productInOrder.add(productInOrder);
-		OrderHandleController.totalPrice+=productInOrder.getProductQuantityInCart()*productInOrder.getPrice();
+		OrderHandleController.totalPrice+=(double)productInOrder.getProductQuantityInCart()*productInOrder.getPrice();
+		priceLabel.setText(String.valueOf(totalPrice));
 	}
 		
 	//to manage the custom item hashmap
@@ -75,7 +81,8 @@ public class OrderHandleController implements nofityOrderListner {
 		}
 		
 		//price calculate to custom 
-		OrderHandleController.totalPrice+=productInOrder.getProductQuantityInCart()*productInOrder.getPrice();
+		OrderHandleController.totalPrice+=(double)productInOrder.getProductQuantityInCart()*productInOrder.getPrice();
+		priceLabel.setText(String.valueOf(totalPrice));
 	}
 	
 	//to manage the not custom item list
@@ -90,13 +97,14 @@ public class OrderHandleController implements nofityOrderListner {
 					System.out.println("inside->order2" + productInOrder2.getProductQuantityInCart());
 					System.out.println("inside->order1" + productInOrder.get(i).getProductQuantityInCart());
 					
-					Double totalQuntity=productInOrder.get(i).getProductQuantityInCart()+productInOrder2.getProductQuantityInCart();
+					int totalQuntity=productInOrder.get(i).getProductQuantityInCart()+productInOrder2.getProductQuantityInCart();
 					productInOrder.get(i).setProductQuantityInCart(totalQuntity);
 					//price calculate to custom 
 				
 					System.out.println("quantityTotal"+totalQuntity);
 				
-					OrderHandleController.totalPrice+=productInOrder2.getProductQuantityInCart()*productInOrder2.getPrice();
+					OrderHandleController.totalPrice+=(double)productInOrder2.getProductQuantityInCart()*productInOrder2.getPrice();
+					priceLabel.setText(String.valueOf(totalPrice));
 				return;
 				}
 			
@@ -116,8 +124,17 @@ public class OrderHandleController implements nofityOrderListner {
 		return totalPrice;
 	}
 	
+	
 	public static void setTotalPrice(double totalPrice) {
 		OrderHandleController.totalPrice = totalPrice;
+	}
+	
+	
+	public static Label getPriceLabel() {
+		return priceLabel;
+	}
+	public static void setPriceLabel(Label priceLabel) {
+		OrderHandleController.priceLabel=priceLabel;
 	}
 	
 	public static int getCartCounter() {
@@ -151,13 +168,19 @@ public class OrderHandleController implements nofityOrderListner {
 		{
 			for(ProductInOrder pd : productInOrder)
 			{
+				System.out.println(pd.getName());
+				System.out.println(ocp.getName());
+				
 				if(pd.getName().equals(ocp.getName()))
 				{
-					totalPrice-=ocp.getPrice();
+					
+					System.out.println("here!!");
+					totalPrice-=ocp.getPrice()*ocp.getQuantity();
 					productInOrder.remove(pd);
 					quantityOfRegularProducts--;
+					break;
 				}	
-				break;
+				
 			}
 		}
 		
@@ -177,17 +200,31 @@ public class OrderHandleController implements nofityOrderListner {
 		
 		//if we remove the last one in custom product
 		if(customProducts.size()==0)
+		{
 			customProductInOrderFinallCart.remove(customName);
+			quantityOfCustomProducts--;
+		}
 		
 		//calculate total price
 		for(ProductInOrder p: productSelectedRegualrList)
-			totalPrice-=p.getPrice()*p.getProductQuantityInCart();
-	
-		
+		{
+			totalPrice-=p.getPrice()*(double)p.getProductQuantityInCart();
+			priceLabel.setText(String.valueOf(totalPrice));
+		}
+		//testing print - need to remove 
 		System.out.println("customProducts list->"+customProducts);
 		System.out.println("after remove deatails page ->"+customProductInOrderFinallCart.get(customName));
 		System.out.println("total custom products ->"+customProductInOrderFinallCart);
+		System.out.println("quantityOfCustomProducts->"+quantityOfCustomProducts);
+		System.out.println("totalPrice->"+totalPrice);
 	}
 	
+	
+    public static void updateTotalPrice() {
+		//update price label after remove regular product
+		priceLabel.setText(OrderHandleController.getTotalPrice()+"");
+    	System.out.println("total price updated ->"+priceLabel.getText());
+    }
+    
 }
     

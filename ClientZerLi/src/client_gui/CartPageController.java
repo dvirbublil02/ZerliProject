@@ -35,9 +35,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 public class CartPageController implements Initializable {
 
-	
-	
-	
     // IDorder / (nameOfProdcut) zerli dvir / (nameOfItem) rose bouget /
     // IDorder / regular / rose / 
 	// OrderCustomCartPreview - > Image , Name , Quantity , Description 
@@ -170,7 +167,13 @@ public class CartPageController implements Initializable {
 		//set tables to show products 
 		tableRegular.setItems(listViewRegular);
 		tableCustom.setItems(listViewCustom);
+		
+		
+		//priceLabel.setText(OrderHandleController.getTotalPrice()+"");
 		priceLabel.setText(OrderHandleController.getTotalPrice()+"");
+		OrderHandleController.setPriceLabel(priceLabel);
+		
+		//priceLabel.setText(OrderHandleController.getPriceLabel().getText());
 		
 		//add listener to OrderHandleController to perform remove on background
 		addSubscriber(new OrderHandleController());
@@ -200,10 +203,14 @@ public class CartPageController implements Initializable {
 
 	@FXML
 	void confirm(ActionEvent event) throws Exception {
-		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-		Stage primaryStage = new Stage();
-		OrderPageController orderPage = new OrderPageController();
-		orderPage.start(primaryStage);
+		
+		if(OrderHandleController.getCartCounter()>0)
+		{
+			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+			Stage primaryStage = new Stage();
+			OrderPageController orderPage = new OrderPageController();
+			orderPage.start(primaryStage);
+		}
 	}
 
     @FXML
@@ -231,7 +238,13 @@ public class CartPageController implements Initializable {
 		}
 		
 		//System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
-		updateTotalPrice();
+	    if(OrderHandleController.getCartCounter()==0)
+	    	OrderHandleController.setTotalPrice(0);
+			
+		OrderHandleController.updateTotalPrice();
+		
+		
+			
     }
     
  
@@ -254,22 +267,23 @@ public class CartPageController implements Initializable {
 			System.out.println("productSelected regular->"+productSelected);
 			
 			System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
-			updateTotalPrice();
+			OrderHandleController.updateTotalPrice();
 
 		} catch (NoSuchElementException e) {
 			massageLabelRegular.setText("Regular Cart Empty!!");
 		}
 		
 		//System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
-		updateTotalPrice();
+		
+		
+	    if(OrderHandleController.getCartCounter()==0)
+	    	OrderHandleController.setTotalPrice(0);
+		
+		OrderHandleController.updateTotalPrice();
+		//priceLabel=OrderHandleController.getPriceLabel();
 
     }
     
-    
-    public void updateTotalPrice() {
-		//update price label after remove regualr product
-		priceLabel.setText(OrderHandleController.getTotalPrice()+"");
-    }
     
     
    // action to remove product selected on details tiny screen in cartPage also
@@ -289,9 +303,16 @@ public class CartPageController implements Initializable {
     			break;
     		}
     	}
+    	
+	    if(OrderHandleController.getCartCounter()==0)
+	    	OrderHandleController.setTotalPrice(0);
+    	
+    	OrderHandleController.updateTotalPrice();
+    	//OrderHandleController.getPriceLabel();
     }
     
-    // add Subscriber
+
+	// add Subscriber
 	public void addSubscriber(OrderHandleController s) {
 		subscribers.add(s);
 	}
@@ -301,6 +322,7 @@ public class CartPageController implements Initializable {
 		subscribers.clear();
 	
 	}
+	
 	
 	// notify all subscribers to remove productSelected list from there local list
 	public void notifyRemoveRegularProductInOrder(ObservableList<OrderCartPreview> productSelected) {

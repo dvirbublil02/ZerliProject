@@ -102,13 +102,15 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 		try {
 			
 			notifyRemoveProductInOrderInsideCustom(productSelected);
-			//adding this part--->need to change to remove from observerlist themself;
-			/////////////////////---->> need to remove from back if only one !!
 			CartPageController.removeProductFromListViewCustom(orderCustomCartPreview, productSelected);
 			productSelected.forEach(allProducts::remove);
 		} catch (NoSuchElementException e) {
 			massageLabel.setText("Table empty!!");
 		}
+		
+		OrderHandleController.updateTotalPrice();
+	
+		//OrderHandleController.getPriceLabel().setText(String.valueOf(orderCustomCartPreview.getTotalprice()));
     }
     
     public ObservableList<ProductInOrder> getProductDetails() {
