@@ -191,10 +191,8 @@ public class CatalogScreenController implements Initializable{
 		//initialize setChosenItemCard
 		vboxAddToCustom.setVisible(false);
 		customTextField.setDisable(true);
-
 		
 		System.out.println("cartCounter->"+OrderHandleController.getCartCounter());
-		
 		cartCounter=OrderHandleController.getCartCounter();
 		cartItemCounter.setText(""+cartCounter);
 		
@@ -534,7 +532,7 @@ public class CatalogScreenController implements Initializable{
     }
     
     
-    //add to bouqet preview
+    //add to bouqet preview 
     public void setChosenItemCardAddToBouqet(String nameTotalCustomName) {
     	Product p=new Product("0"," added to "+nameTotalCustomName, 0, "172D42", "/javafx_images/addItemToCustom.png", 0, "Product", "Blue", false, 0);
     	setChosenItemCard(p);
