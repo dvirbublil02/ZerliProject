@@ -104,6 +104,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 			// need to send list to screen
 			// ObservableList<Product>
 			// listToNextScreen=FXCollections.observableArrayList(o.getItems());
+
 			List<OrderPreview>details=OrderHandleController.getOrdersForBranchManager();
 			for(OrderPreview or:details) {
 				if(or.equals(o)) {
@@ -112,6 +113,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 					break;
 				}
 			}
+
 
 			// open screen of details -- > need to init before starting
 			Stage primaryStage = new Stage();
@@ -136,9 +138,12 @@ public class BranchManagerOrderManagementController implements Initializable {
 		expectedDeliveryCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("expectedDelivery"));
 
 //		
+
 		OrderHandleController.setOrdersForBranchManager(ClientHandleTransmission.getListOrderPreview());
 		listView.addAll(OrderHandleController.getOrdersForBranchManager());
 		Orders.setItems(listView);
+
+
 
 	}
 

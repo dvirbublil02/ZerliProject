@@ -1,16 +1,36 @@
 package entities_general;
 
-public class Deliveries {
-	String deliveryID, orderID, recieverName, price, arrivedDate, deliveryStatus;
+import java.util.List;
+import java.util.Map;
 
-	public Deliveries(String deliveryID, String oredrID, String recieverName, String price, String arrivedDate,
-			String deliveryStatus) {
-		super();
+import entities_catalog.ProductInOrder;
+import enums.DeliveryStatus;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
+
+public class Deliveries extends Order {
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private	String deliveryID, orderID, recieverName, arrivedDate;
+	double price;
+	private	ComboBox<DeliveryStatus> deliveryStatus = new ComboBox<>();
+	
+
+	public Deliveries(String orderID, String customerID, String branchID, double price, String greetingCard,
+			String orderDate, String expectedDelivery, Map<String,List<ProductInOrder>> items, String deliveryID, String orderID2,
+			String recieverName, double price2, String arrivedDate, ComboBox<DeliveryStatus> deliveryStatus) {
+		super(orderID, customerID, branchID, price, greetingCard, orderDate, expectedDelivery, items);
 		this.deliveryID = deliveryID;
-		this.orderID = oredrID;
+		this.orderID = orderID2;
 		this.recieverName = recieverName;
-		this.price = price;
+		this.price = price2;
 		this.arrivedDate = arrivedDate;
+		ObservableList<DeliveryStatus> list=FXCollections.observableArrayList(DeliveryStatus.READY_TO_GO, DeliveryStatus.ON_THE_WAY, DeliveryStatus.CANCELED , DeliveryStatus.ARRIVED);
 		this.deliveryStatus = deliveryStatus;
 	}
 
@@ -38,11 +58,11 @@ public class Deliveries {
 		this.recieverName = recieverName;
 	}
 
-	public String getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
@@ -54,11 +74,11 @@ public class Deliveries {
 		this.arrivedDate = arrivedDate;
 	}
 
-	public String getDeliveryStatus() {
+	public ComboBox<DeliveryStatus> getDeliveryStatus() {
 		return deliveryStatus;
 	}
 
-	public void setDeliveryStatus(String deliveryStatus) {
+	public void setDeliveryStatus(ComboBox<DeliveryStatus> deliveryStatus) {
 		this.deliveryStatus = deliveryStatus;
 	}
 

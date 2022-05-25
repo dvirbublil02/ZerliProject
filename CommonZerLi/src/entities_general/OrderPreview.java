@@ -14,7 +14,6 @@ public class OrderPreview extends Order {
 	/**
 	 * 
 	 */
-	
 	private ComboBox<OrderStatus> comboStatus=new ComboBox<>();
 	
 	public ComboBox<OrderStatus> getComboStatus() {

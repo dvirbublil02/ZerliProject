@@ -10,8 +10,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import java.util.Random;
 import java.util.UUID;
+
 
 import communication.Response;
 import communication.TransmissionPack;
@@ -32,11 +34,12 @@ import entities_users.User;
 import enums.AccountStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
-
+import javafx.collections.ObservableList;
 
 /**
  * In this class there are all the server quarries
- *@author Mor Ben Haim
+ * 
+ * @author Mor Ben Haim
  *
  */
 public class ServerQuaries {
@@ -278,9 +281,9 @@ public class ServerQuaries {
 		ResultSet rs;
 		PreparedStatement pstmt, pstmt2;
 		table = "zerli." + type;
-		userRow = "SELECT isLoggedIn FROM" + " " + table + " WHERE "+type+"ID=" + "'" + userID + "'" + ";";
-		updateSpecificRow = "UPDATE" + " " + table + " SET isLoggedIn=? WHERE "+type+"ID=" + "'" + userID
-				+ "'" + ";";
+		userRow = "SELECT isLoggedIn FROM" + " " + table + " WHERE " + type + "ID=" + "'" + userID + "'" + ";";
+		updateSpecificRow = "UPDATE" + " " + table + " SET isLoggedIn=? WHERE " + type + "ID=" + "'" + userID + "'"
+				+ ";";
 		pstmt = con.prepareStatement(userRow);
 		rs = pstmt.executeQuery(userRow);
 		rs.next();
@@ -291,7 +294,8 @@ public class ServerQuaries {
 			pstmt2 = con.prepareStatement(updateSpecificRow);
 			pstmt2.setString(1, "1");
 			pstmt2.executeUpdate();
-			upadateUserInformation(type, userID, obj, pstmt);//Update the obj to specific userType and his specific information
+			upadateUserInformation(type, userID, obj, pstmt);// Update the obj to specific userType and his specific
+																// information
 
 		}
 
@@ -300,9 +304,11 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * this method is updating the specific userType and his specific information
-	 * it will be update on the client side as well using trancimissionPack setInformation method
-	 * @param type 
+	 * this method is updating the specific userType and his specific information it
+	 * will be update on the client side as well using trancimissionPack
+	 * setInformation method
+	 * 
+	 * @param type
 	 * @param userID
 	 * @param obj
 	 * @param pstmt
@@ -325,54 +331,57 @@ public class ServerQuaries {
 
 			rs = getRowFromTable(userID, type, pstmt);
 			BranchManager branchmanager = new BranchManager(rs.getString(1), rs.getString(2), rs.getString(3),
-					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7), rs.getString(8));
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
+					rs.getString(8));
 			obj.setInformation(branchmanager);
 			break;
 		}
-		case "customerservice":{
+		case "customerservice": {
 			rs = getRowFromTable(userID, type, pstmt);
 			CustomerService customerservice = new CustomerService(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
 			obj.setInformation(customerservice);
 			break;
 		}
-		case "deliveryagent":{
+		case "deliveryagent": {
 			rs = getRowFromTable(userID, type, pstmt);
-			List<String>ordersID=Arrays.asList(rs.getString(9).split("[\\s,]+"));
+			List<String> ordersID = Arrays.asList(rs.getString(9).split("[\\s,]+"));
 			DeliveryAgent deliveryagent = new DeliveryAgent(rs.getString(1), rs.getString(2), rs.getString(3),
-					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),rs.getString(8),ordersID);
+					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
+					rs.getString(8), ordersID);
 			obj.setInformation(deliveryagent);
 			break;
 		}
-		case "marketingworker":{
+		case "marketingworker": {
 			rs = getRowFromTable(userID, type, pstmt);
-			
+
 			MarketingWorker marketingworker = new MarketingWorker(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
 			obj.setInformation(marketingworker);
 			break;
 		}
-		case "networkmanager":{
+		case "networkmanager": {
 			rs = getRowFromTable(userID, type, pstmt);
-			
+
 			NetworkManager networkmanager = new NetworkManager(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
 			obj.setInformation(networkmanager);
 			break;
 		}
-		case "serviceexpert":{
+		case "serviceexpert": {
 			rs = getRowFromTable(userID, type, pstmt);
-			
+
 			ServiceExpert serviceexpert = new ServiceExpert(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7));
 			obj.setInformation(serviceexpert);
 			break;
 		}
-		case "shopworker":{
+		case "shopworker": {
 			rs = getRowFromTable(userID, type, pstmt);
-			
-			ShopWorker shopworker = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3),
-					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),rs.getString(8),ShopWorkerActivity.valueOf(rs.getString(9)));
+
+			ShopWorker shopworker = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+					rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7), rs.getString(8),
+					ShopWorkerActivity.valueOf(rs.getString(9)));
 			obj.setInformation(shopworker);
 			break;
 		}
@@ -420,57 +429,54 @@ public class ServerQuaries {
 			e.printStackTrace();
 		}
 	}
+
 	public static void GetShopWorkersFromDB(TransmissionPack obj, Connection con) {
-		//the method gets workers from the specific branch of the connected user(branch manager), from DB
-		if(obj instanceof TransmissionPack)
-		{
-			List<ShopWorker> list= new ArrayList<>();
+		// the method gets workers from the specific branch of the connected user(branch
+		// manager), from DB
+		if (obj instanceof TransmissionPack) {
+			List<ShopWorker> list = new ArrayList<>();
 			Statement stmt;
-			User user= (User)obj.getInformation();//user=branch manager
-			String branchID=getBranchId(user,con);
-			if(branchID==null)
-			{
+			User user = (User) obj.getInformation();// user=branch manager
+			String branchID = getBranchId(user, con);
+			if (branchID == null) {
 				obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
 				return;
 			}
-			
+
 			try {
 				stmt = con.createStatement();
 				ResultSet rs;
-				//String getColumns = "SELECT shopworkerID,firstName, lastName,accountStatus, branchID FROM shopworker;";
-				String getColumns = "SELECT * FROM zerli.shopworker WHERE branchID='"+branchID+"';";
+				// String getColumns = "SELECT shopworkerID,firstName, lastName,accountStatus,
+				// branchID FROM shopworker;";
+				String getColumns = "SELECT * FROM zerli.shopworker WHERE branchID='" + branchID + "';";
 				rs = stmt.executeQuery(getColumns);
-				
+
 				while (rs.next()) {
-					ShopWorker sw= new ShopWorker(rs.getString(1),rs.getString(2),rs.getString(3),
-							rs.getString(4),rs.getString(5),(AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7), rs.getString(8),
-							ShopWorkerActivity.valueOf(rs.getString(9)));
-					
+					ShopWorker sw = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+							rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
+							rs.getString(8), ShopWorkerActivity.valueOf(rs.getString(9)));
+
 					list.add(sw);
 				}
-				if(list.size()>0)
-				{
+				if (list.size() > 0) {
 					obj.setResponse(Response.SHOP_WORKER_ARRIVED);
 					obj.setInformation(list);
-				}
-				else
+				} else
 					obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
 				rs.close();
 
-				
-				
-			}catch(SQLException e) {
+			} catch (SQLException e) {
 				obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
-			}	
+			}
 		}
 	}
 
-	
 	// get products to catalog without filter .
 	public static void GetProducts(TransmissionPack obj, Connection con) {
 		// TODO Auto-generated method stub
 		if (obj instanceof TransmissionPack) {
 			List<Product> list = new ArrayList<>();
+
 			
 			Statement stmt;
 		    try {
@@ -486,81 +492,82 @@ public class ServerQuaries {
 			if(list.size()==0)
 				throw new SQLException();
 
-			obj.setInformation(list);
-			rs.close();
-		    } catch (SQLException e) {
-		    	e.printStackTrace();
-		    	obj.setResponse(Response.FAILD_DATA_PRODUCTS);
-		    	return;
-		    }
-		    obj.setResponse(Response.GET_DATA_PRODUCTS);
+				obj.setInformation(list);
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				obj.setResponse(Response.FAILD_DATA_PRODUCTS);
+				return;
 			}
-		
+			obj.setResponse(Response.GET_DATA_PRODUCTS);
+		}
+
 		else
 			obj.setResponse(Response.FAILD_DATA_PRODUCTS);
 	}
 
-	
-	//get products by filter of color \ price \ type
+	// get products by filter of color \ price \ type
 	public static void GetProductsByFilter(TransmissionPack obj, Connection con) {
-		
+
 		if (obj instanceof TransmissionPack) {
 			@SuppressWarnings("unchecked")
-			Map<String,String> filters = (Map<String, String>) obj.getInformation();
+			Map<String, String> filters = (Map<String, String>) obj.getInformation();
 			List<Product> products = new ArrayList<>();
-			int lowValuePrice=0 , highValuePrice=0;
-			String colorFilter , priceFilter , typeFilter;
-			String query; 
-		
-			//get Filters from HashMap
-			colorFilter=filters.get("color");
-			priceFilter=filters.get("price");
-			typeFilter=filters.get("type");
-		
-		
-			//split price to 2 section lowValuePrice and highValuePrice
-			if(!priceFilter.equals("None"))
-			{	
-				String [] tmp = priceFilter.split("-");
-				int lastIndex=tmp[1].length()-1;
-				lowValuePrice=Integer.parseInt(tmp[0]);
-				highValuePrice=Integer.parseInt(tmp[1].substring(0,lastIndex));
+			int lowValuePrice = 0, highValuePrice = 0;
+			String colorFilter, priceFilter, typeFilter;
+			String query;
+
+			// get Filters from HashMap
+			colorFilter = filters.get("color");
+			priceFilter = filters.get("price");
+			typeFilter = filters.get("type");
+
+			// split price to 2 section lowValuePrice and highValuePrice
+			if (!priceFilter.equals("None")) {
+				String[] tmp = priceFilter.split("-");
+				int lastIndex = tmp[1].length() - 1;
+				lowValuePrice = Integer.parseInt(tmp[0]);
+				highValuePrice = Integer.parseInt(tmp[1].substring(0, lastIndex));
 			}
-		
-		
+
 			// query of color + price + filter
-			if(!colorFilter.equals("None") && !priceFilter.equals("None") && !typeFilter.equals("None") ) {
-				query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"' AND price > "+ lowValuePrice +" AND price<"+highValuePrice +" AND itemType = '"+typeFilter+"' ;";
+			if (!colorFilter.equals("None") && !priceFilter.equals("None") && !typeFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE dominateColor = '" + colorFilter + "' AND price > "
+						+ lowValuePrice + " AND price<" + highValuePrice + " AND itemType = '" + typeFilter + "' ;";
 			}
 			// color + price
-			else if(!colorFilter.equals("None") && !priceFilter.equals("None")) {
-	    		query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"' AND price > "+ lowValuePrice +" AND price<"+highValuePrice +";";
-	    	}
-			//color + type
-	    	else if (!colorFilter.equals("None") && !typeFilter.equals("None") ) {
-	    		query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"' AND itemType = '"+typeFilter+"' ;";
-	    	}
-			//price + type
-	    	else if(!priceFilter.equals("None") && !typeFilter.equals("None") ) {
-	    		 query = "SELECT * FROM zerli.product WHERE price > "+ lowValuePrice +" AND price<"+highValuePrice +" AND itemType = '"+typeFilter+"' ;";
-	    	}
-			//color
-	    	else if(!colorFilter.equals("None")) {
-	    		query = "SELECT * FROM zerli.product WHERE dominateColor = '"+ colorFilter +"';";
-	    	}
-			//price
-	    	else if(!priceFilter.equals("None")) {
-	    		query = "SELECT * FROM zerli.product WHERE  price > "+ lowValuePrice +" AND price<"+highValuePrice +";";
-	    	}
-			//type
-	    	else 
-	    		query = "SELECT * FROM zerli.product WHERE itemType = '"+typeFilter+"' ;";
-	    		
-	    	System.out.println(query);
-            
-            
+			else if (!colorFilter.equals("None") && !priceFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE dominateColor = '" + colorFilter + "' AND price > "
+						+ lowValuePrice + " AND price<" + highValuePrice + ";";
+			}
+			// color + type
+			else if (!colorFilter.equals("None") && !typeFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE dominateColor = '" + colorFilter + "' AND itemType = '"
+						+ typeFilter + "' ;";
+			}
+			// price + type
+			else if (!priceFilter.equals("None") && !typeFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE price > " + lowValuePrice + " AND price<" + highValuePrice
+						+ " AND itemType = '" + typeFilter + "' ;";
+			}
+			// color
+			else if (!colorFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE dominateColor = '" + colorFilter + "';";
+			}
+			// price
+			else if (!priceFilter.equals("None")) {
+				query = "SELECT * FROM zerli.product WHERE  price > " + lowValuePrice + " AND price<" + highValuePrice
+						+ ";";
+			}
+			// type
+			else
+				query = "SELECT * FROM zerli.product WHERE itemType = '" + typeFilter + "' ;";
+
+			System.out.println(query);
+
 			Statement stmt;
 			try {
+
 			    	stmt = con.createStatement();
 			    	ResultSet rs = stmt.executeQuery(query);
 			    	while (rs.next()) {
@@ -572,21 +579,22 @@ public class ServerQuaries {
 			
 			    	if(products.size()==0)
 					throw new SQLException();
-			    	obj.setInformation(products);
-			    	rs.close();
-			    } catch (SQLException e) {
-			    	e.printStackTrace();
-			    	obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
-			    	return;
-			    }
-			    	obj.setResponse(Response.GET_DATA_PRODUCTS_BY_FILTER);
+				obj.setInformation(products);
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
+				return;
 			}
-		else
+			obj.setResponse(Response.GET_DATA_PRODUCTS_BY_FILTER);
+		} else
 			obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
-		}
+	}
+
 	/**
 	 * this method is getting the colors for the catalog screen for choosing
 	 * dominate color for filtering
+	 * 
 	 * @param obj
 	 * @param con
 	 */
@@ -594,38 +602,34 @@ public class ServerQuaries {
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs;
 			Statement stmt;
-			List<String>colors=new ArrayList<>();
+			List<String> colors = new ArrayList<>();
 			/**
 			 * Distinct query to getting colors from product table
 			 */
-			String query="SELECT DISTINCT dominateColor FROM zerli.product";
+			String query = "SELECT DISTINCT dominateColor FROM zerli.product";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-				
-				while(rs.next()) {
-					colors.add(rs.getString(1));/**add the color to the the arrayList*/
-					
-					
-					
+
+				while (rs.next()) {
+					colors.add(rs.getString(1));/** add the color to the the arrayList */
+
 				}
 				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			System.out.println(colors.toString());
-			if(colors.size()>0) {
-				
-			obj.setInformation(colors);
-			obj.setResponse(Response.FOUND_COLORS);
-			}
-			else {
+			if (colors.size() > 0) {
+
+				obj.setInformation(colors);
+				obj.setResponse(Response.FOUND_COLORS);
+			} else {
 				obj.setResponse(Response.DID_NOT_FIND_COLORS);
 			}
-			
-				
+
 		}
-		
+
 	}
 
 	/**
@@ -646,7 +650,7 @@ public class ServerQuaries {
 				Map<String,List<ProductInOrder>>productInOrderFinallCart=order.getItems();
 				
 				
-			String query=String.format("INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", null,order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
+			String query=String.format("INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", order.getOrderID(),order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
 			
 			try {
 				stmt = con.createStatement();
@@ -656,9 +660,7 @@ public class ServerQuaries {
 				for(String p:productInOrderFinallCart.keySet()) {
 					ProductInOrder pr=productInOrderFinallCart.get(p).get(i);
 					stmt = con.createStatement();
-
 					String query2=String.format("INSERT INTO zerli.productinorder(productID, orderID, nameOfproduct, price, backGroundColor, picture, quantity, itemType, dominateColor, cartID, productQuantityInOrder, nameOfItem) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",pr.getNameOfproduct(), order.getOrderID(),pr.getNameOfproduct(),pr.getPrice(),pr.getBackGroundColor(),pr.getImgSrc(),pr.getQuantity(),pr.getItemType(),pr.getDominateColor(),pr.getProductQuantityInCart(),pr.getName());
-
 					System.out.println(query2);
 					stmt.executeUpdate(query2);
 					i++;
@@ -707,7 +709,7 @@ public class ServerQuaries {
 					rs2 = stmt2.executeQuery(query1+rs.getString(1)+"'");
 					while(rs2.next()) {
 						
-						ProductInOrder newProduct=new ProductInOrder(rs2.getString(1),rs.getString(2),rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), rs2.getBoolean(12),rs.getDouble(13));
+						ProductInOrder newProduct=new ProductInOrder(rs2.getString(1),rs2.getString(2),rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), rs2.getBoolean(12),rs2.getDouble(13));
 						if(!products.containsKey(rs2.getString(3))) {
 							List<ProductInOrder>product=new ArrayList<>();
 							product.add(newProduct);
@@ -741,48 +743,124 @@ public class ServerQuaries {
 		}
 		
 	}
-
-		
-	
-
 	private static String getBranchId(User user, Connection con) {
 		ResultSet rs;
 		Statement stmt;
-		String branchId=null;
-		String getBranchID = "SELECT branchID FROM zerli.branchmanager WHERE branchmanagerID='"+user.getID()+"';";
+		String branchId = null;
+		String getBranchID = "SELECT branchID FROM zerli.branchmanager WHERE branchmanagerID='" + user.getID() + "';";
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(getBranchID);
 			rs.next();
-			branchId=rs.getString(1);
-			
+			branchId = rs.getString(1);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return branchId;
 	}
+
+	@SuppressWarnings("null")
+	public static void getPendingCustomersFromDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<Customer> PendingcustomersList = new ArrayList<Customer>();
+			ResultSet rs;
+			Statement stmt;
+			String getCustomers = "SELECT * FROM zerli.customer WHERE accountStatus ='PENDING_APPROVAL';"; // The query
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(getCustomers);
+				while (rs.next()) {
+					// print all the customers to check if we get them right
+					System.out.println(rs.getString(1));
+					System.out.println(rs.getString(2));
+					System.out.println(rs.getString(3));
+					System.out.println(rs.getString(4));
+					System.out.println(rs.getString(5));
+					System.out.println(AccountStatus.valueOf(rs.getString(6)));
+					System.out.println(rs.getBoolean(7));
+					System.out.println(rs.getString(8));
+					System.out.println(rs.getBoolean(9));
+					System.out.println(new CreditCard(rs.getString(10), null, null));
+
+					// create new customer with the details from DB
+					Customer customer = new Customer(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+							rs.getString(5), AccountStatus.valueOf(rs.getString(6)), rs.getBoolean(7), rs.getString(8),
+							rs.getBoolean(9), new CreditCard(rs.getString(10), null, null));
+					// add to the pending customers list
+					PendingcustomersList.add(customer);
+				}
+				rs.close();
+				obj.setInformation(PendingcustomersList);
+				obj.setResponse(Response.GET_PENDING_CUSTOMERS_SUCCESS);
+				System.out.println(PendingcustomersList);
+				return;
+			} catch (SQLException e) {
+				obj.setResponse(Response.GET_PENDING_CUSTOMERS_FAILED);
+				return;
+			}
+		}
+		obj.setResponse(Response.GET_PENDING_CUSTOMERS_FAILED);
+	}
+
+	public static void getCreditCardsFromDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			ResultSet rs;
+			Statement stmt;
+			List<String> cardsNumbers = new ArrayList<>();
+			String getCards = "SELECT creditCardNumber FROM zerli.creditcards;";
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(getCards);
+				while (rs.next()) {
+					String card = rs.getString(1);
+					cardsNumbers.add(card);
+				}
+				rs.close();
+				obj.setInformation(cardsNumbers);
+				obj.setResponse(Response.GET_CREDIT_CARDS_SUCCESS);
+//				System.out.println(cardsNumbers);
+				return;
+			} catch (SQLException e) {
+				obj.setResponse(Response.GET_CREDIT_CARDS_FAILED);
+				return;
+			}
+		}
+		obj.setResponse(Response.GET_CREDIT_CARDS_FAILED);
+	}
+
+	public static void approveNewCustomerToDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			Customer customer = (Customer) obj.getInformation(); // get the customer updated
+			String approveCuStomer = "UPDATE zerli.customer SET accountStatus= 'CONFIRMED', balance= '0', isNewCustomer= '1', creditCardNumber="
+					+ customer.getCreditCard().getCreditCardNumber() + " WHERE customerID=" + customer.getID() + ";";
+			String addCreditCard = String.format(
+					"INSERT INTO zerli.creditcards(creditCardNumber, creditCardCvvCode, creditCardDateOfExpiration) VALUES ('%s','%s', '%s');",
+					customer.getCreditCard().getCreditCardNumber(), customer.getCreditCard().getCreditCardCvvCode(),
+					customer.getCreditCard().getCreditCardDateOfExpiration());
+			System.out.println(addCreditCard); // check string
+			try {
+				PreparedStatement pstmt1 = con.prepareStatement(approveCuStomer);
+				PreparedStatement pstmt2 = con.prepareStatement(addCreditCard);
+				if (pstmt1.executeUpdate() == 0) { // check if the query failed
+					System.out.println("query 1 failed");
+					obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
+					return;
+				} else if (pstmt2.executeUpdate() == 0) { // check if the query failed
+					System.out.println("query 2 failed");
+					obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
+					return;
+				} else {
+					obj.setResponse(Response.APPROVE_NEW_CUSTOMER_SUCCESS);
+					return;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
+				return;
+			}
+		} else {
+			obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
+		}
+	}
 }
-//	public static void GetProductFromDB(TransmissionPack obj, Connection con) {
-//		if (obj instanceof TransmissionPack) {
-//			List<Product> list = new ArrayList<>();
-//			Statement stmt;
-//			try {
-//				stmt = con.createStatement();
-//				ResultSet rs = stmt.executeQuery("SELECT * FROM product;");
-//				while (rs.next()) {
-//					Product product = new Product(rs.getString(1), rs.getString(2), Double.parseDouble(rs.getString(3)), rs.getString(4),rs.getString(5));
-//							
-//					list.add(product);
-//				}
-//
-//				obj.setInformation(list);
-//				rs.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//				obj.setResponse(Response.DIDNT_FOUND_ORDERS);
-//				return;
-//			}
-//			obj.setResponse(Response.FOUND_ORDERS);
-//		} else
-//			obj.setResponse(Response.DIDNT_FOUND_ORDERS);
-//	}

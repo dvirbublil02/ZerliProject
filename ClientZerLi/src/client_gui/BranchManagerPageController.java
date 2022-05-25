@@ -86,8 +86,8 @@ public class BranchManagerPageController {
     void requestManagment(ActionEvent event) throws Exception {
     	((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
-		BranchManagerOrderManagementController requestManagemetPage = new BranchManagerOrderManagementController();
-		requestManagemetPage.start(primaryStage);
+		BranchManagerOrderManagementController branchManagerOrderManagementController = new BranchManagerOrderManagementController();
+		branchManagerOrderManagementController.start(primaryStage);
     }
 
     @FXML
