@@ -17,6 +17,10 @@ import server_gui.ServerScreenController;
 public class DBController {
 	private static Connection con;
 
+	public static Connection getCon() {
+		return con;
+	}
+
 	/**
 	 * In this method we parsing the TransmissionPack that we got from the client by
 	 * the server. (by calling the MissionAnalyze)
@@ -28,8 +32,9 @@ public class DBController {
 	}
 
 	/**
-	 * In this method we connecting the host to the DB .
-	 *  the method returning if the connection success or not (true/false)
+	 * In this method we connecting the host to the DB . the method returning if the
+	 * connection success or not (true/false)
+	 * 
 	 * @param data
 	 * @return
 	 */

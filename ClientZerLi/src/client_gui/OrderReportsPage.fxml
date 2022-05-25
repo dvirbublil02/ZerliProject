@@ -127,7 +127,7 @@
                   <VBox prefHeight="0.0" prefWidth="308.0" VBox.vgrow="ALWAYS" />
                   <HBox alignment="CENTER" prefHeight="62.0" prefWidth="304.0">
                      <children>
-                        <Button fx:id="BackBtn" mnemonicParsing="false" onAction="#logOut" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Back">
+                        <Button fx:id="BackBtn" mnemonicParsing="false" onAction="#back" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Back">
                            <font>
                               <Font name="Candara Bold" size="18.0" />
                            </font>
@@ -206,7 +206,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="57.0" prefWidth="692.0">
                            <children>
-                              <Label text="Zerli Karmiel - July's orders based on products" textFill="#434343">
+                              <Label fx:id="reportTitle" text="Zerli Karmiel - July's orders based on products" textFill="#434343">
                                  <font>
                                     <Font name="Cambria Bold" size="18.0" />
                                  </font>
@@ -240,7 +240,7 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="44.0" prefWidth="244.0" style="-fx-background-color: #66CDAA;">
                                        <children>
-                                          <Label text="Custom Product Sales ">
+                                          <Label text="Bouqet Product Sales ">
                                              <font>
                                                 <Font name="Cambria" size="16.0" />
                                              </font>
@@ -258,7 +258,7 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="44.0" prefWidth="244.0" style="-fx-background-color: #66CDAA;">
                                        <children>
-                                          <Label text=" Regular Product Sales ">
+                                          <Label text="Single Product Sales ">
                                              <font>
                                                 <Font name="Cambria" size="16.0" />
                                              </font>
@@ -285,7 +285,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="72.0" prefWidth="186.0" style="-fx-background-color: #E0FFFF;">
                                        <children>
-                                          <Label text="Bazil plant">
+                                          <Label fx:id="bestSeller" text="bestSeller">
                                              <font>
                                                 <Font name="Cambria Bold Italic" size="14.0" />
                                              </font>
@@ -303,7 +303,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="95.0" prefWidth="186.0" style="-fx-background-color: #E0FFFF;">
                                        <children>
-                                          <Label text="Holiday Boquet">
+                                          <Label fx:id="worstSeller" text="worstSeller">
                                              <font>
                                                 <Font name="Cambria Bold Italic" size="14.0" />
                                              </font>

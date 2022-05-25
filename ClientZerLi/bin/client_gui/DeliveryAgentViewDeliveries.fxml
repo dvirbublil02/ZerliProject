@@ -181,7 +181,7 @@
                                     </HBox>
                                     <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                                        <children>
-                                          <Label fx:id="branchNameLbl" text="Delivey Agent of" textFill="#0a9451">
+                                          <Label fx:id="branchNameLbl" text="Delivey Agent - Branch" textFill="#0a9451">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
