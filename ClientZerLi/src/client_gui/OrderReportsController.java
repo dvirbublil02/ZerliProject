@@ -68,11 +68,12 @@ public class OrderReportsController implements Initializable {
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		System.out.println("111111111111111");
 		ObservableList<PieChart.Data> pieChartData = null;
 		ObservableList<PieChart.Data> pieChartData2 = null;
 		reportOnList=ReportHandleController.getOrdersReportOnListMonth();
 		insertTheOrdersReportDetails(pieChartData, pieChartData2);
-
+		System.out.println("222222222222");
 	}
 
 	private void insertTheOrdersReportDetails(ObservableList<PieChart.Data> pieChartData,
