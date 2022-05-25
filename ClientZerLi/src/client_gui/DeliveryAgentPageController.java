@@ -34,7 +34,7 @@ public class DeliveryAgentPageController {
     private Label userStatus;
 
     @FXML
-    private Button viewDeliviriesBtn;
+    private Button viewDeliveriesBtn;
 
     @FXML
     private Label welcomeBackUserName;
@@ -42,9 +42,9 @@ public class DeliveryAgentPageController {
    
     @FXML
     public void start(Stage stage) throws IOException {
-    	Parent root = FXMLLoader.load(getClass().getResource("/client_gui/NetworkManagerPage.fxml"));
+    	Parent root = FXMLLoader.load(getClass().getResource("/client_gui/DeliveryAgentPage.fxml"));
     	Scene scene = new Scene(root);
-    	stage.setTitle("Network Manager Menu");
+    	stage.setTitle("Delivery Agent Menu");
     	stage.setScene(scene);
     	stage.show();
     }	
@@ -58,7 +58,7 @@ public class DeliveryAgentPageController {
     }
 
 	@FXML
-	void logOut(ActionEvent event) throws Exception {
+	void LogOut(ActionEvent event) throws Exception {
 		TransmissionPack tp = new TransmissionPack(Mission.USER_LOGOUT, null, ClientController.user);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();

@@ -194,7 +194,7 @@
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                                              <children>
-                                                <Button fx:id="viewDeliviriesBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#ViewDeliveries" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="View Deliveries" textFill="WHITE">
+                                                <Button fx:id="viewDeliveriesBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#ViewDeliveries" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="View Deliveries" textFill="WHITE">
                                                    <font>
                                                       <Font name="Calibri Bold Italic" size="14.0" />
                                                    </font>

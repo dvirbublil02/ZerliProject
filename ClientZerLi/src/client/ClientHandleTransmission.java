@@ -17,6 +17,7 @@ import java.util.Map;
 import client_gui.BranchManagerPageController;
 import client_gui.CartPageController;
 import client_gui.CustomerPageController;
+import client_gui.DeliveryAgentPageController;
 import client_gui.LoginController;
 import client_gui.NetworkManagerPageController;
 import communication.Mission;
@@ -301,21 +302,17 @@ public class ClientHandleTransmission {
 			BranchManagerPageController menu = new BranchManagerPageController();
 			menu.start(primaryStage);
 			break;
-
-//			CustomerPageController menu = new CustomerPageController();
-//			menu.start(primaryStage);
-//			break;
 		}
 //		case "Customer Service": {
 //			CustomerServicePageController menu = new CustomerServiceController();
 //			menu.start(primaryStage);
 //			break;
 //		}
-//		case "Delivery Agent": {
-//			DeliveryAgentPageController menu = new DeliveryAgentPageController();
-//			menu.start(primaryStage);
-//			break;
-//		}
+		case "Delivery Agent": {
+			DeliveryAgentPageController menu = new DeliveryAgentPageController();
+			menu.start(primaryStage);
+			break;
+		}
 //		case "Marketing Worker": {
 //			MarketingWorkerPageController menu = new MarketingWorkerPageController();
 //			menu.start(primaryStage);

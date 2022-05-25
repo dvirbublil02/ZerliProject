@@ -3,25 +3,30 @@ package entities_general;
 import java.util.List;
 
 import entities_catalog.ProductInOrder;
+import enums.DeliveryStatus;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
 
 public class Deliveries extends Order {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	String deliveryID, orderID, recieverName, price, arrivedDate, deliveryStatus;
-
+	private	String deliveryID, orderID, recieverName, price, arrivedDate;
+	private	ComboBox<DeliveryStatus> deliveryStatus = new ComboBox<>();
 	
 
 	public Deliveries(String orderID, String customerID, String branchID, String price, String greetingCard,
 			String orderDate, String expectedDelivery, List<ProductInOrder> items, String deliveryID, String orderID2,
-			String recieverName, String price2, String arrivedDate, String deliveryStatus) {
+			String recieverName, String price2, String arrivedDate, ComboBox<DeliveryStatus> deliveryStatus) {
 		super(orderID, customerID, branchID, price, greetingCard, orderDate, expectedDelivery, items);
 		this.deliveryID = deliveryID;
-		orderID = orderID2;
+		this.orderID = orderID2;
 		this.recieverName = recieverName;
-		price = price2;
+		this.price = price2;
 		this.arrivedDate = arrivedDate;
+		ObservableList<DeliveryStatus> list=FXCollections.observableArrayList(DeliveryStatus.READY_TO_GO, DeliveryStatus.ON_THE_WAY, DeliveryStatus.CANCELED , DeliveryStatus.ARRIVED);
 		this.deliveryStatus = deliveryStatus;
 	}
 
@@ -65,11 +70,11 @@ public class Deliveries extends Order {
 		this.arrivedDate = arrivedDate;
 	}
 
-	public String getDeliveryStatus() {
+	public ComboBox<DeliveryStatus> getDeliveryStatus() {
 		return deliveryStatus;
 	}
 
-	public void setDeliveryStatus(String deliveryStatus) {
+	public void setDeliveryStatus(ComboBox<DeliveryStatus> deliveryStatus) {
 		this.deliveryStatus = deliveryStatus;
 	}
 
