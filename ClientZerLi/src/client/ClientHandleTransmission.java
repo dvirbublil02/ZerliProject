@@ -425,14 +425,19 @@ public class ClientHandleTransmission {
 	 * @return
 	 */
 	public static Response updateComplaints(List<ComplaintPreview> complaintsUpdate) {
+		
 		List<ComplaintPreview> complainPreview =complaintsUpdate;
 		List<Complaint>complain=new ArrayList<>();
 		for(ComplaintPreview c:complainPreview) {
 			Complaint cp=new Complaint(c.getComplaintID(),c.getCustomerID(),c.getOrderID() , c.getCustomerServiceID(), c.getDescription(), c.getBranchID(), c.getComplaintOpening(), c.getTreatmentUntil(), c.getComplainState(), c.getComplaintsStatus());
 			cp.setComplainState(c.getStatus().getValue());
+			System.out.println(c.getRefoundAmount());
+			if(c.getRefoundAmount()!=null) {
 			cp.setRefoundAmount(c.getRefoundAmount());
+			}
 			complain.add(cp);
 		}
+		
 		TransmissionPack tp = new TransmissionPack(Mission.UPDATE_COMPLAINTS, null, complain);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();

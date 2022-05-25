@@ -180,14 +180,15 @@
                                        <children>
                                           <TableView fx:id="Complaints" prefHeight="428.0" prefWidth="704.0">
                                             <columns>
-                                                <TableColumn fx:id="showCol" prefWidth="100.0" text="description" />
-                                              <TableColumn fx:id="complaintIDCol" prefWidth="108.0" text="complaintID" />
-                                              <TableColumn fx:id="customerIDCol" prefWidth="75.0" text="customerID" />
-                                             <TableColumn fx:id="orderIDCol" prefWidth="57.0" text="orderID" />
+                                                <TableColumn fx:id="showCol" prefWidth="85.0" text="description" />
+                                              <TableColumn fx:id="complaintIDCol" prefWidth="76.0" text="complaintID" />
+                                              <TableColumn fx:id="customerIDCol" prefWidth="71.0" text="customerID" />
+                                             <TableColumn fx:id="orderIDCol" prefWidth="55.0" text="orderID" />
+                                             <TableColumn fx:id="branchIDCol" prefWidth="60.0" text="branchID" />
                                             
-                                                <TableColumn fx:id="complaintOpeningCol" prefWidth="119.0" text="complaintOpening" />
-                                                <TableColumn fx:id="treatmentUntilCol" minWidth="0.0" prefWidth="122.0" text="treatmentUntil" />
-                                                <TableColumn fx:id="statusCol" prefWidth="111.0" text="complainState" />
+                                                <TableColumn fx:id="complaintOpeningCol" prefWidth="124.0" text="complaintOpening" />
+                                                <TableColumn fx:id="treatmentUntilCol" minWidth="0.0" prefWidth="125.0" text="treatmentUntil" />
+                                                <TableColumn fx:id="statusCol" prefWidth="93.0" text="complainState" />
                                            
                                             </columns>
                                           </TableView>

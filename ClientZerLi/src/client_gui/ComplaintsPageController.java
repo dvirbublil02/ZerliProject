@@ -26,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
@@ -75,9 +76,13 @@ public class ComplaintsPageController implements Initializable {
 
 	@FXML
 	private TableColumn<ComplaintPreview, String> priceCol;
+	@FXML
+	private TableColumn<ComplaintPreview, String> branchIDCol;
 
 	@FXML
 	private TableColumn<ComplaintPreview, Button> showCol;
+	@FXML
+	private TableRow<ComplaintPreview> table;
 
 	@FXML
 	private TableColumn<ComplaintPreview, ComboBox<ComplaintsStatus>> statusCol;
@@ -146,6 +151,7 @@ public class ComplaintsPageController implements Initializable {
 
 		customerIDCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, String>("customerID"));
 		orderIDCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, String>("orderID"));
+		branchIDCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, String>("branchID"));
 
 		complaintOpeningCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, String>("complaintOpening"));
 		treatmentUntilCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, String>("treatmentUntil"));
@@ -158,16 +164,34 @@ public class ComplaintsPageController implements Initializable {
 		listView.addAll(ClientHandleTransmission.getComplaintsForCustomerService(ClientController.user.getID()));
 
 		Complaints.setItems(listView);
+		/**
+		 * this listener paint the complaint row in red if the complaint still opening after 24 hours
+		 */
+		Complaints.setRowFactory(tv -> new TableRow<ComplaintPreview>() {
+			@SuppressWarnings("unused")
+			@Override
+			protected void updateItem(ComplaintPreview item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || item.getComplaintsStatus() == ComplaintsStatus.STILL_GOT_TIME) {
+					setStyle("-fx-background-color: white;");
+				} else if (item.getComplaintsStatus() == ComplaintsStatus.DELAY) {
+					setStyle("-fx-background-color: red;");
+				}
 
+			}
+		});
 	}
+
 	/**
 	 * update event that send to the db all the complaints to update there status
+	 * 
 	 * @param event
 	 */
 	@FXML
 	void update(ActionEvent event) {
 		/**
-		 * check if the updated mission was finish and display the user feed back message with the specific details
+		 * check if the updated mission was finish and display the user feed back
+		 * message with the specific details
 		 */
 		if (ClientHandleTransmission
 				.updateComplaints(ComplaintsDataHandle.getComlaints()) == Response.COMPLAINTS_UPDATE_SUCCEED) {
@@ -179,4 +203,5 @@ public class ComplaintsPageController implements Initializable {
 		}
 
 	}
+
 }

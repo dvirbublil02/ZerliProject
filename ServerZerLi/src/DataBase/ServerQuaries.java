@@ -736,7 +736,8 @@ public class ServerQuaries {
 			Statement stmt;
 			List<Complaint> complaints = new ArrayList<>();
 
-			String query = "SELECT * FROM zerli.complaints WHERE customerserviceID='" + obj.getInformation() + "'";
+			String query = "SELECT * FROM zerli.complaints WHERE customerserviceID='" + obj.getInformation() + "' AND status='OPEN'";
+			System.out.println(query);
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
@@ -792,7 +793,7 @@ public class ServerQuaries {
 		// Try Class
 		try {
 
-			DateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			// parse method is used to parse
 			// the text from a string to
 			// produce the date
@@ -810,10 +811,10 @@ public class ServerQuaries {
 			e.printStackTrace();
 		}
 		if (difference_In_Days >= 1) {
-			System.out.println(ComplaintsStatus.DELAY);
+			
 			return ComplaintsStatus.DELAY;
 		}
-		System.out.println(ComplaintsStatus.STILL_GOT_TIME);
+		
 		return ComplaintsStatus.STILL_GOT_TIME;
 	}
 
@@ -845,7 +846,9 @@ public class ServerQuaries {
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs;
 			PreparedStatement pstmt, pstmt2, pstmt3;
+			System.out.println("here3->");
 			List<Complaint> complaintsToUpdate = (List<Complaint>) obj.getInformation();
+			System.out.println(obj.getInformation());
 			String updateSpecificRow = "UPDATE zerli.complaints SET status=? WHERE complaintID='";
 			for (Complaint c : complaintsToUpdate) {
 
@@ -853,7 +856,7 @@ public class ServerQuaries {
 
 					updateComlaint(con, updateSpecificRow, c);
 					System.out.println(c.getRefoundAmount());
-					if (!c.getRefoundAmount().isEmpty()) {
+					if (c.getRefoundAmount()!=null) {
 						insertNewRefund(con, c);
 						updateRefundInSpecificCustomer(con, c);
 
@@ -879,6 +882,7 @@ public class ServerQuaries {
 	 * @throws SQLException
 	 */
 	private static void updateComlaint(Connection con, String updateSpecificRow, Complaint c) throws SQLException {
+		System.out.println("here4->");
 		PreparedStatement pstmt;
 		pstmt = con.prepareStatement(updateSpecificRow + c.getComplaintID() + "'");
 		pstmt.setString(1, c.getComplainState().name());

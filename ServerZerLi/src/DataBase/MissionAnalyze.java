@@ -80,6 +80,7 @@ public class MissionAnalyze {
 			break;
 		}
 		case UPDATE_COMPLAINTS:{
+			System.out.println("here2->");
 			ServerQuaries.updateComplaints(obj, con);
 			break;
 		}
