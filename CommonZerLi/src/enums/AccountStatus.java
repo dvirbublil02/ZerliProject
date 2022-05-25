@@ -9,6 +9,6 @@ public enum AccountStatus {
 	PENDING_APPROVAL("PENDING_APPROVAL", 1),
 	FROZEN("FROZEN", 2);
 
-	AccountStatus(String string, final int serialNumber) {
+	private AccountStatus(String string, final int serialNumber) {
 	}
 }

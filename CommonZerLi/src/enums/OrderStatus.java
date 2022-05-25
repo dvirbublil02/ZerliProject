@@ -9,6 +9,6 @@ public enum OrderStatus {
 	CANCEL("CANCEL",2),
 	ARRIVED("ARRIVED",3);
 
-	OrderStatus(String string, int i) {
+	private OrderStatus(String string, int i) {
 	}
 }
