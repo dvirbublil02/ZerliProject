@@ -1,41 +1,59 @@
 package client_gui;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
+import client.OrderHandleController;
 import entities_catalog.ProductInOrder;
+import entities_general.OrderPreview;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+/**
+ * this class is presenting to the branch manager the relevant products in order 
+ * @author Mor Ben Haim
+ * @author Dvir Bulil
+ *
+ */
 
-public class BranchManagerOrderDetailsController{
-
-    @FXML
-    private TableView<?> Orders;
-
-    @FXML
-    private TableColumn<?, ?> branchIDCol;
-
-    @FXML
-    private TableColumn<?, ?> nameCol;
+public class BranchManagerOrderDetailsController implements Initializable{
 
     @FXML
-    private TableColumn<?, ?> priceCol;
+    private TableView<ProductInOrder> Orders;
 
     @FXML
-    private TableColumn<?, ?> productIDCol;
+    private TableColumn<ProductInOrder, String> branchIDCol;
 
     @FXML
-    private TableColumn<?, ?> quantityInCartCol;
+    private TableColumn<ProductInOrder, String> nameCol;
 
     @FXML
-    private TableColumn<?, ?> totalquantityCol;
-    public static List<ProductInOrder>list=new ArrayList<>();;
+    private TableColumn<ProductInOrder, Double> priceCol;
+
+    @FXML
+    private TableColumn<ProductInOrder, String> productIDCol;
+
+    @FXML
+    private TableColumn<ProductInOrder, Double> quantityInCartCol;
+
+    @FXML
+    private TableColumn<ProductInOrder, Double> totalquantityCol;
+    
+    @SuppressWarnings("unused")
+	private ObservableList<ProductInOrder> listView = FXCollections.observableArrayList();
 
 
 
@@ -45,6 +63,34 @@ public class BranchManagerOrderDetailsController{
 		primaryStage.setTitle("Order Details");
 		primaryStage.setScene(scene);
 		primaryStage.show();		
+	}
+
+
+	/**
+	 * this method is initialize the relevant products in the order details
+	 */
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		productIDCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, String>("iD"));
+		nameCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, String>("name"));
+		branchIDCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, String>("cartID"));//need to change the column name from cartID
+		totalquantityCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("quantity"));
+		quantityInCartCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("productQuantityInOrder"));
+		priceCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("price"));
+		OrderPreview order=OrderHandleController.getOrder();
+		System.out.println(order.getItems());
+		List<ProductInOrder>products=new ArrayList<>();
+		/**
+		 *adding relevant product to the observable table 
+		 */
+		for(String key:order.getItems().keySet()) {
+			products.addAll(order.getItems().get(key));
+		}
+		
+
+			listView.addAll(products);
+			Orders.setItems(listView);
+		
 	}
 
 }

@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Random;
+import java.util.UUID;
 
 import communication.Response;
 import communication.TransmissionPack;
@@ -28,9 +30,7 @@ import entities_users.ServiceExpert;
 import entities_users.ShopWorker;
 import entities_users.User;
 import enums.AccountStatus;
-
 import enums.OrderStatus;
-
 import enums.ShopWorkerActivity;
 
 
@@ -40,6 +40,9 @@ import enums.ShopWorkerActivity;
  *
  */
 public class ServerQuaries {
+	private static  Random rndOrderNum = new Random();
+    
+	
 
 	/**
 	 * In this method we Insert an order into the DB . (the order that we got from
@@ -633,24 +636,32 @@ public class ServerQuaries {
 	 */
 	@SuppressWarnings("null")
 	public static void addOrderInDB(TransmissionPack obj, Connection con) {
+		
+		
 		if (obj instanceof TransmissionPack) {
 			
 			Statement stmt=null;
 			if(obj.getInformation() instanceof Order) {
 				Order order=(Order)obj.getInformation();
-				order.getOrderID();
-			
-			String query=String.format("INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", order.getOrderID(),order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
+				Map<String,List<ProductInOrder>>productInOrderFinallCart=order.getItems();
+				
+				
+			String query=String.format("INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", null,order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
 			
 			try {
 				stmt = con.createStatement();
 				System.out.println(query);
 				stmt.executeUpdate(query);
-				for(ProductInOrder p:order.getItems()) {
+				int i=0;
+				for(String p:productInOrderFinallCart.keySet()) {
+					ProductInOrder pr=productInOrderFinallCart.get(p).get(i);
 					stmt = con.createStatement();
-					String query2=String.format("INSERT INTO zerli.productinorder(productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, cartID, productQuantityInOrder) VALUES('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s','%s','%s');", p.getID(),p.getName(),p.getPrice(),p.getBackGroundColor(),p.getImgSrc(),p.getQuantity(),p.getItemType(),p.getDominateColor(),p.getProductQuantityInCart());
+
+					String query2=String.format("INSERT INTO zerli.productinorder(productID, orderID, nameOfproduct, price, backGroundColor, picture, quantity, itemType, dominateColor, cartID, productQuantityInOrder, nameOfItem) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",pr.getNameOfproduct(), order.getOrderID(),pr.getNameOfproduct(),pr.getPrice(),pr.getBackGroundColor(),pr.getImgSrc(),pr.getQuantity(),pr.getItemType(),pr.getDominateColor(),pr.getProductQuantityInCart(),pr.getName());
+
 					System.out.println(query2);
 					stmt.executeUpdate(query2);
+					i++;
 				}
 				
 			} catch (SQLException e) {
@@ -677,23 +688,47 @@ public class ServerQuaries {
 	public static void getOrders(TransmissionPack obj, Connection con) {
 		System.out.println(6);
 		if (obj instanceof TransmissionPack) {
-			ResultSet rs;
-			Statement stmt;
+			ResultSet rs,rs2;
+			Statement stmt,stmt2;
+
 			List<Order>orders=new ArrayList<>();
+			
 			String query="SELECT * FROM zerli.order WHERE status='PENDING'";
+			String query1="SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while(rs.next()) {
-					System.out.println(rs.toString());
-					System.out.printf(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getString(4)+" "+rs.getString(5)+" "+OrderStatus.valueOf(rs.getString(6))+" "+rs.getTimestamp(7).toString()+" "+rs.getTimestamp(8));
-					Order order=new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getTimestamp(7).toString(),rs.getTimestamp(8).toString(),new ArrayList<ProductInOrder>());
+					
+					Map<String,List<ProductInOrder>>products=new HashMap<>();
+					
+					stmt2 = con.createStatement();
+					
+					rs2 = stmt2.executeQuery(query1+rs.getString(1)+"'");
+					while(rs2.next()) {
+						
+						ProductInOrder newProduct=new ProductInOrder(rs2.getString(1),rs.getString(2),rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), rs2.getBoolean(12),rs.getDouble(13));
+						if(!products.containsKey(rs2.getString(3))) {
+							List<ProductInOrder>product=new ArrayList<>();
+							product.add(newProduct);
+							products.put(rs2.getString(3), product);
+						}else {
+							products.get(rs2.getString(3)).add(newProduct);
+						}
+						
+					}
+					rs2.close();
+					
+					
+					Order order=new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getDouble(4),rs.getString(5),rs.getTimestamp(7).toString(),rs.getTimestamp(8).toString(),products);
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
 					
 					orders.add(order);
 				}
+		
+				
 				rs.close();
-				System.out.println(orders);
+//				System.out.println(orders);
 				if(orders.size()>0) {
 					obj.setResponse(Response.FOUND_ORDER);
 					obj.setInformation(orders);

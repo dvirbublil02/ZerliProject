@@ -2,6 +2,7 @@ package entities_general;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
@@ -38,7 +39,7 @@ public class Order implements Serializable {
 	/**
 	 * Every order has a price.
 	 */
-	private String price; 
+	private double price; 
 	/**
 	 * Every order can have a greeting card if the customer wants.
 	 */
@@ -58,7 +59,7 @@ public class Order implements Serializable {
 	/**
 	 * The list of items in the order
 	 */
-	private List<ProductInOrder> items;
+	private Map<String,List<ProductInOrder>> items;
 	/**
 	 * @param orderID
 	 * @param customerID
@@ -70,8 +71,8 @@ public class Order implements Serializable {
 	 * @param expectedDelivery
 	 * @param items
 	 */
-	public Order(String orderID, String customerID, String branchID, String price, String greetingCard,
-			String orderDate, String expectedDelivery, List<ProductInOrder> items) {
+	public Order(String orderID, String customerID, String branchID, double price, String greetingCard,
+			String orderDate, String expectedDelivery, Map<String,List<ProductInOrder>> items) {
 		super();
 		this.orderID = orderID;
 		this.customerID = customerID;
@@ -109,11 +110,11 @@ public class Order implements Serializable {
 		this.branchID = branchID;
 	}
 
-	public String getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
@@ -149,11 +150,11 @@ public class Order implements Serializable {
 		this.expectedDelivery = expectedDelivery;
 	}
 
-	public List<ProductInOrder> getItems() {
+	public Map<String,List<ProductInOrder>> getItems() {
 		return items;
 	}
 
-	public void setItems(List<ProductInOrder> items) {
+	public void setItems(Map<String,List<ProductInOrder>> items) {
 		this.items = items;
 	}
 

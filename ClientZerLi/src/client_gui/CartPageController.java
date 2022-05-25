@@ -78,7 +78,10 @@ public class CartPageController implements Initializable {
     @FXML
     private Label priceLabel;
 
-    @FXML
+  
+
+
+	@FXML
     private TableColumn<OrderCustomCartPreview, Button> showCustomTbl;
 
     @FXML

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import client_gui.BranchManagerPageController;
 import client_gui.CartPageController;
@@ -30,6 +31,8 @@ import entities_users.BranchManager;
 import entities_users.Customer;
 import entities_users.ShopWorker;
 import entities_users.User;
+import enums.BranchNames;
+import enums.OrderStatus;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -41,7 +44,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class ClientHandleTransmission {
-
+	
 	/**
 	 * In this method we are creating TransmissionPack that will contain ADDORDER
 	 * mission ,and the information (order)- to insert into the DB, that will be
@@ -249,13 +252,19 @@ public class ClientHandleTransmission {
 	 * this method is adding the pending order of the specific customer
 	 * the order is waiting for approve from the branch manager
 	 */
-	public static void addOrder() {
-		List<ProductInOrder>in=new ArrayList<>();
 
-		//in.add(new ProductInOrder("8", "rose", 23.3, "black","path", 4.0, "bouqet", "red","3",5.0,false,0.0));
+
+	public static void addOrder(BranchNames branchName,String greetingCard) {
+	
+		Map<String,List<ProductInOrder>> productInOrderFinallCart=OrderHandleController.getCustomProductInOrder();
+		
+		Order order =new Order(null,ClientController.user.getID(),branchName.name(),OrderHandleController.getTotalPrice(),
+				greetingCard,OrderStatus.PENDING.name(),LocalDateTime.now().toString().toString(),productInOrderFinallCart);
 
 		
-		Order order=new Order("9", "3", "4","23.3","happy",LocalDateTime.now().toString(),LocalDateTime.now().toString().toString(),in);
+	   
+		productInOrderFinallCart.put("RegularProducts", OrderHandleController.getProductInOrder());
+
 		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
 		ClientUI.chat.accept(tp);
 	}

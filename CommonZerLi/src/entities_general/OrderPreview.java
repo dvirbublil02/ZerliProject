@@ -1,6 +1,7 @@
 package entities_general;
 
 import java.util.List;
+import java.util.Map;
 
 import entities_catalog.ProductInOrder;
 import enums.OrderStatus;
@@ -26,8 +27,8 @@ public class OrderPreview extends Order {
 
 	private static final long serialVersionUID = 1L;
 
-	public OrderPreview(String orderID, String customerID, String branchID, String price, String greetingCard,
-			String orderDate, String expectedDelivery, List<ProductInOrder> items) {
+	public OrderPreview(String orderID, String customerID, String branchID, double price, String greetingCard,
+			String orderDate, String expectedDelivery, Map<String,List<ProductInOrder>> items) {
 		super(orderID, customerID, branchID, price, greetingCard, orderDate, expectedDelivery, items);
 		ObservableList<OrderStatus> list1=FXCollections.observableArrayList(OrderStatus.APPROVE,OrderStatus.CANCEL,OrderStatus.PENDING);
 		this.comboStatus.setItems(list1);
