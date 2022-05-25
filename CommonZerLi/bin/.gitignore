@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 /entities_general/
 /entities_reports/
 /entities_catalog/
 /enums/
-=======
->>>>>>> branch 'AddNewCustomer-Fix' of https://github.com/dvirbublil02/ZerliProject.git
 /communication/
-<<<<<<< HEAD
-=======
-/entities_catalog/
-/entities_general/
-/entities_reports/
->>>>>>> branch 'AddNewCustomer-Fix' of https://github.com/dvirbublil02/ZerliProject.git
+
 /entities_users/
-/enums/
+
