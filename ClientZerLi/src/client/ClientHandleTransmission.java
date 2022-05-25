@@ -27,9 +27,11 @@ import communication.TransmissionPack;
 import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
 import entities_general.CreditCard;
+import entities_general.CustomersPreview;
 import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
+import entities_general.WorkersPreview;
 import entities_users.BranchManager;
 import entities_users.Customer;
 import entities_users.ShopWorker;
@@ -435,9 +437,57 @@ public class ClientHandleTransmission {
 		ClientUI.chat.accept(tp);
 		tp= ClientUI.chat.getObj();
 		return (List<String>)tp.getInformation();
-			
+		
+	}
+	
+	public static List<Customer> getApprovedCustomers() {
+		TransmissionPack tp= new TransmissionPack(Mission.GET_APPROVED_CUSTOMERS,null,ClientController.user);
+		ClientUI.chat.accept(tp);//tp sent to server through accept method, there its going through mission analyze  
+		tp= ClientUI.chat.getObj();//the tp updated after the quarry and saved
+		if(tp.getResponse()==Response.CUSTOMER_ARRIVED)
+			return (List<Customer>) tp.getInformation();
+		else
+			return new ArrayList<Customer>();
 	}
 
+	public static boolean sendEditedCustomersFromBranchManager(ObservableList<CustomersPreview> customersListView) 
+	{//the method sends a list of Customers from the list of CustomerPreview it gets, with the updated information
+		List<Customer> customersToSendToDB= new ArrayList<>();//we can't send list of previewCustomers to DB so we create customers list
+		
+		for(CustomersPreview cp: customersListView)
+		{
+			customersToSendToDB.add(new Customer(cp.getID(), cp.getFirstName(), cp.getLastName(), cp.getEmail(), 
+			cp.getPhoneNumber(),cp.getAccountStatusCB().getValue(), cp.getIsLoggedIn(), cp.getBalance(), cp.getIsNewCustomer(), cp.getCreditCard()));
+		
+		}
+		TransmissionPack tp= new TransmissionPack(Mission.UPDATE_EDITED_CUSTOMERS,null,customersToSendToDB);
+		ClientUI.chat.accept(tp);
+		tp= ClientUI.chat.getObj();
+		if(tp.getResponse()==Response.CUSTOMER_EDITS_UPDATED)
+			return true;
+		else
+			 return false;
+	}
+
+	public static boolean sendEditedWorkersFromBranchManager(ObservableList<WorkersPreview> workersListView) 
+	{//the method sends a list of ShopWorkers from the list of WorkerPreview it gets, with the updated information
+		List<ShopWorker> workersToSendToDB= new ArrayList<>();//we can't send list of previewWorkers to DB so we create workers list
+		
+		for(WorkersPreview wp: workersListView)
+		{
+			workersToSendToDB.add(new ShopWorker(wp.getID(), wp.getFirstName(), wp.getLastName(), wp.getEmail(), 
+			wp.getPhoneNumber(),wp.getAccountStatus(), wp.getIsLoggedIn(),wp.getBranchID(),wp.getActivityStatusCB().getValue()));
+		
+		}
+		TransmissionPack tp= new TransmissionPack(Mission.UPDATE_EDITED_WORKERS,null,workersToSendToDB);
+		ClientUI.chat.accept(tp);
+		tp= ClientUI.chat.getObj();
+		if(tp.getResponse()==Response.WORKER_EDITS_UPDATED)
+			return true;
+		else
+			 return false;
+		
+	}
 }
 
 

@@ -863,4 +863,116 @@ public class ServerQuaries {
 			obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
 		}
 	}
+	public static void updateCustomersAfterEdit(TransmissionPack obj, Connection con) 
+	{//the method updates the customers that are in the list we got from obj's information
+		if(obj instanceof TransmissionPack)
+		{
+			PreparedStatement pstmt;
+			List<Customer> listAfterEdit=(ArrayList<Customer>) obj.getInformation();
+			try {
+				for(Customer c: listAfterEdit)
+				{
+					String getApprovedCustomers = "UPDATE zerli.customer SET accountStatus='"+c.getAccountStatus()+"' WHERE customerID='"+c.getID()+"';";
+					pstmt = con.prepareStatement(getApprovedCustomers);
+					pstmt.executeUpdate(getApprovedCustomers);
+				}
+				obj.setResponse(Response.CUSTOMER_EDITS_UPDATED);
+				return;
+			
+				}catch(SQLException e) {
+					obj.setResponse(Response.CUSTOMER_EDITS_FAILED);
+					obj.setInformation(null);
+					return;
+				}
+		}	
+		
+	}
+
+	public static void updateWorkersAfterEdit(TransmissionPack obj, Connection con) 
+	{
+		if(obj instanceof TransmissionPack)
+		{
+			PreparedStatement pstmt;
+			List<ShopWorker> listAfterEdit=(ArrayList<ShopWorker>) obj.getInformation();
+			try {
+				for(ShopWorker sw: listAfterEdit)
+				{
+					String getApprovedWorkers = "UPDATE zerli.shopworker SET acctivityStatus='"+sw.getActivityStatus()+"' WHERE shopworkerID='"+sw.getID()+"';";
+					System.out.println(getApprovedWorkers);
+					pstmt = con.prepareStatement(getApprovedWorkers);
+					pstmt.executeUpdate(getApprovedWorkers);
+				}
+				obj.setResponse(Response.WORKER_EDITS_UPDATED);
+				return;
+			
+				}catch(SQLException e) {
+					obj.setResponse(Response.WORKER_EDITS_FAILED);
+					obj.setInformation(null);
+					return;
+				}
+		}	
+	}
+	public static void GetCustomersFromDB(TransmissionPack obj, Connection con) {
+		//the method gets workers from the specific branch of the connected user(branch manager), from DB
+		if(obj instanceof TransmissionPack)
+		{
+			List<Customer> listOfCustomers= new ArrayList<>();
+			Statement stmt;
+			
+			try {
+				stmt = con.createStatement();
+				ResultSet rs;
+				String getApprovedCustomers = "SELECT * FROM zerli.customer WHERE accountStatus='CONFIRMED' OR accountStatus='FROZEN'";
+				rs = stmt.executeQuery(getApprovedCustomers);
+				
+				while (rs.next()) 
+				{
+					CreditCard cc= getCreditCard(rs.getString(10),con);
+					if(cc==null)
+					{
+						obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
+						obj.setInformation(null);
+						return;
+					}
+					Customer customer= new Customer(rs.getString(1),rs.getString(2),rs.getString(3),
+							rs.getString(4),rs.getString(5),(AccountStatus.valueOf(rs.getString(6))), 
+							rs.getBoolean(7), rs.getString(8),rs.getBoolean(9),cc);
+					
+					listOfCustomers.add(customer);
+				}
+				if(listOfCustomers.size()>0)
+				{
+					obj.setResponse(Response.CUSTOMER_ARRIVED);
+					obj.setInformation(listOfCustomers);//updating the mission info to the wanted list of customers
+				}
+				else
+				{
+					obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
+					obj.setInformation(null);
+				}
+				
+				rs.close();
+
+			}catch(SQLException e) {
+				obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
+				obj.setInformation(null);
+			}	
+		}
+	}
+	private static CreditCard getCreditCard(String cardNum, Connection con) {
+		ResultSet rs;
+		Statement stmt;
+		CreditCard cc=null;
+		String getCardDetails = "SELECT creditCardCvvCode,creditCardDateOfExpiration FROM zerli.creditcards WHERE creditCardNumber='"+cardNum+"';";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(getCardDetails);
+			rs.next();
+			cc= new CreditCard(cardNum,rs.getString(1),rs.getString(2));
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cc;
+	}
 }

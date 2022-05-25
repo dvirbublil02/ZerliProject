@@ -85,6 +85,19 @@ public class MissionAnalyze {
 			ServerQuaries.getCreditCardsFromDB(obj, con);
 			break;
 		}
+		case GET_APPROVED_CUSTOMERS:{
+			ServerQuaries.GetCustomersFromDB(obj, con);
+			break;
+		}
+		case UPDATE_EDITED_CUSTOMERS:{
+			ServerQuaries.updateCustomersAfterEdit(obj,con);
+			break;
+		}
+		
+		case UPDATE_EDITED_WORKERS:{
+			ServerQuaries.updateWorkersAfterEdit(obj,con);
+			break;
+		}
 		}
 
 	}
