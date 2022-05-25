@@ -1,9 +1,5 @@
 /client/
-<<<<<<< HEAD
+/entities/
+/javafx_images/
 /client_gui/
 /client_gui_prototype/
-/entities/
-=======
-/client_gui_prototype/
->>>>>>> branch 'branchManager-editCostumer' of https://github.com/dvirbublil02/ZerliProject.git
-/javafx_images/

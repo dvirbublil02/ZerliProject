@@ -2,6 +2,7 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,18 +125,16 @@ public class CatalogScreenController implements Initializable{
     private Button addToCustomBtn;
     @FXML
     private TextField customTextField;
-   
-
+    
     private String CURRENCY="₪";
     private Image imageCardTmp;
     private MyListenerCatalog myListener;
     private List<Product> itemInCatalog = new ArrayList<Product>();
-    private ObservableList<String> customType ;
     private ObservableList<String> colorFilter ;
     private ObservableList<String> priceFilter ;
     private ObservableList<String> typeFilter ;
-    private boolean firstTimeLoadAddtoCard=true;
     private static ProductInOrder productInOrder;
+    private int cartCounter=0;
     
     /**
      * 
@@ -192,7 +191,12 @@ public class CatalogScreenController implements Initializable{
 		//initialize setChosenItemCard
 		vboxAddToCustom.setVisible(false);
 		customTextField.setDisable(true);
-
+		
+		System.out.println("cartCounter->"+OrderHandleController.getCartCounter());
+		cartCounter=OrderHandleController.getCartCounter();
+		cartItemCounter.setText(""+cartCounter);
+		
+		
 		//filter ComboBox section - color , price , type 
 		colorFilter=FXCollections.observableArrayList("None");
 		colorFilter.addAll(ClientHandleTransmission.getColorsForFilter());
@@ -207,6 +211,7 @@ public class CatalogScreenController implements Initializable{
 		
     	//Close Button until first chosen of Product
     	addToCartBtn.setDisable(true);
+    	addToCustomBtn.setDisable(true);
     	
     	//change Add to button to Add to (Text)
     	customTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -248,15 +253,20 @@ public class CatalogScreenController implements Initializable{
 				public void onClickListener(Product item) {
 					
 					//open addToCart button first time 
-					if(firstTimeLoadAddtoCard)
-						addToCartBtn.setDisable(false);
+					addToCartBtn.setDisable(false);
+					addToCustomBtn.setDisable(false);
 					//load chosenCard and ProductInOrder that chosen
 					setChosenItemCard(item);
-					 productInOrder=new ProductInOrder(item.getID(),
-							 item.getName(),item.getPrice(),
-							 item.getbackGroundColor(),item.getImgSrc(),
-							 item.getQuantity(),item.getItemType(),item.getDominateColor(),
-			    			null,Double.parseDouble(quantityTextLable.getText()),item.getIsOnSale(),item.getFixPrice());
+					productInOrder=new ProductInOrder(item.getID(),null,null, item.getPrice()
+							, item.getbackGroundColor(), item.getImgSrc() , item.getQuantity(), item.getItemType(), item.getDominateColor()
+							, Integer.valueOf(quantityTextLable.getText()), item.getName(), item.getIsOnSale(), item.getFixPrice());
+								
+//					 productInOrder=new ProductInOrder(item.getID(),
+//							 item.getName(),item.getPrice(),
+//							 item.getbackGroundColor(),item.getImgSrc(),
+//							 item.getQuantity(),item.getItemType(),item.getDominateColor(),
+//			    			 Integer.valueOf(quantityTextLable.getText()),item.getIsOnSale(),item.getFixPrice());
+		 
 				}
 			};
 			
@@ -351,33 +361,62 @@ public class CatalogScreenController implements Initializable{
      */
     @FXML
     void addToCart(ActionEvent event) {
-    	Integer tmp= Integer.parseInt(cartItemCounter.getText())+1;
-    	cartItemCounter.setText(tmp.toString());
     	
+    	Integer howMuchQuantityToAdd=Integer.parseInt(quantityTextLable.getText());
     	
-    	if(!customClickRadioBtn.isSelected()) {
-    		//regular ProductInOrder
-    		productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
-    		if(OrderHandleController.getProductInOrder().contains(productInOrder)) {
-    			OrderHandleController.addToExistItemOnListNotCustom(productInOrder);
-    		}
-    		else {
-    			OrderHandleController.getProductInOrder().add(productInOrder);
-    			}    	
-    	}
-    	else {
-    		List<ProductInOrder> moveToCart=new ArrayList<>();
-    		moveToCart=OrderHandleController.getCustomProductInOrder().get(customTextField.getText().toUpperCase());
-    		OrderHandleController.setCustomProductInOrderFinallCart(customTextField.getText().toUpperCase(),moveToCart);
-    		System.out.println(OrderHandleController.getCustomProductInOrderFinallCart().toString());
-    		
-    		//clear custom selection
-    		vboxAddToCustom.setVisible(false);
-    		customTextField.setText("");
-    		customTextField.setDisable(true);
-    		customClickRadioBtn.setSelected(false);
-    	}
+    	if(howMuchQuantityToAdd>0)
+	    	if(!customClickRadioBtn.isSelected()) {
+	    		//regular ProductInOrder 
+	    		cartCounter+=howMuchQuantityToAdd;
+	    		OrderHandleController.quantityOfRegularProducts+=howMuchQuantityToAdd;
+	        
+	    		//regular and exist
+	    		productInOrder.setProductQuantityInCart(Integer.valueOf(quantityTextLable.getText()));
+	    		System.out.println("regularInsideClickAddToCart->"+productInOrder);
+	    		
+	    		if(OrderHandleController.getProductInOrder().contains(productInOrder)) {
+	    			OrderHandleController.addToExistItemOnListNotCustom(productInOrder);
+	    		}
+	    		else{ 
+	    			    //regular and new 
+	    			    OrderHandleController.addProductInOrder(productInOrder);
+	    			}   
+	    		
+	    		//animation on set Chosen Item card
+	    		setChosenItemCardAddToCartRegular();
+	    		
+	    	}
+	    	else {
+	    		cartCounter+=1;
+	    		OrderHandleController.quantityOfCustomProducts++;
+	        	
+	    		List<ProductInOrder> moveToCart=new ArrayList<>();
+	    		
+	    		moveToCart=OrderHandleController.getCustomProductInOrder().get(customTextField.getText().toUpperCase());
+	    		System.out.println("more -> "+moveToCart);
+	    		OrderHandleController.addCustomProductInOrderFinallCart(customTextField.getText().toUpperCase(),moveToCart);
+	    		//System.out.println(OrderHandleController.getCustomProductInOrderFinallCart().toString());
+	    		
+	    		//clear custom selection
+	    		vboxAddToCustom.setVisible(false);
+	    		customTextField.setText("");
+	    		customTextField.setDisable(true);
+	    		customClickRadioBtn.setSelected(false);
+	    		
+	    		//animation on set Chosen Item card
+	    		setChosenItemCardAddToCartTotalCustom();
+	    	}
     	
+    	//cartCounterUpdate
+    	cartItemCounter.setText(""+cartCounter);
+    	
+    	//print 
+    	System.out.println("custom-hashMap->"+OrderHandleController.getCustomProductInOrderFinallCart());
+    	System.out.println("regular-list->"+OrderHandleController.getProductInOrder());
+    	System.out.println("custom->"+OrderHandleController.quantityOfCustomProducts);
+    	System.out.println("regualr->"+OrderHandleController.quantityOfRegularProducts);
+    	System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
+    
     }
 
     
@@ -444,7 +483,7 @@ public class CatalogScreenController implements Initializable{
      * @throws Exception  when page will not bring well.
      */
     @FXML
-    void cartPageMove(MouseEvent event) throws Exception {
+    void cartPageMove(MouseEvent event) throws Exception {	
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		CartPageController cartPage = new CartPageController();
@@ -458,17 +497,45 @@ public class CatalogScreenController implements Initializable{
      */
     @FXML
     void addToCustom(ActionEvent event) {
-    	productInOrder.setProductQuantityInCart(Double.parseDouble(quantityTextLable.getText()));
-    	if(OrderHandleController.getCustomProductInOrder().containsKey(customTextField.getText().toUpperCase())) {
-    		OrderHandleController.addToExistItemOnList(customTextField.getText().toUpperCase(),productInOrder);
-    		
-    	}else {
-    		List<ProductInOrder> productInOrderList=new ArrayList<>();
-    		productInOrderList.add(productInOrder);
-    		OrderHandleController.getCustomProductInOrder().put(customTextField.getText().toUpperCase(), productInOrderList);
-    	}
+    	int customQuantity=Integer.valueOf(quantityTextLable.getText());
     	
+    	if(customQuantity>0)
+    	{
+        	productInOrder.setProductQuantityInCart(customQuantity);
+        	if(OrderHandleController.getCustomProductInOrder().containsKey(customTextField.getText().toUpperCase())) {
+        		OrderHandleController.addToExistItemOnList(customTextField.getText().toUpperCase(),productInOrder);
+        		
+        	}else {
+        		List<ProductInOrder> productInOrderList=new ArrayList<>();
+        		productInOrderList.add(productInOrder);
+        		OrderHandleController.addCustomProductInOrder(customTextField.getText().toUpperCase(), productInOrderList);
+        	}
+        	setChosenItemCardAddToBouqet(customTextField.getText().toUpperCase());
+    	}
+    }
+    
+    //add to cart preview 
+    public void setChosenItemCardAddToCartRegular () {
+    	Product p=new Product("0","Regular added", 0, "172D42", "/javafx_images/productAddToCart.png", 0, "Product", "Blue", false, 0);
+    	setChosenItemCard(p);
+    	quantityTextLable.setText("0");
+    }
+        
+    
+    //add to cart preview 
+    public void setChosenItemCardAddToCartTotalCustom () {
+    	Product p=new Product("0","Custom added", 0, "172D42", "/javafx_images/customProdcutAdd.png", 0, "Product", "Blue", false, 0);
+    	setChosenItemCard(p);
+    	quantityTextLable.setText("0");
+    	addToCartBtn.setDisable(true);
+    	addToCustomBtn.setDisable(true);
     }
     
     
+    //add to bouqet preview 
+    public void setChosenItemCardAddToBouqet(String nameTotalCustomName) {
+    	Product p=new Product("0"," added to "+nameTotalCustomName, 0, "172D42", "/javafx_images/addItemToCustom.png", 0, "Product", "Blue", false, 0);
+    	setChosenItemCard(p);
+    }
+       
 }

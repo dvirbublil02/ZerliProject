@@ -199,6 +199,57 @@
                            <children>
                               <TabPane prefHeight="457.0" prefWidth="691.0" stylesheets="@Style.css" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
                                 <tabs>
+                                  <Tab text="regular">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <VBox prefHeight="251.0" prefWidth="687.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <VBox prefHeight="367.0" prefWidth="687.0">
+                                                         <children>
+                                                            <TableView fx:id="tableRegular" prefHeight="345.0" prefWidth="684.0" stylesheets="@Style.css" VBox.vgrow="ALWAYS">
+                                                               <columns>
+                                                                  <TableColumn fx:id="ImgColRegularTbl" prefWidth="191.20001828670502" text="Image" />
+                                                                  <TableColumn fx:id="ItemNameColRegularTbl" prefWidth="178.40005493164062" text="ItemName" />
+                                                                  <TableColumn fx:id="QuantityColRegularTbl" minWidth="0.0" prefWidth="169.59994506835938" text="Quantity" />
+                                                                  <TableColumn fx:id="priceColRegularTbl" prefWidth="142.39996337890625" text="Price" />
+                                                               </columns>
+                                                            </TableView>
+                                                         </children>
+                                                      </VBox>
+                                                      <HBox prefHeight="100.0" prefWidth="200.0">
+                                                         <children>
+                                                            <HBox alignment="CENTER_RIGHT" prefHeight="64.0" prefWidth="297.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <Button fx:id="removeRegularBtn" mnemonicParsing="false" onAction="#removeRegular" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Remove">
+                                                                     <font>
+                                                                        <Font name="Candara Bold" size="18.0" />
+                                                                     </font>
+                                                                     <styleClass>
+                                                                        <String fx:value="buttonBack" />
+                                                                        <String fx:value="shadow" />
+                                                                        <String fx:value="transparent" />
+                                                                     </styleClass>
+                                                                  </Button>
+                                                               </children>
+                                                            </HBox>
+                                                            <HBox alignment="CENTER" prefHeight="64.0" prefWidth="434.0">
+                                                               <children>
+                                                                  <Label fx:id="massageLabelRegular" prefHeight="22.0" prefWidth="230.0" textFill="#cb0606">
+                                                                     <font>
+                                                                        <Font name="Cambria" size="16.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
                                   <Tab text="Custom">
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -239,57 +290,6 @@
                                                                   <Label fx:id="massageLabel" prefHeight="22.0" prefWidth="230.0" textFill="#cb0606">
                                                                      <font>
                                                                         <Font name="Cambria Bold" size="16.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                               </children>
-                                                            </HBox>
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                          </AnchorPane>
-                                    </content>
-                                  </Tab>
-                                  <Tab text="regular">
-                                    <content>
-                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                             <children>
-                                                <VBox prefHeight="251.0" prefWidth="687.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <VBox prefHeight="367.0" prefWidth="687.0">
-                                                         <children>
-                                                            <TableView fx:id="tableRegular" prefHeight="345.0" prefWidth="684.0" stylesheets="@Style.css" VBox.vgrow="ALWAYS">
-                                                               <columns>
-                                                                  <TableColumn fx:id="ImgColRegularTbl" prefWidth="191.20001828670502" text="Image" />
-                                                                  <TableColumn fx:id="ItemNameColRegularTbl" prefWidth="178.40005493164062" text="ItemName" />
-                                                                  <TableColumn fx:id="QuantityColRegularTbl" minWidth="0.0" prefWidth="169.59994506835938" text="Quantity" />
-                                                                  <TableColumn fx:id="priceColRegularTbl" prefWidth="142.39996337890625" text="Price" />
-                                                               </columns>
-                                                            </TableView>
-                                                         </children>
-                                                      </VBox>
-                                                      <HBox prefHeight="100.0" prefWidth="200.0">
-                                                         <children>
-                                                            <HBox alignment="CENTER_RIGHT" prefHeight="64.0" prefWidth="297.0" HBox.hgrow="ALWAYS">
-                                                               <children>
-                                                                  <Button fx:id="removeRegularBtn" mnemonicParsing="false" onAction="#removeRegular" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Remove">
-                                                                     <font>
-                                                                        <Font name="Candara Bold" size="18.0" />
-                                                                     </font>
-                                                                     <styleClass>
-                                                                        <String fx:value="buttonBack" />
-                                                                        <String fx:value="shadow" />
-                                                                        <String fx:value="transparent" />
-                                                                     </styleClass>
-                                                                  </Button>
-                                                               </children>
-                                                            </HBox>
-                                                            <HBox alignment="CENTER" prefHeight="64.0" prefWidth="434.0">
-                                                               <children>
-                                                                  <Label fx:id="massageLabelRegular" prefHeight="22.0" prefWidth="230.0" textFill="#cb0606">
-                                                                     <font>
-                                                                        <Font name="Cambria" size="16.0" />
                                                                      </font>
                                                                   </Label>
                                                                </children>

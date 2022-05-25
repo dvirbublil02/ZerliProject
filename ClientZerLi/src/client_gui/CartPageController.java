@@ -35,9 +35,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 public class CartPageController implements Initializable {
 
-    // IDorder / zerli dvir / rose /
+    // IDorder / (nameOfProdcut) zerli dvir / (nameOfItem) rose bouget /
     // IDorder / regular / rose / 
-	//OrderCustomCartPreview - > Image , Name , Quantity , Description 
+	// OrderCustomCartPreview - > Image , Name , Quantity , Description 
 	
     @FXML
     private TableColumn<OrderCartPreview, ImageView> ImgColRegularTbl;
@@ -93,10 +93,11 @@ public class CartPageController implements Initializable {
     @FXML
     private TableColumn<OrderCustomCartPreview, Double> priceCustomColTbl;
     
-	private ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
+	private static ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
 	private ObservableList<OrderCartPreview> listViewRegular = FXCollections.observableArrayList();
 
-	
+	//Cart is the publisher , orderHandelController is the subscriber
+	private List<OrderHandleController> subscribers = new ArrayList<>();
 
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CartPage.fxml"));
@@ -114,20 +115,27 @@ public class CartPageController implements Initializable {
 		// show button function
 		showCustomTbl.setCellFactory(ShowButtonTableCell.<OrderCustomCartPreview>forTableColumn("Details", (OrderCustomCartPreview o) -> {
 
-			// new windows add send him the productInOrder list with the info
-			Stage primaryStage = new Stage();
-			CustomerViewCustomProductInfoController customProductDetails = new CustomerViewCustomProductInfoController();
-			try {
-				System.out.println(o.getCartList());
-				customProductDetails.setProductDetails(o.getCartList());
-				customProductDetails.start(primaryStage);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(!OrderHandleController.isDetailsAllreadyOpen())
+			{
+				// new windows add send him the productInOrder list with the info
+				Stage primaryStage = new Stage();
+				CustomerViewCustomProductInfoController customProductDetails = new CustomerViewCustomProductInfoController();
+				try {
+					System.out.println(o.getCartList());
+					customProductDetails.setProductDetails(o);
+					customProductDetails.start(primaryStage);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-
+			else
+			{
+				System.out.println("deatials allreaday open popup");
+			}
+			
 			return o;
 		}));
 		
@@ -166,12 +174,28 @@ public class CartPageController implements Initializable {
 		//set tables to show products 
 		tableRegular.setItems(listViewRegular);
 		tableCustom.setItems(listViewCustom);
-		priceLabel.setText(OrderCustomCartPreview.totalprice+OrderCartPreview.totalprice+"");
+		
+		
+		//priceLabel.setText(OrderHandleController.getTotalPrice()+"");
+		priceLabel.setText(OrderHandleController.getTotalPrice()+"");
+		OrderHandleController.setPriceLabel(priceLabel);
+		
+		//priceLabel.setText(OrderHandleController.getPriceLabel().getText());
+		
+		//add listener to OrderHandleController to perform remove on background
+		addSubscriber(new OrderHandleController());
 	}
 	
 	
 	@FXML
 	void back(ActionEvent event) {
+		
+		// remove all listener in background 
+		removeSubscribers();
+		
+		//clear static screen
+		listViewCustom.clear();
+		
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		CatalogScreenController catalogPage = new CatalogScreenController();
@@ -186,10 +210,14 @@ public class CartPageController implements Initializable {
 
 	@FXML
 	void confirm(ActionEvent event) throws Exception {
-		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-		Stage primaryStage = new Stage();
-		OrderPageController orderPage = new OrderPageController();
-		orderPage.start(primaryStage);
+		
+		if(OrderHandleController.getCartCounter()>0)
+		{
+			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+			Stage primaryStage = new Stage();
+			OrderPageController orderPage = new OrderPageController();
+			orderPage.start(primaryStage);
+		}
 	}
 
     @FXML
@@ -198,13 +226,32 @@ public class CartPageController implements Initializable {
 		allProducts=tableCustom.getItems();
 		productSelected=tableCustom.getSelectionModel().getSelectedItems();
 		
+		System.out.println("productSelected regular->"+productSelected);
+		
 		if(allProducts.isEmpty())
-			massageLabel.setText("Cart Allready Empty");
+			massageLabel.setText("Custom Cart Allready Empty");
 		try {
+			
+			
+			//remove all custom product in orderHandler
+			notifyRemoveCustomProduct(productSelected);
+		
+			//remove preview on screen
 			productSelected.forEach(allProducts::remove);
+			System.out.println("productSelected regular->"+productSelected);
+			
 		} catch (NoSuchElementException e) {
-			massageLabel.setText("Cart empty!!");
+			massageLabel.setText("Custom Cart Empty!!");
 		}
+		
+		//System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
+	    if(OrderHandleController.getCartCounter()==0)
+	    	OrderHandleController.setTotalPrice(0);
+			
+		OrderHandleController.updateTotalPrice();
+		
+		
+			
     }
     
  
@@ -214,12 +261,86 @@ public class CartPageController implements Initializable {
 		allProducts=tableRegular.getItems();
 		productSelected=tableRegular.getSelectionModel().getSelectedItems();
 		
+		System.out.println("productSelected regular->"+productSelected);
+		
 		if(allProducts.isEmpty())
-			massageLabelRegular.setText("Cart Allready Empty");
+			massageLabelRegular.setText("Regular Cart Allready Empty");
 		try {
+			
+			//remove all regular productInOrder in orderHandler
+			notifyRemoveRegularProductInOrder(productSelected);
+			//remove preview on screen
 			productSelected.forEach(allProducts::remove);
+			System.out.println("productSelected regular->"+productSelected);
+			
+			System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
+			OrderHandleController.updateTotalPrice();
+
 		} catch (NoSuchElementException e) {
-			massageLabelRegular.setText("Cart empty!!");
+			massageLabelRegular.setText("Regular Cart Empty!!");
 		}
+		
+		//System.out.println("totalPrice->"+OrderHandleController.getTotalPrice());
+		
+		
+	    if(OrderHandleController.getCartCounter()==0)
+	    	OrderHandleController.setTotalPrice(0);
+		
+		OrderHandleController.updateTotalPrice();
+		//priceLabel=OrderHandleController.getPriceLabel();
+
     }
+    
+    
+    
+   // action to remove product selected on details tiny screen in cartPage also
+    public static void removeProductFromListViewCustom (OrderCustomCartPreview oCustomCP , ObservableList<ProductInOrder> productSelected) {
+    	for(OrderCustomCartPreview customUpdate:listViewCustom) {
+    		if(customUpdate.getName()==oCustomCP.getName())
+    		{
+    			customUpdate.removeProductInOrderInsideCustom(productSelected);
+    			
+    			//remove and add to refresh object on screen 
+    			listViewCustom.remove(customUpdate);
+    			listViewCustom.add(customUpdate);
+    			
+    			//if object without product release him 
+    			if(customUpdate.getCartList().size()==0)
+    				listViewCustom.remove(customUpdate);
+    			break;
+    		}
+    	}
+    	
+	    if(OrderHandleController.getCartCounter()==0)
+	    	OrderHandleController.setTotalPrice(0);
+    	
+    	OrderHandleController.updateTotalPrice();
+    	//OrderHandleController.getPriceLabel();
+    }
+    
+
+	// add Subscriber
+	public void addSubscriber(OrderHandleController s) {
+		subscribers.add(s);
+	}
+	
+	// remove Subscriber
+	public void removeSubscribers() {
+		subscribers.clear();
+	
+	}
+	
+	
+	// notify all subscribers to remove productSelected list from there local list
+	public void notifyRemoveRegularProductInOrder(ObservableList<OrderCartPreview> productSelected) {
+		for( OrderHandleController s : subscribers)
+			s.removeFromOrderRegular(productSelected);
+	}
+	
+	// notify all subscribers to remove productSelected list from there local hashMap
+	public void notifyRemoveCustomProduct(ObservableList<OrderCustomCartPreview> productSelected) {
+		for( OrderHandleController s : subscribers)
+			s.removeFromOrderCustom(productSelected);
+	}
+    
 }

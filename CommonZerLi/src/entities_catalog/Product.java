@@ -12,16 +12,17 @@ public class Product  implements Serializable{
 	private String imgSrc;
 	private double price;
 	private String backGroundColor;
-	private String ID;
-	private double quantity;
+	private String productID;
+	private int quantity;
 	private String itemType;
 	private String dominateColor;
 	private boolean isOnSale;
 	private double fixPrice;
 	
-	public Product(String ID,String name, double price, String backGroundColor, String imgSrc,double quantity,
+	//productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, isOnSale, fixPrice
+	public Product(String productID,String name, double price, String backGroundColor, String imgSrc,int quantity,
 			String itemType , String dominateColor,boolean isOnSale,double fixPrice ) {
-		this.ID=ID;
+		this.productID=productID;
 		this.name = name;
 		this.imgSrc = imgSrc;
 		this.price = price;
@@ -66,19 +67,19 @@ public class Product  implements Serializable{
 	}
 
 	public String getID() {
-		return ID;
+		return productID;
 	}
 
 	public void setID(String iD) {
-		ID = iD;
+		productID = iD;
 	}
 
-	public double getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 
 
-	public void setQuantity(double quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
@@ -123,7 +124,7 @@ public class Product  implements Serializable{
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(ID);
+		return Objects.hash(productID);
 	}
 
 	@Override
@@ -135,7 +136,7 @@ public class Product  implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Product other = (Product) obj;
-		return Objects.equals(ID, other.ID);
+		return Objects.equals(productID, other.productID);
 	}
 
 	
