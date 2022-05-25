@@ -25,6 +25,7 @@ public class OrderHandleController implements nofityOrderListner {
 	public static int quantityOfCustomProducts=0;
 	private static double totalPrice=0;
     private static Label priceLabel= new Label("0");
+    private static boolean detailsAllreadyOpen=false;
 	
 	
 	public static Map<String, List<ProductInOrder>> getCustomProductInOrderFinallCart() {
@@ -225,6 +226,14 @@ public class OrderHandleController implements nofityOrderListner {
 		priceLabel.setText(OrderHandleController.getTotalPrice()+"");
     	System.out.println("total price updated ->"+priceLabel.getText());
     }
+	public static boolean isDetailsAllreadyOpen() {
+		return detailsAllreadyOpen;
+	}
+	public static void setDetailsAllreadyOpen(boolean detailsAllreadyOpen) {
+		OrderHandleController.detailsAllreadyOpen = detailsAllreadyOpen;
+	}
+    
+    
     
 }
     

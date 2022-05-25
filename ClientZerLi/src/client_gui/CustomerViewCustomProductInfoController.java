@@ -47,6 +47,9 @@ public class CustomerViewCustomProductInfoController implements Initializable {
     
     @FXML
     private Label massageLabel;
+    
+    @FXML
+    private Label customSelectionDetailsLabel;
 
     @FXML
     private TableColumn<ProductInOrder, Integer> totalquantityCol;
@@ -62,7 +65,7 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 	public void start(Stage primaryStage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CustomerViewCustomProductInfo.fxml"));
 		Scene scene = new Scene(root);
-		primaryStage.setTitle("Custom Product Details Page");
+		primaryStage.setTitle(customName+" - custom Product Details Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
@@ -70,6 +73,9 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 		//need to update list of product inside OrderHandleController 
 		primaryStage.setOnCloseRequest(event ->{
 			productDetails.clear();
+			
+			//release the screen control , somebodyelse can take conytol 
+			OrderHandleController.setDetailsAllreadyOpen(false);
 			
 			// remove all listener in background - orderHandle 
 			removeSubscribers();
@@ -84,6 +90,10 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 		quantityInCartCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Integer>("productQuantityInCart"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("price"));
 		customProductTable.setItems(productDetails);
+		customSelectionDetailsLabel.setText(customName+" Selection Deatails");
+		
+		//take the screen control , only me can view 
+		OrderHandleController.setDetailsAllreadyOpen(true);
 		
 		//add listener to OrderHandleController to perform remove on background
 		addSubscriber(new OrderHandleController());

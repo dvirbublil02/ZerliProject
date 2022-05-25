@@ -379,10 +379,14 @@ public class CatalogScreenController implements Initializable{
 	    		if(OrderHandleController.getProductInOrder().contains(productInOrder)) {
 	    			OrderHandleController.addToExistItemOnListNotCustom(productInOrder);
 	    		}
-	    		else { 
+	    		else{ 
 	    			    //regular and new 
 	    			    OrderHandleController.addProductInOrder(productInOrder);
-	    			}    	
+	    			}   
+	    		
+	    		//animation on set Chosen Item card
+	    		setChosenItemCardAddToCartRegular();
+	    		
 	    	}
 	    	else {
 	    		cartCounter+=1;
@@ -400,6 +404,9 @@ public class CatalogScreenController implements Initializable{
 	    		customTextField.setText("");
 	    		customTextField.setDisable(true);
 	    		customClickRadioBtn.setSelected(false);
+	    		
+	    		//animation on set Chosen Item card
+	    		setChosenItemCardAddToCartTotalCustom();
 	    	}
     	
     	//cartCounterUpdate
@@ -492,17 +499,45 @@ public class CatalogScreenController implements Initializable{
      */
     @FXML
     void addToCustom(ActionEvent event) {
-    	productInOrder.setProductQuantityInCart(Integer.valueOf(quantityTextLable.getText()));
-    	if(OrderHandleController.getCustomProductInOrder().containsKey(customTextField.getText().toUpperCase())) {
-    		OrderHandleController.addToExistItemOnList(customTextField.getText().toUpperCase(),productInOrder);
-    		
-    	}else {
-    		List<ProductInOrder> productInOrderList=new ArrayList<>();
-    		productInOrderList.add(productInOrder);
-    		OrderHandleController.addCustomProductInOrder(customTextField.getText().toUpperCase(), productInOrderList);
-    	}
+    	int customQuantity=Integer.valueOf(quantityTextLable.getText());
     	
+    	if(customQuantity>0)
+    	{
+        	productInOrder.setProductQuantityInCart(customQuantity);
+        	if(OrderHandleController.getCustomProductInOrder().containsKey(customTextField.getText().toUpperCase())) {
+        		OrderHandleController.addToExistItemOnList(customTextField.getText().toUpperCase(),productInOrder);
+        		
+        	}else {
+        		List<ProductInOrder> productInOrderList=new ArrayList<>();
+        		productInOrderList.add(productInOrder);
+        		OrderHandleController.addCustomProductInOrder(customTextField.getText().toUpperCase(), productInOrderList);
+        	}
+        	setChosenItemCardAddToBouqet(customTextField.getText().toUpperCase());
+    	}
+    }
+    
+    //add to cart preview 
+    public void setChosenItemCardAddToCartRegular () {
+    	Product p=new Product("0","Regular added", 0, "172D42", "/javafx_images/productAddToCart.png", 0, "Product", "Blue", false, 0);
+    	setChosenItemCard(p);
+    	quantityTextLable.setText("0");
+    }
+        
+    
+    //add to cart preview 
+    public void setChosenItemCardAddToCartTotalCustom () {
+    	Product p=new Product("0","Custom added", 0, "172D42", "/javafx_images/customProdcutAdd.png", 0, "Product", "Blue", false, 0);
+    	setChosenItemCard(p);
+    	quantityTextLable.setText("0");
+    	addToCartBtn.setDisable(true);
+    	addToCustomBtn.setDisable(true);
     }
     
     
+    //add to bouqet preview
+    public void setChosenItemCardAddToBouqet(String nameTotalCustomName) {
+    	Product p=new Product("0"," added to "+nameTotalCustomName, 0, "172D42", "/javafx_images/addItemToCustom.png", 0, "Product", "Blue", false, 0);
+    	setChosenItemCard(p);
+    }
+       
 }

@@ -115,20 +115,27 @@ public class CartPageController implements Initializable {
 		// show button function
 		showCustomTbl.setCellFactory(ShowButtonTableCell.<OrderCustomCartPreview>forTableColumn("Details", (OrderCustomCartPreview o) -> {
 
-			// new windows add send him the productInOrder list with the info
-			Stage primaryStage = new Stage();
-			CustomerViewCustomProductInfoController customProductDetails = new CustomerViewCustomProductInfoController();
-			try {
-				System.out.println(o.getCartList());
-				customProductDetails.setProductDetails(o);
-				customProductDetails.start(primaryStage);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(!OrderHandleController.isDetailsAllreadyOpen())
+			{
+				// new windows add send him the productInOrder list with the info
+				Stage primaryStage = new Stage();
+				CustomerViewCustomProductInfoController customProductDetails = new CustomerViewCustomProductInfoController();
+				try {
+					System.out.println(o.getCartList());
+					customProductDetails.setProductDetails(o);
+					customProductDetails.start(primaryStage);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-
+			else
+			{
+				System.out.println("deatials allreaday open popup");
+			}
+			
 			return o;
 		}));
 		
