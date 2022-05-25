@@ -3,8 +3,7 @@ package entities_general;
 import java.util.List;
 
 import entities_catalog.ProductInOrder;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import javafx.scene.image.ImageView;
 
 public class OrderCartPreview {

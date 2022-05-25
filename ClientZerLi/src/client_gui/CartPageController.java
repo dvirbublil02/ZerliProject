@@ -2,18 +2,14 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import client.ClientHandleTransmission;
 import client.OrderHandleController;
-import entities_catalog.Cart;
 import entities_catalog.ProductInOrder;
-import entities_general.Order;
 import entities_general.OrderCartPreview;
 import entities_general.OrderCustomCartPreview;
 import javafx.collections.FXCollections;
