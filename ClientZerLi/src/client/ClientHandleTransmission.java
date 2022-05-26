@@ -325,11 +325,11 @@ public class ClientHandleTransmission {
 			menu.start(primaryStage);
 			break;
 		}
-//		case "Customer Service": {
-//			CustomerServicePageController menu = new CustomerServiceController();
-//			menu.start(primaryStage);
-//			break;
-//		}
+		case "Customer Service": {
+			CustomerServicePageController menu = new CustomerServicePageController();
+			menu.start(primaryStage);
+			break;
+		}
 		case "Delivery Agent": {
 			DeliveryAgentPageController menu = new DeliveryAgentPageController();
 			menu.start(primaryStage);
