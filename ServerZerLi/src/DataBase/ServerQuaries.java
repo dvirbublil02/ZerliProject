@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
-
+import java.util.concurrent.TimeUnit;
 
 import communication.Response;
 import communication.TransmissionPack;
@@ -37,6 +37,7 @@ import entities_users.ServiceExpert;
 import entities_users.ShopWorker;
 import entities_users.User;
 import enums.AccountStatus;
+import enums.ComplaintsStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
 import javafx.collections.ObservableList;
@@ -1114,6 +1115,94 @@ public class ServerQuaries {
 		obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
 		}
 
+	}
+	public static void getComlaints(TransmissionPack obj, Connection con) {
+		System.out.println(6);
+		if (obj instanceof TransmissionPack) {
+			ResultSet rs;
+			Statement stmt;
+			List<Complaint> complaints = new ArrayList<>();
+
+			String query = "SELECT * FROM zerli.complaints WHERE customerserviceID='" + obj.getInformation() + "' AND status='OPEN'";
+			System.out.println(query);
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					System.out.println(rs.toString());
+
+					Complaint complaint = new Complaint(rs.getString(1), rs.getString(2), rs.getString(3),
+							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
+							ComplaintsStatus.valueOf(rs.getString(9)), getSatus(rs.getString(7)));
+
+					complaints.add(complaint);
+				}
+				rs.close();
+				System.out.println(complaints);
+				if (complaints.size() > 0) {
+					obj.setResponse(Response.FOUND_COMPLAINTS);
+					obj.setInformation(complaints);
+				} else {
+					obj.setResponse(Response.DID_NOT_FOUND_COMPLAINTS);
+					obj.setInformation(complaints);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	private static String complaintsHanldeTimeLimit(Date currentDate) {
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+
+		dateFormat.format(currentDate);
+
+		// convert date to calendar
+		Calendar c = Calendar.getInstance();
+		c.setTime(currentDate);
+
+		// manipulate date
+
+		c.add(Calendar.DATE, 1); // same with c.add(Calendar.DAY_OF_MONTH, 1);
+
+		// convert calendar to date
+		Date currentDatePlusOne = c.getTime();
+		return dateFormat.format(currentDatePlusOne);
+	}
+
+	private static ComplaintsStatus getSatus(String start_date) {
+		long difference_In_Days = 0;
+		// SimpleDateFormat converts the
+		// string format to date object
+
+		// Try Class
+		try {
+
+			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			// parse method is used to parse
+			// the text from a string to
+			// produce the date
+			Date d1 = sdf.parse(start_date);
+			Date d2 = Calendar.getInstance().getTime();
+			System.out.println(sdf.format(d1));
+
+			// Calucalte time difference
+			// in milliseconds
+			long difference_In_Time = d2.getTime() - d1.getTime();
+
+			difference_In_Days = TimeUnit.MILLISECONDS.toDays(difference_In_Time) % 365;
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		if (difference_In_Days >= 1) {
+			
+			return ComplaintsStatus.DELAY;
+		}
+		
+		return ComplaintsStatus.STILL_GOT_TIME;
 	}
 }
 
