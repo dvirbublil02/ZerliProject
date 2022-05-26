@@ -17,11 +17,12 @@ public class createReports {
 	/*
 	 * in this method creating order monthly report by spesifc branch and month (getting the month on number 2 digit )
 	 */
-	public static void monthlyOrders(String branchID,String month) {
+	public static void monthlyOrders(String branchID,String month,String year) {
 		List<List<String>> orders=new ArrayList<>();
 		List<Object> orderFilter=new ArrayList<>();
 		orderFilter.add(branchID);
 		orderFilter.add(month);
+		orderFilter.add(year);
 		TransmissionPack tp=new TransmissionPack(Mission.GET_MONTHLY_REPORT,null,orderFilter);
 		orders=ReportsQuaries.gettingOrderMonthlyData(tp);
 		
@@ -39,18 +40,19 @@ public class createReports {
 /*
  * in this method we creating income monthly report by spesifc branch and spesifc month.
  */
-	public static void monthlyIncome(String branchID, String Date) {
+	public static void monthlyIncome(String branchID, String month,String year) {
 		List<List<String>> incomeInfo=new ArrayList<>();
 		List<Object> incomeFilter=new ArrayList<>();
 		incomeFilter.add(branchID);
-		incomeFilter.add(Date);
+		incomeFilter.add(month);
+		incomeFilter.add(year);
 		TransmissionPack tp=new TransmissionPack(Mission.GET_MONTHLY_REPORT,null,incomeFilter);
 		incomeInfo=ReportsQuaries.gettingIncomeMonthlyData(tp);
 		if(incomeInfo != null) {
 			List<Object> incomeInfoToParse=new ArrayList<>();
 			incomeInfoToParse.add(branchID);
 			incomeInfoToParse.add(incomeInfo);
-			incomeInfoToParse.add(Date);
+			incomeInfoToParse.add(month);
 			String type=ReportType.INCOME.name();
 			incomeInfoToParse.add(type);
 			ReportsQuaries.createMonthlyReport(incomeInfoToParse);

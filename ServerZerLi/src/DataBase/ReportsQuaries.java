@@ -143,10 +143,11 @@ public class ReportsQuaries {
 		List<Object> information=new ArrayList<>();
 		information=(List<Object>) tp.getInformation();
 		String branchID=(String) information.get(0);
-		String date=(String) information.get(1);
+		String month=(String) information.get(1);
+		String year=(String) information.get(2);
 		List<String> ordersID = new ArrayList<>();
 		Connection con=DBController.getCon();
-		gettingTheRelavantOrdersID(branchID, date, ordersID, con);
+		gettingTheRelavantOrdersID(branchID, month,year, ordersID, con);
 		
 			if(ordersID.size()>0) {
 				for(int i = 0 ;i<ordersID.size();i++) {
@@ -246,9 +247,10 @@ public class ReportsQuaries {
 		information=(List<Object>) tp.getInformation();
 		String branchID=(String) information.get(0);
 		String date=(String) information.get(1);
+		String year=(String) information.get(2);
 		List<String> ordersID = new ArrayList<>();
 		Connection con=DBController.getCon();
-		List<LocalDate> ordersDate=gettingTheRelavantOrdersID(branchID, date, ordersID, con);
+		List<LocalDate> ordersDate=gettingTheRelavantOrdersID(branchID, date, year,ordersID, con);
 		
 			if(ordersID.size()>0) {
 				for(int i = 0 ;i<ordersID.size();i++) {
@@ -279,7 +281,7 @@ public class ReportsQuaries {
 	/*
 	 * this method getting the orders id's by branchID and the relevant date (for example all the orders in 05 month)
 	 */
-	private static List<LocalDate> gettingTheRelavantOrdersID(String branchID, String date, List<String> ordersID,
+	private static List<LocalDate> gettingTheRelavantOrdersID(String branchID, String month,String year, List<String> ordersID,
 			Connection con) {
 		ResultSet rs;
 		Statement stmt;
@@ -289,7 +291,7 @@ public class ReportsQuaries {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(getBrnachOrders);
 			while(rs.next()) {
-				if(getMonthFormat(rs.getDate(2).toLocalDate().getMonth().getValue()).equals(date)) {
+				if(getMonthFormat(rs.getDate(2).toLocalDate().getMonth().getValue()).equals(month) && rs.getDate(7).toLocalDate().getYear() == Integer.parseInt(year)) {
 					ordersID.add(rs.getString(1));
 					ordersDate.add(rs.getDate(2).toLocalDate());
 				}
