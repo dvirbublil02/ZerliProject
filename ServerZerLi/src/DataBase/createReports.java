@@ -17,11 +17,11 @@ public class createReports {
 	/*
 	 * in this method creating order monthly report by spesifc branch and month (getting the month on number 2 digit )
 	 */
-	public static void monthlyOrders(String branchID,String Date) {
+	public static void monthlyOrders(String branchID,String month) {
 		List<List<String>> orders=new ArrayList<>();
 		List<Object> orderFilter=new ArrayList<>();
 		orderFilter.add(branchID);
-		orderFilter.add(Date);
+		orderFilter.add(month);
 		TransmissionPack tp=new TransmissionPack(Mission.GET_MONTHLY_REPORT,null,orderFilter);
 		orders=ReportsQuaries.gettingOrderMonthlyData(tp);
 		
@@ -29,7 +29,7 @@ public class createReports {
 			List<Object> orderInfoToParse=new ArrayList<>();
 			orderInfoToParse.add(branchID);
 			orderInfoToParse.add(orders);
-			orderInfoToParse.add(Date);
+			orderInfoToParse.add(month);
 			String type=ReportType.ORDERS.name();
 			orderInfoToParse.add(type);
 			ReportsQuaries.createMonthlyReport(orderInfoToParse);
