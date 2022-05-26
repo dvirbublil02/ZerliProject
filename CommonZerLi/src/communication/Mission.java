@@ -29,6 +29,7 @@ public enum Mission {
 	OPEN_COMPLAINT("OPEN_COMPLAINT",21),
 	GET_MONTHLY_REPORT("GET_MONTHLY_REPORT",22),
 	GET_QUARTER_INCOME_REPORT("GET_QUARTER_INCOME_REPORT",23);
+	
 
 	
 	private Mission (final String mission,final int serialNumber ) {

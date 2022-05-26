@@ -4,11 +4,15 @@ package server;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 import DataBase.DBController;
+import DataBase.TimerRunner;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import server_gui.ServerScreenController;
+
 
 /** In this class we launch the server , connecting into the db, and also listening to specific port.
  *
@@ -56,7 +60,10 @@ public class ServerUI extends Application {
 	        	ServerScreenController.SetMsg("ERROR - Could not connect!");
 	        	return false;
 	        }
-	    	
+	        System.out.println("start run aoutomated");
+	    	 Timer timer=new Timer();
+	    	 TimerRunner runner=new TimerRunner();
+	    	 timer.scheduleAtFixedRate(runner, 0, 60000);
 	         sv = new EchoServer(port);
 	        
 	        try 
