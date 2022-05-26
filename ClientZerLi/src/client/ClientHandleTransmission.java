@@ -33,6 +33,7 @@ import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
 import entities_general.WorkersPreview;
+import entities_reports.Complaint;
 import entities_users.BranchManager;
 import entities_users.Customer;
 import entities_users.ShopWorker;
