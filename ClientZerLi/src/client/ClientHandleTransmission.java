@@ -634,10 +634,41 @@ public class ClientHandleTransmission {
 			TransmissionPack tp=new TransmissionPack(Mission.GET_QUARTER_INCOME_REPORT,null,reportRequest);
 			ClientUI.chat.accept(tp);
 			tp=ClientUI.chat.getObj();
+			if(tp.getInformation() == null) {
+				System.out.println("No report !");
+			}
+			else {
+				 returndReport = (Report) tp.getInformation();
+
+					ByteArrayInputStream stream = new ByteArrayInputStream(returndReport.getBlob());
+					InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+					BufferedReader bufferedReader = new BufferedReader(streamReader);
+					List<List<String>> reportOnList = new ArrayList<>();
+					String line;
+					try {
+						while ((line = bufferedReader.readLine()) != null) {
+							
+							List<String> row = new ArrayList<String>(Arrays.asList(line.split(" ")));
+							reportOnList.add(row);
+						
+					}
+					ReportHandleController.setOrdersReportOnListQuarter(reportOnList);
+					
+					ClientUI.chat.getObj().setInformation(returndReport);
+					return true;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			
-			
+			}
+		ClientUI.chat.getObj().setInformation(null);
+		return false;
+	}
+		else {
+			ClientUI.chat.getObj().setInformation(null);
+			return false;
 		}
-		 return false; // pop up.
 	}
 }
 

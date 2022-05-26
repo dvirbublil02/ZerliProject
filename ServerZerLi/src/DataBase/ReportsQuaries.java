@@ -496,15 +496,61 @@ public class ReportsQuaries {
 	
 
 	public static void getQuarterIncomeReport(TransmissionPack obj, Connection con) {
-	//	branchid , year, querter
+	
 		if(obj instanceof TransmissionPack) {
 			List<String> reportRequest=new ArrayList<>();
 			reportRequest=(List<String>) obj.getInformation();
 			String branchID=reportRequest.get(0);
 			String year=reportRequest.get(1);
 			String quater=reportRequest.get(2);
-			
+			String month=getMonthForQuater(quater);
+			Report returnReport = null;
+			ResultSet rs;
+			Statement stmt;
+			String query = "SELECT * FROM zerli.reports WHERE branchID='" + branchID + "' AND reportDuration='QUARTERLY'";
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				 if(rs.next() == true) {
+					if (getMonthFormat(rs.getDate(7).toLocalDate().getMonth().getValue()).equals(month)
+							&& rs.getDate(7).toLocalDate().getYear() == Integer.parseInt(year)) {
+						Blob b=rs.getBlob(6);
+						InputStream in=b.getBinaryStream();
+						byte[] buff=b.getBytes(1, (int) b.length());
+						returnReport = new Report(rs.getString(1), ReportType.valueOf(rs.getString(2)), rs.getString(3),
+								rs.getString(4), ReportDuration.valueOf(rs.getString(5)), buff, rs.getDate(7).toLocalDate());
+					}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if (returnReport != null) {
+				obj.setResponse(Response.FOUND_QUARENTY_INCOME_REPORT);
+				obj.setInformation(returnReport);
+				return;
+			} else {
+				obj.setResponse(Response.NOT_FOUND_MONTHLY_REPORT);
+				obj.setInformation(null);
+			}
 		}
+				obj.setResponse(Response.NOT_FOUND_MONTHLY_REPORT);
+				obj.setInformation(null);
 	}
 
+
+	private static String getMonthForQuater(String quater) {
+		String returnMonth = null;
+		switch(Integer.parseInt(quater)) {
+		case 1:{ return returnMonth="03";
+		}
+		case 2:{ return returnMonth="06";
+		}
+		case 3:{ return returnMonth="09";
+		}
+		case 4:{ return returnMonth="12";
+		}
+	}
+		return returnMonth;
+
+	}
 }
