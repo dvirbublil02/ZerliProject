@@ -10,7 +10,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -975,4 +976,140 @@ public class ServerQuaries {
 		}
 		return cc;
 	}
+	/**
+	 * update all the complaint status in the DB
+	 * 
+	 * @param obj
+	 * @param con
+	 */
+	@SuppressWarnings("unchecked")
+	public static void updateComplaints(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			ResultSet rs;
+			PreparedStatement pstmt, pstmt2, pstmt3;
+			System.out.println("here3->");
+			List<Complaint> complaintsToUpdate = (List<Complaint>) obj.getInformation();
+			System.out.println(obj.getInformation());
+			String updateSpecificRow = "UPDATE zerli.complaints SET status=? WHERE complaintID='";
+			for (Complaint c : complaintsToUpdate) {
+
+				try {
+
+					updateComlaint(con, updateSpecificRow, c);
+					System.out.println(c.getRefoundAmount());
+					if (c.getRefoundAmount()!=null) {
+						insertNewRefund(con, c);
+						updateRefundInSpecificCustomer(con, c);
+
+					}
+				} catch (SQLException e) {
+					obj.setResponse(Response.COMPLAINTS_UPDATE_FAILED);
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			obj.setResponse(Response.COMPLAINTS_UPDATE_SUCCEED);
+
+		}
+
+	}
+
+	/**
+	 * update specific complaint row
+	 * 
+	 * @param con
+	 * @param updateSpecificRow
+	 * @param c
+	 * @throws SQLException
+	 */
+	private static void updateComlaint(Connection con, String updateSpecificRow, Complaint c) throws SQLException {
+		System.out.println("here4->");
+		PreparedStatement pstmt;
+		pstmt = con.prepareStatement(updateSpecificRow + c.getComplaintID() + "'");
+		pstmt.setString(1, c.getComplainState().name());
+		pstmt.executeUpdate();
+	}
+
+	/**
+	 * if there is refund in the complaint it will update the customer balance
+	 * 
+	 * @param con
+	 * @param c
+	 * @throws SQLException
+	 */
+	private static void updateRefundInSpecificCustomer(Connection con, Complaint c) throws SQLException {
+		PreparedStatement pstmt3;
+		String query2 = "UPDATE zerli.customer SET balance=balance+? WHERE customerID='" + c.getCustomerID() + "'";
+		pstmt3 = con.prepareStatement(query2);
+		pstmt3.setString(1, c.getRefoundAmount());
+		pstmt3.executeUpdate();
+	}
+
+	/**
+	 * if in the complaint have a refund it create new refund row in the refung row
+	 * 
+	 * @param con
+	 * @param c
+	 * @throws SQLException
+	 */
+	private static void insertNewRefund(Connection con, Complaint c) throws SQLException {
+		PreparedStatement pstmt2;
+		String query = "INSERT INTO zerli.refunds(refundID,orderID, customerID, ammount, reason, date) VALUES (?,?,?,?,?,?)";
+		pstmt2 = con.prepareStatement(query);
+		pstmt2.setString(1, null);
+		pstmt2.setString(2, c.getOrderID());
+		pstmt2.setString(3, c.getCustomerID());
+		pstmt2.setString(4, c.getRefoundAmount());
+		pstmt2.setString(5, "Complaint");
+		DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+		pstmt2.setString(6, dateFormat.format(Calendar.getInstance().getTime()));
+		pstmt2.executeUpdate();
+	}
+	/**
+	 * insert new complaint to the DB from 
+	 * @param obj
+	 * @param con
+	 * @throws ParseException
+	 */
+	public static void openComplaint(TransmissionPack obj, Connection con) throws ParseException {
+		if (obj instanceof TransmissionPack) {
+			Complaint c = (Complaint) obj.getInformation();
+			PreparedStatement pstmt;
+		
+			try {
+				String query = "INSERT INTO zerli.complaints(complaintID, customerID, orderID, customerserviceID, description, branchID, complaintOpening, treatmentUntil, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1, null);
+				pstmt.setString(2, c.getCustomerID());
+				pstmt.setString(3, c.getOrderID());
+				pstmt.setString(4, c.getCustomerServiceID());
+				pstmt.setString(5, c.getDescription());
+				pstmt.setString(6, c.getBranchID());
+				pstmt.setString(7, c.getComplaintOpening());
+				Date d = new Date();
+				DateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+				d = sdf.parse(c.getComplaintOpening());
+
+				Calendar cl = Calendar.getInstance();
+				cl.setTime(d);
+				cl.add(Calendar.DATE, 1);
+				Date currentDatePlusOne = cl.getTime();
+				pstmt.setString(8, sdf.format(currentDatePlusOne));
+				pstmt.setString(9, c.getComplainState().name());
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
+				e.printStackTrace();
+			}
+			obj.setResponse(Response.OPEN_COMPLAINT_SUCCEED);
+			
+			
+
+			
+		}else {
+		obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
+		}
+
+	}
+}
 }

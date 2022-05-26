@@ -1,18 +1,105 @@
 package entities_reports;
 
-public class Complaint {
-	String complaintID, customerID, customerServiceID, description, branchID;
+import java.io.Serializable;
 
-	public Complaint(String complaintID, String customerID, String customerServiceID, String description,
-			String branchID) {
+import enums.ComplaintsStatus;
+
+/**
+ * class for the complain
+ * 
+ * @author Mor Ben Haim
+ *
+ */
+public class Complaint implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	/**
+	 * every complaint have his complaintID, customerID,orderID, customerServiceID,
+	 * description, branchID, complaintOpening, treatmentUntil,refoundAmount
+	 */
+	private String complaintID, customerID, orderID, customerServiceID, description, branchID, complaintOpening,
+			treatmentUntil, refoundAmount;
+	/**
+	 * every complaint have his complaintsStatus, complainState
+	 */
+	private ComplaintsStatus complaintsStatus, complainState;
+	/**
+	 * 
+	 * @param complaintID
+	 * @param customerID
+	 * @param orderID
+	 * @param customerServiceID
+	 * @param description
+	 * @param branchID
+	 * @param complaintOpening
+	 * @param treatmentUntil
+	 * @param complainState
+	 * @param complaintsStatus
+	 */
+	public Complaint(String complaintID, String customerID, String orderID, String customerServiceID,
+			String description, String branchID, String complaintOpening, String treatmentUntil,
+			ComplaintsStatus complainState, ComplaintsStatus complaintsStatus) {
 		super();
 		this.complaintID = complaintID;
 		this.customerID = customerID;
+		this.orderID = orderID;
 		this.customerServiceID = customerServiceID;
 		this.description = description;
 		this.branchID = branchID;
+		this.complaintOpening = complaintOpening;
+		this.treatmentUntil = treatmentUntil;
+		this.complainState = complainState;
+		this.complaintsStatus = complaintsStatus;
 	}
 	
+	public String getOrderID() {
+		return orderID;
+	}
+
+	public void setOrderID(String orderID) {
+		this.orderID = orderID;
+	}
+
+	public String getRefoundAmount() {
+		return refoundAmount;
+	}
+
+	public void setRefoundAmount(String refoundAmount) {
+		this.refoundAmount = refoundAmount;
+	}
+
+	public ComplaintsStatus getComplainState() {
+		return complainState;
+	}
+
+	public void setComplainState(ComplaintsStatus complainState) {
+		this.complainState = complainState;
+	}
+
+	public ComplaintsStatus getComplaintsStatus() {
+		return complaintsStatus;
+	}
+
+	public void setComplaintsStatus(ComplaintsStatus complaintsStatus) {
+		this.complaintsStatus = complaintsStatus;
+	}
+
+	public String getComplaintOpening() {
+		return complaintOpening;
+	}
+
+	public void setComplaintOpening(String complaintOpening) {
+		this.complaintOpening = complaintOpening;
+	}
+
+	public String getTreatmentUntil() {
+		return treatmentUntil;
+	}
+
+	public void setTreatmentUntil(String treatmentUntil) {
+		this.treatmentUntil = treatmentUntil;
+	}
+
 	public String getComplaintID() {
 		return complaintID;
 	}
@@ -77,5 +164,5 @@ public class Complaint {
 			return false;
 		return true;
 	}
-	
+
 }

@@ -2,7 +2,8 @@ package DataBase;
 
 import java.sql.Connection;
 import java.util.ArrayList;
-
+import java.sql.SQLException;
+import java.text.ParseException;
 import communication.TransmissionPack;
 
 /**
@@ -97,6 +98,25 @@ public class MissionAnalyze {
 		case UPDATE_EDITED_WORKERS:{
 			ServerQuaries.updateWorkersAfterEdit(obj,con);
 			break;
+		}
+		case GET_COMPLAINTS:{
+			ServerQuaries.getComlaints(obj, con);
+			break;
+		}
+		case UPDATE_COMPLAINTS:{
+			System.out.println("here2->");
+			ServerQuaries.updateComplaints(obj, con);
+			break;
+		}
+		case OPEN_COMPLAINT:{
+			
+				try {
+					ServerQuaries.openComplaint(obj, con);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
 		}
 		}
 

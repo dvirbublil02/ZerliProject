@@ -13,6 +13,7 @@ public class OrderCartPreview {
 	private int quantity;
 	private double price;
 	private ProductInOrder product;
+	public static double totalprice;
 	
 	public OrderCartPreview(ImageView imgSrc, String name, int quantity, double price,
 			ProductInOrder product) {
@@ -21,6 +22,7 @@ public class OrderCartPreview {
 		this.quantity = quantity;
 		this.price = price;
 		this.product=product;
+		OrderCartPreview.totalprice+=price*quantity;
 	}
 
 	public ImageView getImgSrc() {
@@ -75,4 +77,13 @@ public class OrderCartPreview {
 		return getName().toString();
 	}
 
+	public double getTotalprice() {
+		return totalprice;
+	}
+
+
+	public void setTotalprice(double totalprice) {
+		OrderCartPreview.totalprice = totalprice;
+	}
+	
 }

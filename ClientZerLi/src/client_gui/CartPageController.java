@@ -332,7 +332,7 @@ public class CartPageController implements Initializable {
 		subscribers.clear();
 	
 	}
-	
+	 
 	
 	// notify all subscribers to remove productSelected list from there local list
 	public void notifyRemoveRegularProductInOrder(ObservableList<OrderCartPreview> productSelected) {

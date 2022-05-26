@@ -8,6 +8,7 @@ public enum ShopWorkerActivity
 
 	private ShopWorkerActivity(String str, final int serialNumber) 
 	{
+		
 	}
 
 }
