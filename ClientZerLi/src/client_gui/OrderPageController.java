@@ -4,7 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
-import enums.BranchNames;
+
+import enums.Branches;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,7 +34,7 @@ public class OrderPageController implements Initializable{
 	 private TextField greetingCard;
 	
 	@FXML
-    private ComboBox<BranchNames> getBranchName=new ComboBox<>();
+    private ComboBox<Branches> getBranchName=new ComboBox<>();
 
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/OrderPage.fxml"));
@@ -72,7 +73,7 @@ public class OrderPageController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ObservableList<BranchNames> branchOptions=FXCollections.observableArrayList(BranchNames.KARMIEL);
+		ObservableList<Branches> branchOptions=FXCollections.observableArrayList(Branches.KARMIEL);
 		this.getBranchName.setItems(branchOptions);
 		
 	}

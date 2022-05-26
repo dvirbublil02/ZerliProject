@@ -47,7 +47,8 @@ import entities_users.BranchManager;
 import entities_users.Customer;
 import entities_users.ShopWorker;
 import entities_users.User;
-import enums.BranchNames;
+
+import enums.Branches;
 import enums.OrderStatus;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -269,7 +270,7 @@ public class ClientHandleTransmission {
 	 */
 
 
-	public static void addOrder(BranchNames branchName,String greetingCard) {
+	public static void addOrder(Branches branchName,String greetingCard) {
 	
 		Map<String,List<ProductInOrder>> productInOrderFinallCart=OrderHandleController.getCustomProductInOrder();
 		
