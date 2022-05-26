@@ -76,7 +76,7 @@ public class ComplaintOpenComplaintController implements Initializable {
 	private ObservableList<Branches> branchName = FXCollections.observableArrayList(Branches.KARMIEL);
 
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("ComplaintOpenComplaintControllerPage.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/ComplaintOpenComplaintControllerPage.fxml"));
 
 		Scene scene = new Scene(root);
 
