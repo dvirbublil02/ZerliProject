@@ -2,9 +2,11 @@ package DataBase;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 import java.sql.SQLException;
 import java.text.ParseException;
 import communication.TransmissionPack;
+import enums.ReportType;
 
 /**
  * In this class we analyze the mission that we got from the client , and then
@@ -120,16 +122,25 @@ public class MissionAnalyze {
 		}
 		case GET_MONTHLY_REPORT:
 		{
-			ReportsQuaries.getMonthlyReport(obj,con);
-		//	createReports.monthlyOrders("2525", "05");
-		//	createReports.monthlyIncome("2525","05");
+			TransmissionPack tp=new TransmissionPack(null, null, null);
+			List<String> reportDetails = new ArrayList<>();
+			reportDetails.add("2525");
+			reportDetails.add("2022");
+			reportDetails.add("2");
+			reportDetails.add(ReportType.INCOME.name());
+			tp.setInformation(reportDetails);
+			
+			ReportsQuaries.createQuarterReportInformation(tp);
+		//	ReportsQuaries.getMonthlyReport(obj,con);
+		//	createReports.monthlyOrders("2525", "05","2022");
+		//	createReports.monthlyIncome("2525","05","2022");
 			break;
 		}
-		case GET_QUARTER_INCOME_REPORT:
-		{
-			ReportsQuaries.getQuarterIncomeReport(obj,con);
-			break;
-		}
+//		case CREATE_QUARTER_INCOME_REPORT:
+//		{
+//			ReportsQuaries.createQuarterIncomeReport(obj,con);
+//			break;
+//		}
 		}
 
 	}

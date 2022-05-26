@@ -561,11 +561,23 @@ public class ClientHandleTransmission {
 		return tp.getResponse();
 		
 	}
-	public static void getQuarterComplaintsReport(String year, String quarter) {
-		if(year !=null && quarter !=null) {
-			
-		}
-	}
+//	public static void getQuarterIncomeReport(String branch,String year, String quarter) {
+//		if(year !=null && quarter !=null) {
+//			List<String> reportRequest=new ArrayList<>();
+//			Report returndReport;
+//			String reportType=ReportType.INCOME.name();
+//			reportRequest.addAll(Arrays.asList(branch,year,quarter,reportType));
+//			TransmissionPack tp=new TransmissionPack(Mission.GET_QUARTER_INCOME_REPORT,null,reportRequest);
+//			ClientUI.chat.accept(tp);
+//			tp=ClientUI.chat.getObj();
+//			if(tp.getInformation() == null){
+//				System.out.println("No Report!");
+//			}else {
+//			
+//					 returndReport = (Report) tp.getInformation();
+//			}
+//		}
+//	}
 	/*
 	 * in this method we getting the monthly report and convert it into string to be able to use it and pressent it into the screen.
 	 */

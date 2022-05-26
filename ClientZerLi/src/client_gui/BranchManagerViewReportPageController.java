@@ -200,7 +200,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 		   		}
 		   	}
 		   	else if(MonthlyReportButton.isSelected()) {
-		   		ClientHandleTransmission.getQuarterComplaintsReport(pickYearForQuarterCB.getValue(),pickQuarterCB.getValue());
+		   	//	ClientHandleTransmission.getQuarterComplaintsReport(pickYearForQuarterCB.getValue(),pickQuarterCB.getValue());
 		   	}
 		   	//else should be pop up that say  : Choose Report first
 	    }

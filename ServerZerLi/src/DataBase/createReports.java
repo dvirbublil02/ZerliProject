@@ -1,5 +1,6 @@
 package DataBase;
 
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import communication.TransmissionPack;
 import entities_reports.Report;
 import enums.ReportType;
 /**
- * this class handling with createing the reports 
+ * this class handling with creating the reports 
  * @author Dvir Bublil
  *
  */
@@ -59,4 +60,25 @@ public class createReports {
 		}
 		
 	}
+	/**
+	 * in this method we creating incomeQuarterReport. this method also can create ordersQuarter report but its not asked.
+	 * @param branchID
+	 * @param year
+	 * @param quarter
+	 */
+	public static void quarterIncomeReport(String branchID,String year,String quarter) {
+		boolean created=false;
+		TransmissionPack tp=new TransmissionPack(null, null, null);
+		List<String> reportDetails = new ArrayList<>();
+		reportDetails.add(branchID);
+		reportDetails.add(year);
+		reportDetails.add(quarter);
+		reportDetails.add(ReportType.INCOME.name());
+		tp.setInformation(reportDetails);
+		created=ReportsQuaries.createQuarterReportInformation(tp);
+		if(!created) {
+			System.out.println("quarterReport creation failed");
+		}
+	}
+	
 }
