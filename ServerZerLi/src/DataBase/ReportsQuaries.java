@@ -493,4 +493,18 @@ public class ReportsQuaries {
 		return incomeInfo;
 	}
 
+	
+
+	public static void getQuarterIncomeReport(TransmissionPack obj, Connection con) {
+	//	branchid , year, querter
+		if(obj instanceof TransmissionPack) {
+			List<String> reportRequest=new ArrayList<>();
+			reportRequest=(List<String>) obj.getInformation();
+			String branchID=reportRequest.get(0);
+			String year=reportRequest.get(1);
+			String quater=reportRequest.get(2);
+			
+		}
+	}
+
 }

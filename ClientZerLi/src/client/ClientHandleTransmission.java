@@ -626,19 +626,19 @@ public class ClientHandleTransmission {
 			return false;
 		}
 	}
-//	public static boolean getQuarterIncomeReport(String year, String quarter,String branchID) {
-//		if(year !=null && quarter !=null) {
-//			List<String> reportRequest=new ArrayList<>();
-//			Report returndReport;
-//			reportRequest.addAll(Arrays.asList(branchID,year,quarter));
-//			TransmissionPack tp=new TransmissionPack(Mission.GET_QUARTER_INCOME_REPORT,null,reportRequest);
-//			ClientUI.chat.accept(tp);
-//			tp=ClientUI.chat.getObj();
-//			
-//			
-//		}
-//		else return false;
-//	}
+	public static boolean getQuarterIncomeReport(String year, String quarter,String branchID) {
+		if(year !=null && quarter !=null) {
+			List<String> reportRequest=new ArrayList<>();
+			Report returndReport;
+			reportRequest.addAll(Arrays.asList(branchID,year,quarter));
+			TransmissionPack tp=new TransmissionPack(Mission.GET_QUARTER_INCOME_REPORT,null,reportRequest);
+			ClientUI.chat.accept(tp);
+			tp=ClientUI.chat.getObj();
+			
+			
+		}
+		 return false; // pop up.
+	}
 }
 
 

@@ -6,6 +6,7 @@ import java.util.List;
 public class ReportHandleController {
 	private static List<List<String>> OrdersReportOnListMonth= new ArrayList<>();
 	private static List<List<String>> OrdersReportOnListQuarter=new ArrayList<>();
+	
 	public static List<List<String>> getOrdersReportOnListMonth() {
 		return OrdersReportOnListMonth;
 	}

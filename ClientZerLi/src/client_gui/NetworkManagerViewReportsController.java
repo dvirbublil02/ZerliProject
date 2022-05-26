@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import client.ClientHandleTransmission;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -142,7 +143,7 @@ public class NetworkManagerViewReportsController implements Initializable {
 
 	@FXML
 	void ShowQuarterlyReports(ActionEvent event) {
-
+		//ClientHandleTransmission.getQuarerlyIncomeReport();
 	}
 
 	@FXML

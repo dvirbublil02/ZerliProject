@@ -136,11 +136,11 @@ public class MissionAnalyze {
 		//	createReports.monthlyIncome("2525","05","2022");
 			break;
 		}
-//		case CREATE_QUARTER_INCOME_REPORT:
-//		{
-//			ReportsQuaries.createQuarterIncomeReport(obj,con);
-//			break;
-//		}
+		case GET_QUARTER_INCOME_REPORT:
+		{
+			ReportsQuaries.getQuarterIncomeReport(obj,con);
+			break;
+		}
 		}
 
 	}
