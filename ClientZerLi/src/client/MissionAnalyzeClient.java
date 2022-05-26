@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import communication.TransmissionPack;
-
+ 
 public class MissionAnalyzeClient {
 	private static final List<zerliClientListeners> clientlisteners = new ArrayList<zerliClientListeners>();
 
