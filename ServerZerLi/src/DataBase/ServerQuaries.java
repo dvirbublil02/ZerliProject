@@ -18,7 +18,8 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
+import java.sql.Blob;
+import entities_reports.Report;
 import communication.Response;
 import communication.TransmissionPack;
 import entities_catalog.Product;
@@ -41,7 +42,8 @@ import enums.ComplaintsStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
 import javafx.collections.ObservableList;
-
+import enums.ReportDuration;
+import enums.ReportType;
 /**
  * In this class there are all the server quarries
  * 

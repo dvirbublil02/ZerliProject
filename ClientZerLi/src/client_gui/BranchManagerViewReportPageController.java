@@ -1,8 +1,13 @@
 package client_gui;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientHandleTransmission;
+import client.ClientUI;
+import communication.TransmissionPack;
+import entities_reports.Report;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -74,8 +79,8 @@ public class BranchManagerViewReportPageController implements Initializable {
 
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
-		BranchManagerPageController branchPage = new BranchManagerPageController();
-		branchPage.start(primaryStage);
+		BranchManagerPageController branchPager = new BranchManagerPageController();
+		branchPager.start(primaryStage);
 
 	}
 	// private static ObservableList<String[]> months = {"Month", "January",
@@ -128,7 +133,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 		pickYearForQuarterCB.setItems(quarterlyYearList);
 
 	}
-
+	//this action will hide & show the specific buttons for the MonthlyReport
 	public void showAction1(ActionEvent event) {
 		if (MonthlyReportButton.isSelected() && !QuartelyReportButton.isSelected()) {
 			pickMonthForMonthlyCB.setDisable(false);
@@ -151,7 +156,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 		}
 
 	}
-
+	//this action will hide & show the specific buttons for the QuartelyReport
 	public void showAction2(ActionEvent event) {
 		if (QuartelyReportButton.isSelected() && !MonthlyReportButton.isSelected()) {
 			pickQuarterCB.setDisable(false);
@@ -169,4 +174,34 @@ public class BranchManagerViewReportPageController implements Initializable {
 
 		}
 	}
+	   @FXML
+	    void ViewAction(ActionEvent event) throws Exception {
+		   	if(MonthlyReportButton.isSelected()) {
+		   		
+		   		if(ClientHandleTransmission.getMonthlyReport(pickYearForMonthlyCB.getValue(),pickMonthForMonthlyCB.getValue(),pickReportTypeForMonthlyCB.getValue())) {
+		   			TransmissionPack tp=ClientUI.chat.getObj();
+		   			Report returned=((Report) tp.getInformation());
+		   			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+					Stage primaryStage = new Stage();
+		   			switch(returned.getReportType()) {
+		   			case ORDERS:{
+		   				OrderReportsController orderReport = new OrderReportsController();
+						orderReport.start(primaryStage);
+						return;
+		   				}
+		   			case INCOME:{
+		   				IncomeReportController incomeReport = new IncomeReportController();
+						incomeReport.start(primaryStage);
+						return;
+		   			}
+		   			}
+		   		
+				
+		   		}
+		   	}
+		   	else if(MonthlyReportButton.isSelected()) {
+		   		ClientHandleTransmission.getQuarterComplaintsReport(pickYearForQuarterCB.getValue(),pickQuarterCB.getValue());
+		   	}
+		   	//else should be pop up that say  : Choose Report first
+	    }
 }

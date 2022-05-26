@@ -118,6 +118,18 @@ public class MissionAnalyze {
 				}
 			
 		}
+		case GET_MONTHLY_REPORT:
+		{
+			ReportsQuaries.getMonthlyReport(obj,con);
+		//	createReports.monthlyOrders("2525", "05");
+		//	createReports.monthlyIncome("2525","05");
+			break;
+		}
+		case GET_QUARTER_INCOME_REPORT:
+		{
+			ReportsQuaries.getQuarterIncomeReport(obj,con);
+			break;
+		}
 		}
 
 	}

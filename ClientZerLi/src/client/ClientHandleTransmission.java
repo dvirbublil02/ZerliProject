@@ -33,6 +33,8 @@ import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
 import entities_general.WorkersPreview;
+import entities_reports.Report;
+import enums.ReportType;
 import entities_reports.Complaint;
 import entities_reports.ComplaintPreview;
 import entities_users.BranchManager;
@@ -552,6 +554,72 @@ public class ClientHandleTransmission {
 		return tp.getResponse();
 		
 	}
+	public static void getQuarterComplaintsReport(String year, String quarter) {
+		if(year !=null && quarter !=null) {
+			
+		}
+	}
+	/*
+	 * in this method we getting the monthly report and convert it into string to be able to use it and pressent it into the screen.
+	 */
+	public static boolean getMonthlyReport(String year, String month, String reportType) {
+		if(year !=null && month !=null && reportType!=null) {
+		List<String> reportRequest=new ArrayList<>();
+		Report returndReport;
+		reportRequest.addAll(Arrays.asList(ClientController.user.getID(),year,month,reportType));
+		TransmissionPack tp=new TransmissionPack(Mission.GET_MONTHLY_REPORT,null,reportRequest);
+		ClientUI.chat.accept(tp);
+		tp=ClientUI.chat.getObj();
+		if(tp.getInformation() == null){
+			System.out.println("No Report!");
+		}else {
+		
+				 returndReport = (Report) tp.getInformation();
+
+				ByteArrayInputStream stream = new ByteArrayInputStream(returndReport.getBlob());
+				InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+				BufferedReader bufferedReader = new BufferedReader(streamReader);
+				List<List<String>> reportOnList = new ArrayList<>();
+				String line;
+				try {
+					
+					while ((line = bufferedReader.readLine()) != null) {
+						
+							List<String> row = new ArrayList<String>(Arrays.asList(line.split(" ")));
+							reportOnList.add(row);
+						
+					}
+					ReportHandleController.setOrdersReportOnListMonth(reportOnList);
+					
+					ClientUI.chat.getObj().setInformation(returndReport);
+					return true;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			}
+		ClientUI.chat.getObj().setInformation(null);
+		return false;
+	}
+		else {
+			ClientUI.chat.getObj().setInformation(null);
+			return false;
+		}
+	}
+//	public static boolean getQuarterIncomeReport(String year, String quarter,String branchID) {
+//		if(year !=null && quarter !=null) {
+//			List<String> reportRequest=new ArrayList<>();
+//			Report returndReport;
+//			reportRequest.addAll(Arrays.asList(branchID,year,quarter));
+//			TransmissionPack tp=new TransmissionPack(Mission.GET_QUARTER_INCOME_REPORT,null,reportRequest);
+//			ClientUI.chat.accept(tp);
+//			tp=ClientUI.chat.getObj();
+//			
+//			
+//		}
+//		else return false;
+//	}
 }
 
 
