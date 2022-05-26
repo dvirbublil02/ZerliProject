@@ -8,6 +8,7 @@ import java.io.IOException;
 import communication.ChatIF;
 import communication.TransmissionPack;
 import entities_users.User;
+import javafx.scene.control.Label;
 
 /**
  * This class constructs the UI for a chat client. It implements the chat
@@ -86,6 +87,19 @@ public class ClientController implements ChatIF {
 	 */
 	public static void setObj(TransmissionPack obj) {
 		ClientController.obj = obj;
+	}
+public static void initalizeUserDetails(Label employeeName,Label phoneNumber, Label accountStatus,Label entryGreeting,Label employeeType,String user) {
+		
+		if(entryGreeting!=null) {
+			entryGreeting.setText(entryGreeting.getText()+" "+ClientController.user.getFirstName()+" !");
+		}
+	
+		employeeName.setText(ClientController.user.getFirstName()+" "+ClientController.user.getLastName());
+		phoneNumber.setText(ClientController.user.getPhoneNumber());
+		accountStatus.setText(ClientController.user.getAccountStatus().name());
+		employeeType.setText(user);
+		
+		
 	}
 }
 //End of ConsoleChat class
