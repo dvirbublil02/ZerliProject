@@ -16,6 +16,9 @@ import server_gui.ServerScreenController;
  */
 public class DBController {
 	private static Connection con;
+	public static Connection getCon() {
+		return con;
+	}
 
 	/**
 	 * In this method we parsing the TransmissionPack that we got from the client by
