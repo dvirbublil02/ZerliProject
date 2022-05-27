@@ -53,7 +53,7 @@ public class ReportsQuaries {
 			List<String> reportDetails = new ArrayList<>();
 			reportDetails = (List<String>) obj.getInformation();
 
-			String branchID = getBranchIdbyUserID(reportDetails.get(0), con);
+			String branchID = reportDetails.get(0);
 			String year = reportDetails.get(1);
 			String month = reportDetails.get(2);
 			String reportType = reportDetails.get(3).toUpperCase();
@@ -119,22 +119,22 @@ public class ReportsQuaries {
 	 * @param con
 	 * @return
 	 */
-	private static String getBranchIdbyUserID(String ID, Connection con) {
-		ResultSet rs;
-		Statement stmt;
-		String branchId = null;
-		String getBranchID = "SELECT branchID FROM zerli.branchmanager WHERE branchmanagerID='" + ID + "';";
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery(getBranchID);
-			rs.next();
-			branchId = rs.getString(1);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return branchId;
-	}
+//	private static String getBranchIdbyUserID(String ID, Connection con) {
+//		ResultSet rs;
+//		Statement stmt;
+//		String branchId = null;
+//		String getBranchID = "SELECT branchID FROM zerli.branchmanager WHERE branchmanagerID='" + ID + "';";
+//		try {
+//			stmt = con.createStatement();
+//			rs = stmt.executeQuery(getBranchID);
+//			rs.next();
+//			branchId = rs.getString(1);
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return branchId;
+//	}
 
 	private static String getMonthFormat(int month) {
 		String fixMonth;
@@ -414,35 +414,36 @@ public class ReportsQuaries {
 			}
 			StringBuilder stringBuilder = new StringBuilder();
 			String branchName = getBranchNamebyBranchID(branch, con);
-			stringBuilder.append(branch + " " + branchName + " " + quarter);
+			stringBuilder.append(branch + " " + branchName + " " + quarter + " " +year);
+			
 			if (reportType.equals(ReportType.ORDERS.name()) && countMonths > 0) {
 				if (InfoFirstMonth != null) {
 					for (List<String> row : InfoFirstMonth)
-						stringBuilder.append("\n quarter1 " + row.get(0) + " " + row.get(1) + " " + row.get(2));
+						stringBuilder.append("\nmonth1 " + row.get(0) + " " + row.get(1) + " " + row.get(2));
 				}
 				if (InfoSecondMonth != null) {
 					for (List<String> row : InfoSecondMonth)
-						stringBuilder.append("\n quarter2 " + row.get(0) + " " + row.get(1) + " " + row.get(2));
+						stringBuilder.append("\nmonth2 " + row.get(0) + " " + row.get(1) + " " + row.get(2));
 				}
 				if (InfoThirdMonth != null) {
 					for (List<String> row : InfoThirdMonth)
-						stringBuilder.append("\n quarter3 " + row.get(0) + " " + row.get(1) + " " + row.get(2));
+						stringBuilder.append("\nmonth3 " + row.get(0) + " " + row.get(1) + " " + row.get(2));
 				}
 			} else { // income report
 				if (InfoFirstMonth != null) {
 					for (List<String> row : InfoFirstMonth)
 						stringBuilder.append(
-								"\nquarter1 " + row.get(0) + " " + row.get(1) + " " + row.get(2) + " " + row.get(3));
+								"\nmonth1 " + row.get(0) + " " + row.get(1) + " " + row.get(2) + " " + row.get(3));
 				}
 				if (InfoSecondMonth != null) {
 					for (List<String> row : InfoSecondMonth)
 						stringBuilder.append(
-								"\nquarter2 " + row.get(0) + " " + row.get(1) + " " + row.get(2) + " " + row.get(3));
+								"\nmonth2 " + row.get(0) + " " + row.get(1) + " " + row.get(2) + " " + row.get(3));
 				}
 				if (InfoThirdMonth != null) {
 					for (List<String> row : InfoThirdMonth)
 						stringBuilder.append(
-								"\nquarter3 " + row.get(0) + " " + row.get(1) + " " + row.get(2) + " " + row.get(3));
+								"\nmonth3 " + row.get(0) + " " + row.get(1) + " " + row.get(2) + " " + row.get(3));
 				}
 			}
 			System.out.println(countMonths);
@@ -507,6 +508,7 @@ public class ReportsQuaries {
 			Report returnReport = null;
 			ResultSet rs;
 			Statement stmt;
+			
 			String query = "SELECT * FROM zerli.reports WHERE branchID='" + branchID + "' AND reportDuration='QUARTERLY'";
 			try {
 				stmt = con.createStatement();
@@ -519,21 +521,24 @@ public class ReportsQuaries {
 						byte[] buff=b.getBytes(1, (int) b.length());
 						returnReport = new Report(rs.getString(1), ReportType.valueOf(rs.getString(2)), rs.getString(3),
 								rs.getString(4), ReportDuration.valueOf(rs.getString(5)), buff, rs.getDate(7).toLocalDate());
+						
 					}
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			
 			if (returnReport != null) {
+				
 				obj.setResponse(Response.FOUND_QUARENTY_INCOME_REPORT);
 				obj.setInformation(returnReport);
 				return;
 			} else {
-				obj.setResponse(Response.NOT_FOUND_MONTHLY_REPORT);
+				obj.setResponse(Response.NOT_FOUND_QUARENTY_INCOME_REPORT);
 				obj.setInformation(null);
 			}
 		}
-				obj.setResponse(Response.NOT_FOUND_MONTHLY_REPORT);
+				obj.setResponse(Response.NOT_FOUND_QUARENTY_INCOME_REPORT);
 				obj.setInformation(null);
 	}
 

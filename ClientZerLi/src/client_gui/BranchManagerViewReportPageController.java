@@ -4,10 +4,14 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
+import client.ReportHandleController;
+import client.popMessageHandler;
 import communication.TransmissionPack;
 import entities_reports.Report;
+import entities_users.BranchManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -177,10 +181,13 @@ public class BranchManagerViewReportPageController implements Initializable {
 	   @FXML
 	    void ViewAction(ActionEvent event) throws Exception {
 		   	if(MonthlyReportButton.isSelected()) {
-		   		
-		   		if(ClientHandleTransmission.getMonthlyReport(pickYearForMonthlyCB.getValue(),pickMonthForMonthlyCB.getValue(),pickReportTypeForMonthlyCB.getValue())) {
+		   		String branchID=ClientHandleTransmission.getBranchID();
+		   		if(branchID!= null) {
+		   			
+		   		if(ClientHandleTransmission.getMonthlyReport(branchID,pickYearForMonthlyCB.getValue(),pickMonthForMonthlyCB.getValue(),pickReportTypeForMonthlyCB.getValue())) {
 		   			TransmissionPack tp=ClientUI.chat.getObj();
 		   			Report returned=((Report) tp.getInformation());
+		   			ReportHandleController.setUserReport((BranchManager) ClientController.user); //down cast
 		   			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 					Stage primaryStage = new Stage();
 		   			switch(returned.getReportType()) {
@@ -198,9 +205,14 @@ public class BranchManagerViewReportPageController implements Initializable {
 		   		
 				
 		   		}
+		   		else {
+		   			ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!","No Report Avaliable");
+		   		}
+		   		}
+		   		
 		   	}
-		   	else if(MonthlyReportButton.isSelected()) {
-		   	//	ClientHandleTransmission.getQuarterComplaintsReport(pickYearForQuarterCB.getValue(),pickQuarterCB.getValue());
+		   	else if(QuartelyReportButton.isSelected()) {
+		   		
 		   	}
 		   	//else should be pop up that say  : Choose Report first
 	    }

@@ -41,7 +41,7 @@ import enums.AccountStatus;
 import enums.ComplaintsStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
-import javafx.collections.ObservableList;
+
 import enums.ReportDuration;
 import enums.ReportType;
 /**
@@ -751,7 +751,7 @@ public class ServerQuaries {
 		}
 		
 	}
-	private static String getBranchId(User user, Connection con) {
+	protected static String getBranchId(User user, Connection con) {
 		ResultSet rs;
 		Statement stmt;
 		String branchId = null;
@@ -1109,8 +1109,7 @@ public class ServerQuaries {
 				e.printStackTrace();
 			}
 			obj.setResponse(Response.OPEN_COMPLAINT_SUCCEED);
-			
-			
+		
 
 			
 		}else {

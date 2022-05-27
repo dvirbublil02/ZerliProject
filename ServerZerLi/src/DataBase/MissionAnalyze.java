@@ -6,6 +6,7 @@ import java.util.List;
 import java.sql.SQLException;
 import java.text.ParseException;
 import communication.TransmissionPack;
+import entities_users.User;
 import enums.ReportType;
 
 /**
@@ -118,30 +119,31 @@ public class MissionAnalyze {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			break;
 			
 		}
 		case GET_MONTHLY_REPORT:
 		{
-			TransmissionPack tp=new TransmissionPack(null, null, null);
-			List<String> reportDetails = new ArrayList<>();
-			reportDetails.add("2525");
-			reportDetails.add("2022");
-			reportDetails.add("2");
-			reportDetails.add(ReportType.INCOME.name());
-			tp.setInformation(reportDetails);
 			
-			ReportsQuaries.createQuarterReportInformation(tp);
-		//	ReportsQuaries.getMonthlyReport(obj,con);
+	//		ReportsQuaries.createQuarterReportInformation(tp);
+			ReportsQuaries.getMonthlyReport(obj,con);
 		//	createReports.monthlyOrders("2525", "05","2022");
 		//	createReports.monthlyIncome("2525","05","2022");
+			
 			break;
 		}
 		case GET_QUARTER_INCOME_REPORT:
 		{
-			ReportsQuaries.getQuarterIncomeReport(obj,con);
+			ReportsQuaries.getQuarterIncomeReport(obj, con);
 			break;
 		}
+		case GET_BRANCHID_BY_USER:
+			String branchID=null;
+			branchID=ServerQuaries.getBranchId( (User) obj.getInformation(), con);
+			obj.setInformation(branchID);
+			break;
 		}
+		
 
 	}
 }

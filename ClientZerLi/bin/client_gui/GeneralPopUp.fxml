@@ -12,7 +12,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="labelOfPopUp" />
+                  <Label fx:id="labelOfPopUp" contentDisplay="CENTER" prefHeight="79.0" prefWidth="237.0" text="TEST" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">

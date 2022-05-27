@@ -25,6 +25,7 @@ import client_gui.BranchManagerPageController;
 import client_gui.CartPageController;
 import client_gui.CustomerPageController;
 import client_gui.DeliveryAgentPageController;
+import client_gui.GenaralPopUpController;
 import client_gui.CustomerServicePageController;
 import client_gui.LoginController;
 import client_gui.NetworkManagerPageController;
@@ -581,11 +582,11 @@ public class ClientHandleTransmission {
 	/*
 	 * in this method we getting the monthly report and convert it into string to be able to use it and pressent it into the screen.
 	 */
-	public static boolean getMonthlyReport(String year, String month, String reportType) {
+	public static boolean getMonthlyReport(String branchID,String year, String month, String reportType) {
 		if(year !=null && month !=null && reportType!=null) {
 		List<String> reportRequest=new ArrayList<>();
 		Report returndReport;
-		reportRequest.addAll(Arrays.asList(ClientController.user.getID(),year,month,reportType));
+		reportRequest.addAll(Arrays.asList(branchID,year,month,reportType));
 		TransmissionPack tp=new TransmissionPack(Mission.GET_MONTHLY_REPORT,null,reportRequest);
 		ClientUI.chat.accept(tp);
 		tp=ClientUI.chat.getObj();
@@ -626,8 +627,8 @@ public class ClientHandleTransmission {
 			return false;
 		}
 	}
-	public static boolean getQuarterIncomeReport(String year, String quarter,String branchID) {
-		if(year !=null && quarter !=null) {
+	public static boolean getQuarterIncomeReport(String branchID,String year, String quarter) {
+		//if(year !=null && quarter !=null) {
 			List<String> reportRequest=new ArrayList<>();
 			Report returndReport;
 			reportRequest.addAll(Arrays.asList(branchID,year,quarter));
@@ -639,7 +640,7 @@ public class ClientHandleTransmission {
 			}
 			else {
 				 returndReport = (Report) tp.getInformation();
-
+				 
 					ByteArrayInputStream stream = new ByteArrayInputStream(returndReport.getBlob());
 					InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
 					BufferedReader bufferedReader = new BufferedReader(streamReader);
@@ -664,12 +665,33 @@ public class ClientHandleTransmission {
 			}
 		ClientUI.chat.getObj().setInformation(null);
 		return false;
+//	}
+//		else {
+//			ClientUI.chat.getObj().setInformation(null);
+//			return false;
+//		}
 	}
-		else {
-			ClientUI.chat.getObj().setInformation(null);
-			return false;
+
+	public static String getBranchID() {
+		TransmissionPack tp= new TransmissionPack(Mission.GET_BRANCHID_BY_USER,null,ClientController.user); // The user is Branch manager
+		ClientUI.chat.accept(tp);
+		tp= ClientUI.chat.getObj();
+		return (String)tp.getInformation();
+		
+	}
+	public static void popUp(String body,String title) {
+		GenaralPopUpController popUp=new GenaralPopUpController();
+			popMessageHandler.setMessage(body);
+   		popMessageHandler.setTitle(title);
+   		Stage primaryStage = new Stage();
+   		try {
+			popUp.start(primaryStage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
+
 }
 
 
