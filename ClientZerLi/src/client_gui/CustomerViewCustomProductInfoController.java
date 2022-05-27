@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import client.ClientHandleTransmission;
 import client.OrderHandleController;
@@ -23,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -70,9 +72,10 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 		
 		//need to update list of product inside OrderHandleController 
 		primaryStage.setOnCloseRequest(event ->{
+			//clear static list
 			productDetails.clear();
 			
-			//release the screen control , somebodyelse can take conytol 
+			//release the screen control , somebody else can take control 
 			OrderHandleController.setDetailsAllreadyOpen(false);
 			
 			// remove all listener in background - orderHandle 
@@ -88,6 +91,25 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 		priceCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("price"));
 		customProductTable.setItems(productDetails);
 		customSelectionDetailsLabel.setText(customName+" Selection Details");
+		
+		
+		//red color for problematic quantity
+		customProductTable.setRowFactory(tv -> new TableRow<ProductInOrder>() {
+			@SuppressWarnings("unused")
+			@Override
+			protected void updateItem(ProductInOrder item, boolean empty) {
+				Set<String> problemticProducts = OrderHandleController.getProblemticProducts();
+				
+				super.updateItem(item, empty);
+				if(problemticProducts.size()>0)
+				if (item == null ) {
+					
+				} else if (problemticProducts.contains(item.getName())) {
+							setStyle("-fx-background-color: #FC655B;");
+				}
+				
+			}
+		});
 		
 		//take the screen control , only me can view 
 		OrderHandleController.setDetailsAllreadyOpen(true);

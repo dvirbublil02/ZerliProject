@@ -1,5 +1,6 @@
 package client_gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
 import client.OrderHandleController;
+import client.popMessageHandler;
 import entities_catalog.ProductInBranch;
 import entities_general.Branch;
 import enums.Branches;
@@ -115,51 +117,7 @@ public class OrderPageController implements Initializable{
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 			});	
 	}
-
-	@FXML
-	void back(ActionEvent event) throws Exception {
-		//clear static screen
-		CartPageController.listViewCustom.clear();
-		
-		
-		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-		Stage primaryStage = new Stage();
-		CartPageController cartPageController = new CartPageController();
-		cartPageController.start(primaryStage);
-	}
-	/**
-	 * event when customer press confirm this event 
-	 * adding the order to the DB after the customer 
-	 * finish his order
-	 * 
-	 * @param event
-	 */
-	@FXML
-	void confirm(ActionEvent event) {
-
-		//get product in branch and set on OrderHandleController .
-		List<ProductInBranch> productInBranch =ClientHandleTransmission.getProductInSpecificBranch(getBranchName.getValue());
-		System.out.println(productInBranch);
-		if(productInBranch.size()==0)
-		{
-			System.out.println("popup -> no items in haifa");
-		}
-		else
-		{
-			OrderHandleController.setProductInBranch(productInBranch);
-			OrderHandleController.checkQuantityInOrder();
-			
-		}
-		
-		
-		
-		
-		//OrderMassageLabel.setText("Order (12467) accepted and waiting to approved");
-		//getBranchName.getValue();
-		//ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText());
-		
-	}
-
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
@@ -183,6 +141,65 @@ public class OrderPageController implements Initializable{
 		}
 		this.getBranchName.setItems(branchOptions);
 		this.getBranchName.setValue(Branches.KARMIEL);
+	}
+	
+	
+	/**
+	 * event when customer press confirm this event 
+	 * adding the order to the DB after the customer 
+	 * finish his order
+	 * 
+	 * @param event
+	 * @author Almog Madar , Mor Ben-Haim
+	 */
+	@FXML
+	void confirm(ActionEvent event) {
+
+		//get product in branch and set on OrderHandleController .
+		List<ProductInBranch> productInBranch =ClientHandleTransmission.getProductInSpecificBranch(getBranchName.getValue());
+		System.out.println(productInBranch);
+		if(productInBranch.size()==0)
+		{
+			System.out.println("popup -> no items in haifa");
+		}
+		else
+		{
+			OrderHandleController.setProductInBranch(productInBranch);
+			
+			if(!OrderHandleController.checkQuantityInOrder()) {
+				System.out.println(OrderHandleController.getMsg());
+				//set massage to pop-up screen
+				popMessageHandler.setMessage(OrderHandleController.getMsg());
+				popMessageHandler.setTitle("Wrong Quantity Problem");
+				
+				GenaralPopScroolBarUpController genaralPopScroolBarUpController = new GenaralPopScroolBarUpController();
+				try {
+					genaralPopScroolBarUpController.start(new Stage());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			else
+			{
+				//getBranchName.getValue();
+				//ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText());
+				//OrderMassageLabel.setText("Order (12467) accepted and waiting to approved");
+			}	
+		}		
+	}
+
+
+	@FXML
+	void back(ActionEvent event) throws Exception {
+		//clear static screen
+		CartPageController.listViewCustom.clear();
+		
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		CartPageController cartPageController = new CartPageController();
+		cartPageController.start(primaryStage);
 	}
 
 	
@@ -234,6 +251,7 @@ public class OrderPageController implements Initializable{
     	}
 
     }
+    
     
 	private void timeInit8To20(ObservableList<Time> orderTimesPickUp) {
 		Time time;

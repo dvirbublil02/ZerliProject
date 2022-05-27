@@ -16,6 +16,8 @@ import entities_catalog.ProductInOrder;
 import entities_general.Order;
 import entities_general.OrderCartPreview;
 import entities_general.OrderCustomCartPreview;
+import entities_reports.ComplaintPreview;
+import enums.ComplaintsStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,7 +29,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -77,10 +81,10 @@ public class CartPageController implements Initializable {
     
     @FXML
     private Label priceLabel;
-
-  
-
-
+    
+    @FXML
+    private ProgressIndicator progressIndicator;
+ 
 	@FXML
     private TableColumn<OrderCustomCartPreview, Button> showCustomTbl;
 
@@ -136,7 +140,7 @@ public class CartPageController implements Initializable {
 			}
 			else
 			{
-				System.out.println("deatials allreaday open popup");
+				System.out.println("detials allreaday open popup");
 			}
 			
 			return o;
@@ -153,6 +157,43 @@ public class CartPageController implements Initializable {
 		ItemNameColRegularTbl.setCellValueFactory(new PropertyValueFactory<OrderCartPreview, String>("name"));
 		QuantityColRegularTbl.setCellValueFactory(new PropertyValueFactory<OrderCartPreview, Double>("quantity"));
 		priceColRegularTbl.setCellValueFactory(new PropertyValueFactory<OrderCartPreview, Double>("price"));
+
+		//red color for problematic quantity
+		tableRegular.setRowFactory(tv -> new TableRow<OrderCartPreview>() {
+			@SuppressWarnings("unused")
+			@Override
+			protected void updateItem(OrderCartPreview item, boolean empty) {
+				Set<String> problemticProducts = OrderHandleController.getProblemticProducts();
+				super.updateItem(item, empty);
+				if(problemticProducts.size()>0)
+				if (item == null ) {
+					
+				} else if (OrderHandleController.getProblemticProducts().contains(item.getName())) {
+					setStyle("-fx-background-color: #FC655B;");
+				}
+			}
+		});
+		
+		//red color for problematic quantity
+		tableCustom.setRowFactory(tv -> new TableRow<OrderCustomCartPreview>() {
+			@SuppressWarnings("unused")
+			@Override
+			protected void updateItem(OrderCustomCartPreview item, boolean empty) {
+				Set<String> problemticProducts = OrderHandleController.getProblemticProducts();
+				
+				super.updateItem(item, empty);
+				if(problemticProducts.size()>0)
+				if (item == null ) {
+					
+				} else {
+					List<ProductInOrder> customProductInOrder = item.getCartList();
+					for(ProductInOrder p : customProductInOrder)
+						if (problemticProducts.contains(p.getName())) {
+							setStyle("-fx-background-color: #FC655B;");
+						}
+				}
+			}
+		});
 		
 		
 		//add all Custom product to screen 
@@ -183,7 +224,9 @@ public class CartPageController implements Initializable {
 		priceLabel.setText(OrderHandleController.getTotalPrice()+"");
 		OrderHandleController.setPriceLabel(priceLabel);
 		
-		//priceLabel.setText(OrderHandleController.getPriceLabel().getText());
+		// Progress bar state - 70%
+		progressIndicator.setStyle("-fx-color: #D0F6DD ; -fx-accent: green;");
+		progressIndicator.setProgress(0.70f);
 		
 		//add listener to OrderHandleController to perform remove on background
 		addSubscriber(new OrderHandleController());

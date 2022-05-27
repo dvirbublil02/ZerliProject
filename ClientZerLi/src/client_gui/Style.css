@@ -211,6 +211,28 @@
     -fx-background-color:#708090 ;
 }
 
+.backgroundPopUpScroolPane{
+	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #D0F6DD , #A5C4B0);
+}
+
+.buttonPopUp{
+	-fx-background-color: #37413A;
+	-fx-background-radius: 30;
+}
+
+.buttonPopUp:hover{
+	-fx-background-color: #677A6D;
+	-fx-background-radius: 30;
+	-fx-cursor:hand;
+}
+
+.buttonPopUp:pressed{
+	-fx-background-color: #37413A;
+	-fx-border-width: 30 0 0 30;
+}
+
+
+
 
 
 
