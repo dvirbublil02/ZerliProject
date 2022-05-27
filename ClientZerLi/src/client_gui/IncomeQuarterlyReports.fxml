@@ -205,7 +205,10 @@
                                     </HBox>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="61.0" prefWidth="217.0" />
+                              <HBox alignment="CENTER" prefHeight="61.0" prefWidth="217.0">
+                                 <children>
+                                    <Button fx:id="addAnotherReportBTN" mnemonicParsing="false" onAction="#addAnotherReport" prefHeight="42.0" prefWidth="135.0" text="Button" />
+                                 </children></HBox>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="57.0" prefWidth="692.0">

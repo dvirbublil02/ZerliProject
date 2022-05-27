@@ -32,6 +32,8 @@ public class IncomeQuarterlyReportsController implements Initializable {
 	private LineChart<String, Double> IncomeLineChart;
 	@FXML
 	private Label bestMonth;
+    @FXML
+    private Button addAnotherReportBTN;
 
 	@FXML
 	private Label incomeQuarterTitle;
@@ -130,4 +132,9 @@ public class IncomeQuarterlyReportsController implements Initializable {
 			e.printStackTrace();
 		}
 	}
+
+    @FXML
+    void addAnotherReport(ActionEvent event) {
+
+    }
 }
