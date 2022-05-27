@@ -2,9 +2,12 @@ package client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import entities_catalog.ProductInBranch;
 import entities_catalog.ProductInOrder;
 import entities_general.OrderCartPreview;
 import entities_general.OrderCustomCartPreview;
@@ -18,13 +21,19 @@ public class OrderHandleController implements nofityOrderListner {
 	private static Map<String, List<ProductInOrder>> customProductInOrder = new HashMap<>();
 	private static Map<String, List<ProductInOrder>> customProductInOrderFinallCart = new HashMap<>();
 	private static List<ProductInOrder> productInOrder = new ArrayList<>();
-
 	public static int quantityOfRegularProducts = 0;
 	public static int quantityOfCustomProducts = 0;
 	private static double totalPrice = 0;
 	private static Label priceLabel = new Label("0");
 	private static boolean detailsAllreadyOpen = false;
-
+	
+	//product in brunch 
+	private static List<ProductInBranch> productInBranch = new ArrayList<ProductInBranch>();
+	//map -> <ProductID,quantity>
+	private static Map<String,Integer> quntityImageInBranch =  new HashMap<String, Integer>();
+	private static Set<String> problemticProducts = new HashSet<>();
+	private static String msg ;
+	
 	private static List<OrderPreview> ordersForBranchManager = new ArrayList<>();
 	private static OrderPreview order;
 
@@ -247,6 +256,96 @@ public class OrderHandleController implements nofityOrderListner {
 
 	public static void setDetailsAllreadyOpen(boolean detailsAllreadyOpen) {
 		OrderHandleController.detailsAllreadyOpen = detailsAllreadyOpen;
+	}
+
+	public static List<ProductInBranch> getProductInBranch() {
+		return productInBranch;
+	}
+
+	public static void setProductInBranch(List<ProductInBranch> productInBranch) {
+		OrderHandleController.productInBranch = productInBranch;
+	}
+
+	
+	public static boolean checkQuantityInOrder() {
+		StringBuilder sb = new StringBuilder();
+		
+		//clear all information before run
+		quntityImageInBranch.clear();
+		problemticProducts.clear();
+		
+		//collect total quantity MAP IMAGE for REGUALR.
+		for(ProductInOrder productInOr :productInOrder)
+		{
+			addToMapQuntityInBranch(productInOr);
+		}
+		
+		//collect total quantity MAP IMAGE for CUSTOM.
+		for(List<ProductInOrder> customProductList : customProductInOrderFinallCart.values())
+		{
+			for(ProductInOrder productInOr :customProductList)
+			{
+				addToMapQuntityInBranch(productInOr);
+			}
+		}
+		
+		
+		System.out.println("Map-view-> "+quntityImageInBranch);
+			
+		
+		//check total quantity between mapQuntityInBranch and productInBranch 
+		Set<String> productsID = quntityImageInBranch.keySet();
+		for(String productID : productsID)
+		{
+			for(ProductInBranch productInB:productInBranch) {
+				//same productId
+				if(productInB.getProductID().equals(productID))
+				{
+					//System.out.println("ProductInBranch-> " +productInB.getProductID());
+					//System.out.println("ProductIDInMap-> "  +productID);
+					
+					// Quantity in branch is smaller then total Customer choose. 
+					if(productInB.getQuantity()<quntityImageInBranch.get(productID)) {
+						//System.out.println("QunitityInBranch-> " +productInB.getQuantity());
+						//System.out.println("CustomerTotalQuantity -> " +quntityImageInBranch.get(productID));
+						
+						System.out.println("Total quantity in branch:");
+						System.out.println(productInB.getQuantity());
+						System.out.println("You choose:");
+						System.out.println(quntityImageInBranch.get(productID));
+						System.out.println("Please release -> "+(quntityImageInBranch.get(productID)-productInB.getQuantity())+" products !!");
+						
+						
+					}
+				}
+			}
+		}
+		System.out.println("Another Options is to change branch!!");
+		return true;
+	}
+
+	
+	//add to map of quntityInBranch + set problemticProducts
+	private static void addToMapQuntityInBranch(ProductInOrder productInOr) {
+		int quntity;
+		
+		System.out.println("productInOr ProductID->"+productInOr.getID());
+		
+		//add to problematic product set
+		problemticProducts.add(productInOr.getName());
+		
+		//add quantity of problematic product to  HashMap
+		
+		// if not inside the map 
+		if(!quntityImageInBranch.containsKey(productInOr.getID())) {
+			quntityImageInBranch.put(productInOr.getID(),productInOr.getProductQuantityInCart());
+		}
+		else // inside the map need to add quantity to same item 
+		{
+			quntity=quntityImageInBranch.get(productInOr.getID());
+			quntityImageInBranch.remove(productInOr.getID());
+			quntityImageInBranch.put(productInOr.getID(),quntity+productInOr.getProductQuantityInCart());
+		}
 	}
 
 }

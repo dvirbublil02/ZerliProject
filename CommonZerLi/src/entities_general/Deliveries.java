@@ -10,27 +10,23 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 
 public class Deliveries extends Order {
-	
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private	String deliveryID, orderID, recieverName, arrivedDate;
-	double price;
-	private	ComboBox<DeliveryStatus> deliveryStatus = new ComboBox<>();
-	
+	private String deliveryID, recieverName, arrivedDate;
+	private ComboBox<DeliveryStatus> deliveryStatus = new ComboBox<>();
 
-	public Deliveries(String orderID, String customerID, String branchID, double price, String greetingCard,
-			String orderDate, String expectedDelivery, Map<String,List<ProductInOrder>> items, String deliveryID, String orderID2,
-			String recieverName, double price2, String arrivedDate, ComboBox<DeliveryStatus> deliveryStatus) {
+	public Deliveries(String deliveryID, String recieverName, String arrivedDate,
+			ComboBox<DeliveryStatus> deliveryStatus, String orderID, String customerID, String branchID, double price,
+			String greetingCard, String orderDate, String expectedDelivery, Map<String, List<ProductInOrder>> items) {
 		super(orderID, customerID, branchID, price, greetingCard, orderDate, expectedDelivery, items);
 		this.deliveryID = deliveryID;
-		this.orderID = orderID2;
 		this.recieverName = recieverName;
-		this.price = price2;
 		this.arrivedDate = arrivedDate;
-		ObservableList<DeliveryStatus> list=FXCollections.observableArrayList(DeliveryStatus.READY_TO_GO, DeliveryStatus.ON_THE_WAY, DeliveryStatus.CANCELED , DeliveryStatus.ARRIVED);
+		ObservableList<DeliveryStatus> list = FXCollections.observableArrayList(DeliveryStatus.READY_TO_GO,
+				DeliveryStatus.ON_THE_WAY, DeliveryStatus.CANCELED, DeliveryStatus.ARRIVED);
 		this.deliveryStatus = deliveryStatus;
 	}
 
@@ -42,28 +38,12 @@ public class Deliveries extends Order {
 		this.deliveryID = deliveryID;
 	}
 
-	public String getOredrID() {
-		return orderID;
-	}
-
-	public void setOredrID(String oredrID) {
-		this.orderID = oredrID;
-	}
-
 	public String getRecieverName() {
 		return recieverName;
 	}
 
 	public void setRecieverName(String recieverName) {
 		this.recieverName = recieverName;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
 	}
 
 	public String getArrivedDate() {
@@ -85,8 +65,8 @@ public class Deliveries extends Order {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((orderID == null) ? 0 : orderID.hashCode());
+		int result = super.hashCode();
+		result = prime * result + ((deliveryID == null) ? 0 : deliveryID.hashCode());
 		return result;
 	}
 
@@ -94,17 +74,17 @@ public class Deliveries extends Order {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Deliveries other = (Deliveries) obj;
-		if (orderID == null) {
-			if (other.orderID != null)
+		if (deliveryID == null) {
+			if (other.deliveryID != null)
 				return false;
-		} else if (!orderID.equals(other.orderID))
+		} else if (!deliveryID.equals(other.deliveryID))
 			return false;
 		return true;
 	}
-	
+
 }

@@ -96,7 +96,7 @@ public class CartPageController implements Initializable {
     @FXML
     private TableColumn<OrderCustomCartPreview, Double> priceCustomColTbl;
     
-	private static ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
+	static ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
 	private ObservableList<OrderCartPreview> listViewRegular = FXCollections.observableArrayList();
 
 	//Cart is the publisher , orderHandelController is the subscriber
@@ -198,6 +198,7 @@ public class CartPageController implements Initializable {
 		
 		//clear static screen
 		listViewCustom.clear();
+
 		
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();

@@ -32,7 +32,9 @@ import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
 import entities_catalog.Product;
+import entities_catalog.ProductInBranch;
 import entities_catalog.ProductInOrder;
+import entities_general.Branch;
 import entities_general.CreditCard;
 import entities_general.CustomersPreview;
 import entities_general.Login;
@@ -614,6 +616,60 @@ public class ClientHandleTransmission {
 			return false;
 		}
 	}
+	
+	
+	/* get all branches 
+	 * @return  list of Enum Branches
+	 * @author  Almog Madar
+	 */
+	public static List<Branches> getBranches() {
+		// TODO Auto-generated method stub
+		TransmissionPack tp = new TransmissionPack(Mission.GET_BRANCHES, null, null);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+
+		switch (tp.getResponse()) {
+		case FOUND_BRANCHES: {
+			return (List<Branches>) tp.getInformation();
+		}
+
+		case NOT_FOUND_BRANCHES: {
+			return new ArrayList<Branches>();
+		}
+		}
+		return new ArrayList<Branches>();
+	}
+
+	/* Get Specific Product In branch . 
+	 *  @param  Branches - specific branch 
+	 *  @author Almog Madar
+	 */
+	
+	public static List<ProductInBranch> getProductInSpecificBranch(Branches branch) {
+		// TODO Auto-generated method stub
+		TransmissionPack tp = new TransmissionPack(Mission.GET_PRODUCT_IN_BRANCH, null, branch);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+
+		switch (tp.getResponse()) {
+		case FOUND_PRODUCT_IN_BRANCH: {
+			return (List<ProductInBranch>) tp.getInformation();
+		}
+
+		case NOT_FOUND_PRODUCT_IN_BRANCH: {
+			return new ArrayList<ProductInBranch>();
+		}
+		}
+		return new ArrayList<ProductInBranch>();
+		
+		
+		
+	}
+	
+	
+	
+	
+	
 //	public static boolean getQuarterIncomeReport(String year, String quarter,String branchID) {
 //		if(year !=null && quarter !=null) {
 //			List<String> reportRequest=new ArrayList<>();
@@ -627,6 +683,8 @@ public class ClientHandleTransmission {
 //		}
 //		else return false;
 //	}
+
+
 }
 
 

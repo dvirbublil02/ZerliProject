@@ -23,7 +23,9 @@ import entities_reports.Report;
 import communication.Response;
 import communication.TransmissionPack;
 import entities_catalog.Product;
+import entities_catalog.ProductInBranch;
 import entities_catalog.ProductInOrder;
+import entities_general.Branch;
 import entities_general.CreditCard;
 import entities_general.Login;
 import entities_general.Order;
@@ -38,6 +40,7 @@ import entities_users.ServiceExpert;
 import entities_users.ShopWorker;
 import entities_users.User;
 import enums.AccountStatus;
+import enums.Branches;
 import enums.ComplaintsStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
@@ -585,7 +588,7 @@ public class ServerQuaries {
 			    	products.add(product);
 				}			
 			
-			    	if(products.size()==0)
+			    if(products.size()==0)
 					throw new SQLException();
 				obj.setInformation(products);
 				rs.close();
@@ -767,6 +770,7 @@ public class ServerQuaries {
 		}
 		return branchId;
 	}
+	
 
 	@SuppressWarnings("null")
 	public static void getPendingCustomersFromDB(TransmissionPack obj, Connection con) {
@@ -871,6 +875,8 @@ public class ServerQuaries {
 			obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
 		}
 	}
+	
+	
 	public static void updateCustomersAfterEdit(TransmissionPack obj, Connection con) 
 	{//the method updates the customers that are in the list we got from obj's information
 		if(obj instanceof TransmissionPack)
@@ -1205,6 +1211,84 @@ public class ServerQuaries {
 		}
 		
 		return ComplaintsStatus.STILL_GOT_TIME;
+	}
+
+	
+	/* get all branches 
+	 * @author Almog Madar
+	 */
+	
+	public static void getBranches(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			ResultSet rs;
+			Statement stmt;
+			List<Branches> branches = new ArrayList<>();	
+			
+			String query = "SELECT * FROM zerli.branchs;";
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+
+				
+				while(rs.next()) {
+					branches.add(Branches.valueOf(rs.getString(3).toUpperCase()));
+				}
+				rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			if (branches.size() > 0) {
+
+				obj.setInformation(branches);
+				obj.setResponse(Response.FOUND_BRANCHES);
+			} else {
+				obj.setResponse(Response.NOT_FOUND_BRANCHES);
+			}
+
+		}
+	}
+	
+	/* get product in  specific branch
+	 * @author Almog Madar
+	 */
+	public static void getProductInBranch(TransmissionPack obj, Connection con) {
+		// TODO Auto-generated method stub
+		if (obj instanceof TransmissionPack) {
+			ResultSet rs;
+			Statement stmt;
+			Branches branch = (Branches) obj.getInformation();
+			List<ProductInBranch> productsInBranch = new ArrayList<>();
+			
+			
+			System.out.println(branch.getNumber());
+			String query = "SELECT * FROM zerli.productinbranch where branchID='"+ branch.getNumber() +"';";
+			System.out.println(query);
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				
+				
+				while(rs.next()) {
+					ProductInBranch product = new ProductInBranch(rs.getString(1),rs.getString(2),rs.getInt(3));
+					productsInBranch.add(product);
+				}
+				rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+		    }
+			
+			System.out.println(productsInBranch.toString());
+			
+			if (productsInBranch.size() > 0) {
+				obj.setInformation(productsInBranch);
+				obj.setResponse(Response.FOUND_PRODUCT_IN_BRANCH);
+			} else {
+				obj.setResponse(Response.NOT_FOUND_PRODUCT_IN_BRANCH);
+			}
+
+		}
+		
 	}
 }
 

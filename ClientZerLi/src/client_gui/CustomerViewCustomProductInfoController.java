@@ -51,8 +51,6 @@ public class CustomerViewCustomProductInfoController implements Initializable {
     @FXML
     private Label customSelectionDetailsLabel;
 
-    @FXML
-    private TableColumn<ProductInOrder, Integer> totalquantityCol;
 
     private static ObservableList<ProductInOrder> productDetails = FXCollections.observableArrayList();
     private static OrderCustomCartPreview orderCustomCartPreview;
@@ -86,11 +84,10 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		//Cart Table Initialize
 		productNameCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, String>("name"));
-		totalquantityCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Integer>("quantity"));
 		quantityInCartCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Integer>("productQuantityInCart"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Double>("price"));
 		customProductTable.setItems(productDetails);
-		customSelectionDetailsLabel.setText(customName+" Selection Deatails");
+		customSelectionDetailsLabel.setText(customName+" Selection Details");
 		
 		//take the screen control , only me can view 
 		OrderHandleController.setDetailsAllreadyOpen(true);

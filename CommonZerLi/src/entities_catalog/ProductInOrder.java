@@ -74,7 +74,7 @@ public class ProductInOrder extends Product {
 
 	@Override
 	public String toString() {
-		return "ProductInOrder [getName()=" + getName() + "getQuantity()=" + getQuantity() + ", productQuantityInOrder="
+		return "ProductInOrder("+super.getID()+") [getName()=" + getName() + "getQuantity()=" + getQuantity() + ", productQuantityInOrder="
 				+ getProductQuantityInCart();
 
 	}

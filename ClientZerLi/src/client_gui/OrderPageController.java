@@ -1,10 +1,17 @@
 package client_gui;
 
 import java.net.URL;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.ResourceBundle;
-
+import client.ClientController;
 import client.ClientHandleTransmission;
-
+import client.ClientUI;
+import client.OrderHandleController;
+import entities_catalog.ProductInBranch;
+import entities_general.Branch;
 import enums.Branches;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,10 +24,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 /**
- * @author Mor Ben Haim
+ * @author Mor Ben Haim , Almog Madar
  * */
 public class OrderPageController implements Initializable{
 
@@ -30,12 +42,67 @@ public class OrderPageController implements Initializable{
 	@FXML
 	private Button confirmBtn;
 	
-	 @FXML
-	 private TextField greetingCard;
+	@FXML
+	private TextField greetingCard;
 	
 	@FXML
     private ComboBox<Branches> getBranchName=new ComboBox<>();
+	
+    @FXML
+    private RadioButton ImidiateOrderRadio;
 
+    @FXML
+    private Label OrderMassageLabel;
+    
+    @FXML
+    private RadioButton bleesingCardRadio;
+    
+    @FXML
+    private DatePicker datePickUP;
+   
+    @FXML
+    private TextField deliveryAddressTxtField;
+    
+    @FXML
+    private TextField deliveryPersonNameTxtField;
+	
+    @FXML
+    private TextField deliveryPhoneEndTxtField;
+	
+    @FXML
+    private TextField deliveryPhoneStartTxtField;
+    
+    
+    @FXML
+    private RadioButton deliveryRadio;
+    
+    
+    @FXML
+    private ComboBox<Time> hoursPickUpComboBox;
+    
+    @FXML
+    private HBox hbox1;
+
+    @FXML
+    private HBox hbox2;
+
+    @FXML
+    private HBox hbox3;
+
+    @FXML
+    private HBox hbox4;
+    
+    
+    @FXML
+    private Label deliveryPriceLabel;
+    
+    @FXML
+    private ProgressIndicator progressIndicator;
+    
+    private ObservableList<Branches> branchOptions=FXCollections.observableArrayList();
+    //private List<Branch> branches = new ArrayList<>();
+    
+    
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/OrderPage.fxml"));
 
@@ -51,6 +118,10 @@ public class OrderPageController implements Initializable{
 
 	@FXML
 	void back(ActionEvent event) throws Exception {
+		//clear static screen
+		CartPageController.listViewCustom.clear();
+		
+		
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		CartPageController cartPageController = new CartPageController();
@@ -65,19 +136,129 @@ public class OrderPageController implements Initializable{
 	 */
 	@FXML
 	void confirm(ActionEvent event) {
+
+		//get product in branch and set on OrderHandleController .
+		List<ProductInBranch> productInBranch =ClientHandleTransmission.getProductInSpecificBranch(getBranchName.getValue());
+		System.out.println(productInBranch);
+		if(productInBranch.size()==0)
+		{
+			System.out.println("popup -> no items in haifa");
+		}
+		else
+		{
+			OrderHandleController.setProductInBranch(productInBranch);
+			OrderHandleController.checkQuantityInOrder();
+			
+		}
 		
-		getBranchName.getValue();
-		ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText());
+		
+		
+		
+		//OrderMassageLabel.setText("Order (12467) accepted and waiting to approved");
+		//getBranchName.getValue();
+		//ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText());
 		
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ObservableList<Branches> branchOptions=FXCollections.observableArrayList(Branches.KARMIEL);
-		this.getBranchName.setItems(branchOptions);
 		
+		// Progress bar state - 85%
+		progressIndicator.setStyle("-fx-color: #D0F6DD ; -fx-accent: green;");
+		progressIndicator.setProgress(0.85f);
+		// turn off blessing card 
+		greetingCard.setVisible(false);
+		deliveryOptionsSelection("close");
+		// hours pick up comboBox 
+		ObservableList<Time> orderTimesPickUp = FXCollections.observableArrayList();
+		timeInit8To20(orderTimesPickUp);
+		hoursPickUpComboBox.setItems(orderTimesPickUp);
+	
+		//get branches from database 
+		
+		List<Branches> branches = ClientHandleTransmission.getBranches();
+		if(branches.size()!=0)
+		{
+				branchOptions.addAll(branches);
+		}
+		this.getBranchName.setItems(branchOptions);
+		this.getBranchName.setValue(Branches.KARMIEL);
 	}
 
 	
+    @FXML
+    void bleesingCardRadioSelected(ActionEvent event) {
+    	if(bleesingCardRadio.isSelected())
+    		greetingCard.setVisible(true);
+    	else
+    		greetingCard.setVisible(false);
+    }
+	
+    
+    @FXML
+    void ImidiateOrderSelected(ActionEvent event) {
+    	if(ImidiateOrderRadio.isSelected()) {
+    		//close Imidiate option
+    		deliveryRadio.setSelected(false);
+    		deliveryOptionsSelection("close");
+    	}
+
+    }
+	
+    @FXML
+    void DeliverySelected(ActionEvent event) {
+    	if(deliveryRadio.isSelected()) {
+    		//close Imidiate option
+    		ImidiateOrderRadio.setSelected(false);
+    		//open options Visibility
+    		deliveryOptionsSelection("open");
+    	}
+    }
+    
+    private void deliveryOptionsSelection(String mission) {
+    	
+    	if(mission.equals("open")) {
+    		hbox1.setVisible(true);
+    		hbox2.setVisible(true);
+    		hbox3.setVisible(true);
+    		hbox4.setVisible(true);
+    		deliveryPriceLabel.setVisible(true);
+    	}
+    	else
+    	{
+    		hbox1.setVisible(false);
+    		hbox2.setVisible(false);
+    		hbox3.setVisible(false);
+    		hbox4.setVisible(false);
+    		deliveryPriceLabel.setVisible(false);
+    	}
+
+    }
+    
+	private void timeInit8To20(ObservableList<Time> orderTimesPickUp) {
+		Time time;
+		int hours=8,min=0;
+		
+		for(int i=0;i<12;i++) 
+		{
+			for(int j=0;j<3;j++) 
+			{
+				if(j==0){
+					min=0;
+					
+				}
+				else if(j==1){
+					min=30;
+				}
+				else{
+					hours++;
+					min=0;
+				}
+				time = new Time(hours,min,0);
+				orderTimesPickUp.add(time);
+			}
+		}
+	}
+   	
 
 }

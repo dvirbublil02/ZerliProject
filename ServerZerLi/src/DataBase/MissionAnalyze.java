@@ -130,6 +130,18 @@ public class MissionAnalyze {
 			ReportsQuaries.getQuarterIncomeReport(obj,con);
 			break;
 		}
+		
+		case GET_BRANCHES:
+		{
+			ServerQuaries.getBranches(obj, con);
+			break;
+		}
+		case GET_PRODUCT_IN_BRANCH:
+		{
+			ServerQuaries.getProductInBranch(obj, con);
+			break;
+		}
+		
 		}
 
 	}

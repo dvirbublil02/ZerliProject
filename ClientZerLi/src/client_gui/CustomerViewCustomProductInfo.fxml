@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CustomerViewCustomProductInfoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CustomerViewCustomProductInfoController">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0">
          <children>
@@ -28,9 +28,8 @@
                   <TableView fx:id="customProductTable" prefHeight="338.0" prefWidth="507.0" stylesheets="@Style.css" HBox.hgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="productNameCol" maxWidth="1.7976931348623157E308" prefWidth="297.6000061035156" text="Product Name" />
-                        <TableColumn fx:id="totalquantityCol" maxWidth="1.7976931348623157E308" prefWidth="103.19998168945312" text="Total Quantity" />
-                        <TableColumn fx:id="quantityInCartCol" maxWidth="1.7976931348623157E308" prefWidth="115.99993896484375" text="Quantity In Cart" />
-                        <TableColumn fx:id="priceCol" maxWidth="1.7976931348623157E308" minWidth="3.199951171875" prefWidth="79.199951171875" text="price" />
+                        <TableColumn fx:id="quantityInCartCol" maxWidth="1.7976931348623157E308" prefWidth="172.0" text="Quantity In Cart" />
+                        <TableColumn fx:id="priceCol" maxWidth="1.7976931348623157E308" minWidth="3.199951171875" prefWidth="126.39999389648438" text="price" />
                      </columns>
                   </TableView>
                </children>
