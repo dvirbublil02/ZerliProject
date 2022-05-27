@@ -79,5 +79,6 @@ public class EchoServer extends AbstractServer {
 //		System.out.println("Server has stopped listening for connections.");
 		ServerScreenController.SetMsg("Server has stopped listening for connections.");//adding the msg into his place on the server screen
 	}
+	
 
 }

@@ -10,16 +10,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.sql.Blob;
-import entities_reports.Report;
+
 import communication.Response;
 import communication.TransmissionPack;
 import entities_catalog.Product;
@@ -41,9 +39,7 @@ import enums.AccountStatus;
 import enums.ComplaintsStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
-import javafx.collections.ObservableList;
-import enums.ReportDuration;
-import enums.ReportType;
+import server.ServerUI;
 
 /**
  * In this class there are all the server quarries
@@ -1117,6 +1113,7 @@ public class ServerQuaries {
 	 */
 	public static void openComplaint(TransmissionPack obj, Connection con) throws ParseException {
 		if (obj instanceof TransmissionPack) {
+			System.out.println("here->Open");
 			Complaint c = (Complaint) obj.getInformation();
 			PreparedStatement pstmt;
 
@@ -1131,7 +1128,7 @@ public class ServerQuaries {
 				pstmt.setString(6, c.getBranchID());
 				pstmt.setString(7, c.getComplaintOpening());
 				Date d = new Date();
-				DateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+				DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				d = sdf.parse(c.getComplaintOpening());
 
 				Calendar cl = Calendar.getInstance();
@@ -1141,10 +1138,12 @@ public class ServerQuaries {
 				pstmt.setString(8, sdf.format(currentDatePlusOne));
 				pstmt.setString(9, c.getComplainState().name());
 				pstmt.executeUpdate();
+				System.out.println("here=->>OPenComplaint "+obj.getInformation());
 			} catch (SQLException e) {
 				obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
 				e.printStackTrace();
 			}
+			
 			obj.setResponse(Response.OPEN_COMPLAINT_SUCCEED);
 
 		} else {
@@ -1259,6 +1258,7 @@ public class ServerQuaries {
 				rs=stmt.executeQuery(query);
 				while(rs.next()) {
 					//if(getSatus(rs.getString(1))==ComplaintsStatus.DELAY) {
+					
 						obj.setResponse(Response.NOTIFY_CUSTOMER_SERVICE);
 					//}
 				}

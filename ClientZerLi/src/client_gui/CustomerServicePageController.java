@@ -37,7 +37,7 @@ public class CustomerServicePageController implements Initializable {
 	private Label entryGreeting;
 	@FXML
 	private static GenaralPopUpController genaralPopUpController;
-   
+
 	@FXML
 	private Label accountStatus;
 	@FXML
@@ -63,9 +63,9 @@ public class CustomerServicePageController implements Initializable {
 		MissionAnalyzeClient.addClientListener(new zerliClientListeners() {
 			@Override
 			public void notifyCustomerService() {
-//				MissionAnalyzeClient.removeClientListener(this);
+				MissionAnalyzeClient.removeClientListener(this);
 				notifyCustomerServiceMsg("you have Open complaint that are still open");
-				
+
 			}
 		});
 	}
@@ -82,21 +82,6 @@ public class CustomerServicePageController implements Initializable {
 	}
 
 	@FXML
-	void requestSpecialReport(ActionEvent event) {
-
-	}
-
-	@FXML
-	void viewQuarterlyReport(ActionEvent event) {
-
-	}
-
-	@FXML
-	void viewSpecialReport(ActionEvent event) {
-
-	}
-
-	@FXML
 	void viewcomplaintsBtn(ActionEvent event) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
@@ -104,16 +89,17 @@ public class CustomerServicePageController implements Initializable {
 		complaintsPageController.start(primaryStage);
 	}
 
-    @FXML
-    void openComplaintBtn(ActionEvent event) throws Exception {
+	@FXML
+	void openComplaintBtn(ActionEvent event) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		ComplaintOpenComplaintController complaintOpenComplaintController = new ComplaintOpenComplaintController();
 		complaintOpenComplaintController.start(primaryStage);
-	
-    }
-    private void notifyCustomerServiceMsg(String message) {
-    	Platform.runLater(new Runnable() {
+
+	}
+
+	private void notifyCustomerServiceMsg(String message) {
+		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				FXMLLoader loader = new FXMLLoader();
@@ -123,7 +109,7 @@ public class CustomerServicePageController implements Initializable {
 					Stage.setResizable(false);
 					root = loader.load(getClass().getResource("/client_gui/GeneralPopUp.fxml").openStream());
 					GenaralPopUpController genaralPopUpController = new GenaralPopUpController();
-					
+
 					genaralPopUpController.setMainLabel(message);
 					try {
 						genaralPopUpController.start(Stage);
@@ -131,21 +117,18 @@ public class CustomerServicePageController implements Initializable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
 
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
-    }
-
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-	
+
 		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
 				((CustomerService) ClientController.user).toString());
 

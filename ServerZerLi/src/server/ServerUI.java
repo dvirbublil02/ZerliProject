@@ -61,9 +61,9 @@ public class ServerUI extends Application {
 	        	return false;
 	        }
 	        System.out.println("start run aoutomated");
-	    	 Timer timer=new Timer();
-	    	 TimerRunner runner=new TimerRunner();
-	    	 timer.scheduleAtFixedRate(runner, 0, 60000);
+	    	 //Timer timer=new Timer();
+	    	 //TimerRunner runner=new TimerRunner();
+	    	// timer.scheduleAtFixedRate(runner, 0, 60000);
 	         sv = new EchoServer(port);
 	        
 	        try 

@@ -558,6 +558,10 @@ public class ClientHandleTransmission {
 		TransmissionPack tp = new TransmissionPack(Mission.OPEN_COMPLAINT, null,c);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
+		if(tp==null) {
+			throw new NullPointerException("this is null");
+		}
+		System.out.println("here after query");
 		return tp.getResponse();
 		
 	}
