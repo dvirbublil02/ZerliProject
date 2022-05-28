@@ -130,6 +130,9 @@ public class MissionAnalyze {
 			ReportsQuaries.getQuarterIncomeReport(obj,con);
 			break;
 		}
+		case GET_DELIVERIES:{
+			ServerQuaries.GetDeliveriesFromDB(obj,con);
+		}
 		}
 
 	}

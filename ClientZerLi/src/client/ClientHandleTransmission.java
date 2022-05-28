@@ -35,6 +35,8 @@ import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
 import entities_general.CreditCard;
 import entities_general.CustomersPreview;
+import entities_general.Deliveries;
+import entities_general.DeliveryPreview;
 import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
@@ -627,6 +629,14 @@ public class ClientHandleTransmission {
 //		}
 //		else return false;
 //	}
+
+	public static List<Deliveries> getDeliveries() {
+		TransmissionPack tp= new TransmissionPack(Mission.GET_DELIVERIES,null,null); // The user is Branch manager
+		ClientUI.chat.accept(tp);
+		tp= ClientUI.chat.getObj();
+		return (List<Deliveries>)tp.getInformation();
+	}
+
 }
 
 

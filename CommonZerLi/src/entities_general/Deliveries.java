@@ -1,69 +1,99 @@
 package entities_general;
 
+import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 import entities_catalog.ProductInOrder;
 import enums.DeliveryStatus;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
 
-public class Deliveries extends Order {
-	
+/**
+ * This class used for
+ * 
+ * @author Omri Shalev
+ *
+ */
+public class Deliveries implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private	String deliveryID, orderID, recieverName, arrivedDate;
-	double price;
-	private	ComboBox<DeliveryStatus> deliveryStatus = new ComboBox<>();
-	
+	private String orderID, customerID, branchID, orderDate, expectedDelivery, arrivedDate, receiverName, phoneNumber;
+	private int deliveryID;
+	private double price;
+	private DeliveryStatus status;
+	private List<ProductInOrder> orderProducts;
 
-	public Deliveries(String orderID, String customerID, String branchID, double price, String greetingCard,
-			String orderDate, String expectedDelivery, Map<String,List<ProductInOrder>> items, String deliveryID, String orderID2,
-			String recieverName, double price2, String arrivedDate, ComboBox<DeliveryStatus> deliveryStatus) {
-		super(orderID, customerID, branchID, price, greetingCard, orderDate, expectedDelivery, items);
-		this.deliveryID = deliveryID;
-		this.orderID = orderID2;
-		this.recieverName = recieverName;
-		this.price = price2;
+	/**
+	 * @param orderID
+	 * @param customerID
+	 * @param branchID
+	 * @param orderDate
+	 * @param expectedDelivery
+	 * @param arrivedDate
+	 * @param receiverName
+	 * @param phoneNumber
+	 * @param deliveryID
+	 * @param price
+	 * @param deliveryStatus
+	 * @param order
+	 */
+	public Deliveries(int deliveryID, String orderID, String branchID, String customerID, double price,
+			String orderDate, String expectedDelivery, String arrivedDate, String receiverName, String phoneNumber,
+			DeliveryStatus status, List<ProductInOrder> orderProducts) {
+		super();
+		this.orderID = orderID;
+		this.customerID = customerID;
+		this.branchID = branchID;
+		this.orderDate = orderDate;
+		this.expectedDelivery = expectedDelivery;
 		this.arrivedDate = arrivedDate;
-		ObservableList<DeliveryStatus> list=FXCollections.observableArrayList(DeliveryStatus.READY_TO_GO, DeliveryStatus.ON_THE_WAY, DeliveryStatus.CANCELED , DeliveryStatus.ARRIVED);
-		this.deliveryStatus = deliveryStatus;
-	}
-
-	public String getDeliveryID() {
-		return deliveryID;
-	}
-
-	public void setDeliveryID(String deliveryID) {
+		this.receiverName = receiverName;
+		this.phoneNumber = phoneNumber;
 		this.deliveryID = deliveryID;
+		this.price = price;
+		this.status = status;
+		this.setOrderProducts(orderProducts);
 	}
 
-	public String getOredrID() {
+	public String getOrderID() {
 		return orderID;
 	}
 
-	public void setOredrID(String oredrID) {
-		this.orderID = oredrID;
+	public void setOrderID(String orderID) {
+		this.orderID = orderID;
 	}
 
-	public String getRecieverName() {
-		return recieverName;
+	public String getCustomerID() {
+		return customerID;
 	}
 
-	public void setRecieverName(String recieverName) {
-		this.recieverName = recieverName;
+	public void setCustomerID(String customerID) {
+		this.customerID = customerID;
 	}
 
-	public double getPrice() {
-		return price;
+	public String getBranchID() {
+		return branchID;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public void setBranchID(String branchID) {
+		this.branchID = branchID;
+	}
+
+	public String getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(String orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public String getExpectedDelivery() {
+		return expectedDelivery;
+	}
+
+	public void setExpectedDelivery(String expectedDelivery) {
+		this.expectedDelivery = expectedDelivery;
 	}
 
 	public String getArrivedDate() {
@@ -74,19 +104,63 @@ public class Deliveries extends Order {
 		this.arrivedDate = arrivedDate;
 	}
 
-	public ComboBox<DeliveryStatus> getDeliveryStatus() {
-		return deliveryStatus;
+	public String getReceiverName() {
+		return receiverName;
 	}
 
-	public void setDeliveryStatus(ComboBox<DeliveryStatus> deliveryStatus) {
-		this.deliveryStatus = deliveryStatus;
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public int getDeliveryID() {
+		return deliveryID;
+	}
+
+	public void setDeliveryID(int deliveryID) {
+		this.deliveryID = deliveryID;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public DeliveryStatus getDeliveryStatus() {
+		return status;
+	}
+
+	public void setDeliveryStatus(DeliveryStatus status) {
+		this.status = status;
+	}
+
+	public List<ProductInOrder> getOrderProducts() {
+		return orderProducts;
+	}
+
+	public void setOrderProducts(List<ProductInOrder> orderProducts) {
+		this.orderProducts = orderProducts;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((orderID == null) ? 0 : orderID.hashCode());
+		result = prime * result + deliveryID;
 		return result;
 	}
 
@@ -99,12 +173,9 @@ public class Deliveries extends Order {
 		if (getClass() != obj.getClass())
 			return false;
 		Deliveries other = (Deliveries) obj;
-		if (orderID == null) {
-			if (other.orderID != null)
-				return false;
-		} else if (!orderID.equals(other.orderID))
+		if (deliveryID != other.deliveryID)
 			return false;
 		return true;
 	}
-	
+
 }
