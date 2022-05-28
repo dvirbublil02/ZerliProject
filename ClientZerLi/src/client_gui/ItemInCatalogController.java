@@ -1,9 +1,13 @@
 package client_gui;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import client.OrderHandleController;
 import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +23,9 @@ public class ItemInCatalogController {
 
     @FXML
     private Label itemPriceScrollArea;
+    
+    @FXML
+    private ImageView saleImage;
       
     private Product item;
     private String CURRENCY="₪";
@@ -38,6 +45,12 @@ public class ItemInCatalogController {
     	itemPriceScrollArea.setText(CURRENCY+item.getPrice());
     	Image image =  new Image(getClass().getResourceAsStream(item.getImgSrc()));
     	itemImageScrollArea.setImage(image);
-    }
+    	
+    	if(item.getIsOnSale()) {
+        	Image image2 =  new Image(getClass().getResourceAsStream("/javafx_images/Catalog/saleCatalog.png"));
+        	saleImage.setImage(image2);
+        	itemPriceScrollArea.setStyle("-fx-text-fill: #D25555;");
+    	}
 
+    }
 }
