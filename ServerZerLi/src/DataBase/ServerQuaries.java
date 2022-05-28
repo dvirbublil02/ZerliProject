@@ -648,55 +648,113 @@ public class ServerQuaries {
 	 * it save also the order details that in progress 
 	 * @param obj
 	 * @param con
+	 * @author 
 	 */
 	@SuppressWarnings("null")
 	public static void addOrderInDB(TransmissionPack obj, Connection con) {
-		
-		
 		if (obj instanceof TransmissionPack) {
-			
-			Statement stmt=null;
 			if(obj.getInformation() instanceof Order) {
+				PreparedStatement pstmt;
+				int orderID;
+				Statement stmt1;
+				ResultSet rs1;
+				String query = "INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) "
+						+ "VALUES (?,?,?,?,?,?,?,?)";
+				String query2="SELECT MAX(orderID) FROM zerli.order;";
+				
+				
 				Order order=(Order)obj.getInformation();
 				Map<String,List<ProductInOrder>>productInOrderFinallCart=order.getItems();
+				try {	
+				//insert order to database 
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1,null);	
+				pstmt.setInt(2, Integer.parseInt(order.getCustomerID()));
+				//System.out.println(order.getCustomerID());
+				pstmt.setString(3, order.getBranchID());
+				//System.out.println(order.getBranchID());
+				pstmt.setString(4, String.valueOf(order.getPrice())); 
+				//System.out.println(String.valueOf(order.getPrice()));
+				pstmt.setString(5, order.getGreetingCard());
+				//System.out.println(order.getGreetingCard());
+				pstmt.setString(6, order.getStatus().name());
+				//System.out.println(order.getStatus());
+				pstmt.setString(7, order.getOrderDate());
+				//System.out.println(order.getOrderDate());
+				pstmt.setString(8, order.getExpectedDelivery());
+				//System.out.println(order.getExpectedDelivery());
+				pstmt.executeUpdate();
 				
-				
-			String query=String.format("INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", order.getOrderID(),order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
-			
-			try {
-				stmt = con.createStatement();
-				System.out.println(query);
-				stmt.executeUpdate(query);
-				int i=0;
-				for(String p:productInOrderFinallCart.keySet()) {
-					ProductInOrder pr=productInOrderFinallCart.get(p).get(i);
-					stmt = con.createStatement();
-					String query2=String.format("INSERT INTO zerli.productinorder(productID, orderID, nameOfproduct, price, backGroundColor, picture, quantity, itemType, dominateColor, cartID, productQuantityInOrder, nameOfItem) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",pr.getNameOfproduct(), order.getOrderID(),pr.getNameOfproduct(),pr.getPrice(),pr.getBackGroundColor(),pr.getImgSrc(),pr.getQuantity(),pr.getItemType(),pr.getDominateColor(),pr.getProductQuantityInCart(),pr.getName());
-					System.out.println(query2);
-					stmt.executeUpdate(query2);
-					i++;
+				//get orderID
+				stmt1 = con.createStatement();
+				rs1=stmt1.executeQuery(query2);
+				while(rs1.next()) {
+					orderID=rs1.getInt(1);
 				}
+				rs1.close();
 				
-			} catch (SQLException e) {
+				//insert productInOrder products . 
+				
+				
+				
+				
+				
+				
+				
+				} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			}
+					e.printStackTrace();
+					System.out.println("here1");
+					obj.setResponse(Response.INSERT_ORDER_FAILD);
+					return;
+				}
+				obj.setResponse(Response.INSERT_ORDER_SUCCESS);
+				return;
+		   }
+		}
+		System.out.println("here2");
+		obj.setResponse(Response.INSERT_ORDER_FAILD);
+	}
+				
+	
+	
+	//"INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", order.getOrderID(),order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
+				
+//			//String query=String.format("INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", order.getOrderID(),order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
+//			
+//			try {
+//				stmt = con.createStatement();
+//				System.out.println(query);
+//				stmt.executeUpdate(query);
+//				int i=0;
+//				for(String p:productInOrderFinallCart.keySet()) {
+//					ProductInOrder pr=productInOrderFinallCart.get(p).get(i);
+//					stmt = con.createStatement();
+//					String query2=String.format("INSERT INTO zerli.productinorder(productID, orderID, nameOfproduct, price, backGroundColor, picture, quantity, itemType, dominateColor, cartID, productQuantityInOrder, nameOfItem) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",pr.getNameOfproduct(), order.getOrderID(),pr.getNameOfproduct(),pr.getPrice(),pr.getBackGroundColor(),pr.getImgSrc(),pr.getQuantity(),pr.getItemType(),pr.getDominateColor(),pr.getProductQuantityInCart(),pr.getName());
+//					System.out.println(query2);
+//					stmt.executeUpdate(query2);
+//					i++;
+//				}
+//				
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//			}
 			
 //			stmt.executeUpdate(String.format(
 //					"INSERT INTO zerli.orders(orderNumber, price, greetingCard, color, dOrder, shop, date, orderDate) VALUES ('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s');",
 //					order.getOrderNumber(), order.getPrice(), order.getGreetingCard(), order.getColor(),
 //					order.getDorder(), order.getShop(), order.getDate(), order.getOrderDate()));
-			try {
-				stmt = con.createStatement();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//			try {
+//				stmt = con.createStatement();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		
-	}
 
 	public static void getOrders(TransmissionPack obj, Connection con) {
 		System.out.println(6);

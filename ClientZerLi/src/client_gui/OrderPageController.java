@@ -3,6 +3,7 @@ package client_gui;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -181,11 +182,17 @@ public class OrderPageController implements Initializable{
 				}
 
 			}
-			else
+			else  // everything is OK ready to send order to database and create delivery.
 			{
-				//getBranchName.getValue();
-				//ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText());
-				//OrderMassageLabel.setText("Order (12467) accepted and waiting to approved");
+				
+				StringBuilder expectedDelivery = new StringBuilder();
+				expectedDelivery.append(datePickUP.getValue().toString()+"T");
+				expectedDelivery.append(hoursPickUpComboBox.getValue().toString());
+				expectedDelivery.append(".000000000");
+				System.out.println(expectedDelivery.toString());
+				System.out.println(LocalDateTime.now().toString());
+				if(ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),expectedDelivery.toString()));
+				   	OrderMassageLabel.setText("Order accepted and waiting to approved ");
 			}	
 		}		
 	}

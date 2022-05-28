@@ -37,7 +37,6 @@ public class GenaralPopScroolBarUpController implements Initializable {
 	
 	}
 	
-	
     @FXML
     void okPressed(ActionEvent event) {
     	((Node) event.getSource()).getScene().getWindow().hide(); // hiding window

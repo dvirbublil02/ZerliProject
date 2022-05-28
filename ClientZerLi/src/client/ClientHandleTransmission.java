@@ -269,22 +269,29 @@ public class ClientHandleTransmission {
 	/**
 	 * this method is adding the pending order of the specific customer
 	 * the order is waiting for approve from the branch manager
+	 * @return 
 	 */
 
 
-	public static void addOrder(Branches branchName,String greetingCard) {
-	
+	public static boolean addOrder(Branches branchName,String greetingCard,String expectedDelivery) {
+		
+		//get Custom + regular products in order
 		Map<String,List<ProductInOrder>> productInOrderFinallCart=OrderHandleController.getCustomProductInOrder();
-		
-		Order order =new Order(null,ClientController.user.getID(),branchName.name(),OrderHandleController.getTotalPrice(),
-				greetingCard,OrderStatus.PENDING.name(),LocalDateTime.now().toString().toString(),productInOrderFinallCart);
-
-		
-	   
 		productInOrderFinallCart.put("RegularProducts", OrderHandleController.getProductInOrder());
+		
+		
+		Order order =new Order(null,ClientController.user.getID(),String.valueOf(branchName.getNumber()),OrderHandleController.getTotalPrice(),
+				greetingCard,LocalDateTime.now().toString(),expectedDelivery,productInOrderFinallCart);
+
 
 		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
 		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		
+		if(tp.getResponse() == Response.INSERT_ORDER_SUCCESS)
+			return true;
+	
+		return false;
 	}
 	/**
 	 * this method return the ObserverList of the order that was not approved yet

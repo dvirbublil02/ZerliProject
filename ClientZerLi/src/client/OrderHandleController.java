@@ -207,7 +207,7 @@ public class OrderHandleController implements nofityOrderListner {
 					System.out.println("here!!");
 					totalPrice -= ocp.getPrice() * ocp.getQuantity();
 					productInOrder.remove(pd);
-					quantityOfRegularProducts--;
+					quantityOfRegularProducts-=ocp.getQuantity();
 					break;
 				}
 
@@ -273,7 +273,7 @@ public class OrderHandleController implements nofityOrderListner {
 	
 	public static boolean checkQuantityInOrder() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Return Back and follow the rules:\n");
+		sb.append("There was an exception in the stock.\n");
 		
 		//clear all information before run
 		quntityImageInBranch.clear();
@@ -326,7 +326,7 @@ public class OrderHandleController implements nofityOrderListner {
 						sb.append(productInB.getQuantity()+"\n");
 						sb.append("You choose:\n");
 						sb.append(productQuantity+"\n");
-						sb.append("Please release -> "+(productQuantity-productInB.getQuantity())+" product units."+"\n");
+						sb.append("Please remove -> "+(productQuantity-productInB.getQuantity())+" product units."+"\n");
 							
 					}
 				}

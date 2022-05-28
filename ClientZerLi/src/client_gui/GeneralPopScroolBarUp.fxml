@@ -28,7 +28,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="62.0" prefWidth="300.0">
                <children>
-                  <Button fx:id="OKbutton" mnemonicParsing="false" onAction="#okPressed" prefHeight="26.0" prefWidth="77.0" styleClass="buttonPopUp" stylesheets="@Style.css" text="Get Back" textFill="WHITE">
+                  <Button fx:id="OKbutton" mnemonicParsing="false" onAction="#okPressed" prefHeight="26.0" prefWidth="77.0" styleClass="buttonPopUp" stylesheets="@Style.css" text="Ok" textFill="WHITE">
                      <font>
                         <Font name="Cambria Italic" size="14.0" />
                      </font></Button>

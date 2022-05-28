@@ -16,38 +16,19 @@ import javafx.stage.Stage;
 
 public class GenaralPopUpController implements Initializable {
 	
-
 	    @FXML
 	    private Button OKbutton;
-
 	    @FXML
 	    private Label labelOfPopUp;
-
 	    private String headLine; 
 	    private String mainLabel;
 	    
-	    
-	    public String getHeadLine() {
-			return headLine;
-		}
-		public void setHeadLine(String headLineStr) {
-			this.headLine = headLineStr;
-		}
-		public String getMainLabel() {
-			return mainLabel;
-		}
-		public void setMainLabel(String mainLabel) {
-			this.mainLabel = mainLabel;
-		}
-
-		
-	
 
 	@FXML
 	void okPressed(ActionEvent event) {
-
-		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+	 ((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 	}
+	
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/GeneralPopUp.fxml"));
 
@@ -63,6 +44,21 @@ public class GenaralPopUpController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) 
 	{
 		labelOfPopUp.setAccessibleText(mainLabel);
+	}
+	
+	
+	
+    public String getHeadLine() {
+		return headLine;
+	}
+	public void setHeadLine(String headLineStr) {
+		this.headLine = headLineStr;
+	}
+	public String getMainLabel() {
+		return mainLabel;
+	}
+	public void setMainLabel(String mainLabel) {
+		this.mainLabel = mainLabel;
 	}
 
 }
