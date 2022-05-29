@@ -2,6 +2,7 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,29 +27,26 @@ import javafx.stage.Stage;
 
 public class IncomeReportController implements Initializable {
 
-	@FXML
-	private Button BackBtn;
+	 @FXML
+	    private Button BackBtn;
 
-	@FXML
-	private LineChart<String, Integer> IncomeLineChart;
+	    @FXML
+	    private LineChart<String, Double> IncomeLineChart;
 
-	@FXML
-	private PieChart pieChartCustom;
-	@FXML
-	private Label bestWeek;
+	    @FXML
+	    private Label bestDay;
 
-	@FXML
-	private Label bestDay;
+	    @FXML
+	    private Label incomeTitle;
 
-	@FXML
-	private Label worstDay;
+	    @FXML
+	    private Label totalIncomeLabel;
 
-	@FXML
-	private Label worstWeek;
-	@FXML
-	private PieChart pieChartRegular;
-	@FXML
-	private Label incomeTitle;
+	    @FXML
+	    private Label worstDay;
+
+	    
+
 	List<List<String>> reportOnList = new ArrayList<>();
 	List<String> branchInfo = new ArrayList();
 	List<String> bestDayAndWorst = new ArrayList();
@@ -75,6 +73,7 @@ public class IncomeReportController implements Initializable {
 		IncomeLineChart.getData().addAll(series, series2);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void insertTheDeatilsForTheCart(XYChart.Series series, XYChart.Series series2) {
 
 		branchInfo = reportOnList.get(0);
@@ -124,7 +123,6 @@ public class IncomeReportController implements Initializable {
 
 			}
 		}
-
 		calcAndShowTheBestAndWorst(amountsPerDay);
 
 	}
@@ -132,6 +130,7 @@ public class IncomeReportController implements Initializable {
 	private void calcAndShowTheBestAndWorst(double[] amountsPerDay) {
 		double bestDay1 = 0, worstDay1 = 999999999;
 		double[] amountPerWeek = new double[5];
+		double totalAmountSum=0;
 		int bd = 0, wd = 0;
 		for (int j = 1; j < 31; j++) {
 			if (j >= 1 && j <= 7)
@@ -151,21 +150,14 @@ public class IncomeReportController implements Initializable {
 				worstDay1 = amountsPerDay[j];
 				wd = j;
 			}
+			totalAmountSum+=amountsPerDay[j];
 		}
-		int max = 0, min = 999999999;
-		for (int j = 1; j < amountPerWeek.length; j++) {
-			if (amountPerWeek[j] > max) {
-				max = j;
-			}
-			if (amountPerWeek[j] < min && amountPerWeek[j] != 0) {
-				min = j;
-			}
-		}
+		
 		// add to Single(series) and Bouqet(series2)
 		bestDay.setText("Day " + String.valueOf(bd));
 		worstDay.setText("Day " + String.valueOf(wd));
-		worstWeek.setText("Week " + max);
-		bestWeek.setText("Week " + min);
+		DecimalFormat df = new DecimalFormat("0.00");
+		totalIncomeLabel.setText(String.valueOf(df.format(totalAmountSum)));
 	}
 
 	@FXML

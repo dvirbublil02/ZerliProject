@@ -226,7 +226,7 @@
                                     </CategoryAxis>
                                 </xAxis>
                                 <yAxis>
-                                  <NumberAxis label="Amount (ILS)" side="LEFT" styleClass="axis-label" stylesheets="@Style.css" tickLabelFill="WHITE">
+                                  <NumberAxis label="Income (ILS)" side="LEFT" styleClass="axis-label" stylesheets="@Style.css" tickLabelFill="WHITE">
                                        <tickLabelFont>
                                           <Font name="Cambria Bold" size="12.0" />
                                        </tickLabelFont>
@@ -273,28 +273,6 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="44.0" prefWidth="244.0" style="-fx-background-color: #66CDAA;">
                                        <children>
-                                          <Label text="Best Week">
-                                             <font>
-                                                <Font name="Cambria" size="18.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER" prefHeight="162.0" prefWidth="231.0" style="-fx-background-color: #E0FFFF;">
-                                       <children>
-                                          <Label fx:id="bestWeek" text="Week 4">
-                                             <font>
-                                                <Font name="Cambria Bold Italic" size="14.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="148.0" prefWidth="264.0" style="-fx-border-color: #708090;">
-                                 <children>
-                                    <HBox alignment="CENTER" prefHeight="44.0" prefWidth="244.0" style="-fx-background-color: #66CDAA;">
-                                       <children>
                                           <Label text="Worst Day">
                                              <font>
                                                 <Font name="Cambria" size="18.0" />
@@ -317,7 +295,7 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="44.0" prefWidth="244.0" style="-fx-background-color: #66CDAA;">
                                        <children>
-                                          <Label text="Worst Week">
+                                          <Label text="Total Income">
                                              <font>
                                                 <Font name="Cambria" size="18.0" />
                                              </font>
@@ -326,7 +304,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="162.0" prefWidth="231.0" style="-fx-background-color: #E0FFFF;">
                                        <children>
-                                          <Label fx:id="worstWeek" text="Week 3">
+                                          <Label fx:id="totalIncomeLabel" text="Week 3">
                                              <font>
                                                 <Font name="Cambria Bold Italic" size="14.0" />
                                              </font>
