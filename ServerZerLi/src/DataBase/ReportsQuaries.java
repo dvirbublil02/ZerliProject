@@ -644,7 +644,7 @@ public class ReportsQuaries {
 			stmt.setString(1, null);
 			stmt.setString(2, "SURVEY");
 			stmt.setString(3, "2525");
-			stmt.setString(4, "Expert");
+			stmt.setString(4, "Service Expert");
 			stmt.setString(5, ReportDuration.QUARTERLY.name());
 			stmt.setBlob(6, bais);
 			stmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
