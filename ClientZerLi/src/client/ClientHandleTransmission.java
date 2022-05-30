@@ -275,7 +275,7 @@ public class ClientHandleTransmission {
 	 */
 
 
-	public static int addOrder(Branches branchName,String greetingCard,String orderDate,String expectedDelivery) {
+	public static int addOrder(Branches branchName,String greetingCard,String orderDate,String expectedDelivery,boolean status) {
 		
 		//get Custom + regular products in order
 		Map<String,List<ProductInOrder>> productInOrderFinallCart=OrderHandleController.getCustomProductInOrder();
@@ -284,8 +284,10 @@ public class ClientHandleTransmission {
 		
 		Order order =new Order(null,ClientController.user.getID(),String.valueOf(branchName.getNumber()),OrderHandleController.getTotalPrice(),
 				greetingCard,orderDate,expectedDelivery,productInOrderFinallCart);
-
-
+		
+		if(status)
+			order.setStatus(OrderStatus.PENDING_DELIVERY);
+		
 		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();

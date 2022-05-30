@@ -221,7 +221,7 @@ public class OrderPageController implements Initializable{
 					System.out.println("3 later ->" + dateFormat.format(d2));
 					
 				
-					orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(d1),dateFormat.format(d2));
+					orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(d1),dateFormat.format(d2),false);
 					successImidiateOrder=true;
 				}	
 				else if(deliveryRadio.isSelected()) {
@@ -231,7 +231,7 @@ public class OrderPageController implements Initializable{
 					System.out.println(expectedDelivery.toString());
 					orderDate=Calendar.getInstance().getTime();
 					System.out.println(dateFormat.format(orderDate));
-					orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(orderDate),expectedDelivery.toString());
+					orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(orderDate),expectedDelivery.toString(),true);
 				}
 				
 				
@@ -296,6 +296,11 @@ public class OrderPageController implements Initializable{
 	}
 
 	
+	
+	/**  customer request 
+	 * 
+	 * @param event - request blessing card ticket
+	 */
     @FXML
     void bleesingCardRadioSelected(ActionEvent event) {
     	if(bleesingCardRadio.isSelected())
@@ -304,7 +309,10 @@ public class OrderPageController implements Initializable{
     		greetingCard.setVisible(false);
     }
 	
-    
+    /**   click radio button to request TakeAway  
+     * 
+     * @param event of click on TakeAway radio button 
+     */
     @FXML
     void ImidiateOrderSelected(ActionEvent event) {
     	//step progress 
@@ -315,7 +323,7 @@ public class OrderPageController implements Initializable{
     	hoursPickUpComboBox.setDisable(true);    	
     	
     	if(ImidiateOrderRadio.isSelected()) {
-    		//close Imidiate option
+    		//close Immediate option
     		deliveryRadio.setSelected(false);
     		deliveryOptionsSelection("close");
     	}
@@ -324,7 +332,11 @@ public class OrderPageController implements Initializable{
     	}
 
     }
-	
+    
+    /**   click radio button to request delivery 
+     * 
+     * @param event of click on delivery radio button 
+     */
     @FXML
     void DeliverySelected(ActionEvent event) {
   
@@ -337,7 +349,7 @@ public class OrderPageController implements Initializable{
     	
     	
     	if(deliveryRadio.isSelected()) {
-    		//close Imidiate option
+    		//close Immediate option
     		ImidiateOrderRadio.setSelected(false);
     		//open options Visibility
     		deliveryOptionsSelection("open");
@@ -347,6 +359,10 @@ public class OrderPageController implements Initializable{
     	}
     }
     
+    /** open or close  delivery options on screen 
+     * 
+     * 	@param mission - open or close hbox area
+     */
     private void deliveryOptionsSelection(String mission) {
     	
     	if(mission.equals("open")) {
@@ -370,6 +386,11 @@ public class OrderPageController implements Initializable{
     }
     
     
+    
+    /**Initialize time comboBox with object of Time (08:00 until 20:00)
+     * 
+     * @param orderTimesPickUp - list to add time Initialize
+     */
 	private void timeInit8To20(ObservableList<Time> orderTimesPickUp) {
 		Time time;
 		int hours=8,min=0;
