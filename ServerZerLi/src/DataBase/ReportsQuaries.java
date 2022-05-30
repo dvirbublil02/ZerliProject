@@ -21,6 +21,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -179,7 +180,8 @@ public class ReportsQuaries {
 	}
 
 	/**
-	 * in this method we inserting monthly report for specific branch and specific
+	 * in this method we inserting monthly report for specific branch and specific report
+	 * 
 	 * month.
 	 * 
 	 * @param object
@@ -195,7 +197,7 @@ public class ReportsQuaries {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (branchName != null) {
 			stringBuilder.append(branchID + " " + branchName + " " + Date);
-			if (type.equals(ReportType.ORDERS.name())) {
+			if (type.equals(ReportType.ORDERS.name())) {                              // change to switch case and add TPD to more reports.
 				for (List<String> row : orders) {
 					stringBuilder.append("\n" + row.get(0) + " " + row.get(1) + " " + row.get(2));
 				}
@@ -588,4 +590,47 @@ public class ReportsQuaries {
 		}
 		
 	}
-}
+
+	public static void getSurveyReport(TransmissionPack obj, Connection con) throws NumberFormatException, SQLException {
+		if(obj instanceof TransmissionPack) {
+			List<String> opreation=(List<String>) obj.getInformation();
+			List<List<String>> surveyResults=new ArrayList<>();
+			ResultSet rs = null;
+			Statement stmt;
+			String branchID=opreation.get(0);
+			String Year=opreation.get(1);
+			String Month=opreation.get(2);
+			String surveyType=opreation.get(3);
+			surveyResults.add(opreation);
+			String getSurveyQuarie = "SELECT * from zerli.surveys WHERE branchID='"+branchID+"' AND topic='"+surveyType+"';";
+			
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(getSurveyQuarie);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			while (rs.next()) {
+				if (getMonthFormat(rs.getDate(17).toLocalDate().getMonth().getValue()).equals(Month)
+						&& rs.getDate(17).toLocalDate().getYear() == Integer.parseInt(Year)) {
+					surveyResults.add(Arrays.asList(rs.getString(10),rs.getString(11),rs.getString(12),rs.getString(13),rs.getString(14),rs.getString(15),rs.getString(16)));
+				}
+			}
+			if(surveyResults.size()>1) {
+				obj.setInformation(surveyResults);
+				obj.setResponse(Response.SURVEY_REPORT_FOUND);
+				return;
+			}
+			
+		}else {
+			obj.setInformation(null);
+			obj.setResponse(Response.SURVEY_REPORT_NOT_FOUND);
+		}
+		
+		obj.setInformation(null);
+		obj.setResponse(Response.SURVEY_REPORT_NOT_FOUND);
+		}
+		
+	}
+

@@ -31,6 +31,7 @@ import client_gui.GenaralPopUpController;
 import client_gui.CustomerServicePageController;
 import client_gui.LoginController;
 import client_gui.NetworkManagerPageController;
+import client_gui.ServiceExpertPageController;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
@@ -351,11 +352,11 @@ public class ClientHandleTransmission {
 			menu.start(primaryStage);
 			break;
 		}
-//		case "Service Expert": {
-//			ServiceExpertPageController menu = new ServiceExpertPageController();
-//			menu.start(primaryStage);
-//			break;
-//		}
+		case "Service Expert": {
+			ServiceExpertPageController menu = new ServiceExpertPageController();
+			menu.start(primaryStage);
+			break;
+		}
 //		case "Shop Worker": {
 //			ShopWorkerPageController menu = new ShopWorkerPageController();
 //			menu.start(primaryStage);
@@ -631,8 +632,12 @@ public class ClientHandleTransmission {
 			return false;
 		}
 	}
+	/*
+	 * in this method we getting the quarter income report according to the branchId year and quarter , we sending the order into the server
+	 * by using our transmissionpack
+	 */
 	public static boolean getQuarterIncomeReport(String branchID,String year, String quarter) {
-		//if(year !=null && quarter !=null) {
+		if(year !=null && quarter !=null && branchID !=null) {
 			List<String> reportRequest=new ArrayList<>();
 			Report returndReport;
 			reportRequest.addAll(Arrays.asList(branchID,year,quarter));
@@ -640,7 +645,7 @@ public class ClientHandleTransmission {
 			ClientUI.chat.accept(tp);
 			tp=ClientUI.chat.getObj();
 			if(tp.getInformation() == null) {
-				System.out.println("No report !");
+				return false;
 			}
 			else {
 				 returndReport = (Report) tp.getInformation();
@@ -669,11 +674,11 @@ public class ClientHandleTransmission {
 			}
 		ClientUI.chat.getObj().setInformation(null);
 		return false;
-//	}
-//		else {
-//			ClientUI.chat.getObj().setInformation(null);
-//			return false;
-//		}
+	}
+		else {
+			ClientUI.chat.getObj().setInformation(null);
+			return false;
+		}
 	}
 
 	public static String getBranchID() {
@@ -712,8 +717,23 @@ public class ClientHandleTransmission {
 		
 	}
 
-	public static boolean getServiceReport(String value, String value2, String value3) {
-		// TODO Auto-generated method stub
+	public static boolean getServiceReport(String BranchID, String Year, String Month, String surveyType) {
+		if(BranchID !=null && Year !=null && Month!=null) {
+			List<String> reportRequest=new ArrayList<>();
+			List<List<String>> surveyResult=new ArrayList<>();
+			Report returndReport;
+			reportRequest.addAll(Arrays.asList(BranchID,Year,Month,surveyType));
+			TransmissionPack tp=new TransmissionPack(Mission.GET_SURVEY_REPORT,null,reportRequest);
+			ClientUI.chat.accept(tp);
+			tp=ClientUI.chat.getObj();
+			if(tp.getResponse() == Response.SURVEY_REPORT_NOT_FOUND){
+				return false;
+			}else {
+				ReportHandleController.setSurveyReportResult((List<List<String>>) tp.getInformation());
+				return true;
+			}
+			
+		}
 		return false;
 	}
 

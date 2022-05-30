@@ -149,6 +149,18 @@ public class MissionAnalyze {
 			ReportsQuaries.getYears(obj,con);
 			break;
 		}
+		case GET_SURVEY_REPORT:{
+			try {
+				ReportsQuaries.getSurveyReport(obj,con);
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		}
 		}
 		
 		

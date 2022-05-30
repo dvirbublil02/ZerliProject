@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 public class ReportHandleController {
 	private static List<List<String>> OrdersReportOnListMonth= new ArrayList<>();
 	private static List<List<String>> OrdersReportOnListQuarter=new ArrayList<>();
+	private static List<List<String>> SurveyReportResult=new ArrayList<>();
 	private static User userReport;
 	public static List<List<String>> getOrdersReportOnListMonth() {
 		return OrdersReportOnListMonth;
@@ -30,6 +31,13 @@ public class ReportHandleController {
 		OrdersReportOnListQuarter = ordersReportOnListQuarter;
 	}
 
+	public static List<List<String>> getSurveyReportResult() {
+		return SurveyReportResult;
+	}
+	
+	public static void setSurveyReportResult(List<List<String>> surveyReportResult) {
+		SurveyReportResult = surveyReportResult;
+	}
 	public static User getUserReport() {
 		return userReport;
 	}
@@ -116,5 +124,6 @@ public class ReportHandleController {
 	
 
 	}
+
 	
 }
