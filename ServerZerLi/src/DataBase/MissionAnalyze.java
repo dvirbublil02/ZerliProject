@@ -141,8 +141,15 @@ public class MissionAnalyze {
 			ServerQuaries.getProductInBranch(obj, con);
 			break;
 		}
-		
+		case ADD_DELIVERY:
+		{
+			ServerQuaries.addDelivery(obj, con);
+			break;
 		}
+	
+		}
+		
+		
 
 	}
 }

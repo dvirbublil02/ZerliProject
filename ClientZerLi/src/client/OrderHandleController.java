@@ -14,6 +14,7 @@ import entities_general.OrderCartPreview;
 import entities_general.OrderCustomCartPreview;
 import entities_general.OrderPreview;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 
 public class OrderHandleController implements nofityOrderListner {
@@ -27,6 +28,8 @@ public class OrderHandleController implements nofityOrderListner {
 	private static double totalPrice = 0;
 	private static Label priceLabel = new Label("0");
 	private static boolean detailsAllreadyOpen = false;
+	private static double shippingPrice=20.55;
+	
 	
 	//get product in branch view
 	private static List<ProductInBranch> productInBranch = new ArrayList<ProductInBranch>();
@@ -37,6 +40,9 @@ public class OrderHandleController implements nofityOrderListner {
 	private static Set<String> problemticProducts = new HashSet<>();
 	//Massage note to user if there is problem with quantity.
 	private static String msg ;
+	//boolean eventToClose
+	private static boolean closeEvent=false;
+	
 	
 	private static List<OrderPreview> ordersForBranchManager = new ArrayList<>();
 	private static OrderPreview order;
@@ -374,6 +380,32 @@ public class OrderHandleController implements nofityOrderListner {
 	
 	public static Set<String> getProblemticProducts() {
 		return problemticProducts;
+	}	
+	
+	public static void clearAllOrderData() {
+		customProductInOrder.clear();
+		customProductInOrderFinallCart.clear();
+		productInOrder.clear();
+		quantityOfRegularProducts=0;
+		quantityOfCustomProducts=0;
+		totalPrice=0;
+		updateTotalPrice();
+	}
+
+	public static boolean isCloseEvent() {
+		return closeEvent;
+	}
+
+	public static void setCloseEvent(boolean closeEvent) {
+		OrderHandleController.closeEvent = closeEvent;
+	}
+
+	public static double getShippingPrice() {
+		return shippingPrice;
+	}
+
+	public static void setShippingPrice(double shippingPrice) {
+		OrderHandleController.shippingPrice = shippingPrice;
 	}	
 
 }

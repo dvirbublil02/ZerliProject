@@ -37,6 +37,7 @@ import entities_catalog.ProductInOrder;
 import entities_general.Branch;
 import entities_general.CreditCard;
 import entities_general.CustomersPreview;
+import entities_general.Deliveries;
 import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
@@ -51,6 +52,7 @@ import entities_users.ShopWorker;
 import entities_users.User;
 
 import enums.Branches;
+import enums.DeliveryStatus;
 import enums.OrderStatus;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -273,15 +275,15 @@ public class ClientHandleTransmission {
 	 */
 
 
-	public static boolean addOrder(Branches branchName,String greetingCard,String expectedDelivery) {
+	public static int addOrder(Branches branchName,String greetingCard,String orderDate,String expectedDelivery) {
 		
 		//get Custom + regular products in order
 		Map<String,List<ProductInOrder>> productInOrderFinallCart=OrderHandleController.getCustomProductInOrder();
-		productInOrderFinallCart.put("RegularProducts", OrderHandleController.getProductInOrder());
+		productInOrderFinallCart.put("Regular", OrderHandleController.getProductInOrder());
 		
 		
 		Order order =new Order(null,ClientController.user.getID(),String.valueOf(branchName.getNumber()),OrderHandleController.getTotalPrice(),
-				greetingCard,LocalDateTime.now().toString(),expectedDelivery,productInOrderFinallCart);
+				greetingCard,orderDate,expectedDelivery,productInOrderFinallCart);
 
 
 		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
@@ -289,9 +291,13 @@ public class ClientHandleTransmission {
 		tp = ClientUI.chat.getObj();
 		
 		if(tp.getResponse() == Response.INSERT_ORDER_SUCCESS)
-			return true;
-	
-		return false;
+		{
+			OrderHandleController.clearAllOrderData();
+			int orderID=(int)tp.getInformation();
+			return orderID;
+		}
+		
+		return 0;
 	}
 	/**
 	 * this method return the ObserverList of the order that was not approved yet
@@ -662,6 +668,7 @@ public class ClientHandleTransmission {
 		case FOUND_PRODUCT_IN_BRANCH: {
 			return (List<ProductInBranch>) tp.getInformation();
 		}
+		
 
 		case NOT_FOUND_PRODUCT_IN_BRANCH: {
 			return new ArrayList<ProductInBranch>();
@@ -671,6 +678,30 @@ public class ClientHandleTransmission {
 		
 		
 		
+	}
+
+	public static boolean addDelivery(int deliveryID , int orderID, Branches branchName, String orderDate,
+			String expectedDelivery,String reciverName,String address,String phoneNumber) {
+		// TODO Auto-generated method stub
+		Deliveries deliveries = new Deliveries(deliveryID,String.valueOf(orderID),String.valueOf(branchName.getNumber())
+				                     ,ClientController.user.getID(),OrderHandleController.getShippingPrice(), 
+				                  orderDate, expectedDelivery,"",reciverName,address,phoneNumber
+				              ,DeliveryStatus.WAIT_FOR_MANAGER_APPROVED,new ArrayList<ProductInOrder>());
+			
+		TransmissionPack tp = new TransmissionPack(Mission.ADD_DELIVERY, null, deliveries);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		switch (tp.getResponse()) {
+			case ADD_DELIVERY_SUCCEED: {
+				return true;
+			}
+		
+			case FAILD_ADD_DELIVERY: {
+			return false;
+			}
+		}
+		
+		return false; 
 	}
 	
 	

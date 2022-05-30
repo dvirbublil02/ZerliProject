@@ -3,9 +3,15 @@ package client_gui;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import client.ClientController;
@@ -15,6 +21,7 @@ import client.OrderHandleController;
 import client.popMessageHandler;
 import entities_catalog.ProductInBranch;
 import entities_general.Branch;
+import entities_general.Order;
 import enums.Branches;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -100,10 +107,18 @@ public class OrderPageController implements Initializable{
     private Label deliveryPriceLabel;
     
     @FXML
+    private Label totalPriceLabel;
+    
+    @FXML
     private ProgressIndicator progressIndicator;
     
     private ObservableList<Branches> branchOptions=FXCollections.observableArrayList();
-    //private List<Branch> branches = new ArrayList<>();
+    int orderID;
+    String reciverName , phoneNumber , address ;
+    boolean successCreateDeilivery=false , successImidiateOrder=false ;
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	StringBuilder expectedDelivery = new StringBuilder();
+	Date orderDate = new Date();
     
     
 	public void start(Stage primaryStage) throws Exception {
@@ -132,6 +147,13 @@ public class OrderPageController implements Initializable{
 		ObservableList<Time> orderTimesPickUp = FXCollections.observableArrayList();
 		timeInit8To20(orderTimesPickUp);
 		hoursPickUpComboBox.setItems(orderTimesPickUp);
+		hoursPickUpComboBox.setValue(new Time(LocalTime.now().getHour(),0,0));
+		datePickUP.setValue(LocalDate.now());
+		totalPriceLabel.setText(String.valueOf(OrderHandleController.getTotalPrice()));
+		
+    	//cancel date option pickup 
+    	datePickUP.setDisable(true);
+    	hoursPickUpComboBox.setDisable(true);
 	
 		//get branches from database 
 		
@@ -149,7 +171,7 @@ public class OrderPageController implements Initializable{
 	 * event when customer press confirm this event 
 	 * adding the order to the DB after the customer 
 	 * finish his order
-	 * 
+	 * adding delivers also if necessary 
 	 * @param event
 	 * @author Almog Madar , Mor Ben-Haim
 	 */
@@ -157,11 +179,11 @@ public class OrderPageController implements Initializable{
 	void confirm(ActionEvent event) {
 
 		//get product in branch and set on OrderHandleController .
-		List<ProductInBranch> productInBranch =ClientHandleTransmission.getProductInSpecificBranch(getBranchName.getValue());
+		List<ProductInBranch> productInBranch = ClientHandleTransmission.getProductInSpecificBranch(getBranchName.getValue());
 		System.out.println(productInBranch);
 		if(productInBranch.size()==0)
 		{
-			System.out.println("popup -> no items in haifa");
+			OrderMassageLabel.setText("Products out of stock in "+ getBranchName.getValue().name());
 		}
 		else
 		{
@@ -184,15 +206,79 @@ public class OrderPageController implements Initializable{
 			}
 			else  // everything is OK ready to send order to database and create delivery.
 			{
+				if(ImidiateOrderRadio.isSelected())
+				{
+					Date d1 = new Date();
+					Date d2 = new Date();
+					Calendar c1 = Calendar.getInstance();
+					// d1 current time
+					d1=c1.getTime();
+					c1.add(Calendar.HOUR,3);
+					// d2 current time
+					d2=c1.getTime();
+					
+					System.out.println("current->" + dateFormat.format(d1));
+					System.out.println("3 later ->" + dateFormat.format(d2));
+					
 				
-				StringBuilder expectedDelivery = new StringBuilder();
-				expectedDelivery.append(datePickUP.getValue().toString()+"T");
-				expectedDelivery.append(hoursPickUpComboBox.getValue().toString());
-				expectedDelivery.append(".000000000");
-				System.out.println(expectedDelivery.toString());
-				System.out.println(LocalDateTime.now().toString());
-				if(ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),expectedDelivery.toString()));
-				   	OrderMassageLabel.setText("Order accepted and waiting to approved ");
+					orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(d1),dateFormat.format(d2));
+					successImidiateOrder=true;
+				}	
+				else if(deliveryRadio.isSelected()) {
+							
+					expectedDelivery.append(datePickUP.getValue().toString()+" ");
+					expectedDelivery.append(hoursPickUpComboBox.getValue().toString());
+					System.out.println(expectedDelivery.toString());
+					orderDate=Calendar.getInstance().getTime();
+					System.out.println(dateFormat.format(orderDate));
+					orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(orderDate),expectedDelivery.toString());
+				}
+				
+				
+				//order fine 
+				if(orderID!=0)
+					if(deliveryRadio.isSelected())
+					{
+						reciverName = deliveryPersonNameTxtField.getText();
+						address=deliveryAddressTxtField.getText();
+						phoneNumber=deliveryPhoneStartTxtField.getText()+deliveryPhoneEndTxtField.getText();						
+						successCreateDeilivery = ClientHandleTransmission.addDelivery(0,orderID,getBranchName.getValue(),dateFormat.format(orderDate),expectedDelivery.toString()
+								,reciverName,address,phoneNumber);
+						
+						if(!successCreateDeilivery) {
+							System.out.println("problem with create delivery ");
+						}
+					}
+					
+
+					progressIndicator.setProgress(1f);
+					//label order screen
+					OrderMassageLabel.setText("Order("+ orderID +") accepted and waiting to approved ");
+					//pop-up massage init
+					popMessageHandler.setMessage("Order("+ orderID +") accepted and waiting to approved ");
+					popMessageHandler.setTitle("Order Completed");
+
+					//open Customer Main screen 
+					((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+					Stage primaryStage = new Stage();
+					CustomerPageController custom = new CustomerPageController();
+					try {
+						custom.start(primaryStage);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+						
+					//open PopUp with approved about order. 
+					GenaralPopScroolBarUpController genaralPopScroolBarUpController = new GenaralPopScroolBarUpController();
+					try {
+						genaralPopScroolBarUpController.start(new Stage());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	
+					
 			}	
 		}		
 	}
@@ -221,21 +307,43 @@ public class OrderPageController implements Initializable{
     
     @FXML
     void ImidiateOrderSelected(ActionEvent event) {
+    	//step progress 
+    	progressIndicator.setProgress(0.92f);
+    	
+    	//cancel date option pickup 
+    	datePickUP.setDisable(true);
+    	hoursPickUpComboBox.setDisable(true);    	
+    	
     	if(ImidiateOrderRadio.isSelected()) {
     		//close Imidiate option
     		deliveryRadio.setSelected(false);
     		deliveryOptionsSelection("close");
+    	}
+    	else {
+    		deliveryRadio.setSelected(true);
     	}
 
     }
 	
     @FXML
     void DeliverySelected(ActionEvent event) {
+  
+    	//step progress 
+    	progressIndicator.setProgress(0.92f);
+    	
+    	//open date option pickup 
+    	datePickUP.setDisable(false);
+    	hoursPickUpComboBox.setDisable(false); 
+    	
+    	
     	if(deliveryRadio.isSelected()) {
     		//close Imidiate option
     		ImidiateOrderRadio.setSelected(false);
     		//open options Visibility
     		deliveryOptionsSelection("open");
+    	}
+    	else {
+    		ImidiateOrderRadio.setSelected(true);
     	}
     }
     
@@ -247,6 +355,7 @@ public class OrderPageController implements Initializable{
     		hbox3.setVisible(true);
     		hbox4.setVisible(true);
     		deliveryPriceLabel.setVisible(true);
+    		totalPriceLabel.setText(String.valueOf(OrderHandleController.getTotalPrice()+OrderHandleController.getShippingPrice()));
     	}
     	else
     	{
@@ -255,6 +364,7 @@ public class OrderPageController implements Initializable{
     		hbox3.setVisible(false);
     		hbox4.setVisible(false);
     		deliveryPriceLabel.setVisible(false);
+    		totalPriceLabel.setText(String.valueOf(OrderHandleController.getTotalPrice()));
     	}
 
     }

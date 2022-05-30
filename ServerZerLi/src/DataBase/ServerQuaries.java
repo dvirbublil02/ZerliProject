@@ -27,6 +27,7 @@ import entities_catalog.ProductInBranch;
 import entities_catalog.ProductInOrder;
 import entities_general.Branch;
 import entities_general.CreditCard;
+import entities_general.Deliveries;
 import entities_general.Login;
 import entities_general.Order;
 import entities_reports.Complaint;
@@ -648,23 +649,25 @@ public class ServerQuaries {
 	 * it save also the order details that in progress 
 	 * @param obj
 	 * @param con
-	 * @author 
+	 * @author Almog Madar , Mor Ben-Haim
 	 */
 	@SuppressWarnings("null")
 	public static void addOrderInDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			if(obj.getInformation() instanceof Order) {
 				PreparedStatement pstmt;
-				int orderID;
+				int orderID = 0;
 				Statement stmt1;
 				ResultSet rs1;
-				String query = "INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) "
-						+ "VALUES (?,?,?,?,?,?,?,?)";
-				String query2="SELECT MAX(orderID) FROM zerli.order;";
-				
-				
 				Order order=(Order)obj.getInformation();
 				Map<String,List<ProductInOrder>>productInOrderFinallCart=order.getItems();
+				String query = "INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) "
+						+ "VALUES (?,?,?,?,?,?,?,?);";
+				String query2="SELECT MAX(orderID) FROM zerli.order;";
+				String query3 = "INSERT INTO zerli.productinorder(productID, orderID , nameOfproduct, price, backGroundColor, picture, quantity, itemType, dominateColor, productQuantityInOrder, nameOfItem) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+				
+				
 				try {	
 				//insert order to database 
 				pstmt = con.prepareStatement(query);
@@ -693,26 +696,38 @@ public class ServerQuaries {
 				}
 				rs1.close();
 				
-				//insert productInOrder products . 
-				
-				
-				
-				
-				
-				
+				//insert (List<productInOrder>) products to table productInOrder 
+				for(Map.Entry<String, List<ProductInOrder>>  entry :productInOrderFinallCart.entrySet())
+				{
+					for(ProductInOrder productInOr : entry.getValue())
+					{
+						pstmt = con.prepareStatement(query3);
+						pstmt.setString(1,productInOr.getID());
+						pstmt.setString(2,String.valueOf(orderID));
+						pstmt.setString(3,entry.getKey());  // Regular or Custom key 
+						pstmt.setString(4,String.valueOf(productInOr.getPrice()));
+						pstmt.setString(5,productInOr.getBackGroundColor());
+						pstmt.setString(6,productInOr.getImgSrc());
+						pstmt.setString(7,String.valueOf(productInOr.getQuantity()));
+						pstmt.setString(8,productInOr.getItemType());
+						pstmt.setString(9,productInOr.getDominateColor());
+						pstmt.setString(10,String.valueOf(productInOr.getProductQuantityInCart()));
+						pstmt.setString(11,productInOr.getNameOfItem());
+						pstmt.executeUpdate();
+					}
+				}
 				
 				} catch (SQLException e) {
 				// TODO Auto-generated catch block
 					e.printStackTrace();
-					System.out.println("here1");
 					obj.setResponse(Response.INSERT_ORDER_FAILD);
 					return;
 				}
+				obj.setInformation(orderID);
 				obj.setResponse(Response.INSERT_ORDER_SUCCESS);
 				return;
 		   }
 		}
-		System.out.println("here2");
 		obj.setResponse(Response.INSERT_ORDER_FAILD);
 	}
 				
@@ -1347,6 +1362,79 @@ public class ServerQuaries {
 
 		}
 		
+	}
+
+	
+	/*
+	 * add delivery of order and update order price = regular price + shipment price . 
+	 * @ author Almog Madar
+	 */
+	public static void addDelivery(TransmissionPack obj, Connection con) {
+		// TODO Auto-generated method stub
+		if (obj instanceof TransmissionPack) {
+		if(obj.getInformation() instanceof Deliveries) {
+			
+				Statement stmt1;
+				ResultSet rs1;
+				PreparedStatement pstmt;
+				Deliveries deliveries=(Deliveries)obj.getInformation();
+				String query = "INSERT INTO zerli.deliveries (deliveryID, orderID, branchID, customerID,price,orderDate, expectedDelivery, arrivedDate, receiverName, address, phoneNumber, status) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ? , ? , ? , ? , ? , ? );";
+				
+				try {	
+				//insert order to database 
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1,null);	
+				pstmt.setString(2,deliveries.getOrderID());
+				pstmt.setString(3,deliveries.getBranchID());
+				pstmt.setString(4,deliveries.getCustomerID());
+				pstmt.setDouble(5,deliveries.getPrice());
+				pstmt.setString(6,deliveries.getOrderDate());
+				pstmt.setString(7,deliveries.getExpectedDelivery());
+				pstmt.setString(8,"");
+				pstmt.setString(9,deliveries.getReceiverName());
+				pstmt.setString(10,deliveries.getAddress());
+				pstmt.setString(11,deliveries.getPhoneNumber());
+				pstmt.setString(12,deliveries.getDeliveryStatus().name());
+				pstmt.executeUpdate();
+				
+				
+				//get price and update after delivery
+				String query2 = "SELECT price FROM zerli.order where orderID="+deliveries.getOrderID()+";";
+				double previusPrice = 0;
+				stmt1 = con.createStatement();
+				rs1=stmt1.executeQuery(query2);
+				while(rs1.next()) {
+					previusPrice=rs1.getDouble(1);
+				}
+				rs1.close();
+				
+				
+				//update price in order with delivery 
+				String query3 = "UPDATE zerli.order SET price = (?) WHERE orderID = '"+deliveries.getOrderID()+"' AND customerID = '"+deliveries.getCustomerID()+"' AND branchID = '"+deliveries.getBranchID()+"';";
+				pstmt = con.prepareStatement(query3);
+				pstmt.setDouble(1,previusPrice+deliveries.getPrice());
+				pstmt.executeUpdate();
+				
+				} catch (SQLException e) {
+					obj.setResponse(Response.FAILD_ADD_DELIVERY);
+					e.printStackTrace();
+					return;		
+				} catch (NullPointerException e) {
+					obj.setResponse(Response.FAILD_ADD_DELIVERY);
+					e.printStackTrace();
+					return;
+				}
+				
+				System.out.println("here2");
+				obj.setResponse(Response.ADD_DELIVERY_SUCCEED);
+				return;
+			}
+			else {
+				System.out.println("here3");
+			obj.setResponse(Response.FAILD_ADD_DELIVERY);
+			}
+		}
 	}
 }
 

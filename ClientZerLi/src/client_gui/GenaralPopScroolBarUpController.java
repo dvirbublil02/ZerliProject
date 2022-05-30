@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
+import client.OrderHandleController;
 import client.popMessageHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,6 +41,7 @@ public class GenaralPopScroolBarUpController implements Initializable {
     @FXML
     void okPressed(ActionEvent event) {
     	((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+    	OrderHandleController.setCloseEvent(true);
     }
     
 	@Override

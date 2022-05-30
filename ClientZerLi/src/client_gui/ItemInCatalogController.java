@@ -42,7 +42,11 @@ public class ItemInCatalogController {
     	item=tmpItem;
     	myListener=tmpMyListner;
     	itemNameScrollArea.setText(item.getName());
-    	itemPriceScrollArea.setText(CURRENCY+item.getPrice());
+    	if(tmpItem.getIsOnSale())
+    		itemPriceScrollArea.setText(CURRENCY+item.getFixPrice());
+    	else
+    		itemPriceScrollArea.setText(CURRENCY+item.getPrice());
+    	
     	Image image =  new Image(getClass().getResourceAsStream(item.getImgSrc()));
     	itemImageScrollArea.setImage(image);
     	
