@@ -286,7 +286,7 @@ public class ClientHandleTransmission {
 				greetingCard,orderDate,expectedDelivery,productInOrderFinallCart);
 		
 		if(status)
-			order.setStatus(OrderStatus.PENDING_DELIVERY);
+			order.setStatus(OrderStatus.PENDING_WITH_DELIVERY);
 		
 		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
 		ClientUI.chat.accept(tp);

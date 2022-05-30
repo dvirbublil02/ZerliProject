@@ -22,6 +22,7 @@ import client.popMessageHandler;
 import entities_catalog.ProductInBranch;
 import entities_general.Branch;
 import entities_general.Order;
+import entities_users.Customer;
 import enums.Branches;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,6 +58,7 @@ public class OrderPageController implements Initializable{
 	
 	@FXML
     private ComboBox<Branches> getBranchName=new ComboBox<>();
+	
 	
     @FXML
     private RadioButton ImidiateOrderRadio;
@@ -102,6 +104,20 @@ public class OrderPageController implements Initializable{
     @FXML
     private HBox hbox4;
     
+    @FXML
+    private Label accountStatus;
+    
+    @FXML
+    private Label employeeName;
+    
+    @FXML
+    private Label employeeType;
+    
+    @FXML
+    private Label entryGreeting;
+
+    @FXML
+    private Label phoneNumber1;
     
     @FXML
     private Label deliveryPriceLabel;
@@ -111,6 +127,9 @@ public class OrderPageController implements Initializable{
     
     @FXML
     private ProgressIndicator progressIndicator;
+    
+    
+    
     
     private ObservableList<Branches> branchOptions=FXCollections.observableArrayList();
     int orderID;
@@ -136,6 +155,8 @@ public class OrderPageController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		ClientController.initalizeUserDetails(employeeName, phoneNumber1, accountStatus,null, employeeType,
+				((Customer) ClientController.user).toString());
 		
 		// Progress bar state - 85%
 		progressIndicator.setStyle("-fx-color: #D0F6DD ; -fx-accent: green;");

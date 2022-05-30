@@ -1,20 +1,26 @@
 package client_gui;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
 import communication.Mission;
 import communication.TransmissionPack;
+import entities_users.Customer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-public class CustomerPageController {
+public class CustomerPageController implements Initializable {
 
 	@FXML
 	private Button cancelOrdersBtn;
@@ -27,6 +33,22 @@ public class CustomerPageController {
 
 	@FXML
 	private Button viewCatalogBtn;
+	
+    @FXML
+    private Label accountStatus;
+    
+    @FXML
+    private Label employeeName;
+    
+    @FXML
+    private Label employeeType;
+    
+    @FXML
+    private Label entryGreeting;
+
+    @FXML
+    private Label phoneNumber;
+    
 
     @FXML
     private Button viewCatalogBtn1;
@@ -73,6 +95,13 @@ public class CustomerPageController {
 		Stage primaryStage = new Stage();
 		CatalogScreenController catalog = new CatalogScreenController();
 		catalog.start(primaryStage);
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// TODO Auto-generated method stub
+		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
+				((Customer) ClientController.user).toString());
 	}
 
 }

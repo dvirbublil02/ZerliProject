@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import client.OrderHandleController;
 import entities_catalog.Cart;
@@ -17,6 +18,7 @@ import entities_general.Order;
 import entities_general.OrderCartPreview;
 import entities_general.OrderCustomCartPreview;
 import entities_reports.ComplaintPreview;
+import entities_users.Customer;
 import enums.ComplaintsStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -83,6 +85,18 @@ public class CartPageController implements Initializable {
     private Label priceLabel;
     
     @FXML
+    private Label accountStatus;
+    
+    @FXML
+    private Label employeeName;
+    
+    @FXML
+    private Label employeeType;
+    
+    @FXML
+    private Label phoneNumber;
+    
+    @FXML
     private ProgressIndicator progressIndicator;
  
 	@FXML
@@ -119,6 +133,9 @@ public class CartPageController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus,null, employeeType,
+				((Customer) ClientController.user).toString());
+		
 		// show button function
 		showCustomTbl.setCellFactory(ShowButtonTableCell.<OrderCustomCartPreview>forTableColumn("Details", (OrderCustomCartPreview o) -> {
 
