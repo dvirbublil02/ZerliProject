@@ -137,12 +137,20 @@ public class MissionAnalyze {
 			ReportsQuaries.getQuarterIncomeReport(obj, con);
 			break;
 		}
-		case GET_BRANCHID_BY_USER:
+		case GET_BRANCHID_BY_USER:{
+			
+		
 			String branchID=null;
 			branchID=ServerQuaries.getBranchId( (User) obj.getInformation(), con);
 			obj.setInformation(branchID);
 			break;
 		}
+		case GET_YEARS_FOR_COMOBOX:{
+			ReportsQuaries.getYears(obj,con);
+			break;
+		}
+		}
+		
 		
 
 	}

@@ -76,7 +76,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 	private ObservableList<String> monthlyYearList;
 
 	private ObservableList<String> quarterlyQuarterList;
-	private ObservableList<String> quarterlyYearList;
+
 
 	@FXML
 	void Back(ActionEvent event) throws Exception {
@@ -116,7 +116,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 		QuaterlyLabel.setDisable(true);
 		QuaterlyYearLabel.setDisable(true);
 
-		reportTypeList = FXCollections.observableArrayList("Income", "Orders", "Satisfaction");
+		reportTypeList = FXCollections.observableArrayList("Income", "Orders");
 		pickReportTypeForMonthlyCB.setItems(reportTypeList);
 
 		monthlyMonthList = FXCollections.observableArrayList();
@@ -128,14 +128,18 @@ public class BranchManagerViewReportPageController implements Initializable {
 		}
 		pickMonthForMonthlyCB.setItems(monthlyMonthList);
 
-		monthlyYearList = FXCollections.observableArrayList("2020", "2021", "2022");// needs a quairy to find
-		pickYearForMonthlyCB.setItems(monthlyYearList);// only the years that has reports
 
-		quarterlyQuarterList = FXCollections.observableArrayList("01", "02", "03", "04");
+		quarterlyQuarterList = FXCollections.observableArrayList("1", "2", "3", "4");
 		pickQuarterCB.setItems(quarterlyQuarterList);
-		quarterlyYearList = FXCollections.observableArrayList("2020", "2021", "2022");
-		pickYearForQuarterCB.setItems(quarterlyYearList);
-
+		List<String> monthlyYear = ClientHandleTransmission.getYearsForComboBox("MONTHLY", "reports");
+		if(monthlyYear.size()>0) {
+			monthlyYearList = FXCollections.observableArrayList(monthlyYear);
+		}else {
+			monthlyYearList = FXCollections.observableArrayList();
+		}
+		pickYearForQuarterCB.setItems(monthlyYearList);
+		pickYearForMonthlyCB.setItems(monthlyYearList);
+		System.out.println(monthlyYear);
 	}
 	//this action will hide & show the specific buttons for the MonthlyReport
 	public void showAction1(ActionEvent event) {

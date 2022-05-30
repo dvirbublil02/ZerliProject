@@ -2,6 +2,7 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
@@ -68,11 +69,17 @@ public class AnoterQuarterlyReportPopupController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		quarterlyQuarterList = FXCollections.observableArrayList("1", "2", "3", "4");
 		pickQuarterQuarterlyCB.setItems(quarterlyQuarterList);
-		quarterlyYearList = FXCollections.observableArrayList("2019","2020", "2021", "2022");
+		List<String> querterYear = ClientHandleTransmission.getYearsForComboBox("QUARTERLY", "reports");
+		if(querterYear.size()>0) {
+			quarterlyYearList = FXCollections.observableArrayList(querterYear);
+		}
+		else {
+			quarterlyYearList = FXCollections.observableArrayList();
+		}
 		pickYearQuarterlyCB.setItems(quarterlyYearList);
 		branchesObser = FXCollections.observableArrayList("2525", "1005", "4554");
 		PickBranch.setItems(branchesObser);
-		reportTypeList=FXCollections.observableArrayList("INCOME");
+		reportTypeList=FXCollections.observableArrayList("Income");
 		pickTypeQuarterlyCB.setItems(reportTypeList);
 		// need to add the branches after merge geting almog method.
 //		List<Branches> brances=ClientHandleTransmission.getBranches();

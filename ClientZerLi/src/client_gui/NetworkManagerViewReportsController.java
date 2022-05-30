@@ -107,6 +107,7 @@ public class NetworkManagerViewReportsController implements Initializable {
 	private ObservableList<String> monthlyYearList;
 
 	private ObservableList<String> quarterlyQuarterList;
+	private ObservableList<String> pickTypeQuarterly;
 	private ObservableList<String> quarterlyYearList;
 	private ObservableList<String> branchesObser;
 
@@ -135,14 +136,31 @@ public class NetworkManagerViewReportsController implements Initializable {
 				monthlyMonthList.add("" + i);
 		}
 		pickMonthMonthlyCB.setItems(monthlyMonthList);
-		monthlyYearList = FXCollections.observableArrayList("2020", "2021", "2022");
+		List<String> monthlyYear = ClientHandleTransmission.getYearsForComboBox("MONTHLY", "reports");
+		if(monthlyYear.size()>0) {
+			monthlyYearList = FXCollections.observableArrayList(monthlyYear);
+		}
+		else {
+			monthlyYearList = FXCollections.observableArrayList();
+		}
 		pickYearForMonthlyCB.setItems(monthlyYearList);
 		quarterlyQuarterList = FXCollections.observableArrayList("1", "2", "3", "4");
 		pickQuarterQuarterlyCB.setItems(quarterlyQuarterList);
-		quarterlyYearList = FXCollections.observableArrayList("2020", "2021", "2022","2019");
+		
+		List<String> querterYear = ClientHandleTransmission.getYearsForComboBox("QUARTERLY", "reports");
+		if(querterYear.size()>0) {
+			quarterlyYearList = FXCollections.observableArrayList(querterYear);
+		}
+		else {
+			quarterlyYearList = FXCollections.observableArrayList();
+		}
 		pickYearQuarterlyCB.setItems(quarterlyYearList);
+		
 		branchesObser = FXCollections.observableArrayList("2525", "1005", "4554");
 		PickBranch.setItems(branchesObser);
+		
+		pickTypeQuarterly = FXCollections.observableArrayList("Income");
+		pickTypeQuarterlyCB.setItems(pickTypeQuarterly);
 		// need to add the branches after merge geting almog method.
 //		List<Branches> brances=ClientHandleTransmission.getBranches();
 //		if(brances.size() != 0) {
@@ -219,13 +237,15 @@ public class NetworkManagerViewReportsController implements Initializable {
 	@FXML
 	void Submit(ActionEvent event) throws IOException {
 		if (quarterlyReportsRadioBtn.isSelected()) {
-			if (ClientHandleTransmission.getQuarterIncomeReport("2525", "2022", "2")) {
+			if (ClientHandleTransmission.getQuarterIncomeReport(PickBranch.getValue(), pickYearQuarterlyCB.getValue(), pickQuarterQuarterlyCB.getValue().toUpperCase())) {
 				((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 				Stage primaryStage = new Stage();
 				IncomeQuarterlyReportsController orderReport = new IncomeQuarterlyReportsController();
 				orderReport.start(primaryStage);
 			}
-			// else pop up.
+			else {
+				ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!","No Report Avaliable");
+			}
 		} else {
 			if (monthlyReportsRadioBtn.isSelected()) {
 				if (ClientHandleTransmission.getMonthlyReport(PickBranch.getValue(), pickYearForMonthlyCB.getValue(),
@@ -247,6 +267,9 @@ public class NetworkManagerViewReportsController implements Initializable {
 						return;
 					}
 					}
+				}
+				else {
+					ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!","No Report Avaliable");
 				}
 			}
 

@@ -3,29 +3,24 @@ package client_gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import client.ClientHandleTransmission;
 import client.ReportHandleController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
+import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class PopupSecondIncomeQuarterlyReportsController  implements Initializable {
 
     @FXML
-    private BarChart<String, Double> IncomeLineChart;
+    private StackedBarChart<String, Double> IncomeLineChart;
 
     @FXML
     private Label bestMonth;
@@ -57,10 +52,10 @@ public class PopupSecondIncomeQuarterlyReportsController  implements Initializab
 		XYChart.Series series = new XYChart.Series();
 		XYChart.Series series2 = new XYChart.Series();
 		XYChart.Series series3 = new XYChart.Series();
-		ClientHandleTransmission.insertTheDeatilsForTheCartQurateryReport(worstMonth,bestMonth,incomeQuarterTitle,reportOnList,series, series2, series3);
+		ReportHandleController.insertTheDeatilsForTheCartQurateryReport(worstMonth,bestMonth,incomeQuarterTitle,reportOnList,series, series2, series3);
 
 		IncomeLineChart.getData().addAll(series, series2, series3);
-		
+		IncomeLineChart.setCategoryGap(0);
 	}
 	
 

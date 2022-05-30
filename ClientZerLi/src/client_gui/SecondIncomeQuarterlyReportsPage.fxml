@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -97,14 +97,14 @@
                               <Insets bottom="10.0" top="5.0" />
                            </padding>
                            <children>
-                              <BarChart fx:id="IncomeLineChart" prefHeight="336.0" prefWidth="653.0">
+                              <StackedBarChart fx:id="IncomeLineChart" prefHeight="336.0" prefWidth="647.0" style="-fx-background-radius: 30;" stylesheets="@Style.css">
                                 <xAxis>
                                   <CategoryAxis side="BOTTOM" />
                                 </xAxis>
                                 <yAxis>
                                   <NumberAxis label="Income (ILS)" side="LEFT" />
                                 </yAxis>
-                              </BarChart>
+                              </StackedBarChart>
                            </children>
                         </HBox>
                         <HBox prefHeight="107.0" prefWidth="823.0">

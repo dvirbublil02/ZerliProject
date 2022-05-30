@@ -1,19 +1,21 @@
 package client_gui;
 
-import java.io.IOException;
 
+
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import client.ClientHandleTransmission;
-import client.ClientUI;
+import javax.imageio.ImageIO;
+
 import client.ReportHandleController;
-import javafx.scene.control.Label;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -22,11 +24,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -42,7 +47,7 @@ public class OrderReportsController implements Initializable {
 	private Button BackBtn;
 
 	@FXML
-	private BarChart<String, Number> barChart;
+	private StackedBarChart<String, Number> barChart;
 
 	@FXML
 	private PieChart pieChartCustom;
@@ -134,6 +139,7 @@ public class OrderReportsController implements Initializable {
 		pieChartRegular.setData(pieChartData2);
 		pieChartRegular.setStartAngle(90);
 		insertTheWorstAndBestSell();
+	
 //////////////////////---PieChart MouseEvent(regular + Custom)--//////////////////////////////////////////
 		// display the values of slice inside custom PieChart.
 		pieChartCustom.getData().forEach(data -> {
@@ -230,6 +236,7 @@ public class OrderReportsController implements Initializable {
 
 	@FXML
 	void back(ActionEvent event) {
+		
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		switch (ReportHandleController.getUserReport().toString()) {

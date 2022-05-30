@@ -83,15 +83,6 @@ public class ReportsQuaries {
 			Blob b = rs.getBlob(6);
 			InputStream in = b.getBinaryStream();
 			byte[] buff = b.getBytes(1, (int) b.length());
-			try {
-				OutputStream out = new FileOutputStream("Monthly_Report" + branchID);
-				out.write(buff);
-				out.close();
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 
 			if (getMonthFormat(rs.getDate(7).toLocalDate().getMonth().getValue()).equals(month)
 					&& rs.getDate(7).toLocalDate().getYear() == Integer.parseInt(year)) {
@@ -308,7 +299,7 @@ public class ReportsQuaries {
 		ResultSet rs;
 		Statement stmt;
 		List<LocalDate> ordersDate = new ArrayList<>();
-		String getBrnachOrders = "SELECT orderID,orderDate from zerli.order WHERE branchID='" + branchID + "';";
+		String getBrnachOrders = "SELECT orderID,orderDate from zerli.order WHERE status='APPROVE' AND branchID='" + branchID + "';";
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(getBrnachOrders);
@@ -513,7 +504,8 @@ public class ReportsQuaries {
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-				 if(rs.next() == true) {
+				 while(rs.next() == true) {
+					
 					if (getMonthFormat(rs.getDate(7).toLocalDate().getMonth().getValue()).equals(month)
 							&& rs.getDate(7).toLocalDate().getYear() == Integer.parseInt(year)) {
 						Blob b=rs.getBlob(6);
@@ -557,5 +549,43 @@ public class ReportsQuaries {
 	}
 		return returnMonth;
 
+	}
+
+	public static void getYears(TransmissionPack obj, Connection con) {
+		if(obj instanceof TransmissionPack) {
+			List<String> opreation=(List<String>) obj.getInformation();
+			List<String> returnYears = new ArrayList<>();
+			String table=opreation.get(1);
+			String duration=opreation.get(0);
+			String getYearsFromREPORTS = "SELECT reportDate from zerli."+table+" WHERE reportDuration='"
+					+ duration + "';";
+			System.out.println(getYearsFromREPORTS);
+			ResultSet rs;
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(getYearsFromREPORTS);
+				 while(rs.next()) {
+					 int year =rs.getDate(1).toLocalDate().getYear();
+					 if(!returnYears.contains(String.valueOf(year)))
+					 returnYears.add(String.valueOf(year));
+				 }
+				 }catch(SQLException e) {
+					 obj.setInformation(null);
+					 obj.setResponse(Response.REPORT_YEARS_NOT_FOUND);
+					 e.printStackTrace();
+				 }
+			if(returnYears.size()>0) {
+				 obj.setInformation(returnYears);
+				 obj.setResponse(Response.REPORT_YEARS_FOUND);
+				 return;
+			}
+		}
+		else {
+			 obj.setInformation(null);
+			 obj.setResponse(Response.REPORT_YEARS_NOT_FOUND);
+			
+		}
+		
 	}
 }

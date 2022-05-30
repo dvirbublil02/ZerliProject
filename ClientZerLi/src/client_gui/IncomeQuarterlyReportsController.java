@@ -18,7 +18,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
@@ -31,9 +34,9 @@ public class IncomeQuarterlyReportsController implements Initializable {
 	private Button BackBtn;
 
 	@FXML
-	private BarChart<String, Double> IncomeLineChart;
-	
+	private StackedBarChart<String, Double> IncomeLineChart;
 
+ 
 	@FXML
 	private Label bestMonth;
     @FXML
@@ -44,7 +47,6 @@ public class IncomeQuarterlyReportsController implements Initializable {
 
 	@FXML
 	private Label worstMonth;
-
 	List<List<String>> reportOnList = new ArrayList<>();
 	List<String> reportInfo = new ArrayList();
 
@@ -63,12 +65,17 @@ public class IncomeQuarterlyReportsController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		reportOnList = ReportHandleController.getOrdersReportOnListQuarter();
-		// LineChart
+		
 		XYChart.Series series = new XYChart.Series();
 		XYChart.Series series2 = new XYChart.Series();
 		XYChart.Series series3 = new XYChart.Series();
-		ClientHandleTransmission.insertTheDeatilsForTheCartQurateryReport(worstMonth,bestMonth,incomeQuarterTitle,reportOnList,series, series2, series3);
+		
+		ReportHandleController.insertTheDeatilsForTheCartQurateryReport(worstMonth,bestMonth,incomeQuarterTitle,reportOnList,series, series2, series3);
 		IncomeLineChart.getData().addAll(series, series2, series3);
+		
+	
+		IncomeLineChart.setCategoryGap(0);
+		
 	}
 
 
