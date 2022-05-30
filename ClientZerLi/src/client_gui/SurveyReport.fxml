@@ -223,7 +223,7 @@
                               <Insets bottom="10.0" top="5.0" />
                            </padding>
                            <children>
-                              <StackedBarChart fx:id="barChart" prefHeight="298.0" prefWidth="685.0" style="-fx-background-radius: 30;" stylesheets="@Style.css">
+                              <StackedBarChart fx:id="barChart" prefHeight="307.0" prefWidth="550.0" style="-fx-background-radius: 30;" stylesheets="@Style.css">
                                 <xAxis>
                                   <CategoryAxis side="BOTTOM" />
                                 </xAxis>

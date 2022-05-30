@@ -161,6 +161,10 @@ public class MissionAnalyze {
 			}
 			break;
 		}
+		case INSERT_SURVEY_BY_EXPERT:{
+			ReportsQuaries.insertSurveyResult(obj,con);
+			break;
+		}
 		}
 		
 		

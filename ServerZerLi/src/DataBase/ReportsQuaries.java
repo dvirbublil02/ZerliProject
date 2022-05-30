@@ -631,6 +631,37 @@ public class ReportsQuaries {
 		obj.setInformation(null);
 		obj.setResponse(Response.SURVEY_REPORT_NOT_FOUND);
 		}
+
+	public static void insertSurveyResult(TransmissionPack obj, Connection con) {
+		if(obj instanceof TransmissionPack) {
+		PreparedStatement stmt;
+		Blob blob = null;
+		String query = "INSERT INTO zerli.reports(reportID, reportType, branchID, reportCreator, reportDuration, reportFile, reportDate) VALUES (?,?,?,?,?,?,?)";
+		try {
+			ByteArrayInputStream bais = new ByteArrayInputStream(((byte[])obj.getInformation()));
+			blob = new SerialBlob( (byte[]) obj.getInformation());
+			stmt = con.prepareStatement(query);
+			stmt.setString(1, null);
+			stmt.setString(2, "SURVEY");
+			stmt.setString(3, "2525");
+			stmt.setString(4, "Expert");
+			stmt.setString(5, ReportDuration.QUARTERLY.name());
+			stmt.setBlob(6, bais);
+			stmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			obj.setInformation(null);
+			obj.setResponse(Response.INSERT_SURVEY_REPORT_FAILD);
+		}
+			obj.setResponse(Response.INSERT_SURVEY_REPORT_SUCCESS);
+			return;
+		}else {
+			obj.setInformation(null);
+			obj.setResponse(Response.INSERT_SURVEY_REPORT_FAILD);
+		}
+	}
 		
 	}
+
 

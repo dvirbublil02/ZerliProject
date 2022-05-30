@@ -1,18 +1,19 @@
 package client_gui;
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
-import org.apache.pdfbox.pdmodel.PDDocument;  
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 
 import com.itextpdf.text.BadElementException;
@@ -22,7 +23,12 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import client.ClientHandleTransmission;
+import client.ClientUI;
 import client.ReportHandleController;
+import communication.Mission;
+import communication.Response;
+import communication.TransmissionPack;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,36 +46,39 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.WritableImage;
 import javafx.stage.Stage;
 
-public class SurveyReportController implements Initializable{
+public class SurveyReportController implements Initializable {
 
-    @FXML
-    private Button BackBtn;
+	@FXML
+	private Button BackBtn;
 
-    @FXML
-    private StackedBarChart<String, Integer> barChart;
+	@FXML
+	private StackedBarChart<String, Integer> barChart;
 
-    @FXML
-    private TextArea  conclusionsText;
+	@FXML
+	private TextArea conclusionsText;
 
-    @FXML
-    private TextArea  recommendationText;
+	@FXML
+	private TextArea recommendationText;
 
-    @FXML
-    private Label reportTitle;
+	@FXML
+	private Label reportTitle;
 
-    @FXML
-    private Button submitBtn;
+	@FXML
+	private Button submitBtn;
 
-    public void start(Stage stage) throws IOException {
+	List<String> titleInfo = new ArrayList<>();
+
+	public void start(Stage stage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/SurveyReport.fxml"));
 		Scene scene = new Scene(root);
 		stage.setTitle("Surver Report View Reports");
 		stage.setScene(scene);
 		stage.show();
 	}
-    @FXML
-    void back(ActionEvent event) {
-    	((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+
+	@FXML
+	void back(ActionEvent event) {
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 		Stage primaryStage = new Stage();
 		ServiceExpertViewReportsController serviceExpertPage = new ServiceExpertViewReportsController();
 		try {
@@ -78,65 +87,82 @@ public class SurveyReportController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
+	}
 
-    @FXML
-    void submit(ActionEvent event) {
-    	String conclusions=conclusionsText.getText();
-    	String recommendation=recommendationText.getText();
-    	System.out.println(conclusions);
-    	System.out.println(recommendation);
-    	WritableImage image=new WritableImage(100,100);
-    	 image = barChart.snapshot(new SnapshotParameters(), null);
+	@FXML
+	void submit(ActionEvent event) throws IOException {
+		String conclusions = conclusionsText.getText();
+		String recommendation = recommendationText.getText();
+		System.out.println(conclusions);
+		System.out.println(recommendation);
+		WritableImage image = new WritableImage(75, 75);
+		image = barChart.snapshot(new SnapshotParameters(), null);
+
+		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+		com.itextpdf.text.Image graph = null;
+
+		try {
+			ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", byteOutput);
+			graph = com.itextpdf.text.Image.getInstance(byteOutput.toByteArray());
+		} catch (IOException | BadElementException e) {
+			// TODO: handle exception here
+		}
+		// created PDF document instance
+		Document doc = new Document();
+		try {
+			// generate a PDF at the specified location
+			PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("ExpertPDF.pdf"));
+			System.out.println("PDF created.");
+			// opens the PDF
+			doc.open();
+			// adds paragraph to the PDF file
+			doc.add(new Paragraph("                          Zerli" + titleInfo.get(3) + " - Survey For branch- "
+					+ titleInfo.get(0) + " duration: " + titleInfo.get(2) + "/" + titleInfo.get(1)));
+			doc.add(new Paragraph("The Survey Result: \n\n"));
+			doc.add((com.itextpdf.text.Element) graph);
+			doc.add(new Paragraph("\nThe expert conclusions: \n" + conclusions));
+			doc.add(new Paragraph("\nThe expert recommendation: \n" + recommendation));
+			// close the PDF file
+			doc.close();
+			// closes the writer
+			writer.close();
 		
-		ByteArrayOutputStream  byteOutput = new ByteArrayOutputStream();
-		com.itextpdf.text.Image  graph = null;
-
-	    try {
-	        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", byteOutput);
-	        graph = com.itextpdf.text.Image.getInstance( byteOutput.toByteArray() );
-	    } catch (IOException | BadElementException e) {
-	    	// TODO: handle exception here
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		File file=new File("ExpertPDF.pdf");
+		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    final InputStream in = new FileInputStream(file);
+	    final byte[] buffer = new byte[500];
+	    int read = -1;
+	    while ((read = in.read(buffer)) > 0) {
+	        baos.write(buffer, 0, read);
 	    }
-	  //created PDF document instance   
-	    Document doc = new Document();  
-	    try  
-	    {  
-	    //generate a PDF at the specified location  
-	    PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("Test.pdf"));  
-	    System.out.println("PDF created.");  
-	    //opens the PDF  
-	    doc.open();  
-	    //adds paragraph to the PDF file  
-	    doc.add(new Paragraph("The Survey Result: \n")); 
-	    doc.add((com.itextpdf.text.Element) graph);
-	    doc.add(new Paragraph("The expert conclusions: \n"+conclusions));  
-	    doc.add(new Paragraph("\nThe expert recommendation: \n"+recommendation));
-	    //close the PDF file  
-	    doc.close();  
-	    //closes the writer  
-	    writer.close();  
-	    }   
-	    catch (DocumentException e)  
-	    {  
-	    e.printStackTrace();  
-	    }   
-	    catch (FileNotFoundException e)  
-	    {  
-	    e.printStackTrace();  
-	    }  
-	   }  
-    
+	    in.close();
+
+		TransmissionPack tp=new TransmissionPack(Mission.INSERT_SURVEY_BY_EXPERT,null,baos.toByteArray());
+		ClientUI.chat.accept(tp);
+		tp=ClientUI.chat.getObj();
+		if(tp.getResponse()==Response.INSERT_SURVEY_REPORT_SUCCESS) {
+   			ClientHandleTransmission.popUp("Thank you Service Expert, your report(PDF) store in the DataBase","Success create pdf");
+
+		}else {
+   			ClientHandleTransmission.popUp("Faild to create the PDF file.","Faild To Create pdf");
+
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		List<List<String>> surveyResult=new ArrayList<>();
-		List<String> titleInfo=new ArrayList<>();
-		surveyResult=ReportHandleController.getSurveyReportResult();
-		titleInfo=surveyResult.get(0);
+		List<List<String>> surveyResult = new ArrayList<>();
+		surveyResult = ReportHandleController.getSurveyReportResult();
+		titleInfo = surveyResult.get(0);
 		System.out.println(surveyResult);
-		reportTitle.setText("Zerli - "+titleInfo.get(3)+"- Survey" +" For branch-"+titleInfo.get(0)+" duration: "+titleInfo.get(2)+"/"+titleInfo.get(1) );
+		reportTitle.setText("Zerli - " + titleInfo.get(3) + "- Survey" + " For branch-" + titleInfo.get(0)
+				+ " duration: " + titleInfo.get(2) + "/" + titleInfo.get(1));
 		XYChart.Series<String, Integer> series1 = new XYChart.Series<>();
 		XYChart.Series<String, Integer> series2 = new XYChart.Series<>();
 		XYChart.Series<String, Integer> series3 = new XYChart.Series<>();
@@ -149,12 +175,12 @@ public class SurveyReportController implements Initializable{
 		series4.setName("Question 4");
 		series5.setName("Question 5");
 		series6.setName("Question 6");
-		int[] array=new int[6];
-		for(int i=1;i<surveyResult.size();i++) {
+		int[] array = new int[6];
+		for (int i = 1; i < surveyResult.size(); i++) {
 			List<String> rowInfo = new ArrayList<>();
-			rowInfo=surveyResult.get(i);
-			for(int j=0;j<rowInfo.size()-1;j++)
-			array[j]+=Integer.valueOf(rowInfo.get(j));
+			rowInfo = surveyResult.get(i);
+			for (int j = 0; j < rowInfo.size() - 1; j++)
+				array[j] += Integer.valueOf(rowInfo.get(j));
 		}
 		series1.getData().add(new XYChart.Data<>("Question 1", array[0]));
 		series2.getData().add(new XYChart.Data<>("Question 2", array[1]));
@@ -162,8 +188,7 @@ public class SurveyReportController implements Initializable{
 		series4.getData().add(new XYChart.Data<>("Question 4", array[3]));
 		series5.getData().add(new XYChart.Data<>("Question 5", array[4]));
 		series6.getData().add(new XYChart.Data<>("Question 6", array[5]));
-		barChart.getData().addAll(series1,series2,series3,series4,series5,series6);
-		}
-	
+		barChart.getData().addAll(series1, series2, series3, series4, series5, series6);
+	}
 
 }
