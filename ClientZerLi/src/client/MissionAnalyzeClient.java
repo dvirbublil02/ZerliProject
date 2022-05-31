@@ -23,6 +23,14 @@ public class MissionAnalyzeClient {
 			}
 			break;
 		}
+		case NOTIFY_CUSTOMER_SERVICE:{
+			System.out.println("get to -> NOTIFY_CUSTOMER_SERVICE");
+			for (zerliClientListeners client : clientlisteners) {
+				client.notifyCustomerService();
+			}
+			break;
+			
+		}
 		case UPDATE_DISCONNECTION_SUCCESS: {
 
 		}
@@ -53,6 +61,7 @@ public class MissionAnalyzeClient {
 			break;
 		case USER_EXIST:{
 			notifyAllSpecificListners(obj);
+			break;
 
 		}
 		case FOUND_COLORS:{
@@ -88,12 +97,13 @@ public class MissionAnalyzeClient {
 			}
 			break;
 			}
-////		case "Customer Service": {
-//		for (zerliClientListeners client : clientlisteners) {
-//			client.userIsCustomerService();
-//		}
-////		break;
-////	}
+		case "Customer Service": {
+			System.out.println(obj.getInformation());
+		for (zerliClientListeners client : clientlisteners) {
+			client.userIsCustomerService();
+		}
+		break;
+		}
 ////	case "Delivery Agent": {
 //		for (zerliClientListeners client : clientlisteners) {
 //			client.userIsDeliveryAgent();

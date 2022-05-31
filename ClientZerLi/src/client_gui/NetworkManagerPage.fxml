@@ -179,33 +179,12 @@
                         <GridPane alignment="CENTER" prefHeight="473.0" prefWidth="897.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                       <children>
-                                          <Button fx:id="requestSpecialReportBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#requestSpecialReport" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Request Special Report" textFill="WHITE">
-                                             <font>
-                                                <Font name="Calibri Bold Italic" size="14.0" />
-                                             </font>
-                                             <graphic>
-                                                <ImageView fitHeight="69.0" fitWidth="86.0">
-                                                   <image>
-                                                      <Image url="@../javafx_images/requestSpecialReport.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </Button>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
                                     <Button fx:id="viewReportsBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewReports" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="View Reports" textFill="WHITE">
                                        <graphic>

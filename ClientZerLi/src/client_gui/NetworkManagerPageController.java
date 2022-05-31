@@ -21,9 +21,6 @@ public class NetworkManagerPageController {
 	private Button logOutBtn;
 
 	@FXML
-	private Button requestSpecialReportBtn;
-
-	@FXML
 	private Button viewReportsBtn;
 
 	@FXML
@@ -46,13 +43,6 @@ public class NetworkManagerPageController {
 		login.start(primaryStage);
 	}
 
-	@FXML
-	void requestSpecialReport(ActionEvent event) throws Exception {
-		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-		Stage primaryStage = new Stage();
-		NetworkManagerRequestSpecialReportController networkManagerRequestSpecialReportController = new NetworkManagerRequestSpecialReportController();
-		networkManagerRequestSpecialReportController.start(primaryStage);
-	}
 
 	@FXML
 	void viewReports(ActionEvent event) throws Exception {

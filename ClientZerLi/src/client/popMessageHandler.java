@@ -1,3 +1,4 @@
+
 package client;
 
 import javafx.scene.control.Label;
@@ -24,3 +25,4 @@ public class popMessageHandler {
 		labelOfPopUp.setText(message);
 	}
 }
+

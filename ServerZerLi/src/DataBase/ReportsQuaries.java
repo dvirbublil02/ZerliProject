@@ -104,6 +104,37 @@ public class ReportsQuaries {
 		}
 	}
 
+<<<<<<< HEAD
+=======
+/**
+ * in this method we getting branch id by user id
+ * @param ID
+ * @param con
+ * @return
+ */
+//	private static String getBranchIdbyUserID(String ID, Connection con) {
+//		ResultSet rs;
+//		Statement stmt;
+//		String branchId=null;
+//		String getBranchID = "SELECT branchID FROM zerli.branchmanager WHERE branchmanagerID='"+ID+"';";
+//		try {
+//			stmt = con.createStatement();
+//			rs = stmt.executeQuery(getBranchID);
+//			rs.next();
+//			branchId=rs.getString(1);
+//			
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return branchId;
+//	}
+//	
+	protected static String getMonthFormat(int month) {
+		 String fixMonth;
+		 return fixMonth= month < 9 ? fixMonth=("0" + (month)) : (fixMonth=String.valueOf(month));
+	}
+
+>>>>>>> origin/Merge
 	/**
 	 * in this method we getting branch id by user id
 	 * 
@@ -128,10 +159,14 @@ public class ReportsQuaries {
 //		return branchId;
 //	}
 
+<<<<<<< HEAD
 	private static String getMonthFormat(int month) {
 		String fixMonth;
 		return fixMonth = month < 9 ? fixMonth = ("0" + (month)) : (fixMonth = String.valueOf(month));
 	}
+=======
+
+>>>>>>> origin/Merge
 
 	/**
 	 * in this method we getting the list of lists that contains all the products
@@ -620,8 +655,13 @@ public class ReportsQuaries {
 			while (rs.next()) {
 				if (getMonthFormat(rs.getDate(17).toLocalDate().getMonth().getValue()).equals(Month)
 						&& rs.getDate(17).toLocalDate().getYear() == Integer.parseInt(Year)) {
+<<<<<<< HEAD
 					surveyResults.add(Arrays.asList(rs.getString(10), rs.getString(11), rs.getString(12),
 							rs.getString(13), rs.getString(14), rs.getString(15), rs.getString(16)));
+=======
+					surveyResults.add(Arrays.asList(String.valueOf(rs.getString(10)), String.valueOf(rs.getString(11)), String.valueOf(rs.getString(12)),
+							String.valueOf(rs.getString(13)), String.valueOf(rs.getString(14)), String.valueOf(rs.getString(15)), String.valueOf(rs.getString(16))));
+>>>>>>> origin/Merge
 				}
 			}
 			if (surveyResults.size() > 1) {
