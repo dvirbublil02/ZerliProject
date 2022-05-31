@@ -827,7 +827,7 @@ public class ServerQuaries {
 		}
 		
 	}
-	private static String getBranchId(User user, Connection con) {
+	public static String getBranchId(User user, Connection con) {
 		ResultSet rs;
 		Statement stmt;
 		String branchId = null;
