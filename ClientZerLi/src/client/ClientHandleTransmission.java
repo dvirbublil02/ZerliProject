@@ -273,22 +273,35 @@ public class ClientHandleTransmission {
 	/**
 	 * this method is adding the pending order of the specific customer
 	 * the order is waiting for approve from the branch manager
+	 * @return 
 	 */
 
 
-	public static void addOrder(Branches branchName,String greetingCard) {
-	
+public static int addOrder(Branches branchName,String greetingCard,String orderDate,String expectedDelivery,boolean status) {
+		
+		//get Custom + regular products in order
 		Map<String,List<ProductInOrder>> productInOrderFinallCart=OrderHandleController.getCustomProductInOrder();
+		productInOrderFinallCart.put("Regular", OrderHandleController.getProductInOrder());
 		
-		Order order =new Order(null,ClientController.user.getID(),branchName.name(),OrderHandleController.getTotalPrice(),
-				greetingCard,OrderStatus.PENDING.name(),LocalDateTime.now().toString().toString(),productInOrderFinallCart);
-
 		
-	   
-		productInOrderFinallCart.put("RegularProducts", OrderHandleController.getProductInOrder());
-
+		Order order =new Order(null,ClientController.user.getID(),String.valueOf(branchName.getNumber()),OrderHandleController.getTotalPrice(),
+				greetingCard,orderDate,expectedDelivery,productInOrderFinallCart);
+		
+		if(status)
+			order.setStatus(OrderStatus.PENDING_WITH_DELIVERY);
+		
 		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
 		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		
+		if(tp.getResponse() == Response.INSERT_ORDER_SUCCESS)
+		{
+			OrderHandleController.clearAllOrderData();
+			int orderID=(int)tp.getInformation();
+			return orderID;
+		}
+		
+		return 0;
 	}
 	/**
 	 * this method return the ObserverList of the order that was not approved yet
@@ -782,6 +795,117 @@ public class ClientHandleTransmission {
 		}
 	}
 
+
+	/* get all branches 
+	 * @return  list of Enum Branches
+	 * @author  Almog Madar
+	 */
+	public static List<Branches> getBranches() {
+		// TODO Auto-generated method stub
+		TransmissionPack tp = new TransmissionPack(Mission.GET_BRANCHES, null, null);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+
+		switch (tp.getResponse()) {
+		case FOUND_BRANCHES: {
+			return (List<Branches>) tp.getInformation();
+		}
+
+		case NOT_FOUND_BRANCHES: {
+			return new ArrayList<Branches>();
+		}
+		}
+		return new ArrayList<Branches>();
+	}
+
+	/* Get Specific Product In branch . 
+	 *  @param  Branches - specific branch 
+	 *  @author Almog Madar
+	 */
+	
+	public static List<ProductInBranch> getProductInSpecificBranch(Branches branch) {
+		// TODO Auto-generated method stub
+		TransmissionPack tp = new TransmissionPack(Mission.GET_PRODUCT_IN_BRANCH, null, branch);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+
+		switch (tp.getResponse()) {
+		case FOUND_PRODUCT_IN_BRANCH: {
+			return (List<ProductInBranch>) tp.getInformation();
+		}
+		
+
+		case NOT_FOUND_PRODUCT_IN_BRANCH: {
+			return new ArrayList<ProductInBranch>();
+		}
+		}
+		return new ArrayList<ProductInBranch>();
+		
+		
+		
+	}
+
+	public static boolean addDelivery(int deliveryID , int orderID, Branches branchName, String orderDate,
+			String expectedDelivery,String reciverName,String address,String phoneNumber) {
+		// TODO Auto-generated method stub
+		Deliveries deliveries = new Deliveries(deliveryID,String.valueOf(orderID),String.valueOf(branchName.getNumber())
+				                     ,ClientController.user.getID(),OrderHandleController.getShippingPrice(), 
+				                  orderDate, expectedDelivery,"",reciverName,address,phoneNumber
+				              ,DeliveryStatus.WAIT_FOR_MANAGER_APPROVED,new ArrayList<ProductInOrder>());
+			
+		TransmissionPack tp = new TransmissionPack(Mission.ADD_DELIVERY, null, deliveries);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		switch (tp.getResponse()) {
+			case ADD_DELIVERY_SUCCEED: {
+				return true;
+			}
+		
+			case FAILD_ADD_DELIVERY: {
+			return false;
+			}
+		}
+		
+		return false; 
+	}
+
+	public static List<Order> getCustomerOrdersForCancaltion() {
+		// TODO Auto-generated method stub
+		TransmissionPack tp = new TransmissionPack(Mission.GET_CUSTOMER_ORDERS_CANCELATION, null, ClientController.user.getID());
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		switch (tp.getResponse()) {
+			case GET_CUSTOMER_ORDERS_SUCCESS: {
+				return (List<Order>)tp.getInformation();
+			}
+		
+			case GET_CUSTOMER_ORDERS_FAILD: {
+				return new ArrayList<Order>() ;
+			}
+		}
+		
+		return new ArrayList<Order>() ;
+	}
+	
+	
+	public static List<Order> getCustomerOrdersHistory() {
+		// TODO Auto-generated method stub
+		TransmissionPack tp = new TransmissionPack(Mission.GET_CUSTOMER_ORDERS_HISTORY, null, ClientController.user.getID());
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		switch (tp.getResponse()) {
+			case GET_CUSTOMER_ORDERS_SUCCESS: {
+				return (List<Order>)tp.getInformation();
+			}
+		
+			case GET_CUSTOMER_ORDERS_FAILD: {
+				return new ArrayList<Order>() ;
+			}
+		}
+		
+		return new ArrayList<Order>() ;
+	}
+	
 }
 
 

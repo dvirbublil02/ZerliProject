@@ -1,15 +1,20 @@
 package client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import entities_catalog.ProductInBranch;
 import entities_catalog.ProductInOrder;
 import entities_general.OrderCartPreview;
 import entities_general.OrderCustomCartPreview;
 import entities_general.OrderPreview;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 
 public class OrderHandleController implements nofityOrderListner {
@@ -18,15 +23,50 @@ public class OrderHandleController implements nofityOrderListner {
 	private static Map<String, List<ProductInOrder>> customProductInOrder = new HashMap<>();
 	private static Map<String, List<ProductInOrder>> customProductInOrderFinallCart = new HashMap<>();
 	private static List<ProductInOrder> productInOrder = new ArrayList<>();
-
 	public static int quantityOfRegularProducts = 0;
 	public static int quantityOfCustomProducts = 0;
 	private static double totalPrice = 0;
 	private static Label priceLabel = new Label("0");
 	private static boolean detailsAllreadyOpen = false;
+	private static boolean detailsAllreadyOpen2 = false;
+	private static boolean disableRemoveCustomButton = false;
+	private static double shippingPrice=20.55;
+	
+	/**
+	 * get product in branch view
+	 */
+	private static List<ProductInBranch> productInBranch = new ArrayList<ProductInBranch>();
 
+	
+	/**map to view quantity chosen by customer.
+	 * String nameProdcut(key) , List<Integer>=[productID,quantity]
+	 */
+	private static Map<String,List<Integer>> quntityImageInBranch =  new HashMap<String, List<Integer>>();
+	/**
+	 * set to view product with problematic bigger quantity -> <ProductID>
+	 */
+	private static Set<String> problemticProducts = new HashSet<>();
+	
+	/**
+	 * Massage note to user if there is problem with quantity.
+	 */
+	private static String msg ;
+	/**
+	 * boolean eventToClose
+	 */
+	private static boolean closeEvent=false;
+	
+	
 	private static List<OrderPreview> ordersForBranchManager = new ArrayList<>();
 	private static OrderPreview order;
+	
+	
+	private static List<OrderPreview> cancelationOrdersPreview = new ArrayList<>();
+	private static List<OrderPreview> historyOrdersPreview = new ArrayList<>();
+	private static OrderPreview customerOrderView ;
+	private static Map<String, List<ProductInOrder>> customerOrderDetails = new HashMap<>();;
+	
+	
 
 	public static OrderPreview getOrder() {
 		return order;
@@ -42,6 +82,42 @@ public class OrderHandleController implements nofityOrderListner {
 
 	public static void setOrdersForBranchManager(List<OrderPreview> ordersForBranchManager) {
 		OrderHandleController.ordersForBranchManager = ordersForBranchManager;
+	}
+	
+	/**
+	 *  customer section method 
+	 * 		@return
+	 */
+	public static List<OrderPreview> getCancelationOrdersPreview() {
+		return cancelationOrdersPreview;
+	}
+
+	public static void setCancelationOrdersPreview(List<OrderPreview> cancelationOrdersPreview) {
+		OrderHandleController.cancelationOrdersPreview = cancelationOrdersPreview;
+	}
+
+	public static List<OrderPreview> getHistoryOrdersPreview() {
+		return historyOrdersPreview;
+	}
+
+	public static void setHistoryOrdersPreview(List<OrderPreview> historyOrdersPreview) {
+		OrderHandleController.historyOrdersPreview = historyOrdersPreview;
+	}
+
+	public static OrderPreview getCustomerOrderView() {
+		return customerOrderView;
+	}
+
+	public static void setCustomerOrderView(OrderPreview customerOrderView) {
+		OrderHandleController.customerOrderView = customerOrderView;
+	}
+
+	public static Map<String, List<ProductInOrder>> getCustomerOrderDetails() {
+		return customerOrderDetails;
+	}
+
+	public static void setCustomerOrderDetails(Map<String, List<ProductInOrder>> customerOrderDetails) {
+		OrderHandleController.customerOrderDetails = customerOrderDetails;
 	}
 
 	public static Map<String, List<ProductInOrder>> getCustomProductInOrderFinallCart() {
@@ -74,6 +150,7 @@ public class OrderHandleController implements nofityOrderListner {
 		return productInOrder;
 	}
 
+	
 	public static void addProductInOrder(ProductInOrder productInOrder) {
 		OrderHandleController.productInOrder.add(productInOrder);
 		OrderHandleController.totalPrice += (double) productInOrder.getProductQuantityInCart()
@@ -194,7 +271,7 @@ public class OrderHandleController implements nofityOrderListner {
 					System.out.println("here!!");
 					totalPrice -= ocp.getPrice() * ocp.getQuantity();
 					productInOrder.remove(pd);
-					quantityOfRegularProducts--;
+					quantityOfRegularProducts-=ocp.getQuantity();
 					break;
 				}
 
@@ -248,5 +325,164 @@ public class OrderHandleController implements nofityOrderListner {
 	public static void setDetailsAllreadyOpen(boolean detailsAllreadyOpen) {
 		OrderHandleController.detailsAllreadyOpen = detailsAllreadyOpen;
 	}
+	
+	
+
+	public static boolean isDetailsAllreadyOpen2() {
+		return detailsAllreadyOpen2;
+	}
+
+	public static void setDetailsAllreadyOpen2(boolean detailsAllreadyOpen2) {
+		OrderHandleController.detailsAllreadyOpen2 = detailsAllreadyOpen2;
+	}
+	
+
+	public static boolean isDisableRemoveCustomButton() {
+		return disableRemoveCustomButton;
+	}
+
+	public static void setDisableRemoveCustomButton(boolean disableRemoveCustomButton) {
+		OrderHandleController.disableRemoveCustomButton = disableRemoveCustomButton;
+	}
+
+	public static List<ProductInBranch> getProductInBranch() {
+		return productInBranch;
+	}
+
+	public static void setProductInBranch(List<ProductInBranch> productInBranch) {
+		OrderHandleController.productInBranch = productInBranch;
+	}
+
+	
+	public static boolean checkQuantityInOrder() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("There was an exception in the stock.\n");
+		
+		//clear all information before run
+		quntityImageInBranch.clear();
+		problemticProducts.clear();
+		
+		//collect total quantity MAP IMAGE for REGUALR.
+		for(ProductInOrder productInOr :productInOrder)
+		{
+			addToMapQuntityInBranch(productInOr);
+		}
+		
+		//collect total quantity MAP IMAGE for CUSTOM.
+		for(List<ProductInOrder> customProductList : customProductInOrderFinallCart.values())
+		{
+			for(ProductInOrder productInOr :customProductList)
+			{
+				addToMapQuntityInBranch(productInOr);
+			}
+		}
+		
+		
+		System.out.println("Map-view-> "+quntityImageInBranch);
+			
+		
+		//check total quantity between mapQuntityInBranch and productInBranch 
+		Set<String> productsNames = quntityImageInBranch.keySet();
+		for(String productName : productsNames)
+		{
+			for(ProductInBranch productInB:productInBranch) {
+				//check if same productId
+				String productID=String.valueOf(quntityImageInBranch.get(productName).get(0));  
+				int productQuantity=quntityImageInBranch.get(productName).get(1);
+				
+				if(productInB.getProductID().equals(productID))
+				{
+					//System.out.println("ProductInBranch-> " +productInB.getProductID());
+					//System.out.println("ProductIDInMap-> "  +productID);
+					
+					// Quantity in branch is smaller then total Customer choose. 
+					if(productInB.getQuantity()<productQuantity) {
+						
+						//add to problematic productID set
+						problemticProducts.add(productName);
+						System.out.println("problem-set:"+problemticProducts);
+						//System.out.println("QunitityInBranch-> " +productInB.getQuantity());
+						//System.out.println("CustomerTotalQuantity -> " +quntityImageInBranch.get(productID));
+						
+						//build massage view 
+						sb.append("Total "+ productName+" in branch:\n");
+						sb.append(productInB.getQuantity()+"\n");
+						sb.append("You choose:\n");
+						sb.append(productQuantity+"\n");
+						sb.append("Please remove -> "+(productQuantity-productInB.getQuantity())+" product units."+"\n");
+							
+					}
+				}
+			}
+		}
+		
+		sb.append("Or another option is to change branch :)\n");
+		//set massage pop-up screen.
+		msg=sb.toString();
+		
+		//if there is problem quantity.
+		if(problemticProducts.size()!=0)
+			return false;
+		
+		return true;
+	}
+
+	
+	//add to map of quntityInBranch + set problemticProducts
+	private static void addToMapQuntityInBranch(ProductInOrder productInOr) {
+		int quntity;
+		
+		System.out.println("productInOr ProductID->"+productInOr.getName());
+		// if not inside the map 
+		if(!quntityImageInBranch.containsKey(productInOr.getName())) {
+			quntityImageInBranch.put(productInOr.getName(),Arrays.asList(Integer.parseInt(productInOr.getID()),productInOr.getProductQuantityInCart()));
+		}
+		else // inside the map need to add quantity to same item 
+		{
+			quntity=quntityImageInBranch.get(productInOr.getName()).get(1);
+			quntityImageInBranch.remove(productInOr.getName());
+			quntityImageInBranch.put(productInOr.getName(),Arrays.asList(Integer.parseInt(productInOr.getID()),quntity+productInOr.getProductQuantityInCart()));
+		}		
+		
+	}
+
+	public static String getMsg() {
+		return msg;
+	}
+
+	public static void setMsg(String msg) {
+		OrderHandleController.msg = msg;
+	}
+
+	
+	public static Set<String> getProblemticProducts() {
+		return problemticProducts;
+	}	
+	
+	public static void clearAllOrderData() {
+		customProductInOrder.clear();
+		customProductInOrderFinallCart.clear();
+		productInOrder.clear();
+		quantityOfRegularProducts=0;
+		quantityOfCustomProducts=0;
+		totalPrice=0;
+		updateTotalPrice();
+	}
+
+	public static boolean isCloseEvent() {
+		return closeEvent;
+	}
+
+	public static void setCloseEvent(boolean closeEvent) {
+		OrderHandleController.closeEvent = closeEvent;
+	}
+
+	public static double getShippingPrice() {
+		return shippingPrice;
+	}
+
+	public static void setShippingPrice(double shippingPrice) {
+		OrderHandleController.shippingPrice = shippingPrice;
+	}	
 
 }

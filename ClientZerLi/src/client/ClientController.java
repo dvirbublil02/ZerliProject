@@ -99,7 +99,7 @@ public static void initalizeUserDetails(Label employeeName,Label phoneNumber, La
 		phoneNumber.setText(ClientController.user.getPhoneNumber());
 		accountStatus.setText(ClientController.user.getAccountStatus().name());
 		employeeType.setText(user);
-		
+		 
 		
 	}
 }

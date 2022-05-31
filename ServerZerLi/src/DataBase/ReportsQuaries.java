@@ -719,4 +719,5 @@ public class ReportsQuaries {
 		obj.setInformation(null);
 	}
 
+	
 }

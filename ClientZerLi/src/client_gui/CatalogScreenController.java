@@ -154,7 +154,10 @@ public class CatalogScreenController implements Initializable {
 
 	private void setChosenItemCard(Product item) {
 		itemCardNameLable.setText(item.getName());
-		itemCardPriceLable.setText(CURRENCY + item.getPrice());
+		if(item.getIsOnSale())
+			itemCardPriceLable.setText(CURRENCY + item.getFixPrice());
+		else
+			itemCardPriceLable.setText(CURRENCY + item.getPrice());
 		imageCardTmp = new Image(getClass().getResourceAsStream(item.getImgSrc()));
 		itemImageCard.setImage(imageCardTmp);
 		ChosenItemCard.setStyle("-fx-background-color: #" + item.getbackGroundColor() + "; -fx-background-radius: 30;");
@@ -236,10 +239,22 @@ public class CatalogScreenController implements Initializable {
 					addToCustomBtn.setDisable(false);
 					// load chosenCard and ProductInOrder that chosen
 					setChosenItemCard(item);
-					productInOrder = new ProductInOrder(item.getID(), null, null, item.getPrice(),
-							item.getbackGroundColor(), item.getImgSrc(), item.getQuantity(), item.getItemType(),
-							item.getDominateColor(), Integer.valueOf(quantityTextLable.getText()), item.getName(),
-							item.getIsOnSale(), item.getFixPrice());
+					
+					if(item.getIsOnSale())
+					{
+						productInOrder = new ProductInOrder(item.getID(), null, null, item.getFixPrice(),
+								item.getbackGroundColor(), item.getImgSrc(), item.getQuantity(), item.getItemType(),
+								item.getDominateColor(), Integer.valueOf(quantityTextLable.getText()), item.getName(),
+								item.getIsOnSale(), item.getFixPrice());
+					}
+					else
+					{
+						productInOrder = new ProductInOrder(item.getID(), null, null, item.getPrice(),
+								item.getbackGroundColor(), item.getImgSrc(), item.getQuantity(), item.getItemType(),
+								item.getDominateColor(), Integer.valueOf(quantityTextLable.getText()), item.getName(),
+								item.getIsOnSale(), item.getFixPrice());
+					}
+
 
 				}
 			};
