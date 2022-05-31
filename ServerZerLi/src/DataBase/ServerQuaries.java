@@ -715,7 +715,7 @@ public class ServerQuaries {
 
 			List<Order> orders = new ArrayList<>();
 
-			String query = "SELECT * FROM zerli.order WHERE status='PENDING'";
+			String query = "SELECT * FROM zerli.order WHERE status='PENDING' OR status='PENDING_WITH_DELIVERY'";
 			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
 				stmt = con.createStatement();
@@ -1295,9 +1295,13 @@ public class ServerQuaries {
 		if (obj instanceof TransmissionPack) {
 			List<Order> order = (List<Order>) obj.getInformation();
 			String updateOrderID = "UPDATE zerli.order SET status=? WHERE orderID='";
+			String updateDeliveryStatus = "UPDATE zerli.deliverys SET status=? WHERE orderID='";
+			
 			String updateQuantityInAllZerLi = "UPDATE zerli.product SET quantity=quantity-? WHERE productID='";
 			String updateQuantityInBranch = "UPDATE zerli.productinbranch SET quantity=quantity-? WHERE productID='";
 			String deleteProductformOrder = "DELETE FROM zerli.productinorder WHERE orderID='";
+			String deleteProductformDelivery = "DELETE FROM zerli.deliverys WHERE orderID='";
+			
 			for (Order o : order) {
 				try {
 					switch (o.getStatus()) {
@@ -1306,14 +1310,21 @@ public class ServerQuaries {
 						/**
 						 * loop run on all the product in the specific order
 						 */
-						for (String key : o.getItems().keySet()) {
-							for (ProductInOrder p : o.getItems().get(key)) {
-								updateProductQuentity(con, updateQuantityInAllZerLi, p);
-								updateProductQuentity(con, updateQuantityInBranch, p);
-							}
-						}
+						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
 						break;
 					}
+					case APPROVE_WITH_DELIVERY:{
+						updateDelivryStatus(con, updateDeliveryStatus, o);
+						updateOrderIDStatus(con, updateOrderID, o);
+						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
+						break;
+					}
+					case CANCEL_WITH_DELIVERY:{
+						deleteDelivery(con, deleteProductformDelivery, o);
+						updateOrderIDStatus(con, updateOrderID, o);
+						break;
+					}
+					
 					case CANCEL: {
 						updateOrderIDStatus(con, updateOrderID, o);
 						deleteProductInOrder(con, deleteProductformOrder, o);
@@ -1335,6 +1346,29 @@ public class ServerQuaries {
 
 	}
 
+	private static void updateDelivryStatus(Connection con, String updateDeliveryStatus, Order o) throws SQLException {
+		PreparedStatement pstmt1;
+		pstmt1 = con.prepareStatement(updateDeliveryStatus + o.getOrderID() + "'");
+		pstmt1.setString(1, o.getStatus().name());
+		pstmt1.executeUpdate();
+	}
+
+	private static void updateProducts(Connection con, String updateQuantityInAllZerLi, String updateQuantityInBranch,
+			Order o) throws SQLException {
+		for (String key : o.getItems().keySet()) {
+			for (ProductInOrder p : o.getItems().get(key)) {
+				updateProductQuentity(con, updateQuantityInAllZerLi, p);
+				updateProductQuentity(con, updateQuantityInBranch, p);
+			}
+		}
+	}
+
+	private static void deleteDelivery(Connection con, String deleteProductformDelivery, Order o) throws SQLException {
+		PreparedStatement pstmt3;
+		pstmt3 = con.prepareStatement(deleteProductformDelivery + o.getOrderID() + "'");
+		pstmt3.executeUpdate();
+	}
+
 	/**
 	 * delete the product form the order if the branch meager cancel the customer
 	 * order
@@ -1345,9 +1379,7 @@ public class ServerQuaries {
 	 * @throws SQLException
 	 */
 	private static void deleteProductInOrder(Connection con, String query3, Order o) throws SQLException {
-		PreparedStatement pstmt3;
-		pstmt3 = con.prepareStatement(query3 + o.getOrderID() + "'");
-		pstmt3.executeUpdate();
+		deleteDelivery(con, query3, o);
 	}
 
 	/**
@@ -1374,10 +1406,7 @@ public class ServerQuaries {
 	 * @throws SQLException
 	 */
 	private static void updateOrderIDStatus(Connection con, String query, Order o) throws SQLException {
-		PreparedStatement pstmt1;
-		pstmt1 = con.prepareStatement(query + o.getOrderID() + "'");
-		pstmt1.setString(1, o.getStatus().name());
-		pstmt1.executeUpdate();
+		updateDelivryStatus(con, query, o);
 	}
 
 	public static void getSurvyQuestions(TransmissionPack obj, Connection con) {

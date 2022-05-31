@@ -60,6 +60,7 @@ public class ServerScreenController implements Initializable {
 
 	@FXML
 	private TextField TxtUserName;
+	
 
 	@FXML
 	private TableColumn<ClientDetails, String> hostCol;
@@ -84,6 +85,7 @@ public class ServerScreenController implements Initializable {
 	private List<String> data = new ArrayList<String>();
 	static ObservableList<ClientDetails> clients = FXCollections.observableArrayList();
 	static ObservableList<msgClass> listView2 = FXCollections.observableArrayList();
+	final public String externalDB="jdbc:mysql://localhost/externaldb?serverTimezone=IST";
 
 	/**
 	 * in this method we loading the server screen (FXML)
@@ -115,6 +117,7 @@ public class ServerScreenController implements Initializable {
 		data.add(TxtDataBase.getText());
 		data.add(TxtUserName.getText());
 		data.add(TxtPassword.getText());
+	
 
 		System.out.println(data.toString());
 		p = getport();
@@ -126,7 +129,7 @@ public class ServerScreenController implements Initializable {
 			if (ServerUI.runServer(p, data)) {
 				BTNConnect.setDisable(true);
 				BTNDisconnect.setDisable(false); // only if there is host connected he can press discon
-
+				BTNImport.setDisable(false);
 			}
 
 		}
@@ -177,7 +180,16 @@ public class ServerScreenController implements Initializable {
 	// to be continued
 	@FXML
 	void Import(ActionEvent event) {
-		// to be continued
+		System.out.println(data);
+		data.add(externalDB);
+		data.add(TxtUserName.getText());
+		data.add(TxtPassword.getText());
+		
+		String p=getport();
+		if (ServerUI.runServer(p, data)) {
+			
+		}
+		
 	}
 
 	/**
