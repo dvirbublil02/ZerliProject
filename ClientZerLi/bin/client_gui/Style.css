@@ -213,6 +213,62 @@
 
 
 
+.tab2 {
+  -fx-font-family: Segoe UI;
+  -fx-font-size: 13;
+  -fx-background-color:#C8C8C8 ;
+}
+
+.tab2-pane {
+  -fx-tab-min-width:100px;
+  -fx-tab-max-width:100px;
+  -fx-tab-min-height:40px;
+  -fx-tab-max-height:40px;
+}
+
+.tab2-pane *.tab-header-area *.tab-header-background {
+  -fx-background-color:#F4F4F4;
+}
+ 
+
+.tab2:selected {
+    -fx-background-color:#708090 ;
+}
+
+
+
+
+
+
+
+
+
+
+
+.backgroundPopUpScroolPane{
+	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #D0F6DD , #A5C4B0);
+}
+
+.buttonPopUp{
+	-fx-background-color: #37413A;
+	-fx-background-radius: 30;
+}
+
+.buttonPopUp:hover{
+	-fx-background-color: #677A6D;
+	-fx-background-radius: 30;
+	-fx-cursor:hand;
+}
+
+.buttonPopUp:pressed{
+	-fx-background-color: #37413A;
+	-fx-border-width: 30 0 0 30;
+}
+
+
+
+
+
 
 
 
