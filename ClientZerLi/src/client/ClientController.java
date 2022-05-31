@@ -27,7 +27,6 @@ public class ClientController implements ChatIF {
 	public static TransmissionPack obj; // we creating static obj that will handle the
 										// response/mission/information(TransmissionPack)
 	// Instance variables **********************************************
-
 	/**
 	 * The instance of the client that created this ConsoleChat.
 	 */
@@ -88,7 +87,7 @@ public class ClientController implements ChatIF {
 	public static void setObj(TransmissionPack obj) {
 		ClientController.obj = obj;
 	}
-public static void initalizeUserDetails(Label employeeName,Label phoneNumber, Label accountStatus,Label entryGreeting,Label employeeType,String user) {
+    public static void initalizeUserDetails(Label employeeName,Label phoneNumber, Label accountStatus,Label entryGreeting,Label employeeType,String user) {
 		
 		if(entryGreeting!=null) {
 			entryGreeting.setText(entryGreeting.getText()+" "+ClientController.user.getFirstName()+" !");

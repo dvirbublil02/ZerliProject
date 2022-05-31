@@ -8,14 +8,24 @@ package enums;
  *
  */
 public enum Branches {
-	KARMIEL(1010);
+	KARMIEL("Karmiel",1010),
+	HAIFA("Haifa",2525),
+	TEL_AVIV("Tel-Aviv",5555);
+	
 	private int number;
+	private String name;
 
-	private Branches(int number) {
-	this.number=number;
+	private Branches(String name,int number) {
+	 this.number=number;
+	 this.name=name;
 	}
+	
 	public int getNumber() {
 		return number;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 

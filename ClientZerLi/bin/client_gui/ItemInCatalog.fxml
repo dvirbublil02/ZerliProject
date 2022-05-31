@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMousePressed="#clickItem" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" styleClass="shadow" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.ItemInCatalogController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMousePressed="#clickItem" prefHeight="190.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" styleClass="shadow" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.ItemInCatalogController">
    <children>
       <VBox layoutX="51.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER" prefHeight="38.0" prefWidth="180.0">
                <children>
-                  <Label fx:id="itemNameScrollArea" prefHeight="48.0" prefWidth="136.0" text="Rose Bouquet">
+                  <Label fx:id="itemNameScrollArea" prefHeight="38.0" prefWidth="138.0" text="Rose Bouquet">
                      <HBox.margin>
                         <Insets left="15.0" />
                      </HBox.margin>
@@ -33,7 +33,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="135.0" prefWidth="187.0">
+            <HBox alignment="CENTER" prefHeight="148.0" prefWidth="200.0">
                <children>
                   <ImageView fx:id="itemImageScrollArea" fitHeight="117.0" fitWidth="142.0" pickOnBounds="true" preserveRatio="true" styleClass="imageViewCatalog">
                      <image>
@@ -44,5 +44,17 @@
             </HBox>
          </children>
       </VBox>
+      <AnchorPane prefHeight="190.0" prefWidth="200.0" style="-fx-background-radius: 30;">
+         <children>
+            <VBox alignment="BOTTOM_LEFT" prefHeight="190.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="saleImage" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="8.0" />
+               </padding>
+            </VBox>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

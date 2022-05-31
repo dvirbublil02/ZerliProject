@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CustomerPageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CustomerPageController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -41,7 +41,7 @@
                               <Image url="@../javafx_images/userImageSideScreen.png" />
                            </image>
                         </ImageView>
-                        <Label text="Bob Alice" textFill="WHITE">
+                        <Label fx:id="employeeName" text="Bob Alice" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="2.0" />
                            </VBox.margin>
@@ -49,12 +49,12 @@
                               <Font name="Corbel Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label text="Customer" textFill="#323232">
+                        <Label fx:id="employeeType" text="Customer" textFill="#323232">
                            <font>
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back Bob !" textFill="#3c3131">
+                        <Label fx:id="entryGreeting" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back Bob !" textFill="#3c3131">
                            <font>
                               <Font name="Cambria" size="16.0" />
                            </font>
@@ -85,7 +85,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="+972-524676188" textFill="#9a9a9a">
+                        <Label fx:id="phoneNumber" text="+972-524676188" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -101,7 +101,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="CONFIRMED" textFill="#9a9a9a">
+                        <Label fx:id="accountStatus" text="CONFIRMED" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -204,23 +204,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
-                                    <Button fx:id="viewCatalogBtn1" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewCatalog" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="View  Custom Catalog" textFill="WHITE">
-                                       <graphic>
-                                          <ImageView fitHeight="69.0" fitWidth="86.0">
-                                             <image>
-                                                <Image url="@../javafx_images/ViewCustomCatalogCustomer.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                       <font>
-                                          <Font name="Calibri Bold Italic" size="14.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                 <children>
-                                    <Button fx:id="cancelOrdersBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#cancelOrders" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Cancel Orders" textFill="WHITE">
+                                    <Button fx:id="viewOrdersBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#orderView" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text=" View Orders" textFill="WHITE">
                                        <font>
                                           <Font name="Calibri Bold Italic" size="14.0" />
                                        </font>
@@ -234,22 +218,8 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <children>
-                                    <Button fx:id="compliantBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#compliant" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Complaint" textFill="WHITE">
-                                       <font>
-                                          <Font name="Calibri Bold Italic" size="14.0" />
-                                       </font>
-                                       <graphic>
-                                          <ImageView fitHeight="69.0" fitWidth="86.0">
-                                             <image>
-                                                <Image url="@../javafx_images/compliantCustomer.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </children>
