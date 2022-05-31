@@ -42,11 +42,17 @@ import entities_users.User;
 import enums.AccountStatus;
 import enums.Branches;
 import enums.ComplaintsStatus;
+import enums.DeliveryStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
+
 import ocsf.server.ConnectionToClient;
 import server.EchoServer;
 import server.ServerUI;
+
+import javafx.collections.ObservableList;
+import enums.ReportDuration;
+import enums.ReportType;
 
 /**
  * In this class there are all the server quarries
@@ -662,6 +668,7 @@ public class ServerQuaries {
 	public static void addOrderInDB(TransmissionPack obj, Connection con) {
 
 		if (obj instanceof TransmissionPack) {
+
 			if (obj.getInformation() instanceof Order) {
 				PreparedStatement pstmt;
 				int orderID = 0;
@@ -720,11 +727,13 @@ public class ServerQuaries {
 							pstmt.setString(11, productInOr.getNameOfItem());
 							pstmt.executeUpdate();
 						}
+
 					}
 
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+
 					obj.setResponse(Response.INSERT_ORDER_FAILD);
 					return;
 				}
@@ -734,6 +743,7 @@ public class ServerQuaries {
 			}
 		}
 		obj.setResponse(Response.INSERT_ORDER_FAILD);
+
 	}
 
 	public static void getOrders(TransmissionPack obj, Connection con) {
@@ -745,22 +755,27 @@ public class ServerQuaries {
 			List<Order> orders = new ArrayList<>();
 
 			String query = "SELECT * FROM zerli.order WHERE status='PENDING' OR status='PENDING_WITH_DELIVERY'";
+
 			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while (rs.next()) {
+
 					System.out.println("rs->>");
+
 					Map<String, List<ProductInOrder>> products = new HashMap<>();
 
 					stmt2 = con.createStatement();
 
 					rs2 = stmt2.executeQuery(query1 + rs.getString(1) + "'");
 					while (rs2.next()) {
+
 						System.out.println("rs2>>");
 						ProductInOrder newProduct = new ProductInOrder(rs2.getString(1), rs2.getString(2),
 								rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7),
 								rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0.0);
+
 						if (!products.containsKey(rs2.getString(3))) {
 							List<ProductInOrder> product = new ArrayList<>();
 							product.add(newProduct);
@@ -813,7 +828,7 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * get all the branches ID for create the reports
+	 * <<<<<<< HEAD get all the branches ID for create the reports
 	 * 
 	 * @param user
 	 * @param con
@@ -838,6 +853,15 @@ public class ServerQuaries {
 		}
 		return branchesId;
 	}
+
+	/*
+	 * * Get all the customers that their status is "PENDING_APPROVAL" and collect
+	 * them in a list
+	 * 
+	 * @param obj
+	 * 
+	 * @param con
+	 */
 
 	@SuppressWarnings("null")
 	public static void getPendingCustomersFromDB(TransmissionPack obj, Connection con) {
@@ -1275,6 +1299,7 @@ public class ServerQuaries {
 			e.printStackTrace();
 		}
 		if (difference_In_Days >= 1) {
+
 			System.out.println("here 'DELAY'");
 
 			return ComplaintsStatus.DELAY;
@@ -1577,8 +1602,6 @@ public class ServerQuaries {
 		obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
 	}
 
-
-
 	/**
 	 * this method notify all customerService that still have OPEN complaint after
 	 * 24 hours
@@ -1675,7 +1698,7 @@ public class ServerQuaries {
 	private static void updateDelivryStatus(Connection con, String updateDeliveryStatus, Order o) throws SQLException {
 		PreparedStatement pstmt1;
 		pstmt1 = con.prepareStatement(updateDeliveryStatus + o.getOrderID() + "'");
-		
+
 		pstmt1.executeUpdate();
 	}
 
@@ -1828,5 +1851,82 @@ public class ServerQuaries {
 		pstmt.executeUpdate();
 	}
 
-}
+	public static void GetDeliveriesFromDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<Deliveries> deliveries = new ArrayList<>();
+			List<ProductInOrder> orderProducts = null;
+			Statement stmt1, stmt2;
+			try {
+				stmt1 = con.createStatement();
+				ResultSet rs1, rs2;
+				String getDeliveries = "SELECT * FROM zerli.deliveries WHERE status = 'READY_TO_GO';";
+				rs1 = stmt1.executeQuery(getDeliveries);
+				while (rs1.next()) {
+					// nameOfproduct, productQuantityInOrder, price
+					Deliveries delivery = new Deliveries(rs1.getInt(1), rs1.getString(2), rs1.getString(3),
+							rs1.getString(4), rs1.getDouble(5), rs1.getString(6), rs1.getString(7), rs1.getString(8),
+							rs1.getString(9), rs1.getString(10), rs1.getString(11),
+							DeliveryStatus.valueOf(rs1.getString(12)), null);
+					deliveries.add(delivery);
+					String getProductsInOrder = "SELECT * FROM zerli.productInOrder WHERE orderID = '"
+							+ rs1.getString(2) + "';";
+					System.out.println(getProductsInOrder);
+					stmt2 = con.createStatement();
+					rs2 = stmt2.executeQuery(getProductsInOrder);
+					orderProducts = new ArrayList<>();
+					while (rs2.next()) {
+						ProductInOrder p = new ProductInOrder(rs2.getString(1), rs2.getString(2), rs2.getString(3),
+								rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8),
+								rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0);
+						System.out.println(p);
+						orderProducts.add(p);
+						delivery.setOrderProducts(orderProducts);
+						System.out.println(orderProducts);
+					}
+					rs2.close();
+				}
+				rs1.close();
+				obj.setInformation(deliveries);
+				System.out.println(deliveries);
+				obj.setResponse(Response.FOUND_DELIVERIES);
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+				obj.setResponse(Response.NOT_FOUND_DELIVERIES);
+				return;
+			}
+		}
+		obj.setResponse(Response.NOT_FOUND_DELIVERIES);
+	}
 
+	@SuppressWarnings("unchecked")
+	public static void UpdateDeliveriesStatusesInDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<Deliveries> deliveries = (List<Deliveries>) obj.getInformation();
+			try {
+				for (Deliveries d : deliveries) {
+					System.out.println(d);
+					String updateStatuses = "UPDATE zerli.deliveries SET status=?, arrivedDate =? WHERE deliveryID='"
+							+ d.getDeliveryID() + "';";
+					// if (d.getDeliveryStatus() == DeliveryStatus.ARRIVED) {
+					PreparedStatement pstmt = con.prepareStatement(updateStatuses);
+					pstmt.setString(1, d.getDeliveryStatus().name());
+					pstmt.setString(2, d.getArrivedDate());
+					pstmt.executeUpdate(); // check if the query failed
+//						obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
+//						return;
+//					}
+//					// }
+				}
+				obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_SUCCESS);
+			} catch (Exception e) {
+				obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
+				e.printStackTrace();
+				return;
+			}
+		} else {
+			obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
+			return;
+		}
+	}
+}

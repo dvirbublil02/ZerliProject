@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 /entities_general/
+<<<<<<< HEAD
 /enums/
 /communication/
 /entities_catalog/
@@ -10,3 +11,7 @@
 /entities_general/
 /enums/
 >>>>>>> origin/Timer-Mor
+=======
+/communication/
+/enums/
+>>>>>>> origin/DeliveryAgent-Omri
