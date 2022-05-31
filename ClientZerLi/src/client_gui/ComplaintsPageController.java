@@ -171,10 +171,13 @@ public class ComplaintsPageController implements Initializable {
 			@SuppressWarnings("unused")
 			@Override
 			protected void updateItem(ComplaintPreview item, boolean empty) {
+				
 				super.updateItem(item, empty);
 				if (item == null || item.getComplaintsStatus() == ComplaintsStatus.STILL_GOT_TIME) {
-					setStyle("-fx-background-color: white;");
+					String style=getStyle();
+					setStyle(style);
 				} else if (item.getComplaintsStatus() == ComplaintsStatus.DELAY) {
+					
 					setStyle("-fx-background-color: red;");
 				}
 

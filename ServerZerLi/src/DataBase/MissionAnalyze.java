@@ -1,10 +1,11 @@
 package DataBase;
 
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
+
 import communication.TransmissionPack;
+import ocsf.server.ConnectionToClient;
 
 /**
  * In this class we analyze the mission that we got from the client , and then
@@ -116,6 +117,7 @@ public class MissionAnalyze {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				break;
 			
 		}
 		case GET_MONTHLY_REPORT:
@@ -130,12 +132,33 @@ public class MissionAnalyze {
 			ReportsQuaries.getQuarterIncomeReport(obj,con);
 			break;
 		}
+
 		
 		case GET_BRANCHES:
 		{
 			ServerQuaries.getBranches(obj, con);
 			break;
 		}
+
+		case UPADTE_ORDER:{
+			ServerQuaries.updateOrder(obj,con);
+			break;
+		}
+		case NOTIFY:{
+			ServerQuaries.notifyCustomerService(obj,con);
+			break;
+		}
+		case GET_SURVEY_QUESTIONS:{
+			System.out.println("mission analyze step");
+			ServerQuaries.getSurvyQuestions(obj,con);
+			break;
+		}
+		case INSERT_SURVY:{
+			ServerQuaries.insertSurvy(obj,con);
+			break;
+		}
+
+		
 		case GET_PRODUCT_IN_BRANCH:
 		{
 			ServerQuaries.getProductInBranch(obj, con);

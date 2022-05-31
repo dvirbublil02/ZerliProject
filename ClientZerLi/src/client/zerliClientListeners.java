@@ -40,4 +40,8 @@ public interface zerliClientListeners {
 		return;
 	}
 
+	default void notifyCustomerService() {
+		return;
+	}
+
 }

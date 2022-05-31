@@ -18,6 +18,7 @@ public class createReports {
 	 * in this method creating order monthly report by spesifc branch and month (getting the month on number 2 digit )
 	 */
 	public static void monthlyOrders(String branchID,String month) {
+		System.out.println(branchID+" "+month);
 		List<List<String>> orders=new ArrayList<>();
 		List<Object> orderFilter=new ArrayList<>();
 		orderFilter.add(branchID);

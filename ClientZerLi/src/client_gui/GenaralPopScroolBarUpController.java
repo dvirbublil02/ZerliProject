@@ -20,46 +20,35 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class GenaralPopScroolBarUpController implements Initializable {
-	
-    @FXML
-    private Button OKbutton;
 
-    @FXML
-    private Label labelOfPopUp;
-    
+	@FXML
+	private Button OKbutton;
+
+	@FXML
+	private Label labelOfPopUp;
 
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/GeneralPopScroolBarUp.fxml"));
+
 		Scene scene = new Scene(root);
 		primaryStage.setTitle(popMessageHandler.getTitle());
 		primaryStage.setScene(scene);
 		primaryStage.initStyle(StageStyle.UTILITY);
 		primaryStage.show();
-	
+
 	}
-	
-    @FXML
-    void okPressed(ActionEvent event) {
-    	((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-    	OrderHandleController.setCloseEvent(true);
-    }
-    
+
+	@FXML
+	void okPressed(ActionEvent event) {
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		OrderHandleController.setCloseEvent(true);
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 		popMessageHandler.getLabelText(labelOfPopUp);
-		
+
 	}
 
-
-
-
-
-
 }
-	
-	
-	
-	
-	
-

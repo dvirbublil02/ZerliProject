@@ -127,7 +127,7 @@ public class ReportsQuaries {
 		return branchId;
 	}
 	
-	private static String getMonthFormat(int month) {
+	protected static String getMonthFormat(int month) {
 		 String fixMonth;
 		 return fixMonth= month < 9 ? fixMonth=("0" + (month)) : (fixMonth=String.valueOf(month));
 	}
