@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
+import client.ReportHandleController;
 import client.popMessageHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,8 +24,8 @@ import javafx.stage.Stage;
 
 public class AnoterQuarterlyReportPopupController implements Initializable {
 
-    @FXML
-    private Label alertLabel;
+	@FXML
+	private Label alertLabel;
 	@FXML
 	private ComboBox<String> PickBranch;
 
@@ -44,25 +45,34 @@ public class AnoterQuarterlyReportPopupController implements Initializable {
 	private ObservableList<String> quarterlyYearList;
 	private ObservableList<String> branchesObser;
 	private ObservableList<String> reportTypeList;
+
 	public void start(Stage stage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/AnoterQuarterlyReportPopupPage.fxml"));
 		Scene scene = new Scene(root);
 		stage.setTitle("Network Manager View Reports");
 		stage.setScene(scene);
 		stage.show();
+
 	}
 
 	@FXML
 	void Submit(ActionEvent event) throws IOException {
-		if(PickBranch.getValue() != null && pickYearQuarterlyCB.getValue() != null &&pickQuarterQuarterlyCB.getValue() != null)
-		if (ClientHandleTransmission.getQuarterIncomeReport(PickBranch.getValue(), pickYearQuarterlyCB.getValue(),pickQuarterQuarterlyCB.getValue())) {
-			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-			Stage primaryStage = new Stage();
-			PopupSecondIncomeQuarterlyReportsController secondIncomeQuarterly = new PopupSecondIncomeQuarterlyReportsController();
-			secondIncomeQuarterly.start(primaryStage);
-		}
+		if (PickBranch.getValue() != null && pickYearQuarterlyCB.getValue() != null
+				&& pickQuarterQuarterlyCB.getValue() != null && ReportHandleController.isDualReport() == false) {
+			if (ClientHandleTransmission.getQuarterIncomeReport(PickBranch.getValue(), pickYearQuarterlyCB.getValue(),
+					pickQuarterQuarterlyCB.getValue())) {
+				ReportHandleController.setDualReport(true);
+				((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+				Stage primaryStage = new Stage();
+				PopupSecondIncomeQuarterlyReportsController secondIncomeQuarterly = new PopupSecondIncomeQuarterlyReportsController();
+				secondIncomeQuarterly.start(primaryStage);
+			}
+		} else if (!ReportHandleController.isDualReport())
 			alertLabel.setText("Requested report didnt exist!");
-		
+		else {
+			alertLabel.setText("You cant open more then two reports in parallel!");
+		}
+
 	}
 
 	@Override
@@ -70,16 +80,15 @@ public class AnoterQuarterlyReportPopupController implements Initializable {
 		quarterlyQuarterList = FXCollections.observableArrayList("1", "2", "3", "4");
 		pickQuarterQuarterlyCB.setItems(quarterlyQuarterList);
 		List<String> querterYear = ClientHandleTransmission.getYearsForComboBox("QUARTERLY", "reports");
-		if(querterYear.size()>0) {
+		if (querterYear.size() > 0) {
 			quarterlyYearList = FXCollections.observableArrayList(querterYear);
-		}
-		else {
+		} else {
 			quarterlyYearList = FXCollections.observableArrayList();
 		}
 		pickYearQuarterlyCB.setItems(quarterlyYearList);
 		branchesObser = FXCollections.observableArrayList("2525", "1005", "4554");
 		PickBranch.setItems(branchesObser);
-		reportTypeList=FXCollections.observableArrayList("Income");
+		reportTypeList = FXCollections.observableArrayList("Income");
 		pickTypeQuarterlyCB.setItems(reportTypeList);
 		// need to add the branches after merge geting almog method.
 //		List<Branches> brances=ClientHandleTransmission.getBranches();

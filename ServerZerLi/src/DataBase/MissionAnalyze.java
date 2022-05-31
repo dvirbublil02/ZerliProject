@@ -165,6 +165,10 @@ public class MissionAnalyze {
 			ReportsQuaries.insertSurveyResult(obj,con);
 			break;
 		}
+		case GET_QUARTER_COMPLAINTS_REPORT:{
+			ReportsQuaries.getQuarterComplaintsReport(obj, con);
+			break;
+		}
 		}
 		
 		

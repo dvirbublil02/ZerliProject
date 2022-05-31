@@ -737,6 +737,51 @@ public class ClientHandleTransmission {
 		return false;
 	}
 
+	public static boolean getComliantsQuarterlyReport(String branchID, String Quarter, String Year) {
+		if(Year !=null && Quarter !=null && branchID !=null) {
+			List<String> reportRequest=new ArrayList<>();
+			Report returndReport;
+			reportRequest.addAll(Arrays.asList(branchID,Year,Quarter));
+			TransmissionPack tp=new TransmissionPack(Mission.GET_QUARTER_COMPLAINTS_REPORT,null,reportRequest);
+			ClientUI.chat.accept(tp);
+			tp=ClientUI.chat.getObj();
+			if(tp.getInformation() == null) {
+				return false;
+			}
+			else {
+				 returndReport = (Report) tp.getInformation();
+				 
+					ByteArrayInputStream stream = new ByteArrayInputStream(returndReport.getBlob());
+					InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+					BufferedReader bufferedReader = new BufferedReader(streamReader);
+					List<List<String>> reportOnList = new ArrayList<>();
+					String line;
+					try {
+						while ((line = bufferedReader.readLine()) != null) {
+							
+							List<String> row = new ArrayList<String>(Arrays.asList(line.split(" ")));
+							reportOnList.add(row);
+						
+					}
+					ReportHandleController.setComplaintsReportResult(reportOnList);
+					
+					ClientUI.chat.getObj().setInformation(returndReport);
+					return true;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			}
+		ClientUI.chat.getObj().setInformation(null);
+		return false;
+	}
+		else {
+			ClientUI.chat.getObj().setInformation(null);
+			return false;
+		}
+	}
+
 }
 
 

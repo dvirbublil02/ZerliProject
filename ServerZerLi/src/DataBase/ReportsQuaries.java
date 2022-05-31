@@ -180,7 +180,8 @@ public class ReportsQuaries {
 	}
 
 	/**
-	 * in this method we inserting monthly report for specific branch and specific report
+	 * in this method we inserting monthly report for specific branch and specific
+	 * report
 	 * 
 	 * month.
 	 * 
@@ -197,7 +198,7 @@ public class ReportsQuaries {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (branchName != null) {
 			stringBuilder.append(branchID + " " + branchName + " " + Date);
-			if (type.equals(ReportType.ORDERS.name())) {                              // change to switch case and add TPD to more reports.
+			if (type.equals(ReportType.ORDERS.name())) { // change to switch case and add TPD to more reports.
 				for (List<String> row : orders) {
 					stringBuilder.append("\n" + row.get(0) + " " + row.get(1) + " " + row.get(2));
 				}
@@ -301,7 +302,8 @@ public class ReportsQuaries {
 		ResultSet rs;
 		Statement stmt;
 		List<LocalDate> ordersDate = new ArrayList<>();
-		String getBrnachOrders = "SELECT orderID,orderDate from zerli.order WHERE status='APPROVE' AND branchID='" + branchID + "';";
+		String getBrnachOrders = "SELECT orderID,orderDate from zerli.order WHERE status='APPROVE' AND branchID='"
+				+ branchID + "';";
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(getBrnachOrders);
@@ -407,8 +409,8 @@ public class ReportsQuaries {
 			}
 			StringBuilder stringBuilder = new StringBuilder();
 			String branchName = getBranchNamebyBranchID(branch, con);
-			stringBuilder.append(branch + " " + branchName + " " + quarter + " " +year);
-			
+			stringBuilder.append(branch + " " + branchName + " " + quarter + " " + year);
+
 			if (reportType.equals(ReportType.ORDERS.name()) && countMonths > 0) {
 				if (InfoFirstMonth != null) {
 					for (List<String> row : InfoFirstMonth)
@@ -487,43 +489,43 @@ public class ReportsQuaries {
 		return incomeInfo;
 	}
 
-	
-
 	public static void getQuarterIncomeReport(TransmissionPack obj, Connection con) {
-	
-		if(obj instanceof TransmissionPack) {
-			List<String> reportRequest=new ArrayList<>();
-			reportRequest=(List<String>) obj.getInformation();
-			String branchID=reportRequest.get(0);
-			String year=reportRequest.get(1);
-			String quater=reportRequest.get(2);
-			String month=getMonthForQuater(quater);
+
+		if (obj instanceof TransmissionPack) {
+			List<String> reportRequest = new ArrayList<>();
+			reportRequest = (List<String>) obj.getInformation();
+			String branchID = reportRequest.get(0);
+			String year = reportRequest.get(1);
+			String quater = reportRequest.get(2);
+			String month = getMonthForQuater(quater);
 			Report returnReport = null;
 			ResultSet rs;
 			Statement stmt;
-			
-			String query = "SELECT * FROM zerli.reports WHERE branchID='" + branchID + "' AND reportDuration='QUARTERLY'";
+
+			String query = "SELECT * FROM zerli.reports WHERE branchID='" + branchID
+					+ "' AND reportDuration='QUARTERLY' AND reportType='INCOME'";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-				 while(rs.next() == true) {
-					
+				while (rs.next() == true) {
+
 					if (getMonthFormat(rs.getDate(7).toLocalDate().getMonth().getValue()).equals(month)
 							&& rs.getDate(7).toLocalDate().getYear() == Integer.parseInt(year)) {
-						Blob b=rs.getBlob(6);
-						InputStream in=b.getBinaryStream();
-						byte[] buff=b.getBytes(1, (int) b.length());
+						Blob b = rs.getBlob(6);
+						InputStream in = b.getBinaryStream();
+						byte[] buff = b.getBytes(1, (int) b.length());
 						returnReport = new Report(rs.getString(1), ReportType.valueOf(rs.getString(2)), rs.getString(3),
-								rs.getString(4), ReportDuration.valueOf(rs.getString(5)), buff, rs.getDate(7).toLocalDate());
-						
+								rs.getString(4), ReportDuration.valueOf(rs.getString(5)), buff,
+								rs.getDate(7).toLocalDate());
+
 					}
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 			if (returnReport != null) {
-				
+
 				obj.setResponse(Response.FOUND_QUARENTY_INCOME_REPORT);
 				obj.setInformation(returnReport);
 				return;
@@ -532,78 +534,82 @@ public class ReportsQuaries {
 				obj.setInformation(null);
 			}
 		}
-				obj.setResponse(Response.NOT_FOUND_QUARENTY_INCOME_REPORT);
-				obj.setInformation(null);
+		obj.setResponse(Response.NOT_FOUND_QUARENTY_INCOME_REPORT);
+		obj.setInformation(null);
 	}
-
 
 	private static String getMonthForQuater(String quater) {
 		String returnMonth = null;
-		switch(Integer.parseInt(quater)) {
-		case 1:{ return returnMonth="03";
+		switch (Integer.parseInt(quater)) {
+		case 1: {
+			return returnMonth = "03";
 		}
-		case 2:{ return returnMonth="06";
+		case 2: {
+			return returnMonth = "06";
 		}
-		case 3:{ return returnMonth="09";
+		case 3: {
+			return returnMonth = "09";
 		}
-		case 4:{ return returnMonth="12";
+		case 4: {
+			return returnMonth = "12";
 		}
-	}
+		}
 		return returnMonth;
 
 	}
 
 	public static void getYears(TransmissionPack obj, Connection con) {
-		if(obj instanceof TransmissionPack) {
-			List<String> opreation=(List<String>) obj.getInformation();
+		if (obj instanceof TransmissionPack) {
+			List<String> opreation = (List<String>) obj.getInformation();
 			List<String> returnYears = new ArrayList<>();
-			String table=opreation.get(1);
-			String duration=opreation.get(0);
-			String getYearsFromREPORTS = "SELECT reportDate from zerli."+table+" WHERE reportDuration='"
-					+ duration + "';";
+			String table = opreation.get(1);
+			String duration = opreation.get(0);
+			String getYearsFromREPORTS = "SELECT reportDate from zerli." + table + " WHERE reportDuration='" + duration
+					+ "';";
 			System.out.println(getYearsFromREPORTS);
 			ResultSet rs;
 			Statement stmt;
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(getYearsFromREPORTS);
-				 while(rs.next()) {
-					 int year =rs.getDate(1).toLocalDate().getYear();
-					 if(!returnYears.contains(String.valueOf(year)))
-					 returnYears.add(String.valueOf(year));
-				 }
-				 }catch(SQLException e) {
-					 obj.setInformation(null);
-					 obj.setResponse(Response.REPORT_YEARS_NOT_FOUND);
-					 e.printStackTrace();
-				 }
-			if(returnYears.size()>0) {
-				 obj.setInformation(returnYears);
-				 obj.setResponse(Response.REPORT_YEARS_FOUND);
-				 return;
+				while (rs.next()) {
+					int year = rs.getDate(1).toLocalDate().getYear();
+					if (!returnYears.contains(String.valueOf(year)))
+						returnYears.add(String.valueOf(year));
+				}
+			} catch (SQLException e) {
+				obj.setInformation(null);
+				obj.setResponse(Response.REPORT_YEARS_NOT_FOUND);
+				e.printStackTrace();
 			}
+			if (returnYears.size() > 0) {
+				obj.setInformation(returnYears);
+				obj.setResponse(Response.REPORT_YEARS_FOUND);
+				return;
+			}
+		} else {
+			obj.setInformation(null);
+			obj.setResponse(Response.REPORT_YEARS_NOT_FOUND);
+
 		}
-		else {
-			 obj.setInformation(null);
-			 obj.setResponse(Response.REPORT_YEARS_NOT_FOUND);
-			
-		}
-		
+
 	}
 
-	public static void getSurveyReport(TransmissionPack obj, Connection con) throws NumberFormatException, SQLException {
-		if(obj instanceof TransmissionPack) {
-			List<String> opreation=(List<String>) obj.getInformation();
-			List<List<String>> surveyResults=new ArrayList<>();
+	public static void getSurveyReport(TransmissionPack obj, Connection con)
+			throws NumberFormatException, SQLException {
+		if (obj instanceof TransmissionPack) {
+			List<String> opreation = (List<String>) obj.getInformation();
+			List<List<String>> surveyResults = new ArrayList<>();
 			ResultSet rs = null;
 			Statement stmt;
-			String branchID=opreation.get(0);
-			String Year=opreation.get(1);
-			String Month=opreation.get(2);
-			String surveyType=opreation.get(3);
+			String branchID = opreation.get(0);
+			String Year = opreation.get(1);
+			String Month = opreation.get(2);
+			String surveyType = opreation.get(3);
 			surveyResults.add(opreation);
-			String getSurveyQuarie = "SELECT * from zerli.surveys WHERE branchID='"+branchID+"' AND topic='"+surveyType+"';";
-			
+			String getSurveyQuarie = "SELECT * from zerli.surveys WHERE branchID='" + branchID + "' AND topic='"
+					+ surveyType + "';";
+
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(getSurveyQuarie);
@@ -614,54 +620,103 @@ public class ReportsQuaries {
 			while (rs.next()) {
 				if (getMonthFormat(rs.getDate(17).toLocalDate().getMonth().getValue()).equals(Month)
 						&& rs.getDate(17).toLocalDate().getYear() == Integer.parseInt(Year)) {
-					surveyResults.add(Arrays.asList(rs.getString(10),rs.getString(11),rs.getString(12),rs.getString(13),rs.getString(14),rs.getString(15),rs.getString(16)));
+					surveyResults.add(Arrays.asList(rs.getString(10), rs.getString(11), rs.getString(12),
+							rs.getString(13), rs.getString(14), rs.getString(15), rs.getString(16)));
 				}
 			}
-			if(surveyResults.size()>1) {
+			if (surveyResults.size() > 1) {
 				obj.setInformation(surveyResults);
 				obj.setResponse(Response.SURVEY_REPORT_FOUND);
 				return;
 			}
-			
-		}else {
+
+		} else {
 			obj.setInformation(null);
 			obj.setResponse(Response.SURVEY_REPORT_NOT_FOUND);
 		}
-		
+
 		obj.setInformation(null);
 		obj.setResponse(Response.SURVEY_REPORT_NOT_FOUND);
-		}
+	}
 
 	public static void insertSurveyResult(TransmissionPack obj, Connection con) {
-		if(obj instanceof TransmissionPack) {
-		PreparedStatement stmt;
-		Blob blob = null;
-		String query = "INSERT INTO zerli.reports(reportID, reportType, branchID, reportCreator, reportDuration, reportFile, reportDate) VALUES (?,?,?,?,?,?,?)";
-		try {
-			ByteArrayInputStream bais = new ByteArrayInputStream(((byte[])obj.getInformation()));
-			blob = new SerialBlob( (byte[]) obj.getInformation());
-			stmt = con.prepareStatement(query);
-			stmt.setString(1, null);
-			stmt.setString(2, "SURVEY");
-			stmt.setString(3, "2525");
-			stmt.setString(4, "Service Expert");
-			stmt.setString(5, ReportDuration.MONTHLY.name());
-			stmt.setBlob(6, bais);
-			stmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			obj.setInformation(null);
-			obj.setResponse(Response.INSERT_SURVEY_REPORT_FAILD);
-		}
+		if (obj instanceof TransmissionPack) {
+			PreparedStatement stmt;
+			Blob blob = null;
+			String query = "INSERT INTO zerli.reports(reportID, reportType, branchID, reportCreator, reportDuration, reportFile, reportDate) VALUES (?,?,?,?,?,?,?)";
+			try {
+				ByteArrayInputStream bais = new ByteArrayInputStream(((byte[]) obj.getInformation()));
+				blob = new SerialBlob((byte[]) obj.getInformation());
+				stmt = con.prepareStatement(query);
+				stmt.setString(1, null);
+				stmt.setString(2, "SURVEY");
+				stmt.setString(3, "2525");
+				stmt.setString(4, "Service Expert");
+				stmt.setString(5, ReportDuration.MONTHLY.name());
+				stmt.setBlob(6, bais);
+				stmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+				stmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				obj.setInformation(null);
+				obj.setResponse(Response.INSERT_SURVEY_REPORT_FAILD);
+			}
 			obj.setResponse(Response.INSERT_SURVEY_REPORT_SUCCESS);
 			return;
-		}else {
+		} else {
 			obj.setInformation(null);
 			obj.setResponse(Response.INSERT_SURVEY_REPORT_FAILD);
 		}
 	}
+
+	public static void getQuarterComplaintsReport(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<String> reportRequest = new ArrayList<>();
+			reportRequest = (List<String>) obj.getInformation();
+			System.out.println(reportRequest);
+			String branchID = reportRequest.get(0);
+			String year = reportRequest.get(1);
+			String quater = reportRequest.get(2);
+			String month = getMonthForQuater(quater);
+			Report returnReport = null;
+			ResultSet rs;
+			Statement stmt;
+			
+			String query = "SELECT * FROM zerli.reports WHERE branchID='" + branchID
+					+ "' AND reportDuration='QUARTERLY' AND reportType='COMPLAINTS'";
 		
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next() == true) {
+
+					if (getMonthFormat(rs.getDate(7).toLocalDate().getMonth().getValue()).equals(month)
+							&& rs.getDate(7).toLocalDate().getYear() == Integer.parseInt(year)) {
+						Blob b = rs.getBlob(6);
+						InputStream in = b.getBinaryStream();
+						byte[] buff = b.getBytes(1, (int) b.length());
+						returnReport = new Report(rs.getString(1), ReportType.valueOf(rs.getString(2)), rs.getString(3),
+								rs.getString(4), ReportDuration.valueOf(rs.getString(5)), buff,
+								rs.getDate(7).toLocalDate());
+
+					}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			if (returnReport != null) {
+
+				obj.setResponse(Response.FOUND_QUARENTY_COMPLAINTS_REPORT);
+				obj.setInformation(returnReport);
+				return;
+			} else {
+				obj.setResponse(Response.NOT_FOUND_QUARENTY_COMPLAINTS_REPORT);
+				obj.setInformation(null);
+			}
+		}
+		obj.setResponse(Response.NOT_FOUND_QUARENTY_COMPLAINTS_REPORT);
+		obj.setInformation(null);
 	}
 
-
+}

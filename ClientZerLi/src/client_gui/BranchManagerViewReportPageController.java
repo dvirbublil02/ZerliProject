@@ -77,7 +77,6 @@ public class BranchManagerViewReportPageController implements Initializable {
 
 	private ObservableList<String> quarterlyQuarterList;
 
-
 	@FXML
 	void Back(ActionEvent event) throws Exception {
 
@@ -128,20 +127,20 @@ public class BranchManagerViewReportPageController implements Initializable {
 		}
 		pickMonthForMonthlyCB.setItems(monthlyMonthList);
 
-
 		quarterlyQuarterList = FXCollections.observableArrayList("1", "2", "3", "4");
 		pickQuarterCB.setItems(quarterlyQuarterList);
 		List<String> monthlyYear = ClientHandleTransmission.getYearsForComboBox("MONTHLY", "reports");
-		if(monthlyYear.size()>0) {
+		if (monthlyYear.size() > 0) {
 			monthlyYearList = FXCollections.observableArrayList(monthlyYear);
-		}else {
+		} else {
 			monthlyYearList = FXCollections.observableArrayList();
 		}
 		pickYearForQuarterCB.setItems(monthlyYearList);
 		pickYearForMonthlyCB.setItems(monthlyYearList);
-		System.out.println(monthlyYear);
+
 	}
-	//this action will hide & show the specific buttons for the MonthlyReport
+
+	// this action will hide & show the specific buttons for the MonthlyReport
 	public void showAction1(ActionEvent event) {
 		if (MonthlyReportButton.isSelected() && !QuartelyReportButton.isSelected()) {
 			pickMonthForMonthlyCB.setDisable(false);
@@ -164,7 +163,8 @@ public class BranchManagerViewReportPageController implements Initializable {
 		}
 
 	}
-	//this action will hide & show the specific buttons for the QuartelyReport
+
+	// this action will hide & show the specific buttons for the QuartelyReport
 	public void showAction2(ActionEvent event) {
 		if (QuartelyReportButton.isSelected() && !MonthlyReportButton.isSelected()) {
 			pickQuarterCB.setDisable(false);
@@ -182,42 +182,56 @@ public class BranchManagerViewReportPageController implements Initializable {
 
 		}
 	}
-	   @FXML
-	    void ViewAction(ActionEvent event) throws Exception {
-		   	if(MonthlyReportButton.isSelected()) {
-		   		String branchID=ClientHandleTransmission.getBranchID();
-		   		if(branchID!= null) {
-		   			
-		   		if(ClientHandleTransmission.getMonthlyReport(branchID,pickYearForMonthlyCB.getValue(),pickMonthForMonthlyCB.getValue(),pickReportTypeForMonthlyCB.getValue())) {
-		   			TransmissionPack tp=ClientUI.chat.getObj();
-		   			Report returned=((Report) tp.getInformation());
-		   			ReportHandleController.setUserReport((BranchManager) ClientController.user); //down cast
-		   			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+
+	@FXML
+	void ViewAction(ActionEvent event) throws Exception {
+		if (MonthlyReportButton.isSelected()) {
+			String branchID = ClientHandleTransmission.getBranchID();
+			if (branchID != null) {
+
+				if (ClientHandleTransmission.getMonthlyReport(branchID, pickYearForMonthlyCB.getValue(),
+						pickMonthForMonthlyCB.getValue(), pickReportTypeForMonthlyCB.getValue())) {
+					TransmissionPack tp = ClientUI.chat.getObj();
+					Report returned = ((Report) tp.getInformation());
+					ReportHandleController.setUserReport((BranchManager) ClientController.user); // down cast
+					((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 					Stage primaryStage = new Stage();
-		   			switch(returned.getReportType()) {
-		   			case ORDERS:{
-		   				OrderReportsController orderReport = new OrderReportsController();
+					switch (returned.getReportType()) {
+					case ORDERS: {
+						OrderReportsController orderReport = new OrderReportsController();
 						orderReport.start(primaryStage);
 						return;
-		   				}
-		   			case INCOME:{
-		   				IncomeReportController incomeReport = new IncomeReportController();
+					}
+					case INCOME: {
+						IncomeReportController incomeReport = new IncomeReportController();
 						incomeReport.start(primaryStage);
 						return;
-		   			}
-		   			}
-		   		
-				
-		   		}
-		   		else {
-		   			ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!","No Report Avaliable");
-		   		}
-		   		}
-		   		
-		   	}
-		   	else if(QuartelyReportButton.isSelected()) {
-		   		
-		   	}
-		   	//else should be pop up that say  : Choose Report first
-	    }
+					}
+					}
+
+				} else {
+					ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!",
+							"No Report Avaliable");
+				}
+			}
+
+		} else if (QuartelyReportButton.isSelected()) {
+			String branchID = ClientHandleTransmission.getBranchID();
+			if (branchID != null) {
+				if (ClientHandleTransmission.getComliantsQuarterlyReport(branchID,
+						pickQuarterCB.getValue(), pickYearForQuarterCB.getValue())) {
+					TransmissionPack tp = ClientUI.chat.getObj();
+					Report returned = ((Report) tp.getInformation());
+					ReportHandleController.setUserReport((BranchManager) ClientController.user); // down cast
+					((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+					Stage primaryStage = new Stage();
+					ComplaintsReportController complaintReport = new ComplaintsReportController();
+					complaintReport.start(primaryStage);
+				}
+			}else
+			ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!",
+					"No Report Avaliable");
+			// else should be pop up that say : Choose Report first
+		}
+	}
 }

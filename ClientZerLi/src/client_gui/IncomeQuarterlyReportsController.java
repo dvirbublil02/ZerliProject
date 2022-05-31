@@ -94,6 +94,7 @@ public class IncomeQuarterlyReportsController implements Initializable {
 
     @FXML
     void addAnotherReport(ActionEvent event) {
+    	
     	Stage primaryStage = new Stage();
     	AnoterQuarterlyReportPopupController AnoterQuarterlyReportPopupPage = new AnoterQuarterlyReportPopupController();
 		try {
@@ -102,5 +103,6 @@ public class IncomeQuarterlyReportsController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	
     }
 }

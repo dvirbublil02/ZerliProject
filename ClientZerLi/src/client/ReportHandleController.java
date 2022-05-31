@@ -14,7 +14,27 @@ public class ReportHandleController {
 	private static List<List<String>> OrdersReportOnListMonth= new ArrayList<>();
 	private static List<List<String>> OrdersReportOnListQuarter=new ArrayList<>();
 	private static List<List<String>> SurveyReportResult=new ArrayList<>();
+	private static List<List<String>> ComplaintsReportResult=new ArrayList<>();
 	private static User userReport;
+	private static boolean dualReport=false;
+	
+	
+	public static List<List<String>> getComplaintsReportResult() {
+		return ComplaintsReportResult;
+	}
+
+	public static void setComplaintsReportResult(List<List<String>> complaintsReportResult) {
+		ComplaintsReportResult = complaintsReportResult;
+	}
+
+	public static boolean isDualReport() {
+		return dualReport;
+	}
+
+	public static void setDualReport(boolean dualReport) {
+		ReportHandleController.dualReport = dualReport;
+	}
+
 	public static List<List<String>> getOrdersReportOnListMonth() {
 		return OrdersReportOnListMonth;
 	}
@@ -123,6 +143,32 @@ public class ReportHandleController {
 		
 	
 
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static void insertTheDetailsForTheComplaintsReport(Label satisfactionPercentage,
+			Label complaintsQuarterTitle, List<List<String>> reportOnList, Series series, Series series2,
+			Series series3) {
+		List<String> reportInfo = new ArrayList();
+		List<String> complaintsInfo=new ArrayList();
+		complaintsInfo=reportOnList.get(1);
+		reportInfo = reportOnList.get(0);
+		complaintsQuarterTitle.setText("Zerli " + reportInfo.get(1) + "(" + reportInfo.get(0) + ") -"
+				+ reportInfo.get(2) + "st Quarter Compliants report "+reportInfo.get(3));
+		StringBuilder day=new StringBuilder();
+		day.append("0 - 1(Month)");
+		series.getData().add(new XYChart.Data(day.toString(),
+				(Integer.valueOf(complaintsInfo.get(0)))));
+		 day=new StringBuilder();
+		day.append("1 - 2(Month)");
+		series2.getData().add(new XYChart.Data(day.toString(),
+				(Integer.valueOf(complaintsInfo.get(1)))));
+		 day=new StringBuilder();
+		day.append("2 - 3(Month)");
+		series3.getData().add(new XYChart.Data(day.toString(),
+				(Integer.valueOf(complaintsInfo.get(2)))));
+		satisfactionPercentage.setText("The ratio between the Complaints to the Orders is: "+Double.valueOf(complaintsInfo.get(3))+"%");
+		
 	}
 
 	

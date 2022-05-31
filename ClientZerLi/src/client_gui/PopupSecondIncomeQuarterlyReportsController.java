@@ -42,6 +42,9 @@ public class PopupSecondIncomeQuarterlyReportsController  implements Initializab
     	
     	primaryStage.setScene(scene);
     	primaryStage.show();
+    	primaryStage.setOnCloseRequest(event -> {
+			ReportHandleController.setDualReport(false);
+		});
     	
     }
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -52,10 +55,12 @@ public class PopupSecondIncomeQuarterlyReportsController  implements Initializab
 		XYChart.Series series = new XYChart.Series();
 		XYChart.Series series2 = new XYChart.Series();
 		XYChart.Series series3 = new XYChart.Series();
+		
 		ReportHandleController.insertTheDeatilsForTheCartQurateryReport(worstMonth,bestMonth,incomeQuarterTitle,reportOnList,series, series2, series3);
-
 		IncomeLineChart.getData().addAll(series, series2, series3);
 		IncomeLineChart.setCategoryGap(0);
+		
+		
 	}
 	
 
