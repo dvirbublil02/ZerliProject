@@ -46,6 +46,7 @@ public class ClientController implements ChatIF {
 	public ClientController(String host, int port) {
 		try {
 			client = new ChatClient(host, port, this);
+			
 		} catch (IOException exception) {
 			System.out.println("Error: Can't setup connection!" + " Terminating client.");
 			System.exit(1);

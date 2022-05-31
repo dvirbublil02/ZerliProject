@@ -53,9 +53,6 @@ public class NetworkManagerViewReportsController implements Initializable {
 	private ComboBox<String> PickBranch;
 
 	@FXML
-	private ComboBox<String> pickMonthSpecial;
-
-	@FXML
 	private ComboBox<String> pickQuarterQuarterlyCB;
 
 	@FXML
@@ -71,13 +68,7 @@ public class NetworkManagerViewReportsController implements Initializable {
 	private ComboBox<String> pickYearQuarterlyCB;
 
 	@FXML
-	private ComboBox<String> pickYearSpecialCB;
-
-	@FXML
 	private CheckBox quarterlyReportsRadioBtn;
-
-	@FXML
-	private CheckBox specialReportsRadioBtn;
 
 	@FXML
 	private Button submitBtn;
@@ -115,15 +106,15 @@ public class NetworkManagerViewReportsController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		pickMonthMonthlyCB.setDisable(true);
-		pickMonthSpecial.setDisable(true);
+
 		pickQuarterQuarterlyCB.setDisable(true);
 		pickTypeMonthlyCB.setDisable(true);
 		pickTypeQuarterlyCB.setDisable(true);
 		pickYearForMonthlyCB.setDisable(true);
 		pickYearQuarterlyCB.setDisable(true);
-		pickYearSpecialCB.setDisable(true);
+
 		quarterlyReportsRadioBtn.setDisable(false);
-		specialReportsRadioBtn.setDisable(false);
+
 		monthlyReportsRadioBtn.setDisable(false);
 
 		reportTypeList = FXCollections.observableArrayList("Income", "Orders", "Satisfaction");
@@ -137,28 +128,26 @@ public class NetworkManagerViewReportsController implements Initializable {
 		}
 		pickMonthMonthlyCB.setItems(monthlyMonthList);
 		List<String> monthlyYear = ClientHandleTransmission.getYearsForComboBox("MONTHLY", "reports");
-		if(monthlyYear.size()>0) {
+		if (monthlyYear.size() > 0) {
 			monthlyYearList = FXCollections.observableArrayList(monthlyYear);
-		}
-		else {
+		} else {
 			monthlyYearList = FXCollections.observableArrayList();
 		}
 		pickYearForMonthlyCB.setItems(monthlyYearList);
 		quarterlyQuarterList = FXCollections.observableArrayList("1", "2", "3", "4");
 		pickQuarterQuarterlyCB.setItems(quarterlyQuarterList);
-		
+
 		List<String> querterYear = ClientHandleTransmission.getYearsForComboBox("QUARTERLY", "reports");
-		if(querterYear.size()>0) {
+		if (querterYear.size() > 0) {
 			quarterlyYearList = FXCollections.observableArrayList(querterYear);
-		}
-		else {
+		} else {
 			quarterlyYearList = FXCollections.observableArrayList();
 		}
 		pickYearQuarterlyCB.setItems(quarterlyYearList);
-		
+
 		branchesObser = FXCollections.observableArrayList("2525", "1005", "4554");
 		PickBranch.setItems(branchesObser);
-		
+
 		pickTypeQuarterly = FXCollections.observableArrayList("Income");
 		pickTypeQuarterlyCB.setItems(pickTypeQuarterly);
 		// need to add the branches after merge geting almog method.
@@ -184,67 +173,50 @@ public class NetworkManagerViewReportsController implements Initializable {
 
 	@FXML
 	void ShowMonthlyReports(ActionEvent event) {
-		if (monthlyReportsRadioBtn.isSelected() && !quarterlyReportsRadioBtn.isSelected()
-				&& !specialReportsRadioBtn.isSelected()) {
+		if (monthlyReportsRadioBtn.isSelected() && !quarterlyReportsRadioBtn.isSelected()) {
 			pickMonthMonthlyCB.setDisable(false);
 			pickTypeMonthlyCB.setDisable(false);
 			pickYearForMonthlyCB.setDisable(false);
 			quarterlyReportsRadioBtn.setDisable(true);
-			specialReportsRadioBtn.setDisable(true);
+
 		} else {
 			pickMonthMonthlyCB.setDisable(true);
 			pickTypeMonthlyCB.setDisable(true);
 			pickYearForMonthlyCB.setDisable(true);
 			quarterlyReportsRadioBtn.setDisable(false);
-			specialReportsRadioBtn.setDisable(false);
+
 		}
 	}
 
 	@FXML
 	void ShowQuarterlyReports(ActionEvent event) {
-		if (!monthlyReportsRadioBtn.isSelected() && quarterlyReportsRadioBtn.isSelected()
-				&& !specialReportsRadioBtn.isSelected()) {
+		if (!monthlyReportsRadioBtn.isSelected() && quarterlyReportsRadioBtn.isSelected()) {
 			pickTypeQuarterlyCB.setDisable(false);
 			pickYearQuarterlyCB.setDisable(false);
 			pickQuarterQuarterlyCB.setDisable(false);
-			specialReportsRadioBtn.setDisable(true);
+
 			monthlyReportsRadioBtn.setDisable(true);
 		} else {
 			pickTypeQuarterlyCB.setDisable(true);
 			pickYearQuarterlyCB.setDisable(true);
 			pickQuarterQuarterlyCB.setDisable(true);
 			monthlyReportsRadioBtn.setDisable(false);
-			specialReportsRadioBtn.setDisable(false);
-		}
-	}
 
-	@FXML
-	void ShowSpecialReports(ActionEvent event) {
-		if (!monthlyReportsRadioBtn.isSelected() && !quarterlyReportsRadioBtn.isSelected()
-				&& specialReportsRadioBtn.isSelected()) {
-			monthlyReportsRadioBtn.setDisable(true);
-			quarterlyReportsRadioBtn.setDisable(true);
-			pickYearSpecialCB.setDisable(false);
-			pickMonthSpecial.setDisable(false);
-		} else {
-			monthlyReportsRadioBtn.setDisable(false);
-			quarterlyReportsRadioBtn.setDisable(false);
-			pickYearSpecialCB.setDisable(true);
-			pickMonthSpecial.setDisable(true);
 		}
 	}
 
 	@FXML
 	void Submit(ActionEvent event) throws IOException {
 		if (quarterlyReportsRadioBtn.isSelected()) {
-			if (ClientHandleTransmission.getQuarterIncomeReport(PickBranch.getValue(), pickYearQuarterlyCB.getValue(), pickQuarterQuarterlyCB.getValue().toUpperCase())) {
+			if (ClientHandleTransmission.getQuarterIncomeReport(PickBranch.getValue(), pickYearQuarterlyCB.getValue(),
+					pickQuarterQuarterlyCB.getValue().toUpperCase())) {
 				((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 				Stage primaryStage = new Stage();
 				IncomeQuarterlyReportsController orderReport = new IncomeQuarterlyReportsController();
 				orderReport.start(primaryStage);
-			}
-			else {
-				ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!","No Report Avaliable");
+			} else {
+				ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!",
+						"No Report Avaliable");
 			}
 		} else {
 			if (monthlyReportsRadioBtn.isSelected()) {
@@ -267,9 +239,9 @@ public class NetworkManagerViewReportsController implements Initializable {
 						return;
 					}
 					}
-				}
-				else {
-					ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!","No Report Avaliable");
+				} else {
+					ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!",
+							"No Report Avaliable");
 				}
 			}
 
