@@ -1,3 +1,5 @@
+
+
 /** In this class we are handling with the Transmissions , we creating client transmission (with specific mission ) 
  * And sending it to the server by using ClientUI.chat.accept method, and getting back the response (Transmission)
  * And after that doing the specific task.
