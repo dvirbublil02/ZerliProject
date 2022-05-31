@@ -391,11 +391,11 @@ public class ClientHandleTransmission {
 			menu.start(primaryStage);
 			break;
 		}
-//		case "Shop Worker": {
-//			ShopWorkerPageController menu = new ShopWorkerPageController();
-//			menu.start(primaryStage);
-//			break;
-//		}
+		case "Shop Worker": {
+			ShopWorkerPageController menu = new ShopWorkerPageController();
+			menu.start(primaryStage);
+			break;
+		}
 
 		}
 
