@@ -244,16 +244,12 @@
                                              <children>
                                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="350.0">
                                                    <children>
-                                                      <Button fx:id="showOrderBtn" mnemonicParsing="false" onAction="#ShowOrder" stylesheets="@Style.css" text="Show Order">
-                                                         <styleClass>
-                                                            <String fx:value="buttonBack" />
-                                                            <String fx:value="buttonConfirm" />
-                                                         </styleClass></Button>
+                                                      <Button fx:id="showOrderBtn" mnemonicParsing="false" onAction="#ShowOrder" styleClass="buttonConfirm" stylesheets="@Style.css" text="Show Order" />
                                                    </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="350.0">
                                                    <children>
-                                                      <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#Update" styleClass="buttonConfirm" stylesheets="@Style.css" text="Update" />
+                                                      <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#Update" styleClass="buttonUpdate" stylesheets="@Style.css" text="Update" />
                                                       <Label fx:id="SuccessFailedLbl">
                                                          <HBox.margin>
                                                             <Insets left="20.0" />

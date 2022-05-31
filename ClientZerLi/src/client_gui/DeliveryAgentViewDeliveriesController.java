@@ -2,6 +2,7 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -261,8 +262,14 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 			for (int i = 0; i < deliveriesList.size(); i++) {
 				if (deliveriesList.get(i).getDeliveryStatus() == DeliveryStatus.ARRIVED) {
 					indexes.add(i);
+					Date arrivedDate = new Date(Long.parseLong(deliveriesList.get(i).getArrivedDate()));
+					Date expectedDate = new Date(Long.parseLong(deliveriesList.get(i).getExpectedDelivery()));
+					if(arrivedDate.after(expectedDate)) {
+						//refund
+					}
 				}
 			}
+			
 			for(int j = 0; j<indexes.size(); j++) {
 				deliveriesList.remove(indexes.get(j));
 				deliveriesView.remove(indexes.get(j));
@@ -271,6 +278,7 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 			SuccessFailedLbl.setText("Update Failed!");
 			SuccessFailedLbl.setTextFill(Color.RED);
 		}
+		
 	}
 
 	/**
