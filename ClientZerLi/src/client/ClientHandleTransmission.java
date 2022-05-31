@@ -705,6 +705,43 @@ public class ClientHandleTransmission {
 		
 		return false; 
 	}
+
+	public static List<Order> getCustomerOrdersForCancaltion() {
+		// TODO Auto-generated method stub
+		TransmissionPack tp = new TransmissionPack(Mission.GET_CUSTOMER_ORDERS_CANCELATION, null, ClientController.user.getID());
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		switch (tp.getResponse()) {
+			case GET_CUSTOMER_ORDERS_SUCCESS: {
+				return (List<Order>)tp.getInformation();
+			}
+		
+			case GET_CUSTOMER_ORDERS_FAILD: {
+				return new ArrayList<Order>() ;
+			}
+		}
+		
+		return new ArrayList<Order>() ;
+	}
+	
+	
+	public static List<Order> getCustomerOrdersHistory() {
+		// TODO Auto-generated method stub
+		TransmissionPack tp = new TransmissionPack(Mission.GET_CUSTOMER_ORDERS_HISTORY, null, ClientController.user.getID());
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		switch (tp.getResponse()) {
+			case GET_CUSTOMER_ORDERS_SUCCESS: {
+				return (List<Order>)tp.getInformation();
+			}
+		
+			case GET_CUSTOMER_ORDERS_FAILD: {
+				return new ArrayList<Order>() ;
+			}
+		}
+		
+		return new ArrayList<Order>() ;
+	}
 	
 	
 	

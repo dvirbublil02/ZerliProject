@@ -22,17 +22,15 @@ import javafx.stage.Stage;
 
 public class CustomerPageController implements Initializable {
 
-	@FXML
-	private Button cancelOrdersBtn;
-
-	@FXML
-	private Button compliantBtn;
 
 	@FXML
 	private Button logOutBtn;
 
 	@FXML
 	private Button viewCatalogBtn;
+	
+    @FXML
+    private Button viewOrdersBtn;
 	
     @FXML
     private Label accountStatus;
@@ -50,8 +48,6 @@ public class CustomerPageController implements Initializable {
     private Label phoneNumber;
     
 
-    @FXML
-    private Button viewCatalogBtn1;
     
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CustomerPage.fxml"));
@@ -65,16 +61,16 @@ public class CustomerPageController implements Initializable {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 			});	
 	}
+	
 
-	@FXML
-	void cancelOrders(ActionEvent event) {
-
-	}
-
-	@FXML
-	void compliant(ActionEvent event) {
-
-	}
+    @FXML
+    void orderView(ActionEvent event) throws Exception {
+		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+		Stage primaryStage = new Stage();
+		CustomerViewOrdersController customerViewOrders = new CustomerViewOrdersController();
+		customerViewOrders.start(primaryStage);	
+    }
+	
 
 	@FXML
 	void logOut(ActionEvent event) throws Exception {

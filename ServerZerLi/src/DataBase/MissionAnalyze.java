@@ -146,6 +146,17 @@ public class MissionAnalyze {
 			ServerQuaries.addDelivery(obj, con);
 			break;
 		}
+		case GET_CUSTOMER_ORDERS_CANCELATION:
+		{
+			ServerQuaries.getCustomerOrdersCancelation(obj, con);
+			break;
+		}
+		case GET_CUSTOMER_ORDERS_HISTORY:
+		{
+			ServerQuaries.getCustomerOrdersHistory(obj, con);
+			break;
+		}
+	
 	
 		}
 		

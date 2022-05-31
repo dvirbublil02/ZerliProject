@@ -204,23 +204,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
-                                    <Button fx:id="viewCatalogBtn1" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewCatalog" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="View  Custom Catalog" textFill="WHITE">
-                                       <graphic>
-                                          <ImageView fitHeight="69.0" fitWidth="86.0">
-                                             <image>
-                                                <Image url="@../javafx_images/ViewCustomCatalogCustomer.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                       <font>
-                                          <Font name="Calibri Bold Italic" size="14.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                 <children>
-                                    <Button fx:id="cancelOrdersBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#cancelOrders" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Cancel Orders" textFill="WHITE">
+                                    <Button fx:id="viewOrdersBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#orderView" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text=" View Orders" textFill="WHITE">
                                        <font>
                                           <Font name="Calibri Bold Italic" size="14.0" />
                                        </font>
@@ -234,22 +218,8 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <children>
-                                    <Button fx:id="compliantBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#compliant" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Complaint" textFill="WHITE">
-                                       <font>
-                                          <Font name="Calibri Bold Italic" size="14.0" />
-                                       </font>
-                                       <graphic>
-                                          <ImageView fitHeight="69.0" fitWidth="86.0">
-                                             <image>
-                                                <Image url="@../javafx_images/compliantCustomer.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </children>

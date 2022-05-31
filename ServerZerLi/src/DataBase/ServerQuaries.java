@@ -1425,16 +1425,168 @@ public class ServerQuaries {
 					e.printStackTrace();
 					return;
 				}
-				
-				System.out.println("here2");
 				obj.setResponse(Response.ADD_DELIVERY_SUCCEED);
 				return;
 			}
 			else {
-				System.out.println("here3");
 			obj.setResponse(Response.FAILD_ADD_DELIVERY);
 			}
 		}
 	}
+
+	public static void getCustomerOrdersCancelation(TransmissionPack obj, Connection con) {
+		// TODO Auto-generated method stub
+		
+	if (obj instanceof TransmissionPack) {
+			ResultSet rs,rs2;
+			Statement stmt,stmt2;
+			List<Order>orders=new ArrayList<>();
+			String customerID;
+			
+			
+			if(obj.getInformation()==null)
+				throw new NullPointerException();
+			else
+				customerID=(String)obj.getInformation();
+			
+			
+			
+			String query="SELECT * FROM zerli.order  WHERE (customerID = '"+customerID+"') AND (status = 'PENDING') OR (status = 'PENDING_WITH_DELIVERY') OR (status = 'APPROVE_WITH_DELIVERY');";
+			String query1="SELECT * FROM zerli.productinorder WHERE orderID='";
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while(rs.next()) {
+					
+					Map<String,List<ProductInOrder>>products=new HashMap<>();
+					
+					stmt2 = con.createStatement();
+					
+					rs2 = stmt2.executeQuery(query1+rs.getString(1)+"';");
+					while(rs2.next()) {
+						
+						ProductInOrder newProduct=new ProductInOrder(rs2.getString(1),rs2.getString(2),rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false ,0);
+						if(!products.containsKey(rs2.getString(3))) {
+							List<ProductInOrder>product=new ArrayList<>();
+							product.add(newProduct);
+							products.put(rs2.getString(3), product);
+						}else {
+							products.get(rs2.getString(3)).add(newProduct);
+						}
+						
+					}
+					rs2.close();
+					
+					
+					
+					Order order=new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getDouble(4),rs.getString(5),rs.getTimestamp(7).toString(),rs.getTimestamp(8).toString(),products);
+					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
+					
+					orders.add(order);
+				}
+		
+				
+				rs.close();
+				System.out.println(orders);
+				if(orders.size()>0) {
+					obj.setInformation(orders);
+					obj.setResponse(Response.GET_CUSTOMER_ORDERS_SUCCESS);
+					return;
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
+				return;
+			} catch (NullPointerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
+				return;
+			}
+			
+			
+		}
+		obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
+	}
+	
+	
+	
+	public static void getCustomerOrdersHistory(TransmissionPack obj, Connection con) {
+		// TODO Auto-generated method stub
+		
+	if (obj instanceof TransmissionPack) {
+			ResultSet rs,rs2;
+			Statement stmt,stmt2;
+			List<Order>orders=new ArrayList<>();
+			String customerID;
+			
+			if(obj.getInformation()==null)
+				throw new NullPointerException();
+			else
+				customerID=(String)obj.getInformation();
+			
+			
+			String query="SELECT * FROM zerli.order  WHERE (customerID = '"+customerID+"') AND (status = 'ARRIVED') OR (status = 'TAKEAWAY');";
+			String query1="SELECT * FROM zerli.productinorder WHERE orderID='";
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while(rs.next()) {
+					
+					Map<String,List<ProductInOrder>>products=new HashMap<>();
+					
+					stmt2 = con.createStatement();
+					
+					rs2 = stmt2.executeQuery(query1+rs.getString(1)+"';");
+					while(rs2.next()) {
+						
+						ProductInOrder newProduct=new ProductInOrder(rs2.getString(1),rs2.getString(2),rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false ,0);
+						if(!products.containsKey(rs2.getString(3))) {
+							List<ProductInOrder>product=new ArrayList<>();
+							product.add(newProduct);
+							products.put(rs2.getString(3), product);
+						}else {
+							products.get(rs2.getString(3)).add(newProduct);
+						}
+						
+					}
+					rs2.close();
+					
+					
+					Order order=new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getDouble(4),rs.getString(5),rs.getTimestamp(7).toString(),rs.getTimestamp(8).toString(),products);
+					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
+					
+					orders.add(order);
+				}
+		
+				
+				rs.close();
+				System.out.println(orders);
+				if(orders.size()>0) {
+					obj.setInformation(orders);
+					obj.setResponse(Response.GET_CUSTOMER_ORDERS_SUCCESS);
+					return;
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
+				return;
+			} catch (NullPointerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
+				return;
+			}
+			
+			
+		}
+		obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
+	}
+	
+	
+	
+	
 }
 

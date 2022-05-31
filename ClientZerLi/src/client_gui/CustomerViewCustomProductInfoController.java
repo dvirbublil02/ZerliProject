@@ -85,6 +85,14 @@ public class CustomerViewCustomProductInfoController implements Initializable {
     
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		
+		//check if need to invisible remove button
+		if(OrderHandleController.isDisableRemoveCustomButton()) {
+			removeBtn.setVisible(false);
+			OrderHandleController.setDisableRemoveCustomButton(false);
+		}
+		
 		//Cart Table Initialize
 		productNameCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, String>("name"));
 		quantityInCartCol.setCellValueFactory(new PropertyValueFactory<ProductInOrder, Integer>("productQuantityInCart"));

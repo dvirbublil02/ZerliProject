@@ -28,24 +28,45 @@ public class OrderHandleController implements nofityOrderListner {
 	private static double totalPrice = 0;
 	private static Label priceLabel = new Label("0");
 	private static boolean detailsAllreadyOpen = false;
+	private static boolean detailsAllreadyOpen2 = false;
+	private static boolean disableRemoveCustomButton = false;
 	private static double shippingPrice=20.55;
 	
-	
-	//get product in branch view
+	/**
+	 * get product in branch view
+	 */
 	private static List<ProductInBranch> productInBranch = new ArrayList<ProductInBranch>();
-	//map to view quantity chosen by customer-> <ProductID,quantity>
-	//String nameProdcut(key) , List<Integer>=[productID,quantity]
+
+	
+	/**map to view quantity chosen by customer.
+	 * String nameProdcut(key) , List<Integer>=[productID,quantity]
+	 */
 	private static Map<String,List<Integer>> quntityImageInBranch =  new HashMap<String, List<Integer>>();
-	//set to view product with problematic bigger quantity -> <ProductID>
+	/**
+	 * set to view product with problematic bigger quantity -> <ProductID>
+	 */
 	private static Set<String> problemticProducts = new HashSet<>();
-	//Massage note to user if there is problem with quantity.
+	
+	/**
+	 * Massage note to user if there is problem with quantity.
+	 */
 	private static String msg ;
-	//boolean eventToClose
+	/**
+	 * boolean eventToClose
+	 */
 	private static boolean closeEvent=false;
 	
 	
 	private static List<OrderPreview> ordersForBranchManager = new ArrayList<>();
 	private static OrderPreview order;
+	
+	
+	private static List<OrderPreview> cancelationOrdersPreview = new ArrayList<>();
+	private static List<OrderPreview> historyOrdersPreview = new ArrayList<>();
+	private static OrderPreview customerOrderView ;
+	private static Map<String, List<ProductInOrder>> customerOrderDetails = new HashMap<>();;
+	
+	
 
 	public static OrderPreview getOrder() {
 		return order;
@@ -61,6 +82,42 @@ public class OrderHandleController implements nofityOrderListner {
 
 	public static void setOrdersForBranchManager(List<OrderPreview> ordersForBranchManager) {
 		OrderHandleController.ordersForBranchManager = ordersForBranchManager;
+	}
+	
+	/**
+	 *  customer section method 
+	 * 		@return
+	 */
+	public static List<OrderPreview> getCancelationOrdersPreview() {
+		return cancelationOrdersPreview;
+	}
+
+	public static void setCancelationOrdersPreview(List<OrderPreview> cancelationOrdersPreview) {
+		OrderHandleController.cancelationOrdersPreview = cancelationOrdersPreview;
+	}
+
+	public static List<OrderPreview> getHistoryOrdersPreview() {
+		return historyOrdersPreview;
+	}
+
+	public static void setHistoryOrdersPreview(List<OrderPreview> historyOrdersPreview) {
+		OrderHandleController.historyOrdersPreview = historyOrdersPreview;
+	}
+
+	public static OrderPreview getCustomerOrderView() {
+		return customerOrderView;
+	}
+
+	public static void setCustomerOrderView(OrderPreview customerOrderView) {
+		OrderHandleController.customerOrderView = customerOrderView;
+	}
+
+	public static Map<String, List<ProductInOrder>> getCustomerOrderDetails() {
+		return customerOrderDetails;
+	}
+
+	public static void setCustomerOrderDetails(Map<String, List<ProductInOrder>> customerOrderDetails) {
+		OrderHandleController.customerOrderDetails = customerOrderDetails;
 	}
 
 	public static Map<String, List<ProductInOrder>> getCustomProductInOrderFinallCart() {
@@ -93,6 +150,7 @@ public class OrderHandleController implements nofityOrderListner {
 		return productInOrder;
 	}
 
+	
 	public static void addProductInOrder(ProductInOrder productInOrder) {
 		OrderHandleController.productInOrder.add(productInOrder);
 		OrderHandleController.totalPrice += (double) productInOrder.getProductQuantityInCart()
@@ -266,6 +324,25 @@ public class OrderHandleController implements nofityOrderListner {
 
 	public static void setDetailsAllreadyOpen(boolean detailsAllreadyOpen) {
 		OrderHandleController.detailsAllreadyOpen = detailsAllreadyOpen;
+	}
+	
+	
+
+	public static boolean isDetailsAllreadyOpen2() {
+		return detailsAllreadyOpen2;
+	}
+
+	public static void setDetailsAllreadyOpen2(boolean detailsAllreadyOpen2) {
+		OrderHandleController.detailsAllreadyOpen2 = detailsAllreadyOpen2;
+	}
+	
+
+	public static boolean isDisableRemoveCustomButton() {
+		return disableRemoveCustomButton;
+	}
+
+	public static void setDisableRemoveCustomButton(boolean disableRemoveCustomButton) {
+		OrderHandleController.disableRemoveCustomButton = disableRemoveCustomButton;
 	}
 
 	public static List<ProductInBranch> getProductInBranch() {
