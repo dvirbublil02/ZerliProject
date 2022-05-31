@@ -34,6 +34,14 @@ public class ProductInOrder extends Product {
 		this.productQuantityInOrder = productQuantityInCart;
 	}
 
+	public String getNameOfProduct() {
+		return nameOfProduct;
+	}
+
+	public void setNameOfProduct(String nameOfProduct) {
+		this.nameOfProduct = nameOfProduct;
+	}
+
 	public String getNameOfItem() {
 		return nameOfItem;
 	}

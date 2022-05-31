@@ -160,6 +160,7 @@
                                        </HBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="59.0" prefWidth="83.0" />
+                                    <HBox alignment="CENTER" prefHeight="66.0" prefWidth="90.0" />
                                     <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
                                        <children>
                                           <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0">
@@ -182,43 +183,14 @@
                                        <children>
                                           <Label text="Choose Report" textFill="#11862a">
                                              <font>
-                                                <Font size="33.0" />
+                                                <Font size="19.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </VBox>
-
-                                    <VBox prefHeight="168.0" prefWidth="692.0">
-
+                                    <VBox layoutX="10.0" layoutY="83.0" prefHeight="375.0" prefWidth="100.0">
                                        <children>
-                                          <HBox prefHeight="85.0" prefWidth="627.0">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                                   <children>
-                                                      <VBox prefHeight="125.0" prefWidth="230.0">
-                                                         <children>
-                                                            <HBox alignment="CENTER" prefHeight="101.0" prefWidth="203.0">
-                                                               <children>
-                                                                  <HBox prefHeight="85.0" prefWidth="137.0" />
-                                                                  <Label text="Pick Branch" />
-                                                               </children>
-                                                            </HBox>
-                                                         </children>
-                                                      </VBox>
-                                                   </children>
-                                                </HBox>
-                                                <HBox alignment="CENTER" prefHeight="85.0" prefWidth="276.0">
-                                                   <children>
-                                                      <ComboBox fx:id="PickBranch" prefHeight="50.0" prefWidth="153.0" promptText="none" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="10.0" layoutY="83.0" prefHeight="400.0" prefWidth="100.0">
-                                       <children>
-                                          <VBox prefHeight="152.0" prefWidth="692.0">
+                                          <VBox prefHeight="125.0" prefWidth="100.0">
                                              <children>
                                                 <HBox prefHeight="125.0" prefWidth="200.0">
                                                    <children>
@@ -356,13 +328,73 @@
                                                 </HBox>
                                              </children>
                                           </VBox>
+                                          <VBox prefHeight="125.0" prefWidth="100.0">
+                                             <children>
+                                                <HBox prefHeight="125.0" prefWidth="200.0">
+                                                   <children>
+                                                      <HBox prefHeight="125.0" prefWidth="230.0">
+                                                         <children>
+                                                            <VBox prefHeight="125.0" prefWidth="230.0">
+                                                               <children>
+                                                                  <HBox prefHeight="50.0" prefWidth="200.0">
+                                                                     <children>
+                                                                        <CheckBox fx:id="specialReportsRadioBtn" mnemonicParsing="false" onAction="#ShowSpecialReports" prefHeight="40.0" prefWidth="224.0" text="Special Report" textFill="#009400" />
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0">
+                                                                     <children>
+                                                                        <Label text="Pick Year" />
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <HBox alignment="CENTER" prefHeight="80.0" prefWidth="80.0">
+                                                                     <children>
+                                                                        <ComboBox fx:id="pickYearSpecialCB" prefHeight="50.0" prefWidth="212.0" promptText="none" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox prefHeight="125.0" prefWidth="230.0">
+                                                         <children>
+                                                            <VBox prefHeight="125.0" prefWidth="230.0">
+                                                               <children>
+                                                                  <HBox prefHeight="50.0" prefWidth="200.0" />
+                                                                  <HBox alignment="CENTER" prefHeight="67.0" prefWidth="200.0">
+                                                                     <children>
+                                                                        <Label text="Pick Month" />
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <HBox alignment="CENTER" prefHeight="80.0" prefWidth="80.0">
+                                                                     <children>
+                                                                        <ComboBox fx:id="pickMonthSpecial" prefHeight="50.0" prefWidth="212.0" promptText="none" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" stylesheets="@Style.css" />
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox prefHeight="100.0" prefWidth="230.0">
+                                                         <children>
+                                                            <VBox prefHeight="200.0" prefWidth="230.0">
+                                                               <children>
+                                                                  <HBox prefHeight="67.0" prefWidth="200.0" />
+                                                                  <HBox prefHeight="80.0" prefWidth="80.0" />
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
                                        </children>
                                     </VBox>
                                  </children>
                               </VBox>
-                              <VBox alignment="CENTER" prefHeight="80.0" prefWidth="100.0">
+                              <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                                  <children>
-                                    <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#Submit" prefHeight="46.0" prefWidth="109.0" styleClass="buttonUpdate" stylesheets="@Style.css" text="Submit" />
+                                    <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#Submit" text="Submit" />
                                  </children>
                               </VBox>
                            </children>

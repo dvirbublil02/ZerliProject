@@ -7,11 +7,8 @@ import java.util.List;
 
 import DataBase.DBController;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import server_gui.ServerScreenController;
-
 
 /** In this class we launch the server , connecting into the db, and also listening to specific port.
  *
@@ -19,7 +16,7 @@ import server_gui.ServerScreenController;
 
 public class ServerUI extends Application {
 	final public static int DEFAULT_PORT = 5556;
-	public static EchoServer sv;
+	 static EchoServer sv;
 	static DBController DBC;
 	
 
@@ -59,10 +56,7 @@ public class ServerUI extends Application {
 	        	ServerScreenController.SetMsg("ERROR - Could not connect!");
 	        	return false;
 	        }
-//	        System.out.println("start run aoutomated");
-//	    	 Timer timer=new Timer();
-//	    	 TimerRunner runner=new TimerRunner();
-//	    	 timer.scheduleAtFixedRate(runner, 0, 60000);
+	    	
 	         sv = new EchoServer(port);
 	        
 	        try 
@@ -92,6 +86,5 @@ public class ServerUI extends Application {
 			e.printStackTrace();
 		}
 	}
-   
 
 }

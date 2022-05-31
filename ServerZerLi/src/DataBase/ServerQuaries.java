@@ -1,6 +1,5 @@
 package DataBase;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,13 +10,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
+import java.sql.Blob;
+import entities_reports.Report;
 import communication.Response;
 import communication.TransmissionPack;
 import entities_catalog.Product;
@@ -28,7 +30,6 @@ import entities_general.CreditCard;
 import entities_general.Deliveries;
 import entities_general.Login;
 import entities_general.Order;
-import entities_general.Question;
 import entities_reports.Complaint;
 import entities_users.BranchManager;
 import entities_users.Customer;
@@ -42,20 +43,11 @@ import entities_users.User;
 import enums.AccountStatus;
 import enums.Branches;
 import enums.ComplaintsStatus;
-import enums.DeliveryStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
-
-
-import ocsf.server.ConnectionToClient;
-import server.EchoServer;
-import server.ServerUI;
-
 import javafx.collections.ObservableList;
-
 import enums.ReportDuration;
 import enums.ReportType;
-
 /**
  * In this class there are all the server quarries
  * 
@@ -63,6 +55,9 @@ import enums.ReportType;
  *
  */
 public class ServerQuaries {
+	private static  Random rndOrderNum = new Random();
+    
+	
 
 	/**
 	 * In this method we Insert an order into the DB . (the order that we got from
@@ -246,7 +241,7 @@ public class ServerQuaries {
 	public static void Login(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			Login user = (Login) obj.getInformation();
-			Statement stmt, stmt2;
+			Statement stmt;
 			try {
 				stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT userName , password , userType, ID FROM login;");
@@ -254,14 +249,6 @@ public class ServerQuaries {
 					System.out.println(rs.getString(4));
 					if (user.getUserName().equals(rs.getString(1)) && user.getPassword().equals(rs.getString(2))) {
 						if (checkIfLoggedin(user, rs.getString(3), rs.getString(4), obj, con) == false) {
-							if (rs.getString(4).equals("shopworker")) {
-								stmt2 = con.createStatement();
-								ResultSet rs2 = stmt2
-										.executeQuery("SELECT branchID FROM zerli.shopworker WHERE shopworkerID='"
-												+ rs.getString(3) + "'");
-
-								((ShopWorker) obj.getInformation()).setBranchID(rs2.getString(1));
-							}
 							obj.setResponse(Response.USER_EXIST);
 
 							return;
@@ -502,20 +489,20 @@ public class ServerQuaries {
 		if (obj instanceof TransmissionPack) {
 			List<Product> list = new ArrayList<>();
 
+			
 			Statement stmt;
-			try {
-				stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM product;");
-				while (rs.next()) {
-					Product product = new Product(rs.getString(1), rs.getString(2), rs.getDouble(3), rs.getString(4),
-							rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getBoolean(9),
-							rs.getDouble(10));
-
-					list.add(product);
-				}
-
-				if (list.size() == 0)
-					throw new SQLException();
+		    try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM product;");
+			while (rs.next()) {
+				Product product = new Product(rs.getString(1), rs.getString(2), rs.getDouble(3), rs.getString(4),rs.getString(5),
+						rs.getInt(6),rs.getString(7),rs.getString(8),rs.getBoolean(9),rs.getDouble(10));
+						
+				list.add(product);
+			}			
+			
+			if(list.size()==0)
+				throw new SQLException();
 
 				obj.setInformation(list);
 				rs.close();
@@ -593,17 +580,16 @@ public class ServerQuaries {
 			Statement stmt;
 			try {
 
-				stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery(query);
-				while (rs.next()) {
-					Product product = new Product(rs.getString(1), rs.getString(2), rs.getDouble(3), rs.getString(4),
-							rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getBoolean(9),
-							rs.getDouble(10));
-
-					products.add(product);
-				}
-
-				if (products.size() == 0)
+			    	stmt = con.createStatement();
+			    	ResultSet rs = stmt.executeQuery(query);
+			    	while (rs.next()) {
+			    	Product product = new Product(rs.getString(1), rs.getString(2),rs.getDouble(3), rs.getString(4),rs.getString(5),
+							rs.getInt(6),rs.getString(7),rs.getString(8),rs.getBoolean(9),rs.getDouble(10));
+							
+			    	products.add(product);
+				}			
+			
+			    if(products.size()==0)
 					throw new SQLException();
 				obj.setInformation(products);
 				rs.close();
@@ -659,147 +645,177 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * this method is insert order that customer performed and save it to wate for
-	 * branch manger for improving it save also the order details that in progress
-	 * 
+	 * this method is insert order that customer performed and save it to wate for branch manger for improving
+	 * it save also the order details that in progress 
 	 * @param obj
 	 * @param con
 	 * @author Almog Madar , Mor Ben-Haim
 	 */
 	@SuppressWarnings("null")
 	public static void addOrderInDB(TransmissionPack obj, Connection con) {
-
 		if (obj instanceof TransmissionPack) {
-
-			if (obj.getInformation() instanceof Order) {
+			if(obj.getInformation() instanceof Order) {
 				PreparedStatement pstmt;
 				int orderID = 0;
 				Statement stmt1;
 				ResultSet rs1;
-				Order order = (Order) obj.getInformation();
-				Map<String, List<ProductInOrder>> productInOrderFinallCart = order.getItems();
+				Order order=(Order)obj.getInformation();
+				Map<String,List<ProductInOrder>>productInOrderFinallCart=order.getItems();
 				String query = "INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) "
 						+ "VALUES (?,?,?,?,?,?,?,?);";
-				String query2 = "SELECT MAX(orderID) FROM zerli.order;";
+				String query2="SELECT MAX(orderID) FROM zerli.order;";
 				String query3 = "INSERT INTO zerli.productinorder(productID, orderID , nameOfproduct, price, backGroundColor, picture, quantity, itemType, dominateColor, productQuantityInOrder, nameOfItem) "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
-				try {
-					// insert order to database
-					pstmt = con.prepareStatement(query);
-					pstmt.setString(1, null);
-					pstmt.setInt(2, Integer.parseInt(order.getCustomerID()));
-					// System.out.println(order.getCustomerID());
-					pstmt.setString(3, order.getBranchID());
-					// System.out.println(order.getBranchID());
-					pstmt.setString(4, String.valueOf(order.getPrice()));
-					// System.out.println(String.valueOf(order.getPrice()));
-					pstmt.setString(5, order.getGreetingCard());
-					// System.out.println(order.getGreetingCard());
-					pstmt.setString(6, order.getStatus().name());
-					// System.out.println(order.getStatus());
-					pstmt.setString(7, order.getOrderDate());
-					// System.out.println(order.getOrderDate());
-					pstmt.setString(8, order.getExpectedDelivery());
-					// System.out.println(order.getExpectedDelivery());
-					pstmt.executeUpdate();
-
-					// get orderID
-					stmt1 = con.createStatement();
-					rs1 = stmt1.executeQuery(query2);
-					while (rs1.next()) {
-						orderID = rs1.getInt(1);
+				
+				
+				try {	
+				//insert order to database 
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1,null);	
+				pstmt.setInt(2, Integer.parseInt(order.getCustomerID()));
+				//System.out.println(order.getCustomerID());
+				pstmt.setString(3, order.getBranchID());
+				//System.out.println(order.getBranchID());
+				pstmt.setString(4, String.valueOf(order.getPrice())); 
+				//System.out.println(String.valueOf(order.getPrice()));
+				pstmt.setString(5, order.getGreetingCard());
+				//System.out.println(order.getGreetingCard());
+				pstmt.setString(6, order.getStatus().name());
+				//System.out.println(order.getStatus());
+				pstmt.setString(7, order.getOrderDate());
+				//System.out.println(order.getOrderDate());
+				pstmt.setString(8, order.getExpectedDelivery());
+				//System.out.println(order.getExpectedDelivery());
+				pstmt.executeUpdate();
+				
+				//get orderID
+				stmt1 = con.createStatement();
+				rs1=stmt1.executeQuery(query2);
+				while(rs1.next()) {
+					orderID=rs1.getInt(1);
+				}
+				rs1.close();
+				
+				//insert (List<productInOrder>) products to table productInOrder 
+				for(Map.Entry<String, List<ProductInOrder>>  entry :productInOrderFinallCart.entrySet())
+				{
+					for(ProductInOrder productInOr : entry.getValue())
+					{
+						pstmt = con.prepareStatement(query3);
+						pstmt.setString(1,productInOr.getID());
+						pstmt.setString(2,String.valueOf(orderID));
+						pstmt.setString(3,entry.getKey());  // Regular or Custom key 
+						pstmt.setString(4,String.valueOf(productInOr.getPrice()));
+						pstmt.setString(5,productInOr.getBackGroundColor());
+						pstmt.setString(6,productInOr.getImgSrc());
+						pstmt.setString(7,String.valueOf(productInOr.getQuantity()));
+						pstmt.setString(8,productInOr.getItemType());
+						pstmt.setString(9,productInOr.getDominateColor());
+						pstmt.setString(10,String.valueOf(productInOr.getProductQuantityInCart()));
+						pstmt.setString(11,productInOr.getNameOfItem());
+						pstmt.executeUpdate();
 					}
-					rs1.close();
-
-					// insert (List<productInOrder>) products to table productInOrder
-					for (Map.Entry<String, List<ProductInOrder>> entry : productInOrderFinallCart.entrySet()) {
-						for (ProductInOrder productInOr : entry.getValue()) {
-							pstmt = con.prepareStatement(query3);
-							pstmt.setString(1, productInOr.getID());
-							pstmt.setString(2, String.valueOf(orderID));
-							pstmt.setString(3, entry.getKey()); // Regular or Custom key
-							pstmt.setString(4, String.valueOf(productInOr.getPrice()));
-							pstmt.setString(5, productInOr.getBackGroundColor());
-							pstmt.setString(6, productInOr.getImgSrc());
-							pstmt.setString(7, String.valueOf(productInOr.getQuantity()));
-							pstmt.setString(8, productInOr.getItemType());
-							pstmt.setString(9, productInOr.getDominateColor());
-							pstmt.setString(10, String.valueOf(productInOr.getProductQuantityInCart()));
-							pstmt.setString(11, productInOr.getNameOfItem());
-							pstmt.executeUpdate();
-						}
-
-					}
-
+				}
+				
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+				// TODO Auto-generated catch block
 					e.printStackTrace();
-
 					obj.setResponse(Response.INSERT_ORDER_FAILD);
 					return;
 				}
 				obj.setInformation(orderID);
 				obj.setResponse(Response.INSERT_ORDER_SUCCESS);
 				return;
-			}
+		   }
 		}
 		obj.setResponse(Response.INSERT_ORDER_FAILD);
-
 	}
+				
+	
+	
+	//"INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", order.getOrderID(),order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
+				
+//			//String query=String.format("INSERT INTO zerli.order(orderID, customerID, branchID,price, greetingCard,status, orderDate,expectedDelivery) VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s', '%s');", order.getOrderID(),order.getCustomerID(),order.getBranchID(),order.getPrice(),order.getGreetingCard(),order.getStatus(),order.getOrderDate(),order.getExpectedDelivery());
+//			
+//			try {
+//				stmt = con.createStatement();
+//				System.out.println(query);
+//				stmt.executeUpdate(query);
+//				int i=0;
+//				for(String p:productInOrderFinallCart.keySet()) {
+//					ProductInOrder pr=productInOrderFinallCart.get(p).get(i);
+//					stmt = con.createStatement();
+//					String query2=String.format("INSERT INTO zerli.productinorder(productID, orderID, nameOfproduct, price, backGroundColor, picture, quantity, itemType, dominateColor, cartID, productQuantityInOrder, nameOfItem) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",pr.getNameOfproduct(), order.getOrderID(),pr.getNameOfproduct(),pr.getPrice(),pr.getBackGroundColor(),pr.getImgSrc(),pr.getQuantity(),pr.getItemType(),pr.getDominateColor(),pr.getProductQuantityInCart(),pr.getName());
+//					System.out.println(query2);
+//					stmt.executeUpdate(query2);
+//					i++;
+//				}
+//				
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//			}
+			
+//			stmt.executeUpdate(String.format(
+//					"INSERT INTO zerli.orders(orderNumber, price, greetingCard, color, dOrder, shop, date, orderDate) VALUES ('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s');",
+//					order.getOrderNumber(), order.getPrice(), order.getGreetingCard(), order.getColor(),
+//					order.getDorder(), order.getShop(), order.getDate(), order.getOrderDate()));
+//			try {
+//				stmt = con.createStatement();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		
 
 	public static void getOrders(TransmissionPack obj, Connection con) {
 		System.out.println(6);
 		if (obj instanceof TransmissionPack) {
-			ResultSet rs, rs2;
-			Statement stmt, stmt2;
+			ResultSet rs,rs2;
+			Statement stmt,stmt2;
 
-			List<Order> orders = new ArrayList<>();
-
-			String query = "SELECT * FROM zerli.order WHERE status='PENDING' OR status='PENDING_WITH_DELIVERY'";
-
-			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
+			List<Order>orders=new ArrayList<>();
+			
+			String query="SELECT * FROM zerli.order WHERE status='PENDING'";
+			String query1="SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-				while (rs.next()) {
-
-					System.out.println("rs->>");
-
-					Map<String, List<ProductInOrder>> products = new HashMap<>();
-
+				while(rs.next()) {
+					
+					Map<String,List<ProductInOrder>>products=new HashMap<>();
+					
 					stmt2 = con.createStatement();
-
-					rs2 = stmt2.executeQuery(query1 + rs.getString(1) + "'");
-					while (rs2.next()) {
-
-						System.out.println("rs2>>");
-						ProductInOrder newProduct = new ProductInOrder(rs2.getString(1), rs2.getString(2),
-								rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7),
-								rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0.0);
-
-						if (!products.containsKey(rs2.getString(3))) {
-							List<ProductInOrder> product = new ArrayList<>();
+					
+					rs2 = stmt2.executeQuery(query1+rs.getString(1)+"'");
+					while(rs2.next()) {
+						
+						ProductInOrder newProduct=new ProductInOrder(rs2.getString(1),rs2.getString(2),rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), rs2.getBoolean(12),rs2.getDouble(13));
+						if(!products.containsKey(rs2.getString(3))) {
+							List<ProductInOrder>product=new ArrayList<>();
 							product.add(newProduct);
 							products.put(rs2.getString(3), product);
-						} else {
+						}else {
 							products.get(rs2.getString(3)).add(newProduct);
 						}
-
+						
 					}
-					System.out.println(products);
 					rs2.close();
-
-					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
-							rs.getString(5), rs.getTimestamp(7).toString(), rs.getTimestamp(8).toString(), products);
+					
+					
+					Order order=new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getDouble(4),rs.getString(5),rs.getTimestamp(7).toString(),rs.getTimestamp(8).toString(),products);
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
-
+					
 					orders.add(order);
 				}
-
+		
+				
 				rs.close();
 //				System.out.println(orders);
-				if (orders.size() > 0) {
+				if(orders.size()>0) {
 					obj.setResponse(Response.FOUND_ORDER);
 					obj.setInformation(orders);
 				}
@@ -807,17 +823,11 @@ public class ServerQuaries {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			
 		}
-
+		
 	}
-<<<<<<< HEAD
 	public static String getBranchId(User user, Connection con) {
-=======
-
-	protected static String getBranchId(User user, Connection con) {
-
->>>>>>> origin/Merge
 		ResultSet rs;
 		Statement stmt;
 		String branchId = null;
@@ -833,42 +843,7 @@ public class ServerQuaries {
 		}
 		return branchId;
 	}
-
-	/**
-	 * <<<<<<< HEAD get all the branches ID for create the reports
-	 * 
-	 * @param user
-	 * @param con
-	 * @return
-	 */
-	public static List<String> getAllBranchId(Connection con) {
-		ResultSet rs;
-		Statement stmt;
-		List<String> branchesId = new ArrayList<>();
-		;
-
-		String getBranchID = "SELECT branchID FROM zerli.branchs;";
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery(getBranchID);
-			while (rs.next()) {
-				branchesId.add(rs.getString(1));
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return branchesId;
-	}
-
-	/*
-	 * * Get all the customers that their status is "PENDING_APPROVAL" and collect
-	 * them in a list
-	 * 
-	 * @param obj
-	 * 
-	 * @param con
-	 */
+	
 
 	@SuppressWarnings("null")
 	public static void getPendingCustomersFromDB(TransmissionPack obj, Connection con) {
@@ -973,118 +948,120 @@ public class ServerQuaries {
 			obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
 		}
 	}
-
-	public static void updateCustomersAfterEdit(TransmissionPack obj, Connection con) {// the method updates the
-																						// customers that are in the
-																						// list we got from obj's
-																						// information
-		if (obj instanceof TransmissionPack) {
-
+	
+	
+	public static void updateCustomersAfterEdit(TransmissionPack obj, Connection con) 
+	{//the method updates the customers that are in the list we got from obj's information
+		if(obj instanceof TransmissionPack)
+		{
 			PreparedStatement pstmt;
-			List<Customer> listAfterEdit = (ArrayList<Customer>) obj.getInformation();
+			List<Customer> listAfterEdit=(ArrayList<Customer>) obj.getInformation();
 			try {
-				for (Customer c : listAfterEdit) {
-					String getApprovedCustomers = "UPDATE zerli.customer SET accountStatus='" + c.getAccountStatus()
-							+ "' WHERE customerID='" + c.getID() + "';";
+				for(Customer c: listAfterEdit)
+				{
+					String getApprovedCustomers = "UPDATE zerli.customer SET accountStatus='"+c.getAccountStatus()+"' WHERE customerID='"+c.getID()+"';";
 					pstmt = con.prepareStatement(getApprovedCustomers);
 					pstmt.executeUpdate(getApprovedCustomers);
 				}
 				obj.setResponse(Response.CUSTOMER_EDITS_UPDATED);
 				return;
-
-			} catch (SQLException e) {
-				obj.setResponse(Response.CUSTOMER_EDITS_FAILED);
-				obj.setInformation(null);
-				return;
-			}
-		}
-
+			
+				}catch(SQLException e) {
+					obj.setResponse(Response.CUSTOMER_EDITS_FAILED);
+					obj.setInformation(null);
+					return;
+				}
+		}	
+		
 	}
 
-	public static void updateWorkersAfterEdit(TransmissionPack obj, Connection con) {
-		if (obj instanceof TransmissionPack) {
+	public static void updateWorkersAfterEdit(TransmissionPack obj, Connection con) 
+	{
+		if(obj instanceof TransmissionPack)
+		{
 			PreparedStatement pstmt;
-			List<ShopWorker> listAfterEdit = (ArrayList<ShopWorker>) obj.getInformation();
+			List<ShopWorker> listAfterEdit=(ArrayList<ShopWorker>) obj.getInformation();
 			try {
-				for (ShopWorker sw : listAfterEdit) {
-					String getApprovedWorkers = "UPDATE zerli.shopworker SET acctivityStatus='" + sw.getActivityStatus()
-							+ "' WHERE shopworkerID='" + sw.getID() + "';";
+				for(ShopWorker sw: listAfterEdit)
+				{
+					String getApprovedWorkers = "UPDATE zerli.shopworker SET acctivityStatus='"+sw.getActivityStatus()+"' WHERE shopworkerID='"+sw.getID()+"';";
 					System.out.println(getApprovedWorkers);
 					pstmt = con.prepareStatement(getApprovedWorkers);
 					pstmt.executeUpdate(getApprovedWorkers);
 				}
 				obj.setResponse(Response.WORKER_EDITS_UPDATED);
 				return;
-
-			} catch (SQLException e) {
-				obj.setResponse(Response.WORKER_EDITS_FAILED);
-				obj.setInformation(null);
-				return;
-			}
-		}
+			
+				}catch(SQLException e) {
+					obj.setResponse(Response.WORKER_EDITS_FAILED);
+					obj.setInformation(null);
+					return;
+				}
+		}	
 	}
-
 	public static void GetCustomersFromDB(TransmissionPack obj, Connection con) {
-		// the method gets workers from the specific branch of the connected user(branch
-		// manager), from DB
-		if (obj instanceof TransmissionPack) {
-			List<Customer> listOfCustomers = new ArrayList<>();
+		//the method gets workers from the specific branch of the connected user(branch manager), from DB
+		if(obj instanceof TransmissionPack)
+		{
+			List<Customer> listOfCustomers= new ArrayList<>();
 			Statement stmt;
-
+			
 			try {
 				stmt = con.createStatement();
 				ResultSet rs;
 				String getApprovedCustomers = "SELECT * FROM zerli.customer WHERE accountStatus='CONFIRMED' OR accountStatus='FROZEN'";
 				rs = stmt.executeQuery(getApprovedCustomers);
-
-				while (rs.next()) {
-					CreditCard cc = getCreditCard(rs.getString(10), con);
-					if (cc == null) {
+				
+				while (rs.next()) 
+				{
+					CreditCard cc= getCreditCard(rs.getString(10),con);
+					if(cc==null)
+					{
 						obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
 						obj.setInformation(null);
 						return;
 					}
-					Customer customer = new Customer(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-							rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
-							rs.getString(8), rs.getBoolean(9), cc);
-
+					Customer customer= new Customer(rs.getString(1),rs.getString(2),rs.getString(3),
+							rs.getString(4),rs.getString(5),(AccountStatus.valueOf(rs.getString(6))), 
+							rs.getBoolean(7), rs.getString(8),rs.getBoolean(9),cc);
+					
 					listOfCustomers.add(customer);
 				}
-				if (listOfCustomers.size() > 0) {
+				if(listOfCustomers.size()>0)
+				{
 					obj.setResponse(Response.CUSTOMER_ARRIVED);
-					obj.setInformation(listOfCustomers);// updating the mission info to the wanted list of customers
-				} else {
+					obj.setInformation(listOfCustomers);//updating the mission info to the wanted list of customers
+				}
+				else
+				{
 					obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
 					obj.setInformation(null);
 				}
-
+				
 				rs.close();
 
-			} catch (SQLException e) {
+			}catch(SQLException e) {
 				obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
 				obj.setInformation(null);
-			}
+			}	
 		}
 	}
-
 	private static CreditCard getCreditCard(String cardNum, Connection con) {
 		ResultSet rs;
 		Statement stmt;
-		CreditCard cc = null;
-		String getCardDetails = "SELECT creditCardCvvCode,creditCardDateOfExpiration FROM zerli.creditcards WHERE creditCardNumber='"
-				+ cardNum + "';";
+		CreditCard cc=null;
+		String getCardDetails = "SELECT creditCardCvvCode,creditCardDateOfExpiration FROM zerli.creditcards WHERE creditCardNumber='"+cardNum+"';";
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(getCardDetails);
 			rs.next();
-			cc = new CreditCard(cardNum, rs.getString(1), rs.getString(2));
-
+			cc= new CreditCard(cardNum,rs.getString(1),rs.getString(2));
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return cc;
 	}
-
 	/**
 	 * update all the complaint status in the DB
 	 * 
@@ -1106,7 +1083,7 @@ public class ServerQuaries {
 
 					updateComlaint(con, updateSpecificRow, c);
 					System.out.println(c.getRefoundAmount());
-					if (c.getRefoundAmount() != null) {
+					if (c.getRefoundAmount()!=null) {
 						insertNewRefund(con, c);
 						updateRefundInSpecificCustomer(con, c);
 
@@ -1175,20 +1152,17 @@ public class ServerQuaries {
 		pstmt2.setString(6, dateFormat.format(Calendar.getInstance().getTime()));
 		pstmt2.executeUpdate();
 	}
-
 	/**
-	 * insert new complaint to the DB from
-	 * 
+	 * insert new complaint to the DB from 
 	 * @param obj
 	 * @param con
 	 * @throws ParseException
 	 */
 	public static void openComplaint(TransmissionPack obj, Connection con) throws ParseException {
 		if (obj instanceof TransmissionPack) {
-			System.out.println("here->Open");
 			Complaint c = (Complaint) obj.getInformation();
 			PreparedStatement pstmt;
-
+		
 			try {
 				String query = "INSERT INTO zerli.complaints(complaintID, customerID, orderID, customerserviceID, description, branchID, complaintOpening, treatmentUntil, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				pstmt = con.prepareStatement(query);
@@ -1200,7 +1174,7 @@ public class ServerQuaries {
 				pstmt.setString(6, c.getBranchID());
 				pstmt.setString(7, c.getComplaintOpening());
 				Date d = new Date();
-				DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				DateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
 				d = sdf.parse(c.getComplaintOpening());
 
 				Calendar cl = Calendar.getInstance();
@@ -1210,21 +1184,20 @@ public class ServerQuaries {
 				pstmt.setString(8, sdf.format(currentDatePlusOne));
 				pstmt.setString(9, c.getComplainState().name());
 				pstmt.executeUpdate();
-				System.out.println("here=->>OPenComplaint " + obj.getInformation());
 			} catch (SQLException e) {
 				obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
 				e.printStackTrace();
 			}
-
-
 			obj.setResponse(Response.OPEN_COMPLAINT_SUCCEED);
+			
+			
 
-		} else {
-			obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
+			
+		}else {
+		obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
 		}
 
 	}
-
 	public static void getComlaints(TransmissionPack obj, Connection con) {
 		System.out.println(6);
 		if (obj instanceof TransmissionPack) {
@@ -1232,8 +1205,7 @@ public class ServerQuaries {
 			Statement stmt;
 			List<Complaint> complaints = new ArrayList<>();
 
-			String query = "SELECT * FROM zerli.complaints WHERE customerserviceID='" + obj.getInformation()
-					+ "' AND status='OPEN'";
+			String query = "SELECT * FROM zerli.complaints WHERE customerserviceID='" + obj.getInformation() + "' AND status='OPEN'";
 			System.out.println(query);
 			try {
 				stmt = con.createStatement();
@@ -1308,40 +1280,38 @@ public class ServerQuaries {
 			e.printStackTrace();
 		}
 		if (difference_In_Days >= 1) {
-
-			System.out.println("here 'DELAY'");
-
+			
 			return ComplaintsStatus.DELAY;
 		}
-
+		
 		return ComplaintsStatus.STILL_GOT_TIME;
 	}
 
-	/*
-	 * get all branches
-	 * 
+	
+	/* get all branches 
 	 * @author Almog Madar
 	 */
-
+	
 	public static void getBranches(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs;
 			Statement stmt;
-			List<Branches> branches = new ArrayList<>();
-
+			List<Branches> branches = new ArrayList<>();	
+			
 			String query = "SELECT * FROM zerli.branchs;";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 
-				while (rs.next()) {
+				
+				while(rs.next()) {
 					branches.add(Branches.valueOf(rs.getString(3).toUpperCase()));
 				}
 				rs.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
+			
 			if (branches.size() > 0) {
 
 				obj.setInformation(branches);
@@ -1352,10 +1322,8 @@ public class ServerQuaries {
 
 		}
 	}
-
-	/*
-	 * get product in specific branch
-	 * 
+	
+	/* get product in  specific branch
 	 * @author Almog Madar
 	 */
 	public static void getProductInBranch(TransmissionPack obj, Connection con) {
@@ -1365,25 +1333,27 @@ public class ServerQuaries {
 			Statement stmt;
 			Branches branch = (Branches) obj.getInformation();
 			List<ProductInBranch> productsInBranch = new ArrayList<>();
-
+			
+			
 			System.out.println(branch.getNumber());
-			String query = "SELECT * FROM zerli.productinbranch where branchID='" + branch.getNumber() + "';";
+			String query = "SELECT * FROM zerli.productinbranch where branchID='"+ branch.getNumber() +"';";
 			System.out.println(query);
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-
-				while (rs.next()) {
-					ProductInBranch product = new ProductInBranch(rs.getString(1), rs.getString(2), rs.getInt(3));
+				
+				
+				while(rs.next()) {
+					ProductInBranch product = new ProductInBranch(rs.getString(1),rs.getString(2),rs.getInt(3));
 					productsInBranch.add(product);
 				}
 				rs.close();
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
-
+		    }
+			
 			System.out.println(productsInBranch.toString());
-
+			
 			if (productsInBranch.size() > 0) {
 				obj.setInformation(productsInBranch);
 				obj.setResponse(Response.FOUND_PRODUCT_IN_BRANCH);
@@ -1392,66 +1362,65 @@ public class ServerQuaries {
 			}
 
 		}
-
+		
 	}
 
+	
 	/*
-	 * add delivery of order and update order price = regular price + shipment price
-	 * .
-	 * 
+	 * add delivery of order and update order price = regular price + shipment price . 
 	 * @ author Almog Madar
 	 */
 	public static void addDelivery(TransmissionPack obj, Connection con) {
 		// TODO Auto-generated method stub
 		if (obj instanceof TransmissionPack) {
-			if (obj.getInformation() instanceof Deliveries) {
-
+		if(obj.getInformation() instanceof Deliveries) {
+			
 				Statement stmt1;
 				ResultSet rs1;
 				PreparedStatement pstmt;
-				Deliveries deliveries = (Deliveries) obj.getInformation();
+				Deliveries deliveries=(Deliveries)obj.getInformation();
 				String query = "INSERT INTO zerli.deliveries (deliveryID, orderID, branchID, customerID,price,orderDate, expectedDelivery, arrivedDate, receiverName, address, phoneNumber, status) "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ? , ? , ? , ? , ? , ? );";
-
-				try {
-					// insert order to database
-					pstmt = con.prepareStatement(query);
-					pstmt.setString(1, null);
-					pstmt.setString(2, deliveries.getOrderID());
-					pstmt.setString(3, deliveries.getBranchID());
-					pstmt.setString(4, deliveries.getCustomerID());
-					pstmt.setDouble(5, deliveries.getPrice());
-					pstmt.setString(6, deliveries.getOrderDate());
-					pstmt.setString(7, deliveries.getExpectedDelivery());
-					pstmt.setString(8, "");
-					pstmt.setString(9, deliveries.getReceiverName());
-					pstmt.setString(10, deliveries.getAddress());
-					pstmt.setString(11, deliveries.getPhoneNumber());
-					pstmt.setString(12, deliveries.getDeliveryStatus().name());
-					pstmt.executeUpdate();
-
-					// get price and update after delivery
-					String query2 = "SELECT price FROM zerli.order where orderID=" + deliveries.getOrderID() + ";";
-					double previusPrice = 0;
-					stmt1 = con.createStatement();
-					rs1 = stmt1.executeQuery(query2);
-					while (rs1.next()) {
-						previusPrice = rs1.getDouble(1);
-					}
-					rs1.close();
-
-					// update price in order with delivery
-					String query3 = "UPDATE zerli.order SET price = (?) WHERE orderID = '" + deliveries.getOrderID()
-							+ "' AND customerID = '" + deliveries.getCustomerID() + "' AND branchID = '"
-							+ deliveries.getBranchID() + "';";
-					pstmt = con.prepareStatement(query3);
-					pstmt.setDouble(1, previusPrice + deliveries.getPrice());
-					pstmt.executeUpdate();
-
+				
+				try {	
+				//insert order to database 
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1,null);	
+				pstmt.setString(2,deliveries.getOrderID());
+				pstmt.setString(3,deliveries.getBranchID());
+				pstmt.setString(4,deliveries.getCustomerID());
+				pstmt.setDouble(5,deliveries.getPrice());
+				pstmt.setString(6,deliveries.getOrderDate());
+				pstmt.setString(7,deliveries.getExpectedDelivery());
+				pstmt.setString(8,"");
+				pstmt.setString(9,deliveries.getReceiverName());
+				pstmt.setString(10,deliveries.getAddress());
+				pstmt.setString(11,deliveries.getPhoneNumber());
+				pstmt.setString(12,deliveries.getDeliveryStatus().name());
+				pstmt.executeUpdate();
+				
+				
+				//get price and update after delivery
+				String query2 = "SELECT price FROM zerli.order where orderID="+deliveries.getOrderID()+";";
+				double previusPrice = 0;
+				stmt1 = con.createStatement();
+				rs1=stmt1.executeQuery(query2);
+				while(rs1.next()) {
+					previusPrice=rs1.getDouble(1);
+				}
+				rs1.close();
+				
+				
+				//update price in order with delivery 
+				String query3 = "UPDATE zerli.order SET price = (?) WHERE orderID = '"+deliveries.getOrderID()+"' AND customerID = '"+deliveries.getCustomerID()+"' AND branchID = '"+deliveries.getBranchID()+"';";
+				pstmt = con.prepareStatement(query3);
+				pstmt.setDouble(1,previusPrice+deliveries.getPrice());
+				pstmt.executeUpdate();
+				
 				} catch (SQLException e) {
 					obj.setResponse(Response.FAILD_ADD_DELIVERY);
 					e.printStackTrace();
-					return;
+					return;		
 				} catch (NullPointerException e) {
 					obj.setResponse(Response.FAILD_ADD_DELIVERY);
 					e.printStackTrace();
@@ -1459,65 +1428,68 @@ public class ServerQuaries {
 				}
 				obj.setResponse(Response.ADD_DELIVERY_SUCCEED);
 				return;
-			} else {
-				obj.setResponse(Response.FAILD_ADD_DELIVERY);
+			}
+			else {
+			obj.setResponse(Response.FAILD_ADD_DELIVERY);
 			}
 		}
 	}
 
 	public static void getCustomerOrdersCancelation(TransmissionPack obj, Connection con) {
 		// TODO Auto-generated method stub
-
-		if (obj instanceof TransmissionPack) {
-			ResultSet rs, rs2;
-			Statement stmt, stmt2;
-			List<Order> orders = new ArrayList<>();
+		
+	if (obj instanceof TransmissionPack) {
+			ResultSet rs,rs2;
+			Statement stmt,stmt2;
+			List<Order>orders=new ArrayList<>();
 			String customerID;
-
-			if (obj.getInformation() == null)
+			
+			
+			if(obj.getInformation()==null)
 				throw new NullPointerException();
 			else
-				customerID = (String) obj.getInformation();
-
-			String query = "SELECT * FROM zerli.order  WHERE (customerID = '" + customerID
-					+ "') AND (status = 'PENDING') OR (status = 'PENDING_WITH_DELIVERY') OR (status = 'APPROVE_WITH_DELIVERY');";
-			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
+				customerID=(String)obj.getInformation();
+			
+			
+			
+			String query="SELECT * FROM zerli.order  WHERE (customerID = '"+customerID+"') AND (status = 'PENDING') OR (status = 'PENDING_WITH_DELIVERY') OR (status = 'APPROVE_WITH_DELIVERY');";
+			String query1="SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-				while (rs.next()) {
-
-					Map<String, List<ProductInOrder>> products = new HashMap<>();
-
+				while(rs.next()) {
+					
+					Map<String,List<ProductInOrder>>products=new HashMap<>();
+					
 					stmt2 = con.createStatement();
-
-					rs2 = stmt2.executeQuery(query1 + rs.getString(1) + "';");
-					while (rs2.next()) {
-
-						ProductInOrder newProduct = new ProductInOrder(rs2.getString(1), rs2.getString(2),
-								rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7),
-								rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0);
-						if (!products.containsKey(rs2.getString(3))) {
-							List<ProductInOrder> product = new ArrayList<>();
+					
+					rs2 = stmt2.executeQuery(query1+rs.getString(1)+"';");
+					while(rs2.next()) {
+						
+						ProductInOrder newProduct=new ProductInOrder(rs2.getString(1),rs2.getString(2),rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false ,0);
+						if(!products.containsKey(rs2.getString(3))) {
+							List<ProductInOrder>product=new ArrayList<>();
 							product.add(newProduct);
 							products.put(rs2.getString(3), product);
-						} else {
+						}else {
 							products.get(rs2.getString(3)).add(newProduct);
 						}
-
+						
 					}
 					rs2.close();
-
-					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
-							rs.getString(5), rs.getTimestamp(7).toString(), rs.getTimestamp(8).toString(), products);
+					
+					
+					
+					Order order=new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getDouble(4),rs.getString(5),rs.getTimestamp(7).toString(),rs.getTimestamp(8).toString(),products);
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
-
+					
 					orders.add(order);
 				}
-
+		
+				
 				rs.close();
 				System.out.println(orders);
-				if (orders.size() > 0) {
+				if(orders.size()>0) {
 					obj.setInformation(orders);
 					obj.setResponse(Response.GET_CUSTOMER_ORDERS_SUCCESS);
 					return;
@@ -1533,64 +1505,66 @@ public class ServerQuaries {
 				obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
 				return;
 			}
-
+			
+			
 		}
 		obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
 	}
-
+	
+	
+	
 	public static void getCustomerOrdersHistory(TransmissionPack obj, Connection con) {
 		// TODO Auto-generated method stub
-
-		if (obj instanceof TransmissionPack) {
-			ResultSet rs, rs2;
-			Statement stmt, stmt2;
-			List<Order> orders = new ArrayList<>();
+		
+	if (obj instanceof TransmissionPack) {
+			ResultSet rs,rs2;
+			Statement stmt,stmt2;
+			List<Order>orders=new ArrayList<>();
 			String customerID;
-
-			if (obj.getInformation() == null)
+			
+			if(obj.getInformation()==null)
 				throw new NullPointerException();
 			else
-				customerID = (String) obj.getInformation();
-
-			String query = "SELECT * FROM zerli.order  WHERE (customerID = '" + customerID
-					+ "') AND (status = 'ARRIVED') OR (status = 'TAKEAWAY');";
-			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
+				customerID=(String)obj.getInformation();
+			
+			
+			String query="SELECT * FROM zerli.order  WHERE (customerID = '"+customerID+"') AND (status = 'ARRIVED') OR (status = 'TAKEAWAY');";
+			String query1="SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-				while (rs.next()) {
-
-					Map<String, List<ProductInOrder>> products = new HashMap<>();
-
+				while(rs.next()) {
+					
+					Map<String,List<ProductInOrder>>products=new HashMap<>();
+					
 					stmt2 = con.createStatement();
-
-					rs2 = stmt2.executeQuery(query1 + rs.getString(1) + "';");
-					while (rs2.next()) {
-
-						ProductInOrder newProduct = new ProductInOrder(rs2.getString(1), rs2.getString(2),
-								rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7),
-								rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0);
-						if (!products.containsKey(rs2.getString(3))) {
-							List<ProductInOrder> product = new ArrayList<>();
+					
+					rs2 = stmt2.executeQuery(query1+rs.getString(1)+"';");
+					while(rs2.next()) {
+						
+						ProductInOrder newProduct=new ProductInOrder(rs2.getString(1),rs2.getString(2),rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false ,0);
+						if(!products.containsKey(rs2.getString(3))) {
+							List<ProductInOrder>product=new ArrayList<>();
 							product.add(newProduct);
 							products.put(rs2.getString(3), product);
-						} else {
+						}else {
 							products.get(rs2.getString(3)).add(newProduct);
 						}
-
+						
 					}
 					rs2.close();
-
-					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
-							rs.getString(5), rs.getTimestamp(7).toString(), rs.getTimestamp(8).toString(), products);
+					
+					
+					Order order=new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getDouble(4),rs.getString(5),rs.getTimestamp(7).toString(),rs.getTimestamp(8).toString(),products);
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
-
+					
 					orders.add(order);
 				}
-
+		
+				
 				rs.close();
 				System.out.println(orders);
-				if (orders.size() > 0) {
+				if(orders.size()>0) {
 					obj.setInformation(orders);
 					obj.setResponse(Response.GET_CUSTOMER_ORDERS_SUCCESS);
 					return;
@@ -1606,336 +1580,14 @@ public class ServerQuaries {
 				obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
 				return;
 			}
-
+			
+			
 		}
 		obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
 	}
-
-	/**
-	 * this method notify all customerService that still have OPEN complaint after
-	 * 24 hours
-	 * 
-	 * @param obj
-	 * @param con
-	 */
-	public static void notifyCustomerService(TransmissionPack obj, Connection con) {
-		System.out.println("get to ->notifyCustomerService");
-		if (obj instanceof TransmissionPack) {
-			ResultSet rs;
-			Statement stmt;
-			String query = "SELECT complaintOpening FROM zerli.complaints WHERE status='OPEN'";
-			try {
-				stmt = con.createStatement();
-				rs = stmt.executeQuery(query);
-				while (rs.next()) {
-					// if(getSatus(rs.getString(1))==ComplaintsStatus.DELAY) {
-					obj.setResponse(Response.NOTIFY_CUSTOMER_SERVICE);
-
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		} else {
-			obj.setResponse(null);
-		}
-	}
-
-	/**
-	 * update the order status in the DB
-	 * 
-	 * @param obj
-	 * @param con
-	 */
-	@SuppressWarnings("unchecked")
-	public static void updateOrder(TransmissionPack obj, Connection con) {
-		if (obj instanceof TransmissionPack) {
-			List<Order> order = (List<Order>) obj.getInformation();
-			String updateOrderID = "UPDATE zerli.order SET status=? WHERE orderID='";
-			String updateDeliveryStatus = "UPDATE zerli.deliverys SET status='READY_TO_GO' WHERE orderID='";
-
-			String updateQuantityInAllZerLi = "UPDATE zerli.product SET quantity=quantity-? WHERE productID='";
-			String updateQuantityInBranch = "UPDATE zerli.productinbranch SET quantity=quantity-? WHERE productID='";
-			String deleteProductformOrder = "DELETE FROM zerli.productinorder WHERE orderID='";
-			String deleteProductformDelivery = "DELETE FROM zerli.deliveries WHERE orderID='";
-
-			for (Order o : order) {
-				try {
-					switch (o.getStatus()) {
-					case APPROVE: {
-						updateOrderIDStatus(con, updateOrderID, o);
-						/**
-						 * loop run on all the product in the specific order
-						 */
-						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
-						break;
-					}
-					case APPROVE_WITH_DELIVERY: {
-						updateDelivryStatus(con, updateDeliveryStatus, o);
-						updateOrderIDStatus(con, updateOrderID, o);
-						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
-						break;
-					}
-					case CANCEL_WITH_DELIVERY: {
-						deleteDelivery(con, deleteProductformDelivery, o);
-						updateOrderIDStatus(con, updateOrderID, o);
-						break;
-					}
-
-					case CANCEL: {
-						updateOrderIDStatus(con, updateOrderID, o);
-						deleteProductInOrder(con, deleteProductformOrder, o);
-						break;
-					}
-					default:
-						break;
-					}
-				} catch (SQLException e) {
-					obj.setResponse(Response.UPDATE_ORDER_FAILED);
-					e.printStackTrace();
-				}
-
-			}
-			obj.setResponse(Response.UPDATE_ORDER_SUCCEED);
-		} else {
-			obj.setResponse(Response.UPDATE_ORDER_FAILED);
-		}
-
-	}
-
-	private static void updateDelivryStatus(Connection con, String updateDeliveryStatus, Order o) throws SQLException {
-		PreparedStatement pstmt1;
-		pstmt1 = con.prepareStatement(updateDeliveryStatus + o.getOrderID() + "'");
-
-		pstmt1.executeUpdate();
-	}
-
-	private static void updateProducts(Connection con, String updateQuantityInAllZerLi, String updateQuantityInBranch,
-			Order o) throws SQLException {
-		for (String key : o.getItems().keySet()) {
-			for (ProductInOrder p : o.getItems().get(key)) {
-				updateProductQuentity(con, updateQuantityInAllZerLi, p);
-				updateProductQuentity(con, updateQuantityInBranch, p);
-			}
-		}
-	}
-
-	private static void deleteDelivery(Connection con, String deleteProductformDelivery, Order o) throws SQLException {
-		PreparedStatement pstmt3;
-		pstmt3 = con.prepareStatement(deleteProductformDelivery + o.getOrderID() + "'");
-		pstmt3.executeUpdate();
-	}
-
-	/**
-	 * delete the product form the order if the branch meager cancel the customer
-	 * order
-	 * 
-	 * @param con
-	 * @param query3
-	 * @param o
-	 * @throws SQLException
-	 */
-	private static void deleteProductInOrder(Connection con, String query3, Order o) throws SQLException {
-		deleteDelivery(con, query3, o);
-	}
-
-	/**
-	 * update quantity in the relevant table if the branch manager approve the order
-	 * 
-	 * @param con
-	 * @param query2
-	 * @param p
-	 * @throws SQLException
-	 */
-	private static void updateProductQuentity(Connection con, String query2, ProductInOrder p) throws SQLException {
-		PreparedStatement pstmt2;
-		pstmt2 = con.prepareStatement(query2 + p.getID() + "'");
-		pstmt2.setInt(1, p.getProductQuantityInCart());
-		pstmt2.executeUpdate();
-	}
-
-	/**
-	 * update the order status according to the branch manager decision
-	 * 
-	 * @param con
-	 * @param query
-	 * @param o
-	 * @throws SQLException
-	 */
-	private static void updateOrderIDStatus(Connection con, String query, Order o) throws SQLException {
-		updateDelivryStatus(con, query, o);
-	}
-
-	public static void getSurvyQuestions(TransmissionPack obj, Connection con) {
-		if (obj instanceof TransmissionPack) {
-			Statement stmt;
-			ResultSet rs;
-			List<Question> questions = new ArrayList<>();
-			String topic = (String) obj.getInformation();
-			String getquestion = "SELECT * FROM zerli.surveyquestions WHERE topic='" + topic + "'";
-			try {
-				stmt = con.createStatement();
-				rs = stmt.executeQuery(getquestion);
-				while (rs.next()) {
-					Question question = new Question(rs.getString(1), rs.getInt(2), rs.getString(3));
-					questions.add(question);
-				}
-				System.out.println(questions);
-				rs.close();
-				if (questions.size() > 0) {
-					System.out.println("here question query");
-					obj.setInformation(questions);
-					obj.setResponse(Response.GET_SURVY_QUESTION_SUCCEED);
-				} else {
-					obj.setResponse(Response.GET_SURVY_QUESTION_FAILED);
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			obj.setResponse(Response.GET_SURVY_QUESTION_FAILED);
-		}
-
-	}
-
-	/**
-	 * inert the survey result of the specific survey
-	 * 
-	 * @param obj
-	 * @param con
-	 */
-	@SuppressWarnings("unchecked")
-	public static void insertSurvy(TransmissionPack obj, Connection con) {
-		if (obj instanceof TransmissionPack) {
-			List<Question> questions = (List<Question>) obj.getInformation();
-
-			String query = "INSERT INTO zerli.surveys(surveysresultsID, branchID, topic, questionNumber1, questionNumber2, questionNumber3, questionNumber4, questionNumber5, questionNumber6, answerNumber1, answerNumber2, answerNumber3, answerNumber4, answerNumber5, answerNumber6, targetAudience, date) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			try {
-
-				insertSurveyResult(con, questions, query);
-				obj.setResponse(Response.ISERT_SURVEY_SUCCEED);
-
-			} catch (SQLException e) {
-				obj.setResponse(Response.ISERT_SURVEY_FAILED);
-				e.printStackTrace();
-			}
-
-		} else {
-			obj.setResponse(Response.ISERT_SURVEY_FAILED);
-		}
-
-	}
-
-	/**
-	 * insert all the survey to the DB
-	 * 
-	 * @param con
-	 * @param questions
-	 * @param query
-	 * @throws SQLException
-	 */
-	private static void insertSurveyResult(Connection con, List<Question> questions, String query) throws SQLException {
-		PreparedStatement pstmt;
-		pstmt = con.prepareStatement(query);
-		pstmt.setString(1, null);
-		pstmt.setString(2, questions.get(0).getBranchID());
-		pstmt.setString(3, questions.get(0).getTopic());
-
-		pstmt.setInt(4, questions.get(0).getQuestionNumber());
-		pstmt.setInt(5, questions.get(1).getQuestionNumber());
-		pstmt.setInt(6, questions.get(2).getQuestionNumber());
-		pstmt.setInt(7, questions.get(3).getQuestionNumber());
-		pstmt.setInt(8, questions.get(4).getQuestionNumber());
-		pstmt.setInt(9, questions.get(5).getQuestionNumber());
-		pstmt.setInt(10, questions.get(0).getAnswer());
-		pstmt.setInt(11, questions.get(1).getAnswer());
-		pstmt.setInt(12, questions.get(2).getAnswer());
-		pstmt.setInt(13, questions.get(3).getAnswer());
-		pstmt.setInt(14, questions.get(4).getAnswer());
-		pstmt.setInt(15, questions.get(5).getAnswer());
-		pstmt.setString(16, questions.get(0).getTargetAudience());
-		pstmt.setString(17, questions.get(0).getDate());
-		pstmt.executeUpdate();
-	}
-
-	public static void GetDeliveriesFromDB(TransmissionPack obj, Connection con) {
-		if (obj instanceof TransmissionPack) {
-			List<Deliveries> deliveries = new ArrayList<>();
-			List<ProductInOrder> orderProducts = null;
-			Statement stmt1, stmt2;
-			try {
-				stmt1 = con.createStatement();
-				ResultSet rs1, rs2;
-				String getDeliveries = "SELECT * FROM zerli.deliveries WHERE status = 'READY_TO_GO';";
-				rs1 = stmt1.executeQuery(getDeliveries);
-				while (rs1.next()) {
-					// nameOfproduct, productQuantityInOrder, price
-					Deliveries delivery = new Deliveries(rs1.getInt(1), rs1.getString(2), rs1.getString(3),
-							rs1.getString(4), rs1.getDouble(5), rs1.getString(6), rs1.getString(7), rs1.getString(8),
-							rs1.getString(9), rs1.getString(10), rs1.getString(11),
-							DeliveryStatus.valueOf(rs1.getString(12)), null);
-					deliveries.add(delivery);
-					String getProductsInOrder = "SELECT * FROM zerli.productInOrder WHERE orderID = '"
-							+ rs1.getString(2) + "';";
-					System.out.println(getProductsInOrder);
-					stmt2 = con.createStatement();
-					rs2 = stmt2.executeQuery(getProductsInOrder);
-					orderProducts = new ArrayList<>();
-					while (rs2.next()) {
-						ProductInOrder p = new ProductInOrder(rs2.getString(1), rs2.getString(2), rs2.getString(3),
-								rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8),
-								rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0);
-						System.out.println(p);
-						orderProducts.add(p);
-						delivery.setOrderProducts(orderProducts);
-						System.out.println(orderProducts);
-					}
-					rs2.close();
-				}
-				rs1.close();
-				obj.setInformation(deliveries);
-				System.out.println(deliveries);
-				obj.setResponse(Response.FOUND_DELIVERIES);
-				return;
-			} catch (Exception e) {
-				e.printStackTrace();
-				obj.setResponse(Response.NOT_FOUND_DELIVERIES);
-				return;
-			}
-		}
-		obj.setResponse(Response.NOT_FOUND_DELIVERIES);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static void UpdateDeliveriesStatusesInDB(TransmissionPack obj, Connection con) {
-		if (obj instanceof TransmissionPack) {
-			List<Deliveries> deliveries = (List<Deliveries>) obj.getInformation();
-			try {
-				for (Deliveries d : deliveries) {
-					System.out.println(d);
-					String updateStatuses = "UPDATE zerli.deliveries SET status=?, arrivedDate =? WHERE deliveryID='"
-							+ d.getDeliveryID() + "';";
-					// if (d.getDeliveryStatus() == DeliveryStatus.ARRIVED) {
-					PreparedStatement pstmt = con.prepareStatement(updateStatuses);
-					pstmt.setString(1, d.getDeliveryStatus().name());
-					pstmt.setString(2, d.getArrivedDate());
-					pstmt.executeUpdate(); // check if the query failed
-//						obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
-//						return;
-//					}
-//					// }
-				}
-				obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_SUCCESS);
-			} catch (Exception e) {
-				obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
-				e.printStackTrace();
-				return;
-			}
-		} else {
-			obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
-			return;
-		}
-	}
+	
+	
+	
+	
 }
+

@@ -117,7 +117,7 @@
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="0.0" prefWidth="308.0" VBox.vgrow="ALWAYS" />
-                                    <HBox alignment="CENTER" prefHeight="62.0" prefWidth="300.0">
+                                    <HBox alignment="CENTER" prefHeight="62.0" prefWidth="304.0">
                                        <children>
                                           <Button fx:id="BackBtn" mnemonicParsing="false" onAction="#Back" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Back">
                                              <font>
@@ -137,7 +137,7 @@
                            <center>
                               <VBox prefHeight="600.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <HBox prefHeight="66.0" prefWidth="600.0">
+                                    <HBox prefHeight="66.0" prefWidth="592.0">
                                        <children>
                                           <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="189.0">
                                              <children>
@@ -181,92 +181,24 @@
                                     </HBox>
                                     <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                                        <children>
-                                          <Label fx:id="branchNameLbl" text="Delivey Agent of Branch" textFill="#0a9451">
+                                          <Label fx:id="branchNameLbl" text="Delivey Agent of" textFill="#0a9451">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <VBox prefHeight="400.0" prefWidth="100.0">
+                                    <VBox prefHeight="350.0" prefWidth="100.0">
                                        <children>
-                                          <VBox prefHeight="600.0" prefWidth="100.0">
-                                             <children>
-                                                <TableView fx:id="deliveriesTable" onMouseClicked="#ChooseDelivery" prefHeight="234.0" prefWidth="500.0">
-                                                   <columns>
-                                                      <TableColumn fx:id="deliveryIDCol" text="deliveryID" />
-                                                      <TableColumn fx:id="orderIDCol" text="orderID" />
-                                                      <TableColumn fx:id="customerIDCol" text="customerID" />
-                                                      <TableColumn fx:id="priceCol" prefWidth="70.0" text="price" />
-                                                      <TableColumn fx:id="receiverNameCol" prefWidth="110.0" text="receiverName" />
-                                                      <TableColumn fx:id="addressCol" prefWidth="75.0" text="address" />
-                                                      <TableColumn fx:id="phoneNumberCol" prefWidth="100.0" text="phoneNumber" />
-                                                      <TableColumn fx:id="statusCol" prefWidth="100.0" text="status" />
-                                                   </columns>
-                                                   <VBox.margin>
-                                                      <Insets />
-                                                   </VBox.margin>
-                                                </TableView>
-                                                <VBox prefHeight="20.0" prefWidth="100.0" />
-                                                <HBox prefHeight="75.0" prefWidth="200.0">
-                                                   <children>
-                                                      <HBox prefHeight="100.0" prefWidth="150.0" />
-                                                      <HBox prefHeight="75.0" prefWidth="364.0">
-                                                         <children>
-                                                            <TableView fx:id="datesTable" prefHeight="75.0" prefWidth="361.0">
-                                                              <columns>
-                                                                  <TableColumn fx:id="deliveryIDdatesTable" prefWidth="75.0" text="deliveryID" />
-                                                                  <TableColumn fx:id="orderDateCol" prefWidth="125.0" text="orderDate" />
-                                                                  <TableColumn fx:id="expectedDeliveryCol" prefWidth="125.0" text="expectedDelivery" />
-                                                              </columns>
-                                                            </TableView>
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox prefHeight="100.0" prefWidth="150.0" />
-                                                   </children>
-                                                </HBox>
-                                                <VBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0">
-                                                   <children>
-                                                      <Label fx:id="timer">
-                                                         <font>
-                                                            <Font name="Cambria Bold" size="14.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                          </VBox>
+                                          <TableView fx:id="deliveriesTable" onMouseClicked="#ChooseDelivery" prefHeight="350.0" prefWidth="200.0">
+                                             <columns>
+                                                <TableColumn prefWidth="75.0" text="C1" />
+                                                <TableColumn prefWidth="75.0" text="C2" />
+                                             </columns>
+                                          </TableView>
                                        </children>
                                     </VBox>
-                                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="100.0">
-                                       <children>
-                                          <HBox prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="350.0">
-                                                   <children>
-                                                      <Button fx:id="showOrderBtn" mnemonicParsing="false" onAction="#ShowOrder" stylesheets="@Style.css" text="Show Order">
-                                                         <styleClass>
-                                                            <String fx:value="buttonBack" />
-                                                            <String fx:value="buttonConfirm" />
-                                                         </styleClass></Button>
-                                                   </children>
-                                                </HBox>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="350.0">
-                                                   <children>
-                                                      <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#Update" styleClass="buttonConfirm" stylesheets="@Style.css" text="Update" />
-                                                      <Label fx:id="SuccessFailedLbl">
-                                                         <HBox.margin>
-                                                            <Insets left="20.0" />
-                                                         </HBox.margin>
-                                                         <font>
-                                                            <Font name="Cambria Bold" size="18.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </HBox>
-                                       </children></VBox>
+                                    <VBox prefHeight="180.0" prefWidth="100.0" />
                                  </children>
                               </VBox>
                            </center>

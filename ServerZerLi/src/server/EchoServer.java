@@ -5,8 +5,6 @@ package server;
 // license found at www.lloseng.com 
 /** new dvir Bublil 12321 command*/
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import DataBase.DBController;
 import communication.TransmissionPack;
@@ -20,20 +18,15 @@ import server_gui.ServerScreenController;
  *
  */
 public class EchoServer extends AbstractServer {
-	
+
 	// Class variables *******
-	
+
 	/**
 	 * The default port to listen on.
 	 */
 	final public static int DEFAULT_PORT = 5556;
-	
 
 	// Constructors ******
-
-	
-
-	
 
 	/**
 	 * Constructs an instance of the echo server.
@@ -56,9 +49,9 @@ public class EchoServer extends AbstractServer {
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 
 		TransmissionPack mission1 = (TransmissionPack) msg;
-		
+
 		DBController.parsingToData(mission1);
-		
+
 		System.out.println("Message received: " + mission1 + " from " + client);
 
 		try {
@@ -86,8 +79,5 @@ public class EchoServer extends AbstractServer {
 //		System.out.println("Server has stopped listening for connections.");
 		ServerScreenController.SetMsg("Server has stopped listening for connections.");//adding the msg into his place on the server screen
 	}
-
-
-	
 
 }

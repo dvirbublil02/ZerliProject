@@ -28,9 +28,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
- * This class is to GUI of add new customer from the branch manager side.
- * Here there is a table with the pending customer who wait for approval.
+ * 
  * @author Omri Shalev
+ *
  */
 public class BranchManagerAddNewCustomerController implements Initializable {
 /**

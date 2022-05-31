@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderDetailsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderDetailsController">
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0">
          <children>
@@ -25,11 +25,12 @@
                <children>
                   <TableView fx:id="Orders" prefHeight="338.0" prefWidth="507.0" HBox.hgrow="ALWAYS">
                      <columns>
-                        <TableColumn fx:id="productIDCol" prefWidth="122.4000244140625" text="ProductID" />
-                        <TableColumn fx:id="nameCol" prefWidth="127.20001220703125" text="Name" />
-                        <TableColumn fx:id="priceCol" minWidth="3.199951171875" prefWidth="107.20001220703125" text="price" />
-                        <TableColumn fx:id="totalquantityCol" prefWidth="120.79998779296875" text="Total Quantity" />
-                        <TableColumn fx:id="quantityInCartCol" prefWidth="123.199951171875" text="Quantity In Cart" />
+                        <TableColumn fx:id="productIDCol" prefWidth="81.5999755859375" text="ProductID" />
+                        <TableColumn fx:id="nameCol" prefWidth="121.5999755859375" text="Name" />
+                        <TableColumn fx:id="branchIDCol" minWidth="0.0" prefWidth="56.800048828125" text="branchID" />
+                        <TableColumn fx:id="totalquantityCol" prefWidth="100.7999267578125" text="Total Quantity" />
+                        <TableColumn fx:id="quantityInCartCol" prefWidth="140.800048828125" text="Quantity In Cart" />
+                        <TableColumn fx:id="priceCol" minWidth="3.199951171875" prefWidth="92.800048828125" text="price" />
                      </columns>
                   </TableView>
                </children>

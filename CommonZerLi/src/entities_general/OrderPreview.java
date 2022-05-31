@@ -29,7 +29,7 @@ public class OrderPreview extends Order {
 	public OrderPreview(String orderID, String customerID, String branchID, double price, String greetingCard,
 			String orderDate, String expectedDelivery, Map<String,List<ProductInOrder>> items) {
 		super(orderID, customerID, branchID, price, greetingCard, orderDate, expectedDelivery, items);
-		ObservableList<OrderStatus> list1=FXCollections.observableArrayList(OrderStatus.APPROVE,OrderStatus.CANCEL,OrderStatus.PENDING,OrderStatus.APPROVE_WITH_DELIVERY,OrderStatus.CANCEL_WITH_DELIVERY,OrderStatus.PENDING_WITH_DELIVERY);
+		ObservableList<OrderStatus> list1=FXCollections.observableArrayList(OrderStatus.APPROVE,OrderStatus.CANCEL,OrderStatus.PENDING);
 		this.comboStatus.setItems(list1);
 	}
 

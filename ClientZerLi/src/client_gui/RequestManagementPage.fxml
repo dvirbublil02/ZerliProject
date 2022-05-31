@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderManagementController">
+<AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderManagementController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1006.0">
          <children>
@@ -200,16 +200,16 @@
                                     </HBox>
                                     <HBox prefHeight="444.0" prefWidth="698.0">
                                        <children>
-                                          <TableView fx:id="Orders" prefHeight="410.0" prefWidth="698.0" HBox.hgrow="ALWAYS">
+                                          <TableView fx:id="Orders" prefHeight="229.0" prefWidth="698.0" HBox.hgrow="ALWAYS">
                                             <columns>
                                                 <TableColumn fx:id="showCol" prefWidth="75.0" text="show" />
-                                                <TableColumn fx:id="statusCol" prefWidth="113.5999755859375" text="status" />
-                                              <TableColumn fx:id="orderIDCol" prefWidth="56.800048828125" text="orderID" />
-                                              <TableColumn fx:id="customerIDCol" prefWidth="72.7999267578125" text="customerID" />
-                                                <TableColumn fx:id="branchIDCol" prefWidth="63.20001220703125" text="branchID" />
-                                                <TableColumn fx:id="priceCol" prefWidth="54.4000244140625" text="price" />
-                                                <TableColumn fx:id="orderDateCol" prefWidth="132.0" text="orderDate" />
-                                                <TableColumn fx:id="expectedDeliveryCol" prefWidth="143.199951171875" text="expectedDelivery" />
+                                                <TableColumn fx:id="statusCol" prefWidth="99.0" text="status" />
+                                              <TableColumn fx:id="orderIDCol" prefWidth="70.0" text="orderID" />
+                                              <TableColumn fx:id="customerIDCol" prefWidth="77.5999755859375" text="customerID" />
+                                                <TableColumn fx:id="branchIDCol" prefWidth="68.0" text="branchID" />
+                                                <TableColumn fx:id="priceCol" prefWidth="64.800048828125" text="price" />
+                                                <TableColumn fx:id="orderDateCol" prefWidth="117.5999755859375" text="orderDate" />
+                                                <TableColumn fx:id="expectedDeliveryCol" prefWidth="124.00003662109373" text="expectedDelivery" />
                                             </columns>
                                           </TableView>
                                        </children>
@@ -218,32 +218,9 @@
                               </VBox>
                            </children>
                         </HBox>
-                        <VBox alignment="CENTER" prefHeight="126.0" prefWidth="698.0" VBox.vgrow="ALWAYS">
+                        <VBox alignment="CENTER" prefHeight="25.0" prefWidth="692.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <VBox alignment="CENTER" prefHeight="94.0" prefWidth="698.0">
-                                 <children>
-                                    <Button fx:id="Back1" mnemonicParsing="false" onAction="#updateBtn" prefHeight="23.0" prefWidth="106.0" stylesheets="@Style.css" text="Update">
-                                       <font>
-                                          <Font name="Candara Bold" size="18.0" />
-                                       </font>
-                                       <styleClass>
-                                          <String fx:value="buttonBack" />
-                                          <String fx:value="shadow" />
-                                          <String fx:value="transparent" />
-                                       </styleClass>
-                                    </Button>
-                                    <VBox prefHeight="14.0" prefWidth="698.0" />
-                                    <VBox alignment="CENTER" prefHeight="23.0" prefWidth="698.0">
-                                       <children>
-                                          <Label fx:id="upadteFeedBack">
-                                             <font>
-                                                <Font name="Calibri Bold" size="18.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </VBox>
+                              <Button mnemonicParsing="false" text="Button" />
                            </children>
                         </VBox>
                      </children>
