@@ -3,7 +3,7 @@ package entities_catalog;
 import java.io.Serializable;
 
 /* Product In Branch 
- * @Author Almog Madar
+ * @Author Almog Madar 
  */
 
 public class ProductInBranch implements Serializable {

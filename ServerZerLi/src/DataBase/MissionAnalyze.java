@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.sql.SQLException;
 import java.text.ParseException;
 import communication.TransmissionPack;
-
+import entities_users.User;
+import enums.ReportType;
 /**
  * In this class we analyze the mission that we got from the client , and then
  * we go into the right queries(ServerQuries) by switch case. according to the
@@ -157,10 +158,41 @@ public class MissionAnalyze {
 			break;
 		}
 	
-	
-		}
-		
-		
 
+	case GET_BRANCHID_BY_USER:{
+		
+		
+		String branchID=null;
+		branchID=ServerQuaries.getBranchId( (User) obj.getInformation(), con);
+		obj.setInformation(branchID);
+		break;
 	}
+	case GET_YEARS_FOR_COMOBOX:{
+		ReportsQuaries.getYears(obj,con);
+		break;
+	}
+	case GET_SURVEY_REPORT:{
+		try {
+			ReportsQuaries.getSurveyReport(obj,con);
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		break;
+	}
+	case INSERT_SURVEY_BY_EXPERT:{
+		ReportsQuaries.insertSurveyResult(obj,con);
+		break;
+	}
+	case GET_QUARTER_COMPLAINTS_REPORT:{
+		ReportsQuaries.getQuarterComplaintsReport(obj, con);
+		break;
+	}
+	}
+		
+	}
+	
 }
