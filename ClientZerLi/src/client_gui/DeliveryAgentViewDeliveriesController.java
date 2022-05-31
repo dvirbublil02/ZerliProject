@@ -2,15 +2,22 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
+import client.DeliveriesController;
+import communication.Response;
 import entities_catalog.ProductInOrder;
 import entities_general.Deliveries;
 import entities_general.DeliveryPreview;
-import entities_general.Order;
+import entities_users.DeliveryAgent;
 import enums.DeliveryStatus;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,6 +34,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class DeliveryAgentViewDeliveriesController implements Initializable {
@@ -59,10 +67,10 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 	private TableColumn<DeliveryPreview, String> expectedDeliveryCol;
 
 	@FXML
-	private TableColumn<DeliveryPreview, String> arrivedDateCol;
+	private TableColumn<DeliveryPreview, String> receiverNameCol;
 
 	@FXML
-	private TableColumn<DeliveryPreview, String> receiverNameCol;
+	private TableColumn<DeliveryPreview, String> addressCol;
 
 	@FXML
 	private TableColumn<DeliveryPreview, String> phoneNumberCol;
@@ -83,6 +91,9 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 	private Button updateBtn;
 
 	@FXML
+	private Label timer;
+
+	@FXML
 	private Label networkManagerName;
 
 	@FXML
@@ -100,12 +111,20 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 	@FXML
 	private Label welcomeBackUserName;
 
-	ObservableList<DeliveryPreview> deliveriesView = FXCollections.observableArrayList();
-	ObservableList<DeliveryPreview> dates = FXCollections.observableArrayList();
+	@FXML
+	private Label SuccessFailedLbl;
 
-	List<Deliveries> deliveriesList;
-	List<ProductInOrder> orderProducts;
-	DeliveryPreview currDelivery = null;
+	static boolean showOrderFlag = false;// false = can click, true = can not click
+
+	private ObservableList<DeliveryPreview> deliveriesView = FXCollections.observableArrayList();
+	private ObservableList<DeliveryPreview> dates = FXCollections.observableArrayList();
+
+	private List<DeliveryPreview> deliveriesList;
+//	private	List<ProductInOrder> orderProducts;
+
+//	private List<DeliveryPreview> updatedDeliveryPreviews;
+
+	private DeliveryPreview currDeliveryPreview = null;
 
 	/**
 	 * @param stage
@@ -117,16 +136,34 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 		stage.setTitle("Delivery Agent View Delivieries");
 		stage.setScene(scene);
 		stage.show();
+		stage.setOnCloseRequest(event -> {
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+		});
 	}
 
+	/**
+	 * initialize the user details and the table view on the page.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		ClientController.initalizeUserDetails(networkManagerName, phoneNumber, userStatus, welcomeBackUserName,
+				userRole, ((DeliveryAgent) ClientController.user).toString());
+
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		time.start();
+
 		showOrderBtn.setDisable(true);
 		deliveryIDCol.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, Integer>("deliveryID"));
 		orderIDCol.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, String>("orderID"));
 		customerIDCol.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, String>("customerID"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, Double>("price"));
 		receiverNameCol.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, String>("receiverName"));
+		addressCol.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, String>("address"));
 		phoneNumberCol.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, String>("phoneNumber"));
 		statusCol.setCellValueFactory(
 				new PropertyValueFactory<DeliveryPreview, ComboBox<DeliveryStatus>>("deliveryStatusComboBox"));
@@ -139,30 +176,101 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 			deliveriesView.add(new DeliveryPreview(delivery.getDeliveryID(), delivery.getOrderID(),
 					delivery.getBranchID(), delivery.getCustomerID(), delivery.getPrice(), delivery.getOrderDate(),
 					delivery.getExpectedDelivery(), delivery.getArrivedDate(), delivery.getReceiverName(),
-					delivery.getPhoneNumber(), delivery.getDeliveryStatus(), delivery.getOrderProducts()));
-			System.out.println(delivery); // check
+					delivery.getAddress(), delivery.getPhoneNumber(), delivery.getDeliveryStatus(),
+					delivery.getOrderProducts()));
+
+			System.out.println("delivery ID is: " + delivery.getOrderProducts()); // check
 		}
 		deliveriesTable.setItems(deliveriesView);
-		
-		deliveryIDdatesTable.setCellValueFactory(new PropertyValueFactory<>("deliveryID"));
+
+		/**
+		 * create a table view with the dates that connect to the delivery we point at
+		 * at the moment
+		 */
+		deliveryIDdatesTable.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, String>("deliveryID"));
 		orderDateCol.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, String>("orderDate"));
 		expectedDeliveryCol.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, String>("expectedDelivery"));
-		arrivedDateCol.setCellValueFactory(new PropertyValueFactory<DeliveryPreview, String>("arrivedDate"));
-		
 	}
 
+	/**
+	 * open pop up with the items that belongs to the specific order we are pointing
+	 * on.
+	 * 
+	 * @param event
+	 * @throws IOException
+	 */
 	@FXML
 	void ShowOrder(ActionEvent event) throws IOException {
-		
 		Stage primaryStage = new Stage();
 		DeliveryAgentViewOrderController deliveryAgentViewOrderController = new DeliveryAgentViewOrderController();
-		deliveryAgentViewOrderController.start(primaryStage);
-		
+		if (DeliveriesController.getDelivery().getOrderProducts() != null
+				&& DeliveryAgentViewOrderController.flag == false) {
+			for (DeliveryPreview delivery : deliveriesList) {
+				if (delivery.getDeliveryID() == (currDeliveryPreview.getDeliveryID())) {
+					DeliveriesController.setDelivery(currDeliveryPreview);
+					deliveryAgentViewOrderController.start(primaryStage);
+					DeliveryAgentViewDeliveriesController.showOrderFlag = true;
+					showOrderBtn.setDisable(true);
+					return;
+				}
+			}
+		}
 	}
 
+	/**
+	 * Update the statuses of the deliveries by the Delivery Agent
+	 * 
+	 * @param event
+	 */
+	@SuppressWarnings("unlikely-arg-type")
 	@FXML
 	void Update(ActionEvent event) {
+		/**
+		 * update the list that we see on the screen
+		 */
+		for (DeliveryPreview dp : deliveriesView) {
+			dp.setDeliveryStatusComboBox(statusCol.getCellData(dp));
+			dp.setDeliveryStatus(dp.getDeliveryStatusComboBox().getValue());
+			/**
+			 * print to check if got the new status
+			 */
+			System.out.println(dp.getDeliveryStatus());
+			System.out.println(dp.getDeliveryStatusComboBox().getValue());
+		}
+		/**
+		 * update the list that we will send to the server
+		 */
 
+		for (int i = 0; i < deliveriesList.size(); i++) {
+			deliveriesList.get(i).setDeliveryStatus(deliveriesView.get(i).getDeliveryStatus());
+			if (deliveriesList.get(i).getDeliveryStatus() == DeliveryStatus.ARRIVED) {
+				deliveriesList.get(i).setArrivedDate(timer.getText());
+			}
+		}
+
+		/**
+		 * send the updated list of deliveries to the DB by the result we will change
+		 * the label that notice on success/fail text and color. if update was a success
+		 * so remove the deliveries from the list. else, present a message that update
+		 * failed.
+		 */
+		if (ClientHandleTransmission.UpdateDeliveriesStatus(deliveriesList) == Response.UPDATE_DELIVERIES_STATUS_SUCCESS) {
+			SuccessFailedLbl.setText("Update Success!");
+			SuccessFailedLbl.setTextFill(Color.GREEN);
+			List<Integer> indexes = new ArrayList<>();
+			for (int i = 0; i < deliveriesList.size(); i++) {
+				if (deliveriesList.get(i).getDeliveryStatus() == DeliveryStatus.ARRIVED) {
+					indexes.add(i);
+				}
+			}
+			for(int j = 0; j<indexes.size(); j++) {
+				deliveriesList.remove(indexes.get(j));
+				deliveriesView.remove(indexes.get(j));
+			}
+		} else {
+			SuccessFailedLbl.setText("Update Failed!");
+			SuccessFailedLbl.setTextFill(Color.RED);
+		}
 	}
 
 	/**
@@ -174,20 +282,51 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 	@FXML
 	void ChooseDelivery(MouseEvent event) {
 		try {
-			if (dates.size() > 0)
-				dates.clear();
-			currDelivery = deliveriesTable.getSelectionModel().getSelectedItem();
-			if (currDelivery != null)
-				showOrderBtn.setDisable(false);
-			dates.add(currDelivery);
-			System.out.println(dates);
-			datesTable.setItems(dates);
+
+			/**
+			 * insert the current delivery details to currDelivery parameter
+			 */
+			DeliveriesController.setDelivery((DeliveryPreview) deliveriesTable.getSelectionModel().getSelectedItem());
+			currDeliveryPreview = DeliveriesController.getDelivery();
+			if (currDeliveryPreview != null) {
+
+				System.out.println("The items in order " + DeliveriesController.getDelivery().getOrderID());
+				System.out.println("order items: " + DeliveriesController.getDelivery().getOrderProducts());
+				for (ProductInOrder pio : DeliveriesController.getDelivery().getOrderProducts()) {
+					System.out.println(pio.getNameOfItem());
+				}
+				/**
+				 * lock order button and clear the products list
+				 */
+				if (DeliveriesController.getDelivery() != null
+						&& DeliveryAgentViewDeliveriesController.showOrderFlag == false) {
+					showOrderBtn.setDisable(false);
+				} else if (DeliveryAgentViewDeliveriesController.showOrderFlag == true) {
+					showOrderBtn.setDisable(true);
+				}
+
+				/**
+				 * build the dates table
+				 */
+				if (dates.size() > 0)
+					dates.clear();
+				/**
+				 * update dates table
+				 */
+				dates.add(DeliveriesController.getDelivery());
+				for (DeliveryPreview dp : dates) {
+					System.out.println("dates of delivey with ID " + dp.getDeliveryID());
+				}
+				datesTable.setItems(dates);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
+	 * go back to the previous page
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */

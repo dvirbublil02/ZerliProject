@@ -196,28 +196,28 @@
                                                    <columns>
                                                       <TableColumn fx:id="deliveryIDCol" text="deliveryID" />
                                                       <TableColumn fx:id="orderIDCol" text="orderID" />
-                                                      <TableColumn fx:id="customerIDCol" prefWidth="100.0" text="customerID" />
-                                                      <TableColumn fx:id="priceCol" text="price" />
+                                                      <TableColumn fx:id="customerIDCol" text="customerID" />
+                                                      <TableColumn fx:id="priceCol" prefWidth="70.0" text="price" />
                                                       <TableColumn fx:id="receiverNameCol" prefWidth="110.0" text="receiverName" />
+                                                      <TableColumn fx:id="addressCol" prefWidth="75.0" text="address" />
                                                       <TableColumn fx:id="phoneNumberCol" prefWidth="100.0" text="phoneNumber" />
-                                                      <TableColumn fx:id="statusCol" prefWidth="120.0" text="status" />
+                                                      <TableColumn fx:id="statusCol" prefWidth="100.0" text="status" />
                                                    </columns>
                                                    <VBox.margin>
-                                                      <Insets left="25.0" right="25.0" />
+                                                      <Insets />
                                                    </VBox.margin>
                                                 </TableView>
                                                 <VBox prefHeight="20.0" prefWidth="100.0" />
                                                 <HBox prefHeight="75.0" prefWidth="200.0">
                                                    <children>
                                                       <HBox prefHeight="100.0" prefWidth="150.0" />
-                                                      <HBox prefHeight="50.0" prefWidth="500.0">
+                                                      <HBox prefHeight="75.0" prefWidth="364.0">
                                                          <children>
-                                                            <TableView fx:id="datesTable" prefHeight="100.0" prefWidth="445.0">
+                                                            <TableView fx:id="datesTable" prefHeight="75.0" prefWidth="361.0">
                                                               <columns>
                                                                   <TableColumn fx:id="deliveryIDdatesTable" prefWidth="75.0" text="deliveryID" />
                                                                   <TableColumn fx:id="orderDateCol" prefWidth="125.0" text="orderDate" />
                                                                   <TableColumn fx:id="expectedDeliveryCol" prefWidth="125.0" text="expectedDelivery" />
-                                                                  <TableColumn fx:id="arrivedDateCol" prefWidth="125.0" text="arrivedDate" />
                                                               </columns>
                                                             </TableView>
                                                          </children>
@@ -225,6 +225,15 @@
                                                       <HBox prefHeight="100.0" prefWidth="150.0" />
                                                    </children>
                                                 </HBox>
+                                                <VBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0">
+                                                   <children>
+                                                      <Label fx:id="timer">
+                                                         <font>
+                                                            <Font name="Cambria Bold" size="14.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </VBox>
                                              </children>
                                           </VBox>
                                        </children>
@@ -235,12 +244,24 @@
                                              <children>
                                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="350.0">
                                                    <children>
-                                                      <Button fx:id="showOrderBtn" mnemonicParsing="false" onAction="#ShowOrder" text="Show Order" />
+                                                      <Button fx:id="showOrderBtn" mnemonicParsing="false" onAction="#ShowOrder" stylesheets="@Style.css" text="Show Order">
+                                                         <styleClass>
+                                                            <String fx:value="buttonBack" />
+                                                            <String fx:value="buttonConfirm" />
+                                                         </styleClass></Button>
                                                    </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="350.0">
                                                    <children>
-                                                      <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#Update" text="Update" />
+                                                      <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#Update" styleClass="buttonConfirm" stylesheets="@Style.css" text="Update" />
+                                                      <Label fx:id="SuccessFailedLbl">
+                                                         <HBox.margin>
+                                                            <Insets left="20.0" />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font name="Cambria Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
                                                    </children>
                                                 </HBox>
                                              </children>

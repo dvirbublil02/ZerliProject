@@ -132,6 +132,11 @@ public class MissionAnalyze {
 		}
 		case GET_DELIVERIES:{
 			ServerQuaries.GetDeliveriesFromDB(obj,con);
+			break;
+		}
+		case UPDATE_DELIVERIES_STATUSES:{
+			ServerQuaries.UpdateDeliveriesStatusesInDB(obj, con);
+			break;
 		}
 		}
 

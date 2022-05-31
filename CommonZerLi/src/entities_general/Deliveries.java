@@ -18,29 +18,32 @@ public class Deliveries implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String orderID, customerID, branchID, orderDate, expectedDelivery, arrivedDate, receiverName, phoneNumber;
+	private String orderID, customerID, branchID, orderDate, expectedDelivery, arrivedDate, receiverName, address,
+			phoneNumber;
 	private int deliveryID;
 	private double price;
 	private DeliveryStatus status;
 	private List<ProductInOrder> orderProducts;
 
 	/**
+	 * 
+	 * @param deliveryID
 	 * @param orderID
-	 * @param customerID
 	 * @param branchID
+	 * @param customerID
+	 * @param price
 	 * @param orderDate
 	 * @param expectedDelivery
 	 * @param arrivedDate
 	 * @param receiverName
+	 * @param address
 	 * @param phoneNumber
-	 * @param deliveryID
-	 * @param price
-	 * @param deliveryStatus
-	 * @param order
+	 * @param status
+	 * @param orderProducts
 	 */
 	public Deliveries(int deliveryID, String orderID, String branchID, String customerID, double price,
-			String orderDate, String expectedDelivery, String arrivedDate, String receiverName, String phoneNumber,
-			DeliveryStatus status, List<ProductInOrder> orderProducts) {
+			String orderDate, String expectedDelivery, String arrivedDate, String receiverName, String address,
+			String phoneNumber, DeliveryStatus status, List<ProductInOrder> orderProducts) {
 		super();
 		this.orderID = orderID;
 		this.customerID = customerID;
@@ -53,6 +56,7 @@ public class Deliveries implements Serializable {
 		this.deliveryID = deliveryID;
 		this.price = price;
 		this.status = status;
+		this.address = address;
 		this.setOrderProducts(orderProducts);
 	}
 
@@ -140,6 +144,14 @@ public class Deliveries implements Serializable {
 		return status;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public void setDeliveryStatus(DeliveryStatus status) {
 		this.status = status;
 	}
@@ -150,10 +162,6 @@ public class Deliveries implements Serializable {
 
 	public void setOrderProducts(List<ProductInOrder> orderProducts) {
 		this.orderProducts = orderProducts;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 	@Override

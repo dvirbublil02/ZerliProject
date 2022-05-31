@@ -17,13 +17,13 @@ public class DeliveryPreview extends Deliveries {
 	private ComboBox<DeliveryStatus> deliveryStatus = new ComboBox<>();
 
 	public DeliveryPreview(int deliveryID, String orderID, String branchID, String customerID, double price,
-			String orderDate, String expectedDelivery, String arrivedDate, String receiverName, String phoneNumber,
-			DeliveryStatus deliveryStatus, List<ProductInOrder> orderProducts) {
+			String orderDate, String expectedDelivery, String arrivedDate, String receiverName, String address,
+			String phoneNumber, DeliveryStatus deliveryStatus, List<ProductInOrder> orderProducts) {
 		super(deliveryID, orderID, branchID, customerID, price, orderDate, expectedDelivery, arrivedDate, receiverName,
-				phoneNumber, deliveryStatus, orderProducts);
+				address, phoneNumber, deliveryStatus, orderProducts);
 		// set combo box values
 		ObservableList<DeliveryStatus> list = FXCollections.observableArrayList(DeliveryStatus.READY_TO_GO,
-				DeliveryStatus.ON_THE_WAY, DeliveryStatus.CANCELED, DeliveryStatus.ARRIVED);
+				DeliveryStatus.ARRIVED);
 		this.deliveryStatus.setItems(list);
 		this.deliveryStatus.setValue(deliveryStatus);
 	}
@@ -35,7 +35,5 @@ public class DeliveryPreview extends Deliveries {
 	public ComboBox<DeliveryStatus> getDeliveryStatusComboBox() {
 		return deliveryStatus;
 	}
-	
-	
 
 }

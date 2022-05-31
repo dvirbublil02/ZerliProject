@@ -63,7 +63,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class ClientHandleTransmission {
-	
+
 	/**
 	 * In this method we are creating TransmissionPack that will contain ADDORDER
 	 * mission ,and the information (order)- to insert into the DB, that will be
@@ -253,41 +253,43 @@ public class ClientHandleTransmission {
 		} else
 			return true;
 	}
+
 	/**
 	 * get the colors filter for catalog initilizedProductGrid
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<String> getColorsForFilter() {
-		TransmissionPack tp=new TransmissionPack(Mission.GET_COLORS,null,null);
+		TransmissionPack tp = new TransmissionPack(Mission.GET_COLORS, null, null);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
-		if(tp.getResponse()==Response.DID_NOT_FIND_COLORS) {
-			//adding pop screen
+		if (tp.getResponse() == Response.DID_NOT_FIND_COLORS) {
+			// adding pop screen
 		}
-		return (ArrayList<String>)tp.getInformation();
+		return (ArrayList<String>) tp.getInformation();
 	}
+
 	/**
-	 * this method is adding the pending order of the specific customer
-	 * the order is waiting for approve from the branch manager
+	 * this method is adding the pending order of the specific customer the order is
+	 * waiting for approve from the branch manager
 	 */
 
+	public static void addOrder(Branches branchName, String greetingCard) {
 
-	public static void addOrder(Branches branchName,String greetingCard) {
-	
-		Map<String,List<ProductInOrder>> productInOrderFinallCart=OrderHandleController.getCustomProductInOrder();
-		
-		Order order =new Order(null,ClientController.user.getID(),branchName.name(),OrderHandleController.getTotalPrice(),
-				greetingCard,OrderStatus.PENDING.name(),LocalDateTime.now().toString().toString(),productInOrderFinallCart);
+		Map<String, List<ProductInOrder>> productInOrderFinallCart = OrderHandleController.getCustomProductInOrder();
 
-		
-	   
+		Order order = new Order(null, ClientController.user.getID(), branchName.name(),
+				OrderHandleController.getTotalPrice(), greetingCard, OrderStatus.PENDING.name(),
+				LocalDateTime.now().toString().toString(), productInOrderFinallCart);
+
 		productInOrderFinallCart.put("RegularProducts", OrderHandleController.getProductInOrder());
 
-		TransmissionPack tp=new TransmissionPack(Mission.ADD_ORDER,null,order);
+		TransmissionPack tp = new TransmissionPack(Mission.ADD_ORDER, null, order);
 		ClientUI.chat.accept(tp);
 	}
+
 	/**
 	 * this method return the ObserverList of the order that was not approved yet
+	 * 
 	 * @return
 	 */
 	public static List<OrderPreview> getListOrderPreview() {
@@ -362,7 +364,6 @@ public class ClientHandleTransmission {
 
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public static List<Product> getDataProduct() {
 		TransmissionPack tp = new TransmissionPack(Mission.DATA_PRODUCTS, null, null);
@@ -384,127 +385,174 @@ public class ClientHandleTransmission {
 	// COLLCET PRODUCT BY FILTERS
 	public static List<Product> getDataProductByFilter(String color, String price, String type) {
 		TransmissionPack tp = new TransmissionPack(Mission.DATA_PRODUCTS_BY_FILTER, null, null);
-		// initilaze filters 
-				Map<String,String> filters = new HashMap<>();
-				filters.put("color",color);
-				filters.put("price",price);
-				filters.put("type",type);
+		// initilaze filters
+		Map<String, String> filters = new HashMap<>();
+		filters.put("color", color);
+		filters.put("price", price);
+		filters.put("type", type);
 
-				//send to server side and get information.
-				tp.setInformation(filters);
-				ClientUI.chat.accept(tp);
-				tp = ClientUI.chat.getObj();
+		// send to server side and get information.
+		tp.setInformation(filters);
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
 
-				switch (tp.getResponse()) {
-					case GET_DATA_PRODUCTS_BY_FILTER: {
-						return (List<Product>) tp.getInformation();
-					}
+		switch (tp.getResponse()) {
+		case GET_DATA_PRODUCTS_BY_FILTER: {
+			return (List<Product>) tp.getInformation();
+		}
 
-					case FAILD_DATA_PRODUCTS_BY_FILTER: {
-						return null;
-					}
-				}
-				return null;
+		case FAILD_DATA_PRODUCTS_BY_FILTER: {
+			return null;
+		}
+		}
+		return null;
 	}
 
 	public static List<ShopWorker> getShopWorkers() {
-		TransmissionPack tp= new TransmissionPack(Mission.GET_SHOP_WORKERS,null,ClientController.user);
-		ClientUI.chat.accept(tp);//tp sent to server and list of workers in the specific branch enters the tp
-		tp= ClientUI.chat.getObj();
+		TransmissionPack tp = new TransmissionPack(Mission.GET_SHOP_WORKERS, null, ClientController.user);
+		ClientUI.chat.accept(tp);// tp sent to server and list of workers in the specific branch enters the tp
+		tp = ClientUI.chat.getObj();
 		return (List<ShopWorker>) tp.getInformation();
 	}
-	
-	
-	
+
 	/**
 	 * Get all the customers who has PENDING_APPROVAL status
-	 * @return return the list of those customers 
+	 * 
+	 * @return return the list of those customers
 	 */
 	public static List<Customer> getPendingCustomers() {
-		TransmissionPack tp= new TransmissionPack(Mission.GET_PENDING_CUSTOMERS,null,ClientController.user); // The user is Branch manager
+		TransmissionPack tp = new TransmissionPack(Mission.GET_PENDING_CUSTOMERS, null, ClientController.user); // The
+																												// user
+																												// is
+																												// Branch
+																												// manager
 		ClientUI.chat.accept(tp);
-		tp= ClientUI.chat.getObj();
-		return (List<Customer>)tp.getInformation();
+		tp = ClientUI.chat.getObj();
+		return (List<Customer>) tp.getInformation();
 	}
-	
+
 	/**
-	 * Send an updated customer after changed his status and added him credit card, to the DB
+	 * Send an updated customer after changed his status and added him credit card,
+	 * to the DB
+	 * 
 	 * @param updatedCustomer
 	 */
 	public static boolean approveNewCustomer(Customer updatedCustomer) {
-		TransmissionPack tp= new TransmissionPack(Mission.APPROVE_NEW_CUSTOMER,null,updatedCustomer); // The user is Branch manager
+		TransmissionPack tp = new TransmissionPack(Mission.APPROVE_NEW_CUSTOMER, null, updatedCustomer); // The user is
+																											// Branch
+																											// manager
 		ClientUI.chat.accept(tp);
-		tp= ClientUI.chat.getObj();
+		tp = ClientUI.chat.getObj();
 		if (tp.getResponse() == Response.APPROVE_NEW_CUSTOMER_SUCCESS) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Get a list of the Credit cards we have in the DB 
+	 * Get a list of the Credit cards we have in the DB
+	 * 
 	 * @return return the list of the credit cards numbers
 	 */
 	public static List<String> getCreditCards() {
-		TransmissionPack tp= new TransmissionPack(Mission.GET_CREDIT_CARDS,null,ClientController.user); // The user is Branch manager
+		TransmissionPack tp = new TransmissionPack(Mission.GET_CREDIT_CARDS, null, ClientController.user); // The user
+																											// is Branch
+																											// manager
 		ClientUI.chat.accept(tp);
-		tp= ClientUI.chat.getObj();
-		return (List<String>)tp.getInformation();
-		
+		tp = ClientUI.chat.getObj();
+		return (List<String>) tp.getInformation();
+
 	}
-	
+
 	public static List<Customer> getApprovedCustomers() {
-		TransmissionPack tp= new TransmissionPack(Mission.GET_APPROVED_CUSTOMERS,null,ClientController.user);
-		ClientUI.chat.accept(tp);//tp sent to server through accept method, there its going through mission analyze  
-		tp= ClientUI.chat.getObj();//the tp updated after the quarry and saved
-		if(tp.getResponse()==Response.CUSTOMER_ARRIVED)
+		TransmissionPack tp = new TransmissionPack(Mission.GET_APPROVED_CUSTOMERS, null, ClientController.user);
+		ClientUI.chat.accept(tp);// tp sent to server through accept method, there its going through mission
+									// analyze
+		tp = ClientUI.chat.getObj();// the tp updated after the quarry and saved
+		if (tp.getResponse() == Response.CUSTOMER_ARRIVED)
 			return (List<Customer>) tp.getInformation();
 		else
 			return new ArrayList<Customer>();
 	}
 
-	public static boolean sendEditedCustomersFromBranchManager(ObservableList<CustomersPreview> customersListView) 
-	{//the method sends a list of Customers from the list of CustomerPreview it gets, with the updated information
-		List<Customer> customersToSendToDB= new ArrayList<>();//we can't send list of previewCustomers to DB so we create customers list
-		
-		for(CustomersPreview cp: customersListView)
-		{
-			customersToSendToDB.add(new Customer(cp.getID(), cp.getFirstName(), cp.getLastName(), cp.getEmail(), 
-			cp.getPhoneNumber(),cp.getAccountStatusCB().getValue(), cp.getIsLoggedIn(), cp.getBalance(), cp.getIsNewCustomer(), cp.getCreditCard()));
-		
+	public static boolean sendEditedCustomersFromBranchManager(ObservableList<CustomersPreview> customersListView) {// the
+																													// method
+																													// sends
+																													// a
+																													// list
+																													// of
+																													// Customers
+																													// from
+																													// the
+																													// list
+																													// of
+																													// CustomerPreview
+																													// it
+																													// gets,
+																													// with
+																													// the
+																													// updated
+																													// information
+		List<Customer> customersToSendToDB = new ArrayList<>();// we can't send list of previewCustomers to DB so we
+																// create customers list
+
+		for (CustomersPreview cp : customersListView) {
+			customersToSendToDB.add(new Customer(cp.getID(), cp.getFirstName(), cp.getLastName(), cp.getEmail(),
+					cp.getPhoneNumber(), cp.getAccountStatusCB().getValue(), cp.getIsLoggedIn(), cp.getBalance(),
+					cp.getIsNewCustomer(), cp.getCreditCard()));
+
 		}
-		TransmissionPack tp= new TransmissionPack(Mission.UPDATE_EDITED_CUSTOMERS,null,customersToSendToDB);
+		TransmissionPack tp = new TransmissionPack(Mission.UPDATE_EDITED_CUSTOMERS, null, customersToSendToDB);
 		ClientUI.chat.accept(tp);
-		tp= ClientUI.chat.getObj();
-		if(tp.getResponse()==Response.CUSTOMER_EDITS_UPDATED)
+		tp = ClientUI.chat.getObj();
+		if (tp.getResponse() == Response.CUSTOMER_EDITS_UPDATED)
 			return true;
 		else
-			 return false;
+			return false;
 	}
 
-	public static boolean sendEditedWorkersFromBranchManager(ObservableList<WorkersPreview> workersListView) 
-	{//the method sends a list of ShopWorkers from the list of WorkerPreview it gets, with the updated information
-		List<ShopWorker> workersToSendToDB= new ArrayList<>();//we can't send list of previewWorkers to DB so we create workers list
-		
-		for(WorkersPreview wp: workersListView)
-		{
-			workersToSendToDB.add(new ShopWorker(wp.getID(), wp.getFirstName(), wp.getLastName(), wp.getEmail(), 
-			wp.getPhoneNumber(),wp.getAccountStatus(), wp.getIsLoggedIn(),wp.getBranchID(),wp.getActivityStatusCB().getValue()));
-		
+	public static boolean sendEditedWorkersFromBranchManager(ObservableList<WorkersPreview> workersListView) {// the
+																												// method
+																												// sends
+																												// a
+																												// list
+																												// of
+																												// ShopWorkers
+																												// from
+																												// the
+																												// list
+																												// of
+																												// WorkerPreview
+																												// it
+																												// gets,
+																												// with
+																												// the
+																												// updated
+																												// information
+		List<ShopWorker> workersToSendToDB = new ArrayList<>();// we can't send list of previewWorkers to DB so we
+																// create workers list
+
+		for (WorkersPreview wp : workersListView) {
+			workersToSendToDB.add(new ShopWorker(wp.getID(), wp.getFirstName(), wp.getLastName(), wp.getEmail(),
+					wp.getPhoneNumber(), wp.getAccountStatus(), wp.getIsLoggedIn(), wp.getBranchID(),
+					wp.getActivityStatusCB().getValue()));
+
 		}
-		TransmissionPack tp= new TransmissionPack(Mission.UPDATE_EDITED_WORKERS,null,workersToSendToDB);
+		TransmissionPack tp = new TransmissionPack(Mission.UPDATE_EDITED_WORKERS, null, workersToSendToDB);
 		ClientUI.chat.accept(tp);
-		tp= ClientUI.chat.getObj();
-		if(tp.getResponse()==Response.WORKER_EDITS_UPDATED)
+		tp = ClientUI.chat.getObj();
+		if (tp.getResponse() == Response.WORKER_EDITS_UPDATED)
 			return true;
 		else
-			 return false;
-		
+			return false;
+
 	}
+
 	/**
-	 * sending mission the the server for get all the complaints of the specific 
+	 * sending mission the the server for get all the complaints of the specific
 	 * Customer Service employee
+	 * 
 	 * @param ID-CustomerSerive ID
 	 * @return- list of Complaints of Complaints for the screen
 	 */
@@ -514,76 +562,87 @@ public class ClientHandleTransmission {
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		List<Complaint> complaints = (List<Complaint>) tp.getInformation();
-		List<ComplaintPreview>complainPreview=new ArrayList<>();
-		for(Complaint c:complaints) {
-			ComplaintPreview cp=new ComplaintPreview(c.getComplaintID(),c.getCustomerID(),c.getOrderID() , c.getCustomerServiceID(), c.getDescription(), c.getBranchID(), c.getComplaintOpening(), c.getTreatmentUntil(), c.getComplainState(), c.getComplaintsStatus());
+		List<ComplaintPreview> complainPreview = new ArrayList<>();
+		for (Complaint c : complaints) {
+			ComplaintPreview cp = new ComplaintPreview(c.getComplaintID(), c.getCustomerID(), c.getOrderID(),
+					c.getCustomerServiceID(), c.getDescription(), c.getBranchID(), c.getComplaintOpening(),
+					c.getTreatmentUntil(), c.getComplainState(), c.getComplaintsStatus());
 			cp.getStatus().setValue(c.getComplainState());
 			complainPreview.add(cp);
 		}
 		ComplaintsDataHandle.setComlaints(complainPreview);
-		
+
 		return complainPreview;
 	}
+
 	/**
-	 * sending mission to the server to update all the complaints cases
-	 * and if there is refund amount it will create new refund row in the
-	 * refund row and update to the specific customer his new balance
+	 * sending mission to the server to update all the complaints cases and if there
+	 * is refund amount it will create new refund row in the refund row and update
+	 * to the specific customer his new balance
+	 * 
 	 * @param complaintsUpdate
 	 * @return
 	 */
 	public static Response updateComplaints(List<ComplaintPreview> complaintsUpdate) {
-		
-		List<ComplaintPreview> complainPreview =complaintsUpdate;
-		List<Complaint>complain=new ArrayList<>();
-		for(ComplaintPreview c:complainPreview) {
-			Complaint cp=new Complaint(c.getComplaintID(),c.getCustomerID(),c.getOrderID() , c.getCustomerServiceID(), c.getDescription(), c.getBranchID(), c.getComplaintOpening(), c.getTreatmentUntil(), c.getComplainState(), c.getComplaintsStatus());
+
+		List<ComplaintPreview> complainPreview = complaintsUpdate;
+		List<Complaint> complain = new ArrayList<>();
+		for (ComplaintPreview c : complainPreview) {
+			Complaint cp = new Complaint(c.getComplaintID(), c.getCustomerID(), c.getOrderID(),
+					c.getCustomerServiceID(), c.getDescription(), c.getBranchID(), c.getComplaintOpening(),
+					c.getTreatmentUntil(), c.getComplainState(), c.getComplaintsStatus());
 			cp.setComplainState(c.getStatus().getValue());
 			System.out.println(c.getRefoundAmount());
-			if(c.getRefoundAmount()!=null) {
-			cp.setRefoundAmount(c.getRefoundAmount());
+			if (c.getRefoundAmount() != null) {
+				cp.setRefoundAmount(c.getRefoundAmount());
 			}
 			complain.add(cp);
 		}
-		
+
 		TransmissionPack tp = new TransmissionPack(Mission.UPDATE_COMPLAINTS, null, complain);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		return tp.getResponse();
-		
+
 	}
+
 	/**
 	 * create new mission to the server to create new complaint case
+	 * 
 	 * @param c
 	 * @return
 	 */
 	public static Response createComplaint(Complaint c) {
-		TransmissionPack tp = new TransmissionPack(Mission.OPEN_COMPLAINT, null,c);
+		TransmissionPack tp = new TransmissionPack(Mission.OPEN_COMPLAINT, null, c);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		return tp.getResponse();
-		
+
 	}
+
 	public static void getQuarterComplaintsReport(String year, String quarter) {
-		if(year !=null && quarter !=null) {
-			
+		if (year != null && quarter != null) {
+
 		}
 	}
+
 	/*
-	 * in this method we getting the monthly report and convert it into string to be able to use it and pressent it into the screen.
+	 * in this method we getting the monthly report and convert it into string to be
+	 * able to use it and pressent it into the screen.
 	 */
 	public static boolean getMonthlyReport(String year, String month, String reportType) {
-		if(year !=null && month !=null && reportType!=null) {
-		List<String> reportRequest=new ArrayList<>();
-		Report returndReport;
-		reportRequest.addAll(Arrays.asList(ClientController.user.getID(),year,month,reportType));
-		TransmissionPack tp=new TransmissionPack(Mission.GET_MONTHLY_REPORT,null,reportRequest);
-		ClientUI.chat.accept(tp);
-		tp=ClientUI.chat.getObj();
-		if(tp.getInformation() == null){
-			System.out.println("No Report!");
-		}else {
-		
-				 returndReport = (Report) tp.getInformation();
+		if (year != null && month != null && reportType != null) {
+			List<String> reportRequest = new ArrayList<>();
+			Report returndReport;
+			reportRequest.addAll(Arrays.asList(ClientController.user.getID(), year, month, reportType));
+			TransmissionPack tp = new TransmissionPack(Mission.GET_MONTHLY_REPORT, null, reportRequest);
+			ClientUI.chat.accept(tp);
+			tp = ClientUI.chat.getObj();
+			if (tp.getInformation() == null) {
+				System.out.println("No Report!");
+			} else {
+
+				returndReport = (Report) tp.getInformation();
 
 				ByteArrayInputStream stream = new ByteArrayInputStream(returndReport.getBlob());
 				InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
@@ -591,27 +650,26 @@ public class ClientHandleTransmission {
 				List<List<String>> reportOnList = new ArrayList<>();
 				String line;
 				try {
-					
+
 					while ((line = bufferedReader.readLine()) != null) {
-						
-							List<String> row = new ArrayList<String>(Arrays.asList(line.split(" ")));
-							reportOnList.add(row);
-						
+
+						List<String> row = new ArrayList<String>(Arrays.asList(line.split(" ")));
+						reportOnList.add(row);
+
 					}
 					ReportHandleController.setOrdersReportOnListMonth(reportOnList);
-					
+
 					ClientUI.chat.getObj().setInformation(returndReport);
 					return true;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			
+
 			}
-		ClientUI.chat.getObj().setInformation(null);
-		return false;
-	}
-		else {
+			ClientUI.chat.getObj().setInformation(null);
+			return false;
+		} else {
 			ClientUI.chat.getObj().setInformation(null);
 			return false;
 		}
@@ -630,23 +688,50 @@ public class ClientHandleTransmission {
 //		else return false;
 //	}
 
-	public static List<Deliveries> getDeliveries() {
-		TransmissionPack tp= new TransmissionPack(Mission.GET_DELIVERIES,null,null); // The user is Branch manager
+	/**
+	 * send request to the DB for a list of the deliveries that was approved by the
+	 * manager.
+	 * 
+	 * @return
+	 */
+	public static List<DeliveryPreview> getDeliveries() {
+		TransmissionPack tp = new TransmissionPack(Mission.GET_DELIVERIES, null, null); // The user is Branch manager
 		ClientUI.chat.accept(tp);
-		tp= ClientUI.chat.getObj();
-		return (List<Deliveries>)tp.getInformation();
+		tp = ClientUI.chat.getObj();
+		List<Deliveries> deliveries = (List<Deliveries>) tp.getInformation();
+		List<DeliveryPreview> deliveryPreviews = new ArrayList<>();
+		for (Deliveries d : deliveries) {
+			DeliveryPreview dp = new DeliveryPreview(d.getDeliveryID(), d.getOrderID(), d.getBranchID(),
+					d.getCustomerID(), d.getPrice(), d.getOrderDate(), d.getExpectedDelivery(), d.getArrivedDate(),
+					d.getReceiverName(), d.getAddress(), d.getPhoneNumber(), d.getDeliveryStatus(),
+					d.getOrderProducts());
+			dp.getDeliveryStatusComboBox().setValue(d.getDeliveryStatus());
+			deliveryPreviews.add(dp);
+		}
+		return deliveryPreviews;
+	}
+
+	/**
+	 * Send to DB the updated statuses of the deliveries and then got back the
+	 * response if the update was a success of not.
+	 * 
+	 * @param deliveriesList
+	 * @return
+	 */
+	public static Response UpdateDeliveriesStatus(List<DeliveryPreview> deliveriesList) {
+		List<DeliveryPreview> deliveryPreviews = deliveriesList;
+		List<Deliveries> deliveries = new ArrayList<>();
+		for (DeliveryPreview dp : deliveryPreviews) {
+			Deliveries d = new Deliveries(dp.getDeliveryID(), dp.getOrderID(), dp.getBranchID(), dp.getCustomerID(),
+					dp.getPrice(), dp.getOrderDate(), dp.getExpectedDelivery(), dp.getArrivedDate(),
+					dp.getReceiverName(), dp.getAddress(), dp.getPhoneNumber(), dp.getDeliveryStatus(),
+					dp.getOrderProducts());
+			deliveries.add(d);
+		}
+		TransmissionPack tp = new TransmissionPack(Mission.UPDATE_DELIVERIES_STATUSES, null, deliveries);																								
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		return tp.getResponse();		
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

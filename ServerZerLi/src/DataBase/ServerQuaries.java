@@ -1228,31 +1228,44 @@ public class ServerQuaries {
 	public static void GetDeliveriesFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			List<Deliveries> deliveries = new ArrayList<>();
+			List<ProductInOrder> orderProducts = null;
 			Statement stmt1, stmt2;
-
 			try {
 				stmt1 = con.createStatement();
-
-				ResultSet rs1 = null, rs2;
-				String getDeliveries = "SELECT * FROM zerli.deliveries;";
+				ResultSet rs1, rs2;
+				String getDeliveries = "SELECT * FROM zerli.deliveries WHERE status = 'READY_TO_GO';";
 				rs1 = stmt1.executeQuery(getDeliveries);
 				while (rs1.next()) {
-					stmt2 = con.createStatement();
-				//	String getProductsInOrder = "SELECT nameOfproduct, productQuantityInOrder, price FROM zerli.productInOrder WHERE orderID = '" + rs1.getString(2) + "';";
-				//	rs2 = executeQuery(getOrder);
-				//	rs2 = stmt2.executeQuery(getDeliveries);
-
+					// nameOfproduct, productQuantityInOrder, price
 					Deliveries delivery = new Deliveries(rs1.getInt(1), rs1.getString(2), rs1.getString(3),
 							rs1.getString(4), rs1.getDouble(5), rs1.getString(6), rs1.getString(7), rs1.getString(8),
-							rs1.getString(9), rs1.getString(10), DeliveryStatus.valueOf(rs1.getString(11)),null);
+							rs1.getString(9), rs1.getString(10), rs1.getString(11),
+							DeliveryStatus.valueOf(rs1.getString(12)), null);
 					deliveries.add(delivery);
-					System.out.println("check" + delivery.getDeliveryID());
+					String getProductsInOrder = "SELECT * FROM zerli.productInOrder WHERE orderID = '"
+							+ rs1.getString(2) + "';";
+					System.out.println(getProductsInOrder);
+					stmt2 = con.createStatement();
+					rs2 = stmt2.executeQuery(getProductsInOrder);
+					orderProducts = new ArrayList<>();
+					while (rs2.next()) {
+						ProductInOrder p = new ProductInOrder(rs2.getString(1), rs2.getString(2), rs2.getString(3),
+								rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8),
+								rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0);
+						System.out.println(p);
+						orderProducts.add(p);
+						delivery.setOrderProducts(orderProducts);
+						System.out.println(orderProducts);
+					}
+					rs2.close();
 				}
 				rs1.close();
 				obj.setInformation(deliveries);
+				System.out.println(deliveries);
 				obj.setResponse(Response.FOUND_DELIVERIES);
 				return;
-			} catch (SQLException e) {
+			} catch (Exception e) {
+				e.printStackTrace();
 				obj.setResponse(Response.NOT_FOUND_DELIVERIES);
 				return;
 			}
@@ -1260,8 +1273,34 @@ public class ServerQuaries {
 		obj.setResponse(Response.NOT_FOUND_DELIVERIES);
 	}
 
-	private static ResultSet executeQuery(String getOrder) {
-		// TODO Auto-generated method stub
-		return null;
+	@SuppressWarnings("unchecked")
+	public static void UpdateDeliveriesStatusesInDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<Deliveries> deliveries = (List<Deliveries>) obj.getInformation();
+			try {
+				for (Deliveries d : deliveries) {
+					System.out.println(d);
+					String updateStatuses = "UPDATE zerli.deliveries SET status=?, arrivedDate =? WHERE deliveryID='"
+							+ d.getDeliveryID() + "';";
+					// if (d.getDeliveryStatus() == DeliveryStatus.ARRIVED) {
+					PreparedStatement pstmt = con.prepareStatement(updateStatuses);
+					pstmt.setString(1, d.getDeliveryStatus().name());
+					pstmt.setString(2, d.getArrivedDate());
+					pstmt.executeUpdate(); // check if the query failed
+//						obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
+//						return;
+//					}
+//					// }
+				}
+				obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_SUCCESS);
+			} catch (Exception e) {
+				obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
+				e.printStackTrace();
+				return;
+			}
+		} else {
+			obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
+			return;
+		}
 	}
 }
