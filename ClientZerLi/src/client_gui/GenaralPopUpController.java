@@ -3,6 +3,7 @@ package client_gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import client.popMessageHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +21,9 @@ public class GenaralPopUpController implements Initializable {
 	    private Button OKbutton;
 	    @FXML
 	    private Label labelOfPopUp;
+
 	    private String headLine; 
+
 	    private String mainLabel;
 	    
 
@@ -34,7 +37,7 @@ public class GenaralPopUpController implements Initializable {
 
 		Scene scene = new Scene(root);
 
-		primaryStage.setTitle(headLine);
+		primaryStage.setTitle(popMessageHandler.getTitle());
 		primaryStage.setScene(scene);
 
 		primaryStage.show();
@@ -43,7 +46,7 @@ public class GenaralPopUpController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) 
 	{
-		labelOfPopUp.setAccessibleText(mainLabel);
+		popMessageHandler.getLabelText(labelOfPopUp);
 	}
 	
 	

@@ -49,8 +49,8 @@ public class TimerRunner extends TimerTask {
 			List<String> reportCreate = ServerQuaries.getAllBranchId(DBController.getCon());
 			for (String b : reportCreate) {
 				String month=ReportsQuaries.getMonthFormat(newDate.getMonth() + 1);
-				createReports.monthlyIncome(b,month);
-				createReports.monthlyOrders(b, month);
+				createReports.monthlyIncome(b, month,String.valueOf(current.getYear()));
+				createReports.monthlyOrders(b, month,String.valueOf(current.getYear()));
 			}
 
 		}

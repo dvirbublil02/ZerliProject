@@ -46,11 +46,13 @@ import enums.DeliveryStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
 
+
 import ocsf.server.ConnectionToClient;
 import server.EchoServer;
 import server.ServerUI;
 
 import javafx.collections.ObservableList;
+
 import enums.ReportDuration;
 import enums.ReportType;
 
@@ -810,7 +812,8 @@ public class ServerQuaries {
 
 	}
 
-	private static String getBranchId(User user, Connection con) {
+	protected static String getBranchId(User user, Connection con) {
+
 		ResultSet rs;
 		Statement stmt;
 		String branchId = null;
@@ -1207,6 +1210,7 @@ public class ServerQuaries {
 				obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
 				e.printStackTrace();
 			}
+
 
 			obj.setResponse(Response.OPEN_COMPLAINT_SUCCEED);
 

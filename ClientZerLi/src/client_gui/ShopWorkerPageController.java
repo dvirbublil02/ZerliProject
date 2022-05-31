@@ -79,7 +79,7 @@ public class ShopWorkerPageController implements Initializable{
    */
     @FXML
     void CustomerServiceSurveyBtn(ActionEvent event) throws Exception {
-    	SurveyHandle.setTopic("cusromer Service");
+    	SurveyHandle.setTopic("Customer Service");
     	SurveyHandle.setTargetAudience("Customer");
     	loadSurveyScreen(event);
     }

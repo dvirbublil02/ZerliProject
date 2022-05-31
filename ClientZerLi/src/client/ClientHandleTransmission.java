@@ -17,17 +17,27 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import client_gui.BranchManagerPageController;
 import client_gui.CustomerPageController;
+
+import client_gui.DeliveryAgentPageController;
+import client_gui.GenaralPopUpController;
+
 import client_gui.CustomerServicePageController;
 import client_gui.DeliveryAgentPageController;
 import client_gui.LoginController;
 import client_gui.NetworkManagerPageController;
+
 import client_gui.ShopWorkerPageController;
+
+import client_gui.ServiceExpertPageController;
+
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
@@ -60,6 +70,8 @@ import enums.OrderStatus;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -373,16 +385,18 @@ public class ClientHandleTransmission {
 			menu.start(primaryStage);
 			break;
 		}
-//		case "Service Expert": {
-//			ServiceExpertPageController menu = new ServiceExpertPageController();
-//			menu.start(primaryStage);
-//			break;
-//		}
-		case "Shop Worker": {
-			ShopWorkerPageController menu = new ShopWorkerPageController();
+
+		case "Service Expert": {
+			ServiceExpertPageController menu = new ServiceExpertPageController();
 			menu.start(primaryStage);
 			break;
 		}
+//		case "Shop Worker": {
+//			ShopWorkerPageController menu = new ShopWorkerPageController();
+//			menu.start(primaryStage);
+//			break;
+//		}
+
 		}
 
 	}
@@ -647,29 +661,26 @@ public class ClientHandleTransmission {
 
 	}
 
-	public static void getQuarterComplaintsReport(String year, String quarter) {
-		if (year != null && quarter != null) {
-
-		}
-	}
 
 	/*
 	 * in this method we getting the monthly report and convert it into string to be
 	 * able to use it and pressent it into the screen.
 	 */
-	public static boolean getMonthlyReport(String year, String month, String reportType) {
-		if (year != null && month != null && reportType != null) {
-			List<String> reportRequest = new ArrayList<>();
-			Report returndReport;
-			reportRequest.addAll(Arrays.asList(ClientController.user.getID(), year, month, reportType));
-			TransmissionPack tp = new TransmissionPack(Mission.GET_MONTHLY_REPORT, null, reportRequest);
-			ClientUI.chat.accept(tp);
-			tp = ClientUI.chat.getObj();
-			if (tp.getInformation() == null) {
-				System.out.println("No Report!");
-			} else {
 
-				returndReport = (Report) tp.getInformation();
+	public static boolean getMonthlyReport(String branchID,String year, String month, String reportType) {
+		if(year !=null && month !=null && reportType!=null) {
+		List<String> reportRequest=new ArrayList<>();
+		Report returndReport;
+		reportRequest.addAll(Arrays.asList(branchID,year,month,reportType));
+		TransmissionPack tp=new TransmissionPack(Mission.GET_MONTHLY_REPORT,null,reportRequest);
+		ClientUI.chat.accept(tp);
+		tp=ClientUI.chat.getObj();
+		if(tp.getInformation() == null){
+			System.out.println("No Report!");
+		}else {
+		
+				 returndReport = (Report) tp.getInformation();
+
 
 				ByteArrayInputStream stream = new ByteArrayInputStream(returndReport.getBlob());
 				InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
@@ -701,6 +712,7 @@ public class ClientHandleTransmission {
 			return false;
 		}
 	}
+
 
 	/*
 	 * get all branches
@@ -889,6 +901,157 @@ public class ClientHandleTransmission {
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		return tp.getResponse();
+	}
+
+	/*
+	 * in this method we getting the quarter income report according to the branchId year and quarter , we sending the order into the server
+	 * by using our transmissionpack
+	 */
+	public static boolean getQuarterIncomeReport(String branchID,String year, String quarter) {
+		if(year !=null && quarter !=null && branchID !=null) {
+			List<String> reportRequest=new ArrayList<>();
+			Report returndReport;
+			reportRequest.addAll(Arrays.asList(branchID,year,quarter));
+			TransmissionPack tp=new TransmissionPack(Mission.GET_QUARTER_INCOME_REPORT,null,reportRequest);
+			ClientUI.chat.accept(tp);
+			tp=ClientUI.chat.getObj();
+			if(tp.getInformation() == null) {
+				return false;
+			}
+			else {
+				 returndReport = (Report) tp.getInformation();
+				 
+					ByteArrayInputStream stream = new ByteArrayInputStream(returndReport.getBlob());
+					InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+					BufferedReader bufferedReader = new BufferedReader(streamReader);
+					List<List<String>> reportOnList = new ArrayList<>();
+					String line;
+					try {
+						while ((line = bufferedReader.readLine()) != null) {
+							
+							List<String> row = new ArrayList<String>(Arrays.asList(line.split(" ")));
+							reportOnList.add(row);
+						
+					}
+					ReportHandleController.setOrdersReportOnListQuarter(reportOnList);
+					
+					ClientUI.chat.getObj().setInformation(returndReport);
+					return true;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			}
+		ClientUI.chat.getObj().setInformation(null);
+		return false;
+	}
+		else {
+			ClientUI.chat.getObj().setInformation(null);
+			return false;
+		}
+	}
+
+	public static String getBranchID() {
+		TransmissionPack tp= new TransmissionPack(Mission.GET_BRANCHID_BY_USER,null,ClientController.user); // The user is Branch manager
+		ClientUI.chat.accept(tp);
+		tp= ClientUI.chat.getObj();
+		return (String)tp.getInformation();
+		
+	}
+	public static void popUp(String body,String title) {
+		GenaralPopUpController popUp=new GenaralPopUpController();
+			popMessageHandler.setMessage(body);
+   		popMessageHandler.setTitle(title);
+   		Stage primaryStage = new Stage();
+   		try {
+			popUp.start(primaryStage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+
+	public static List<String> getYearsForComboBox(String Duration, String Table) {
+		List<String> getYears=new ArrayList<>();
+		List<String> returnedYears=new ArrayList<>();
+		getYears.add(Duration);
+		getYears.add(Table);
+		TransmissionPack tp= new TransmissionPack(Mission.GET_YEARS_FOR_COMOBOX,null,null);
+		tp.setInformation(getYears);
+		ClientUI.chat.accept(tp);
+		tp= ClientUI.chat.getObj();
+			returnedYears=(List<String>) tp.getInformation();
+		return returnedYears;
+		
+	}
+
+	public static boolean getServiceReport(String BranchID, String Year, String Month, String surveyType) {
+		if(BranchID !=null && Year !=null && Month!=null) {
+			List<String> reportRequest=new ArrayList<>();
+			List<List<String>> surveyResult=new ArrayList<>();
+			Report returndReport;
+			reportRequest.addAll(Arrays.asList(BranchID,Year,Month,surveyType));
+			TransmissionPack tp=new TransmissionPack(Mission.GET_SURVEY_REPORT,null,reportRequest);
+			ClientUI.chat.accept(tp);
+			tp=ClientUI.chat.getObj();
+			if(tp.getResponse() == Response.SURVEY_REPORT_NOT_FOUND){
+				return false;
+			}else {
+				ReportHandleController.setSurveyReportResult((List<List<String>>) tp.getInformation());
+				return true;
+			}
+			
+		}
+		return false;
+	}
+
+	public static boolean getComliantsQuarterlyReport(String branchID, String Quarter, String Year) {
+		if(Year !=null && Quarter !=null && branchID !=null) {
+			List<String> reportRequest=new ArrayList<>();
+			Report returndReport;
+			reportRequest.addAll(Arrays.asList(branchID,Year,Quarter));
+			TransmissionPack tp=new TransmissionPack(Mission.GET_QUARTER_COMPLAINTS_REPORT,null,reportRequest);
+			ClientUI.chat.accept(tp);
+			tp=ClientUI.chat.getObj();
+			if(tp.getInformation() == null) {
+				return false;
+			}
+			else {
+				 returndReport = (Report) tp.getInformation();
+				 
+					ByteArrayInputStream stream = new ByteArrayInputStream(returndReport.getBlob());
+					InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+					BufferedReader bufferedReader = new BufferedReader(streamReader);
+					List<List<String>> reportOnList = new ArrayList<>();
+					String line;
+					try {
+						while ((line = bufferedReader.readLine()) != null) {
+							
+							List<String> row = new ArrayList<String>(Arrays.asList(line.split(" ")));
+							reportOnList.add(row);
+						
+					}
+					ReportHandleController.setComplaintsReportResult(reportOnList);
+					
+					ClientUI.chat.getObj().setInformation(returndReport);
+					return true;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			}
+		ClientUI.chat.getObj().setInformation(null);
+		return false;
+	}
+		else {
+			ClientUI.chat.getObj().setInformation(null);
+			return false;
+		}
+
 	}
 
 }

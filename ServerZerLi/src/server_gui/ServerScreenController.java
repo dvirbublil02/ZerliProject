@@ -209,6 +209,7 @@ public class ServerScreenController implements Initializable {
 	 * 
 	 */
 	private void loadInformation() {
+		
 		ClientDetails client = new ClientDetails("", "", "");
 		clients.add(client);
 		table.setItems(clients);

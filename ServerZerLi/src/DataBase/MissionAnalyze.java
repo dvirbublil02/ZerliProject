@@ -1,11 +1,21 @@
 package DataBase;
 
 import java.sql.Connection;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.SQLException;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 
 import communication.TransmissionPack;
+
 import ocsf.server.ConnectionToClient;
+
+import entities_users.User;
+import enums.ReportType;
+
 
 /**
  * In this class we analyze the mission that we got from the client , and then
@@ -109,25 +119,64 @@ public class MissionAnalyze {
 			ServerQuaries.updateComplaints(obj, con);
 			break;
 		}
-		case OPEN_COMPLAINT: {
 
+		case OPEN_COMPLAINT:{
+			
+				try {
+					ServerQuaries.openComplaint(obj, con);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			break;
+			
+		}
+		case GET_MONTHLY_REPORT:
+		{
+			
+	//		ReportsQuaries.createQuarterReportInformation(tp);
+			ReportsQuaries.getMonthlyReport(obj,con);
+		//	createReports.monthlyOrders("2525", "05","2022");
+		//	createReports.monthlyIncome("2525","05","2022");
+			
+			break;
+		}
+		case GET_QUARTER_INCOME_REPORT:
+		{
+			ReportsQuaries.getQuarterIncomeReport(obj, con);
+			break;
+		}
+		case GET_BRANCHID_BY_USER:{
+			
+		
+			String branchID=null;
+			branchID=ServerQuaries.getBranchId( (User) obj.getInformation(), con);
+			obj.setInformation(branchID);
+			break;
+		}
+		case GET_YEARS_FOR_COMOBOX:{
+			ReportsQuaries.getYears(obj,con);
+			break;
+		}
+		case GET_SURVEY_REPORT:{
 			try {
-				ServerQuaries.openComplaint(obj, con);
-			} catch (ParseException e) {
+				ReportsQuaries.getSurveyReport(obj,con);
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
-
 		}
-		case GET_MONTHLY_REPORT: {
-			ReportsQuaries.getMonthlyReport(obj, con);
-			// createReports.monthlyOrders("2525", "05");
-			// createReports.monthlyIncome("2525","05");
+		case INSERT_SURVEY_BY_EXPERT:{
+			ReportsQuaries.insertSurveyResult(obj,con);
 			break;
 		}
-		case GET_QUARTER_INCOME_REPORT: {
-			ReportsQuaries.getQuarterIncomeReport(obj, con);
+		case GET_QUARTER_COMPLAINTS_REPORT:{
+			ReportsQuaries.getQuarterComplaintsReport(obj, con);
+
 			break;
 		}
 
@@ -181,6 +230,8 @@ public class MissionAnalyze {
 		}
 
 		}
+		
+		
 
 	}
 }

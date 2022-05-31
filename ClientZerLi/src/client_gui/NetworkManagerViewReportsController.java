@@ -2,9 +2,20 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+
+import client.ClientController;
 import client.ClientHandleTransmission;
+import client.ClientUI;
+import client.ReportHandleController;
+import communication.TransmissionPack;
+import entities_reports.Report;
+import entities_users.BranchManager;
+import entities_users.NetworkManager;
+import enums.Branches;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,9 +55,7 @@ public class NetworkManagerViewReportsController implements Initializable {
 	private ComboBox<String> PickBranch;
 
 	@FXML
-	private ComboBox<String> pickMonthSpecial;
 
-	@FXML
 	private ComboBox<String> pickQuarterQuarterlyCB;
 
 	@FXML
@@ -61,14 +70,9 @@ public class NetworkManagerViewReportsController implements Initializable {
 	@FXML
 	private ComboBox<String> pickYearQuarterlyCB;
 
-	@FXML
-	private ComboBox<String> pickYearSpecialCB;
 
 	@FXML
 	private CheckBox quarterlyReportsRadioBtn;
-
-	@FXML
-	private CheckBox specialReportsRadioBtn;
 
 	@FXML
 	private Button submitBtn;
@@ -98,23 +102,29 @@ public class NetworkManagerViewReportsController implements Initializable {
 	private ObservableList<String> monthlyYearList;
 
 	private ObservableList<String> quarterlyQuarterList;
+
+	private ObservableList<String> pickTypeQuarterly;
 	private ObservableList<String> quarterlyYearList;
+	private ObservableList<String> branchesObser;
+
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
 		pickMonthMonthlyCB.setDisable(true);
-		pickMonthSpecial.setDisable(true);
+
 		pickQuarterQuarterlyCB.setDisable(true);
 		pickTypeMonthlyCB.setDisable(true);
 		pickTypeQuarterlyCB.setDisable(true);
 		pickYearForMonthlyCB.setDisable(true);
 		pickYearQuarterlyCB.setDisable(true);
-		pickYearSpecialCB.setDisable(true);
+
+
 		quarterlyReportsRadioBtn.setDisable(false);
-		specialReportsRadioBtn.setDisable(false);
+
 		monthlyReportsRadioBtn.setDisable(false);
-		
+
+
 		reportTypeList = FXCollections.observableArrayList("Income", "Orders", "Satisfaction");
 		pickTypeMonthlyCB.setItems(reportTypeList);
 		monthlyMonthList = FXCollections.observableArrayList();
@@ -125,13 +135,37 @@ public class NetworkManagerViewReportsController implements Initializable {
 				monthlyMonthList.add("" + i);
 		}
 		pickMonthMonthlyCB.setItems(monthlyMonthList);
-		monthlyYearList = FXCollections.observableArrayList("2020", "2021", "2022");// needs a quairy to find
-		pickYearForMonthlyCB.setItems(monthlyYearList);// only the years that has reports
 
-		quarterlyQuarterList = FXCollections.observableArrayList("01", "02", "03", "04");
+		List<String> monthlyYear = ClientHandleTransmission.getYearsForComboBox("MONTHLY", "reports");
+		if (monthlyYear.size() > 0) {
+			monthlyYearList = FXCollections.observableArrayList(monthlyYear);
+		} else {
+			monthlyYearList = FXCollections.observableArrayList();
+		}
+		pickYearForMonthlyCB.setItems(monthlyYearList);
+		quarterlyQuarterList = FXCollections.observableArrayList("1", "2", "3", "4");
 		pickQuarterQuarterlyCB.setItems(quarterlyQuarterList);
-		quarterlyYearList = FXCollections.observableArrayList("2020", "2021", "2022");
+
+		List<String> querterYear = ClientHandleTransmission.getYearsForComboBox("QUARTERLY", "reports");
+		if (querterYear.size() > 0) {
+			quarterlyYearList = FXCollections.observableArrayList(querterYear);
+		} else {
+			quarterlyYearList = FXCollections.observableArrayList();
+		}
 		pickYearQuarterlyCB.setItems(quarterlyYearList);
+
+		branchesObser = FXCollections.observableArrayList("2525", "1005", "4554");
+		PickBranch.setItems(branchesObser);
+
+		pickTypeQuarterly = FXCollections.observableArrayList("Income");
+		pickTypeQuarterlyCB.setItems(pickTypeQuarterly);
+		// need to add the branches after merge geting almog method.
+//		List<Branches> brances=ClientHandleTransmission.getBranches();
+//		if(brances.size() != 0) {
+//			branchesObser.addAll(brances);
+//		}
+//		PickBranch.setItems(branchesObser);
+
 
 	}
 
@@ -149,65 +183,90 @@ public class NetworkManagerViewReportsController implements Initializable {
 
 	@FXML
 	void ShowMonthlyReports(ActionEvent event) {
-		if (monthlyReportsRadioBtn.isSelected() && !quarterlyReportsRadioBtn.isSelected()
-				&& !specialReportsRadioBtn.isSelected()) {
+
+		if (monthlyReportsRadioBtn.isSelected() && !quarterlyReportsRadioBtn.isSelected()) {
+
 			pickMonthMonthlyCB.setDisable(false);
 			pickTypeMonthlyCB.setDisable(false);
 			pickYearForMonthlyCB.setDisable(false);
 			quarterlyReportsRadioBtn.setDisable(true);
-			specialReportsRadioBtn.setDisable(true);
+
+
+
 		} else {
 			pickMonthMonthlyCB.setDisable(true);
 			pickTypeMonthlyCB.setDisable(true);
 			pickYearForMonthlyCB.setDisable(true);
 			quarterlyReportsRadioBtn.setDisable(false);
-			specialReportsRadioBtn.setDisable(false);
+
+
+
 		}
 	}
 
 	@FXML
 	void ShowQuarterlyReports(ActionEvent event) {
-		if (!monthlyReportsRadioBtn.isSelected() && quarterlyReportsRadioBtn.isSelected()
-				&& !specialReportsRadioBtn.isSelected()) {
+
+		if (!monthlyReportsRadioBtn.isSelected() && quarterlyReportsRadioBtn.isSelected()) {
 			pickTypeQuarterlyCB.setDisable(false);
 			pickYearQuarterlyCB.setDisable(false);
 			pickQuarterQuarterlyCB.setDisable(false);
-			specialReportsRadioBtn.setDisable(true);
+
 			monthlyReportsRadioBtn.setDisable(true);
-		}
-		else {
+		} else {
+
 			pickTypeQuarterlyCB.setDisable(true);
 			pickYearQuarterlyCB.setDisable(true);
 			pickQuarterQuarterlyCB.setDisable(true);
 			monthlyReportsRadioBtn.setDisable(false);
-			specialReportsRadioBtn.setDisable(false);
+
+
+
 		}
 	}
 
 	@FXML
-	void ShowSpecialReports(ActionEvent event) {
-		if(!monthlyReportsRadioBtn.isSelected() && !quarterlyReportsRadioBtn.isSelected() && specialReportsRadioBtn.isSelected()){
-			monthlyReportsRadioBtn.setDisable(true);
-			quarterlyReportsRadioBtn.setDisable(true);
-			pickYearSpecialCB.setDisable(false);
-			pickMonthSpecial.setDisable(false);
-		}
-		else {
-			monthlyReportsRadioBtn.setDisable(false);
-			quarterlyReportsRadioBtn.setDisable(false);
-			pickYearSpecialCB.setDisable(true);
-			pickMonthSpecial.setDisable(true);
-		}
-	}
 
-	@FXML
 	void Submit(ActionEvent event) throws IOException {
-//		ClientHandleTransmission.getQuarterIncomeReport("2525","2022","2");
-//		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
-//		Stage primaryStage = new Stage();
-//		IncomeQuarterlyReportsController orderReport = new IncomeQuarterlyReportsController();
-//		orderReport.start(primaryStage);
+		if (quarterlyReportsRadioBtn.isSelected()) {
+			if (ClientHandleTransmission.getQuarterIncomeReport(PickBranch.getValue(), pickYearQuarterlyCB.getValue(),
+					pickQuarterQuarterlyCB.getValue().toUpperCase())) {
+				((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+				Stage primaryStage = new Stage();
+				IncomeQuarterlyReportsController orderReport = new IncomeQuarterlyReportsController();
+				orderReport.start(primaryStage);
+			} else {
+				ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!",
+						"No Report Avaliable");
+			}
+		} else {
+			if (monthlyReportsRadioBtn.isSelected()) {
+				if (ClientHandleTransmission.getMonthlyReport(PickBranch.getValue(), pickYearForMonthlyCB.getValue(),
+						pickMonthMonthlyCB.getValue(), pickTypeMonthlyCB.getValue())) {
+					TransmissionPack tp = ClientUI.chat.getObj();
+					Report returned = ((Report) tp.getInformation());
+					ReportHandleController.setUserReport((NetworkManager) ClientController.user); // down cast
+					((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
+					Stage primaryStage = new Stage();
+					switch (returned.getReportType()) {
+					case ORDERS: {
+						OrderReportsController orderReport = new OrderReportsController();
+						orderReport.start(primaryStage);
+						return;
+					}
+					case INCOME: {
+						IncomeReportController incomeReport = new IncomeReportController();
+						incomeReport.start(primaryStage);
+						return;
+					}
+					}
+				} else {
+					ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!",
+							"No Report Avaliable");
+				}
+			}
 
+		}
 	}
 
 }
