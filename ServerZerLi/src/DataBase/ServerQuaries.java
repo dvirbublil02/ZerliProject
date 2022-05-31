@@ -1,5 +1,6 @@
 package DataBase;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +16,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import communication.Response;
@@ -25,6 +25,7 @@ import entities_catalog.ProductInOrder;
 import entities_general.CreditCard;
 import entities_general.Login;
 import entities_general.Order;
+import entities_general.Question;
 import entities_reports.Complaint;
 import entities_users.BranchManager;
 import entities_users.Customer;
@@ -39,6 +40,8 @@ import enums.AccountStatus;
 import enums.ComplaintsStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
+import ocsf.server.ConnectionToClient;
+import server.EchoServer;
 import server.ServerUI;
 
 /**
@@ -48,7 +51,6 @@ import server.ServerUI;
  *
  */
 public class ServerQuaries {
-	private static Random rndOrderNum = new Random();
 
 	/**
 	 * In this method we Insert an order into the DB . (the order that we got from
@@ -232,7 +234,7 @@ public class ServerQuaries {
 	public static void Login(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			Login user = (Login) obj.getInformation();
-			Statement stmt;
+			Statement stmt, stmt2;
 			try {
 				stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT userName , password , userType, ID FROM login;");
@@ -240,6 +242,14 @@ public class ServerQuaries {
 					System.out.println(rs.getString(4));
 					if (user.getUserName().equals(rs.getString(1)) && user.getPassword().equals(rs.getString(2))) {
 						if (checkIfLoggedin(user, rs.getString(3), rs.getString(4), obj, con) == false) {
+							if (rs.getString(4).equals("shopworker")) {
+								stmt2 = con.createStatement();
+								ResultSet rs2 = stmt2
+										.executeQuery("SELECT branchID FROM zerli.shopworker WHERE shopworkerID='"
+												+ rs.getString(3) + "'");
+								
+								((ShopWorker) obj.getInformation()).setBranchID(rs2.getString(1));
+							}
 							obj.setResponse(Response.USER_EXIST);
 
 							return;
@@ -711,18 +721,17 @@ public class ServerQuaries {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while (rs.next()) {
-
+					System.out.println("rs->>");
 					Map<String, List<ProductInOrder>> products = new HashMap<>();
 
 					stmt2 = con.createStatement();
 
 					rs2 = stmt2.executeQuery(query1 + rs.getString(1) + "'");
 					while (rs2.next()) {
-
+						System.out.println("rs2>>");
 						ProductInOrder newProduct = new ProductInOrder(rs2.getString(1), rs2.getString(2),
 								rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7),
-								rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11),
-								rs2.getBoolean(12), rs2.getDouble(13));
+								rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0.0);
 						if (!products.containsKey(rs2.getString(3))) {
 							List<ProductInOrder> product = new ArrayList<>();
 							product.add(newProduct);
@@ -732,6 +741,7 @@ public class ServerQuaries {
 						}
 
 					}
+					System.out.println(products);
 					rs2.close();
 
 					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
@@ -1138,12 +1148,12 @@ public class ServerQuaries {
 				pstmt.setString(8, sdf.format(currentDatePlusOne));
 				pstmt.setString(9, c.getComplainState().name());
 				pstmt.executeUpdate();
-				System.out.println("here=->>OPenComplaint "+obj.getInformation());
+				System.out.println("here=->>OPenComplaint " + obj.getInformation());
 			} catch (SQLException e) {
 				obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
 				e.printStackTrace();
 			}
-			
+
 			obj.setResponse(Response.OPEN_COMPLAINT_SUCCEED);
 
 		} else {
@@ -1242,8 +1252,11 @@ public class ServerQuaries {
 
 		return ComplaintsStatus.STILL_GOT_TIME;
 	}
+
 	/**
-	 * this method notify all customerService that still have OPEN complaint after 24 hours
+	 * this method notify all customerService that still have OPEN complaint after
+	 * 24 hours
+	 * 
 	 * @param obj
 	 * @param con
 	 */
@@ -1254,21 +1267,208 @@ public class ServerQuaries {
 			Statement stmt;
 			String query = "SELECT complaintOpening FROM zerli.complaints WHERE status='OPEN'";
 			try {
-				stmt=con.createStatement();
-				rs=stmt.executeQuery(query);
-				while(rs.next()) {
-					//if(getSatus(rs.getString(1))==ComplaintsStatus.DELAY) {
-					
-						obj.setResponse(Response.NOTIFY_CUSTOMER_SERVICE);
-					//}
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					// if(getSatus(rs.getString(1))==ComplaintsStatus.DELAY) {
+					obj.setResponse(Response.NOTIFY_CUSTOMER_SERVICE);
+
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
+		} else {
+			obj.setResponse(null);
 		}
-		obj.setResponse(null);
+	}
+
+	/**
+	 * update the order status in the DB
+	 * 
+	 * @param obj
+	 * @param con
+	 */
+	@SuppressWarnings("unchecked")
+	public static void updateOrder(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<Order> order = (List<Order>) obj.getInformation();
+			String updateOrderID = "UPDATE zerli.order SET status=? WHERE orderID='";
+			String updateQuantityInAllZerLi = "UPDATE zerli.product SET quantity=quantity-? WHERE productID='";
+			String updateQuantityInBranch = "UPDATE zerli.productinbranch SET quantity=quantity-? WHERE productID='";
+			String deleteProductformOrder = "DELETE FROM zerli.productinorder WHERE orderID='";
+			for (Order o : order) {
+				try {
+					switch (o.getStatus()) {
+					case APPROVE: {
+						updateOrderIDStatus(con, updateOrderID, o);
+						/**
+						 * loop run on all the product in the specific order
+						 */
+						for (String key : o.getItems().keySet()) {
+							for (ProductInOrder p : o.getItems().get(key)) {
+								updateProductQuentity(con, updateQuantityInAllZerLi, p);
+								updateProductQuentity(con, updateQuantityInBranch, p);
+							}
+						}
+						break;
+					}
+					case CANCEL: {
+						updateOrderIDStatus(con, updateOrderID, o);
+						deleteProductInOrder(con, deleteProductformOrder, o);
+						break;
+					}
+					default:
+						break;
+					}
+				} catch (SQLException e) {
+					obj.setResponse(Response.UPDATE_ORDER_FAILED);
+					e.printStackTrace();
+				}
+
+			}
+			obj.setResponse(Response.UPDATE_ORDER_SUCCEED);
+		} else {
+			obj.setResponse(Response.UPDATE_ORDER_FAILED);
+		}
+
+	}
+
+	/**
+	 * delete the product form the order if the branch meager cancel the customer
+	 * order
+	 * 
+	 * @param con
+	 * @param query3
+	 * @param o
+	 * @throws SQLException
+	 */
+	private static void deleteProductInOrder(Connection con, String query3, Order o) throws SQLException {
+		PreparedStatement pstmt3;
+		pstmt3 = con.prepareStatement(query3 + o.getOrderID() + "'");
+		pstmt3.executeUpdate();
+	}
+
+	/**
+	 * update quantity in the relevant table if the branch manager approve the order
+	 * 
+	 * @param con
+	 * @param query2
+	 * @param p
+	 * @throws SQLException
+	 */
+	private static void updateProductQuentity(Connection con, String query2, ProductInOrder p) throws SQLException {
+		PreparedStatement pstmt2;
+		pstmt2 = con.prepareStatement(query2 + p.getID() + "'");
+		pstmt2.setInt(1, p.getProductQuantityInCart());
+		pstmt2.executeUpdate();
+	}
+
+	/**
+	 * update the order status according to the branch manager decision
+	 * 
+	 * @param con
+	 * @param query
+	 * @param o
+	 * @throws SQLException
+	 */
+	private static void updateOrderIDStatus(Connection con, String query, Order o) throws SQLException {
+		PreparedStatement pstmt1;
+		pstmt1 = con.prepareStatement(query + o.getOrderID() + "'");
+		pstmt1.setString(1, o.getStatus().name());
+		pstmt1.executeUpdate();
+	}
+
+	public static void getSurvyQuestions(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			Statement stmt;
+			ResultSet rs;
+			List<Question> questions = new ArrayList<>();
+			String topic=(String)obj.getInformation();
+			String getquestion = "SELECT * FROM zerli.surveyquestions WHERE topic='"+topic+"'";
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(getquestion);
+				while (rs.next()) {
+					Question question = new Question(rs.getString(1), rs.getInt(2), rs.getString(3));
+					questions.add(question);
+				}
+				System.out.println(questions);
+				rs.close();
+				if (questions.size() > 0) {
+					System.out.println("here question query");
+					obj.setInformation(questions);
+					obj.setResponse(Response.GET_SURVY_QUESTION_SUCCEED);
+				} else {
+					obj.setResponse(Response.GET_SURVY_QUESTION_FAILED);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			obj.setResponse(Response.GET_SURVY_QUESTION_FAILED);
+		}
+
+	}
+
+	/**
+	 * inert the survey result of the specific survey
+	 * 
+	 * @param obj
+	 * @param con
+	 */
+	@SuppressWarnings("unchecked")
+	public static void insertSurvy(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<Question> questions = (List<Question>) obj.getInformation();
+			
+			String query = "INSERT INTO zerli.surveys(surveysresultsID, branchID, topic, questionNumber1, questionNumber2, questionNumber3, questionNumber4, questionNumber5, questionNumber6, answerNumber1, answerNumber2, answerNumber3, answerNumber4, answerNumber5, answerNumber6, targetAudience, date) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			try {
+
+				insertSurveyResult(con, questions, query);
+				obj.setResponse(Response.ISERT_SURVEY_SUCCEED);
+
+			} catch (SQLException e) {
+				obj.setResponse(Response.ISERT_SURVEY_FAILED);
+				e.printStackTrace();
+			}
+
+		}else {
+			obj.setResponse(Response.ISERT_SURVEY_FAILED);
+		}
+
+	}
+	/**
+	 * insert all the survey to the DB
+	 * @param con
+	 * @param questions
+	 * @param query
+	 * @throws SQLException
+	 */
+	private static void insertSurveyResult(Connection con, List<Question> questions, String query) throws SQLException {
+		PreparedStatement pstmt;
+		pstmt = con.prepareStatement(query);
+		pstmt.setString(1, null);
+		pstmt.setString(2, questions.get(0).getBranchID());
+		pstmt.setString(3, questions.get(0).getTopic());
+
+		pstmt.setInt(4, questions.get(0).getQuestionNumber());
+		pstmt.setInt(5, questions.get(1).getQuestionNumber());
+		pstmt.setInt(6, questions.get(2).getQuestionNumber());
+		pstmt.setInt(7, questions.get(3).getQuestionNumber());
+		pstmt.setInt(8, questions.get(4).getQuestionNumber());
+		pstmt.setInt(9, questions.get(5).getQuestionNumber());
+		pstmt.setInt(10, questions.get(0).getAnswer());
+		pstmt.setInt(11, questions.get(1).getAnswer());
+		pstmt.setInt(12, questions.get(2).getAnswer());
+		pstmt.setInt(13, questions.get(3).getAnswer());
+		pstmt.setInt(14, questions.get(4).getAnswer());
+		pstmt.setInt(15, questions.get(5).getAnswer());
+		pstmt.setString(16, questions.get(0).getTargetAudience());
+		pstmt.setString(17, questions.get(0).getDate());
+		pstmt.executeUpdate();
 	}
 
 }

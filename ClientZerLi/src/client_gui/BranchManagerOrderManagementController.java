@@ -1,18 +1,14 @@
 package client_gui;
 
 import java.io.IOException;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
-import client.ClientUI;
 import client.OrderHandleController;
-import communication.Mission;
 import communication.Response;
-import communication.TransmissionPack;
 import entities_general.Order;
 import entities_general.OrderPreview;
 import enums.OrderStatus;
@@ -27,13 +23,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
 /**
- * this class is handle the branch manager order screen controller
- * the branch manager can approve or cancel the request 
+ * this class is handle the branch manager order screen controller the branch
+ * manager can approve or cancel the request
+ * 
  * @author Mor Ben Haim
  * @author Dvir Bublil
  *
@@ -42,6 +42,8 @@ public class BranchManagerOrderManagementController implements Initializable {
 
 	@FXML
 	private Button Back;
+	@FXML
+    private Label upadteFeedBack;
 
 	@FXML
 	private TableView<OrderPreview> Orders;
@@ -76,7 +78,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/RequestManagementPage.fxml"));
 		Scene scene = new Scene(root);
-		primaryStage.setTitle("Add New Customer");
+		primaryStage.setTitle("Order Management");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(event -> {
@@ -91,8 +93,9 @@ public class BranchManagerOrderManagementController implements Initializable {
 		BranchManagerPageController branchManagerPage = new BranchManagerPageController();
 		branchManagerPage.start(primaryStage);
 	}
+
 	/**
-	 *initialize the order page that is in pending status
+	 * initialize the order page that is in pending status
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -105,15 +108,14 @@ public class BranchManagerOrderManagementController implements Initializable {
 			// ObservableList<Product>
 			// listToNextScreen=FXCollections.observableArrayList(o.getItems());
 
-			List<OrderPreview>details=OrderHandleController.getOrdersForBranchManager();
-			for(OrderPreview or:details) {
-				if(or.equals(o)) {
+			List<OrderPreview> details = OrderHandleController.getOrdersForBranchManager();
+			for (OrderPreview or : details) {
+				if (or.equals(o)) {
 					OrderHandleController.setOrder(or);
 					System.out.println(or);
 					break;
 				}
 			}
-
 
 			// open screen of details -- > need to init before starting
 			Stage primaryStage = new Stage();
@@ -143,9 +145,29 @@ public class BranchManagerOrderManagementController implements Initializable {
 		listView.addAll(OrderHandleController.getOrdersForBranchManager());
 		Orders.setItems(listView);
 
-
-
 	}
-
+	
+	/**
+	 * send mission to the server for updating the orders state
+	 * @param event
+	 */
+	@FXML
+	void updateBtn(ActionEvent event) {
+		List<OrderPreview>orderPreview=OrderHandleController.getOrdersForBranchManager();
+		List<Order>order=new ArrayList<>();
+		for(OrderPreview or:orderPreview) {
+			Order o=new Order(or.getOrderID(), or.getCustomerID(), or.getBranchID(), or.getPrice(), or.getGreetingCard(), or.getOrderDate(), or.getExpectedDelivery(), or.getItems());
+			o.setStatus(or.getComboStatus().getValue());
+			order.add(o);
+		}
+		if(ClientHandleTransmission.updateOrders(order)==Response.UPDATE_ORDER_SUCCEED) {
+			upadteFeedBack.setText("Update Succeed");
+			upadteFeedBack.setTextFill(Color.GREEN);
+			
+		}else {
+			upadteFeedBack.setText("Update Failed");
+			upadteFeedBack.setTextFill(Color.RED);
+		}
+	}
 
 }

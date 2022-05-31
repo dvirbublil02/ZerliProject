@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
+import communication.Mission;
 import communication.TransmissionPack;
 
 /**
@@ -36,8 +37,9 @@ public class TimerRunner extends TimerTask {
 			System.out.println("New Day");
 			//TBD : Add actions after one day.
 			//String budgetType = BudgetType.DAILY.toString();
-			TransmissionPack obj=new TransmissionPack(null,null,null);
-			ServerQuaries.notifyCustomerService(obj,DBController.getCon());
+			TransmissionPack obj=new TransmissionPack(Mission.NOTIFY,null,null);
+			MissionAnalyze.MissionsAnalyze(obj, DBController.getCon());
+//			ServerQuaries.notifyCustomerService(obj,DBController.getCon());
 	//	}
 		
 		if (current.getMonth() != newDate.getMonth()) {

@@ -19,35 +19,31 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import client_gui.BranchManagerPageController;
-import client_gui.CartPageController;
 import client_gui.CustomerPageController;
-import client_gui.DeliveryAgentPageController;
 import client_gui.CustomerServicePageController;
+import client_gui.DeliveryAgentPageController;
 import client_gui.LoginController;
 import client_gui.NetworkManagerPageController;
+import client_gui.ShopWorkerPageController;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
 import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
-import entities_general.CreditCard;
 import entities_general.CustomersPreview;
 import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
+import entities_general.Question;
 import entities_general.WorkersPreview;
-import entities_reports.Report;
-import enums.ReportType;
 import entities_reports.Complaint;
 import entities_reports.ComplaintPreview;
-import entities_users.BranchManager;
+import entities_reports.Report;
 import entities_users.Customer;
 import entities_users.ShopWorker;
 import entities_users.User;
-
 import enums.Branches;
 import enums.OrderStatus;
 import javafx.collections.ObservableList;
@@ -126,6 +122,7 @@ public class ClientHandleTransmission {
 			statusLabel.setText("Upload Failed");
 		}
 	}
+	
 
 	/**
 	 * In this method we are creating Transmission that will contain EDITORDER
@@ -293,6 +290,7 @@ public class ClientHandleTransmission {
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		List<OrderPreview> orderPreview = new ArrayList<>();
+		System.out.println("here->>after mission");
 		if (tp.getResponse() == Response.FOUND_ORDER) {
 
 			@SuppressWarnings("unchecked")
@@ -351,11 +349,11 @@ public class ClientHandleTransmission {
 //			menu.start(primaryStage);
 //			break;
 //		}
-//		case "Shop Worker": {
-//			ShopWorkerPageController menu = new ShopWorkerPageController();
-//			menu.start(primaryStage);
-//			break;
-//		}
+		case "Shop Worker": {
+			ShopWorkerPageController menu = new ShopWorkerPageController();
+			menu.start(primaryStage);
+			break;
+		}
 		}
 
 	}
@@ -631,6 +629,36 @@ public class ClientHandleTransmission {
 //		}
 //		else return false;
 //	}
+
+	public static Response updateOrders(List<Order> order) {
+		TransmissionPack tp=new TransmissionPack(Mission.UPADTE_ORDER,null,order);
+		ClientUI.chat.accept(tp);
+		tp=ClientUI.chat.getObj();
+		return tp.getResponse();
+	}
+
+	/**
+	 * get the question survey from the DB
+	 */
+	public static List<Question> getSurveyQuestion() {
+		TransmissionPack tp=new TransmissionPack(Mission.GET_SURVEY_QUESTIONS,null,SurveyHandle.getTopic());
+		ClientUI.chat.accept(tp);
+		System.out.println("here bofore query");
+		tp=ClientUI.chat.getObj();
+		System.out.println(tp);
+		return (List<Question>) tp.getInformation();
+		//List<Question>questionPreview=(List<Question>)tp.getInformation();
+		
+	}
+
+
+	public static Response insertSurvey(List<Question> question) {
+		TransmissionPack tp=new TransmissionPack(Mission.INSERT_SURVY,null,question);
+		ClientUI.chat.accept(tp);
+		tp=ClientUI.chat.getObj();
+		return tp.getResponse();
+		
+	}
 }
 
 

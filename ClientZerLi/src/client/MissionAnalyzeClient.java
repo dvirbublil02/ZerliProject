@@ -61,6 +61,7 @@ public class MissionAnalyzeClient {
 			break;
 		case USER_EXIST:{
 			notifyAllSpecificListners(obj);
+			break;
 
 		}
 		case FOUND_COLORS:{
