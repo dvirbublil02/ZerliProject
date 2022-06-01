@@ -228,6 +228,10 @@ public class MissionAnalyze {
 			ServerQuaries.getCustomerOrdersHistory(obj, con);
 			break;
 		}
+		case EXTERNAL_IMPOART:{
+			ExternalDBquaries.ImportUsersData(obj,con);
+			break;
+		}
 
 		}
 		

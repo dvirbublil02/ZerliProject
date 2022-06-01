@@ -743,5 +743,313 @@ public class ReportsQuaries {
 		obj.setResponse(Response.NOT_FOUND_QUARENTY_COMPLAINTS_REPORT);
 		obj.setInformation(null);
 	}
+	
+	public static void getRelavantComplaints(String branchID, String quarter,String year) 
+	{
+		Connection con=DBController.getCon();
+		List<Object> info=new ArrayList<>();
+		Integer firstMonthComplaints,secondMonthComplaints,thirdMonthComplaints,totalComplaints, totalOrders;
+		Double ratio;
+		
+		totalComplaints=getTotalComplaintsInQuarter(branchID,quarter,year,con);//total complaints per quarter 
+		
+		totalOrders=getTotalOrdersInQuarter(branchID,quarter,year,con);//total orders per quarter
+		
+		//complaints amount per month
+		firstMonthComplaints=getFirstMonthComplaints(branchID,quarter,year,con);
+		
+		secondMonthComplaints=getSecondMonthComplaints(branchID,quarter,year,con);
+		
+		thirdMonthComplaints=getThirdMonthComplaints(branchID,quarter,year,con);
+		
+				
+		if(totalOrders!=0)
+			ratio=(1-((double)totalComplaints/(double)totalOrders))*100;//calculating the ratio between the complaints per orders
+		else
+			return;
+		info.add(branchID);
+		info.add(firstMonthComplaints);
+		info.add(secondMonthComplaints);
+		info.add(thirdMonthComplaints);
+		info.add(quarter);
+		info.add(year);
+		info.add(ratio);
+		
+		if(firstMonthComplaints!=0||secondMonthComplaints!=0||thirdMonthComplaints!=0)
+			createQuarterlyComplaintsReport(info);
+	}
+	public static void createQuarterlyComplaintsReport(List<Object> info) {
+		String branchID=(String) info.get(0);
+		Integer firstMonthComplaints=(Integer) info.get(1);
+		Integer secondMonthComplaints=(Integer) info.get(2);
+		Integer thirdMonthComplaints=(Integer) info.get(3);
+		String quarter=(String) info.get(4);
+		String year=(String) info.get(5);
+		Double ratio=(Double) info.get(6);
+		
+		
+		Connection con=DBController.getCon();
+		PreparedStatement stmt;
+		String branchName=getBranchNamebyBranchID(branchID,con);
+		StringBuilder stringBuilder=new StringBuilder();
+		if(branchName !=null ) {
+			stringBuilder.append(branchID+" "+branchName+" "+quarter+ " "+year);//1010 haifa 2 2020
+			stringBuilder.append("\n"+firstMonthComplaints+" " + secondMonthComplaints+" " + thirdMonthComplaints+" "+ratio);
+			
+			
+			byte[] byteConent = stringBuilder.toString().getBytes();
+			Blob blob=null;
+			String query="INSERT INTO zerli.reports(reportID, reportType, branchID, reportCreator, reportDuration, reportFile, reportDate) VALUES (?,?,?,?,?,?,?)";
+			try {
+				blob = new SerialBlob(byteConent);
+				stmt = con.prepareStatement(query);
+				stmt.setString(1,null);//null
+				stmt.setString(2,ReportType.COMPLAINTS.name());//complaint
+				stmt.setString(3, branchID);//same
+				stmt.setString(4, "System");//same
+				stmt.setString(5, ReportDuration.QUARTERLY.name());//quaterly
+				stmt.setBlob(6, blob);
+				stmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));//same
+				stmt.executeUpdate();
+			}catch(SQLException e) {
+				e.printStackTrace();	
+		} 
+		}
+		
+	}
+	private static Integer getThirdMonthComplaints(String branchID, String quarter, String year, Connection con) {
+		
+		ResultSet rs;
+		Statement stmt;
+		StringBuilder from=new StringBuilder(),to=new StringBuilder();
+		from.append(year);
+		from.append("-");
+		to.append(year);
+		to.append("-");
+		switch(quarter)
+		{
+			case "1":
+				from.append("03-01");
+				to.append("04-01");
+				break;
+				
+			case "2":
+				from.append("06-01");
+				to.append("07-01");
+				break;
+				
+			case "3":
+				from.append("09-01");
+				to.append("10-01");
+				break;
+			
+			case "4":
+				from.append("12-01");
+				to.append("01-01");
+				break;
+		}
+		String getNumOfComplaintsInSecondMonth="SELECT count(complaintID)  FROM zerli.complaints WHERE branchID='"+branchID+"' AND complaintOpening>='"+from+
+				"' AND  complaintOpening < '"+to+"';";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(getNumOfComplaintsInSecondMonth);
+			if(rs.next()!=false)
+				return rs.getInt(1);//return the number of complaints in the first month
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+	private static Integer getSecondMonthComplaints(String branchID, String quarter, String year, Connection con) {
+		
+		ResultSet rs;
+		Statement stmt;
+		StringBuilder from=new StringBuilder(),to=new StringBuilder();
+		from.append(year);
+		from.append("-");
+		to.append(year);
+		to.append("-");
+		switch(quarter)
+		{
+			case "1":
+				from.append("02-01");
+				to.append("03-01");
+				break;
+				
+			case "2":
+				from.append("05-01");
+				to.append("06-01");
+				break;
+				
+			case "3":
+				from.append("08-01");
+				to.append("09-01");
+				break;
+			
+			case "4":
+				from.append("11-01");
+				to.append("12-01");
+				break;
+		}
+		String getNumOfComplaintsInSecondMonth="SELECT count(complaintID)  FROM zerli.complaints WHERE branchID='"+branchID+"' AND complaintOpening>='"+from+
+				"' AND  complaintOpening < '"+to+"';";
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(getNumOfComplaintsInSecondMonth);
+			if(rs.next()!=false)
+				return rs.getInt(1);//return the number of complaints in the first month
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+	private static Integer getFirstMonthComplaints(String branchID, String quarter, String year, Connection con) {
+		ResultSet rs;
+		Statement stmt;
+		StringBuilder from=new StringBuilder(),to=new StringBuilder();
+		from.append(year);
+		from.append("-");
+		to.append(year);
+		to.append("-");
+		switch(quarter)
+		{
+			case "1":
+				from.append("01-01");
+				to.append("02-01");
+				break;
+				
+			case "2":
+				from.append("04-01");
+				to.append("05-01");
+				break;
+				
+			case "3":
+				from.append("07-01");
+				to.append("08-01");
+				break;
+			
+			case "4":
+				from.append("10-01");
+				to.append("11-01");
+				break;
+		}
+		String getNumOfComplaintsInFirstMonth="SELECT count(complaintID)  FROM zerli.complaints WHERE branchID='"+branchID+"' AND complaintOpening>='"+from+
+				"' AND  complaintOpening < '"+to+"';";
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(getNumOfComplaintsInFirstMonth);
+			if(rs.next()!=false)
+				return rs.getInt(1);//return the number of complaints in the first month
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+	private static Integer getTotalComplaintsInQuarter(String branchID, String quarter,String year,Connection con)
+	{
+		ResultSet rs;
+		Statement stmt;
+		StringBuilder from=new StringBuilder(),to=new StringBuilder();
+		from.append(year);
+		from.append("-");
+		to.append(year);
+		to.append("-");
+		switch(quarter)
+		{
+			case "1":
+				from.append("01-01");
+				to.append("04-01");
+				break;
+				
+			case "2":
+				from.append("04-01");
+				to.append("07-01");
+				break;
+				
+			case "3":
+				from.append("07-01");
+				to.append("10-01");
+				break;
+			
+			case "4":
+				to=new StringBuilder();
+				int temp= Integer.valueOf(year)+1;
+				to.append(String.valueOf(temp));
+				to.append("-");
+				from.append("10-01");
+				to.append("01-01");
+				break;
+		}
+		String getNumOfComplaintsInQuarter="SELECT count(complaintID)  FROM zerli.complaints WHERE branchID='"+branchID+"' AND complaintOpening>='"+from+
+				"' AND  complaintOpening < '"+to+"';";
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(getNumOfComplaintsInQuarter);
+			if(rs.next()!=false)
+			{
+				
+				return rs.getInt(1);//return the number of complaints in the wanted branch and quarter
+			}
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+	private static Integer getTotalOrdersInQuarter(String branchID, String quarter,String year,Connection con)
+	{
+		ResultSet rs;
+		Statement stmt;
+		StringBuilder from=new StringBuilder(),to=new StringBuilder();
+		from.append(year);
+		from.append("-");
+		to.append(year);
+		to.append("-");
+		switch(quarter)
+		{
+			case "1":
+				from.append("01-01");
+				to.append("04-01");
+				break;
+				
+			case "2":
+				from.append("04-01");
+				to.append("07-01");
+				break;
+				
+			case "3":
+				from.append("07-01");
+				to.append("10-01");
+				break;
+			
+			case "4":
+				to=new StringBuilder();
+				int temp= Integer.valueOf(year)+1;
+				to.append(String.valueOf(temp));
+				to.append("-");
+				from.append("10-01");
+				to.append("01-01");
+				break;
+				
+		}
+		String getNumOfOrdersInQuarter="SELECT count(orderID)  FROM zerli.order WHERE branchID='"+branchID+"' AND orderDate>='"+from+
+				"' AND  orderDate < '"+to+"';";
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(getNumOfOrdersInQuarter);
+			
+			if(rs.next()!=false)
+			{
+	
+				return rs.getInt(1);//return the number of orders in the wanted branch and quarter
+			}
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
 
 }

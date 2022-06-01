@@ -74,7 +74,7 @@ public class EchoServer extends AbstractServer {
 	 * starts listening for connections.
 	 */
 	protected void serverStarted() {
-//		System.out.println("Server listening for connections on port " + getPort());
+
 		ServerScreenController.SetMsg("Server listening for connections on port " + getPort());//adding the msg into his place on the server screen
 	}
 

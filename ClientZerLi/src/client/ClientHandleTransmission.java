@@ -1023,7 +1023,7 @@ public class ClientHandleTransmission {
 				 returndReport = (Report) tp.getInformation();
 				 
 					ByteArrayInputStream stream = new ByteArrayInputStream(returndReport.getBlob());
-					InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+					InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8); 
 					BufferedReader bufferedReader = new BufferedReader(streamReader);
 					List<List<String>> reportOnList = new ArrayList<>();
 					String line;
@@ -1036,7 +1036,7 @@ public class ClientHandleTransmission {
 					}
 					ReportHandleController.setComplaintsReportResult(reportOnList);
 					
-					ClientUI.chat.getObj().setInformation(returndReport);
+					ClientUI.chat.getObj().setInformation(reportOnList);
 					return true;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

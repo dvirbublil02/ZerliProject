@@ -17,6 +17,8 @@ import server_gui.ServerScreenController;
  */
 public class DBController {
 	private static Connection con;
+	private static Connection externalCon;
+	
 	public static Connection getCon() {
 		return con;
 	}
@@ -50,21 +52,32 @@ public class DBController {
 			ServerScreenController.SetMsg("Driver definition failed");
 		}
 		try {
+			if(!data.get(0).equals((String)"jdbc:mysql://localhost/externaldb?serverTimezone=IST")) {
 			con = DriverManager.getConnection(data.get(0), data.get(1), data.get(2));
+			}else
+			{
+				externalCon= DriverManager.getConnection(data.get(0), data.get(1), data.get(2));
+			}
 			data.clear();
-//	        System.out.println("SQL connection succeed");
+
 			ServerScreenController.SetMsg("SQL connection succeed");
 		} catch (SQLException ex) {/* handle any errors */
 			data.clear();
-//	        System.out.println("SQLException: " + ex.getMessage());
-//	        System.out.println("SQLState: " + ex.getSQLState());
-//	        System.out.println("VendorError: " + ex.getErrorCode());
+
 			ServerScreenController.SetMsg("SQLException: " + ex.getMessage());
 			ServerScreenController.SetMsg("SQLState: " + ex.getSQLState());
 			ServerScreenController.SetMsg("VendorError: " + ex.getErrorCode());
 			return false;
 		}
 		return true;
+	}
+
+	public static Connection getExternalCon() {
+		return externalCon;
+	}
+
+	public static void setExternalCon(Connection externalCon) {
+		DBController.externalCon = externalCon;
 	}
 
 }

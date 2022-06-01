@@ -220,8 +220,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 			if (branchID != null) {
 				if (ClientHandleTransmission.getComliantsQuarterlyReport(branchID,
 						pickQuarterCB.getValue(), pickYearForQuarterCB.getValue())) {
-					TransmissionPack tp = ClientUI.chat.getObj();
-					Report returned = ((Report) tp.getInformation());
+					
 					ReportHandleController.setUserReport((BranchManager) ClientController.user); // down cast
 					((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 					Stage primaryStage = new Stage();
