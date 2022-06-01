@@ -260,7 +260,7 @@ public class ReportsQuaries {
 	 * @param con
 	 * @return
 	 */
-	private static String getBranchNamebyBranchID(String ID, Connection con) {
+	protected static String getBranchNamebyBranchID(String ID, Connection con) {
 		ResultSet rs;
 		Statement stmt;
 		String branchName = null;
