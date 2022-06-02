@@ -58,15 +58,42 @@ public class OrderHandleController implements nofityOrderListner {
 	
 	
 	private static List<OrderPreview> ordersForBranchManager = new ArrayList<>();
+	private static List<OrderPreview> ordersForBranchManagerD = new ArrayList<>();
+	private static List<OrderPreview> ordersForBranchManagerC = new ArrayList<>();
+	private static List<OrderPreview> ordersForBranchManagerCD = new ArrayList<>();
 	private static OrderPreview order;
 	
 	
 	private static List<OrderPreview> cancelationOrdersPreview = new ArrayList<>();
 	private static List<OrderPreview> historyOrdersPreview = new ArrayList<>();
-	private static OrderPreview customerOrderView ;
-	private static Map<String, List<ProductInOrder>> customerOrderDetails = new HashMap<>();;
+	private static OrderPreview customerOrderView;
+	private static Map<String, List<ProductInOrder>> customerOrderDetails = new HashMap<>();
 	
 	
+
+	public static List<OrderPreview> getOrdersForBranchManagerD() {
+		return ordersForBranchManagerD;
+	}
+
+	public static void setOrdersForBranchManagerD(List<OrderPreview> ordersForBranchManagerD) {
+		OrderHandleController.ordersForBranchManagerD = ordersForBranchManagerD;
+	}
+
+	public static List<OrderPreview> getOrdersForBranchManagerC() {
+		return ordersForBranchManagerC;
+	}
+
+	public static void setOrdersForBranchManagerC(List<OrderPreview> ordersForBranchManagerC) {
+		OrderHandleController.ordersForBranchManagerC = ordersForBranchManagerC;
+	}
+
+	public static List<OrderPreview> getOrdersForBranchManagerCD() {
+		return ordersForBranchManagerCD;
+	}
+
+	public static void setOrdersForBranchManagerCD(List<OrderPreview> ordersForBranchManagerCD) {
+		OrderHandleController.ordersForBranchManagerCD = ordersForBranchManagerCD;
+	}
 
 	public static OrderPreview getOrder() {
 		return order;

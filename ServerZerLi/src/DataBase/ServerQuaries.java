@@ -756,7 +756,7 @@ public class ServerQuaries {
 
 			List<Order> orders = new ArrayList<>();
 
-			String query = "SELECT * FROM zerli.order WHERE status='PENDING' OR status='PENDING_WITH_DELIVERY'";
+			String query = "SELECT * FROM zerli.order WHERE status='PENDING' OR status='PENDING_WITH_DELIVERY' OR status='CANCEL_ORDER_DELIVERY_BY_CUSTOMER' OR status='CANCEL_ORDER_BY_CUSTOMER'";
 
 			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
@@ -1647,9 +1647,13 @@ public class ServerQuaries {
 	public static void updateOrder(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			List<Order> order = (List<Order>) obj.getInformation();
+			Statement stmt;
+			PreparedStatement pstmt;
+			ResultSet rs;
 			String updateOrderID = "UPDATE zerli.order SET status=? WHERE orderID='";
-			String updateDeliveryStatus = "UPDATE zerli.deliverys SET status='READY_TO_GO' WHERE orderID='";
-
+			String updateDeliveryStatus = "UPDATE zerli.deliveries SET status='READY_TO_GO' WHERE orderID='";
+			String getRefund="SELECT expectedRefund FROM zerli.cancelation WHERE orderID='";
+			String updateCusomerBalance = "UPDATE zerli.customer SET balance=balance+? WHERE customerID='";
 			String updateQuantityInAllZerLi = "UPDATE zerli.product SET quantity=quantity-? WHERE productID='";
 			String updateQuantityInBranch = "UPDATE zerli.productinbranch SET quantity=quantity-? WHERE productID='";
 			String deleteProductformOrder = "DELETE FROM zerli.productinorder WHERE orderID='";
@@ -1683,6 +1687,33 @@ public class ServerQuaries {
 						deleteProductInOrder(con, deleteProductformOrder, o);
 						break;
 					}
+					case DECLINE_ORDER_CANCELATION:{
+						updateOrderIDStatus(con, updateOrderID, o);
+						/**
+						 * loop run on all the product in the specific order
+						 */
+						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
+						break;
+					}
+					case DECLINE_ORDER_DELIVERY_CANCELATION:{
+						updateDelivryStatus(con, updateDeliveryStatus, o);
+						updateOrderIDStatus(con, updateOrderID, o);
+						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
+						break;
+					}
+					case APPROVE_ORDER_DELIVERY_CANCELATION:{
+						updateOrderIDStatus(con, updateOrderID, o);
+						updateCustomerBalance(con, getRefund, updateCusomerBalance, o);
+						deleteDelivery(con, deleteProductformDelivery, o);
+						deleteProductInOrder(con, deleteProductformOrder, o);
+						break;
+					}
+					case APPROVE_ORDER_CANCELATION:{
+						updateOrderIDStatus(con, updateOrderID, o);
+						deleteProductInOrder(con, deleteProductformOrder, o);
+						
+						break;
+					}
 					default:
 						break;
 					}
@@ -1698,11 +1729,28 @@ public class ServerQuaries {
 		}
 
 	}
+	
+
+	private static void updateCustomerBalance(Connection con, String getRefund, String updateCusomerBalance, Order o)
+			throws SQLException {
+		Statement stmt;
+		PreparedStatement pstmt;
+		ResultSet rs;
+		stmt=con.createStatement();
+		rs=stmt.executeQuery(getRefund+o.getOrderID()+"'");					
+		while(rs.next()) {
+		pstmt=con.prepareStatement(updateCusomerBalance+o.getCustomerID()+"'");
+		pstmt.setString(1, rs.getString(1));
+		pstmt.executeUpdate();
+		}
+	}
 
 	private static void updateDelivryStatus(Connection con, String updateDeliveryStatus, Order o) throws SQLException {
 		PreparedStatement pstmt1;
+		
+		
 		pstmt1 = con.prepareStatement(updateDeliveryStatus + o.getOrderID() + "'");
-
+		pstmt1.setString(1, o.getStatus().name());
 		pstmt1.executeUpdate();
 	}
 

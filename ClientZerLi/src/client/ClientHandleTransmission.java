@@ -67,6 +67,7 @@ import entities_users.User;
 import enums.Branches;
 import enums.DeliveryStatus;
 import enums.OrderStatus;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -326,28 +327,62 @@ public class ClientHandleTransmission {
 	 * 
 	 * @return
 	 */
-	public static List<OrderPreview> getListOrderPreview() {
+	public static List<List<OrderPreview>> getListOrderPreview() {
 		TransmissionPack tp = new TransmissionPack(Mission.GET_ORDER, null, null);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
-		List<OrderPreview> orderPreview = new ArrayList<>();
+		List<OrderPreview> orderPreviewOrdinary = new ArrayList<>();
+		List<OrderPreview> orderPreviewDelivery = new ArrayList<>();
+		List<OrderPreview> orderPreviewCancel = new ArrayList<>();
+		List<OrderPreview> orderPreviewCancelDelivery = new ArrayList<>();
+		List<List<OrderPreview>> orderPreviews = new ArrayList<>();
 		System.out.println("here->>after mission");
 		if (tp.getResponse() == Response.FOUND_ORDER) {
 
 			@SuppressWarnings("unchecked")
 			List<Order> orders = (List<Order>) tp.getInformation();
 			for (Order order : orders) {
+				
 				OrderPreview screen = new OrderPreview(order.getOrderID(), order.getCustomerID(), order.getBranchID(),
 						order.getPrice(), order.getGreetingCard(), order.getOrderDate(), order.getExpectedDelivery(),
 						order.getItems());
 				screen.getComboStatus().setValue(order.getStatus());
-				orderPreview.add(screen);
-
+				switch(order.getStatus()) {
+				case PENDING:{
+					ObservableList<OrderStatus>list=FXCollections.observableArrayList(OrderStatus.PENDING,OrderStatus.APPROVE,OrderStatus.CANCEL);
+					screen.getComboStatus().setItems(list);
+					orderPreviewOrdinary.add(screen);
+					break;
+				}
+				case PENDING_WITH_DELIVERY:{
+					ObservableList<OrderStatus>list=FXCollections.observableArrayList(OrderStatus.PENDING_WITH_DELIVERY,OrderStatus.APPROVE_WITH_DELIVERY,OrderStatus.CANCEL_WITH_DELIVERY);
+					screen.getComboStatus().setItems(list);
+					orderPreviewDelivery.add(screen);
+					break;
+				}
+				case CANCEL_ORDER_BY_CUSTOMER:{
+					ObservableList<OrderStatus>list=FXCollections.observableArrayList(OrderStatus.APPROVE_ORDER_CANCELATION,OrderStatus.DECLINE_ORDER_CANCELATION);
+					screen.getComboStatus().setItems(list);
+					orderPreviewCancel.add(screen);
+					break;
+					
+				}
+				case CANCEL_ORDER_DELIVERY_BY_CUSTOMER:{
+					ObservableList<OrderStatus>list=FXCollections.observableArrayList(OrderStatus.APPROVE_ORDER_DELIVERY_CANCELATION,OrderStatus.DECLINE_ORDER_DELIVERY_CANCELATION);
+					screen.getComboStatus().setItems(list);
+					orderPreviewCancelDelivery.add(screen);
+					break;
+				}
+				default:
+					break;
+				}
+				
 			}
-
+			orderPreviews.addAll(Arrays.asList(orderPreviewOrdinary,orderPreviewDelivery,orderPreviewCancel,orderPreviewCancelDelivery));
 		}
-		return orderPreview;
+		return orderPreviews;
 	}
+	
 
 	private static void loadTheRightScreen(MouseEvent event, TransmissionPack tp) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
