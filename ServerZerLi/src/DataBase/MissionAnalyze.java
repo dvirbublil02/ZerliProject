@@ -228,7 +228,16 @@ public class MissionAnalyze {
 			ServerQuaries.getCustomerOrdersHistory(obj, con);
 			break;
 		}
+		case CANCEL_ORDER_BY_CUSTOMER: {
+			ServerQuaries.cancelOrderByCustomer(obj, con);
+			break;
+		}
+		case GET_CUSTOMER_ORDERS_WAITING_CANCELATION: {
+			ServerQuaries.getCustomerOrdersCancelationWaiting(obj, con);
+			break;
+		}
 
+	
 		}
 		
 		

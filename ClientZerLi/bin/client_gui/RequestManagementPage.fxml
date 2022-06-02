@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderManagementController">
+<AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderManagementController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1006.0">
          <children>
@@ -202,14 +202,14 @@
                                        <children>
                                           <TableView fx:id="Orders" prefHeight="410.0" prefWidth="698.0" HBox.hgrow="ALWAYS">
                                             <columns>
-                                                <TableColumn fx:id="showCol" prefWidth="75.0" text="show" />
-                                                <TableColumn fx:id="statusCol" prefWidth="113.5999755859375" text="status" />
-                                              <TableColumn fx:id="orderIDCol" prefWidth="56.800048828125" text="orderID" />
+                                                <TableColumn fx:id="showCol" prefWidth="40.800048828125" text="show" />
+                                                <TableColumn fx:id="statusCol" prefWidth="144.7999267578125" text="status" />
+                                              <TableColumn fx:id="orderIDCol" prefWidth="60.8001708984375" text="orderID" />
                                               <TableColumn fx:id="customerIDCol" prefWidth="72.7999267578125" text="customerID" />
                                                 <TableColumn fx:id="branchIDCol" prefWidth="63.20001220703125" text="branchID" />
                                                 <TableColumn fx:id="priceCol" prefWidth="54.4000244140625" text="price" />
                                                 <TableColumn fx:id="orderDateCol" prefWidth="132.0" text="orderDate" />
-                                                <TableColumn fx:id="expectedDeliveryCol" prefWidth="143.199951171875" text="expectedDelivery" />
+                                                <TableColumn fx:id="expectedDeliveryCol" prefWidth="122.400146484375" text="expectedDelivery" />
                                             </columns>
                                           </TableView>
                                        </children>

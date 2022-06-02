@@ -59,7 +59,6 @@ public class OrderPageController implements Initializable{
 	@FXML
     private ComboBox<Branches> getBranchName=new ComboBox<>();
 	
-	
     @FXML
     private RadioButton ImidiateOrderRadio;
 
@@ -123,21 +122,28 @@ public class OrderPageController implements Initializable{
     private Label deliveryPriceLabel;
     
     @FXML
+    private TextField deliveryLastNameTxtField;
+    
+    @FXML
     private Label totalPriceLabel;
+    
+    @FXML
+    private RadioButton takeAwayRadio;
     
     @FXML
     private ProgressIndicator progressIndicator;
     
-    
-    
-    
+        
     private ObservableList<Branches> branchOptions=FXCollections.observableArrayList();
     int orderID;
-    String reciverName , phoneNumber , address ;
+    String reciverName ,reciverLastName, phoneNumberStart,phoneNumberEnd , address ;
     boolean successCreateDeilivery=false , successImidiateOrder=false ;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	StringBuilder expectedDelivery = new StringBuilder();
 	Date orderDate = new Date();
+	Date d1,d2;
+	Calendar c1;
+
     
     
 	public void start(Stage primaryStage) throws Exception {
@@ -168,7 +174,16 @@ public class OrderPageController implements Initializable{
 		ObservableList<Time> orderTimesPickUp = FXCollections.observableArrayList();
 		timeInit8To20(orderTimesPickUp);
 		hoursPickUpComboBox.setItems(orderTimesPickUp);
-		hoursPickUpComboBox.setValue(new Time(LocalTime.now().getHour(),0,0));
+		
+		if(LocalTime.now().getMinute()>30)
+		{
+			hoursPickUpComboBox.setValue(new Time(LocalTime.now().getHour()+4,0,0));
+		}
+		else
+		{
+			hoursPickUpComboBox.setValue(new Time(LocalTime.now().getHour()+3,30,0));
+		}
+		
 		datePickUP.setValue(LocalDate.now());
 		totalPriceLabel.setText(String.valueOf(OrderHandleController.getTotalPrice()));
 		
@@ -227,56 +242,118 @@ public class OrderPageController implements Initializable{
 			}
 			else  // everything is OK ready to send order to database and create delivery.
 			{
-				if(ImidiateOrderRadio.isSelected())
+				if(takeAwayRadio.isSelected())
 				{
-					Date d1 = new Date();
-					Date d2 = new Date();
-					Calendar c1 = Calendar.getInstance();
-					// d1 current time
-					d1=c1.getTime();
-					c1.add(Calendar.HOUR,3);
-					// d2 current time
-					d2=c1.getTime();
-					
-					System.out.println("current->" + dateFormat.format(d1));
-					System.out.println("3 later ->" + dateFormat.format(d2));
-					
-				
-					orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(d1),dateFormat.format(d2),false);
-					successImidiateOrder=true;
+					Date d3=Calendar.getInstance().getTime();
+					orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(d3),dateFormat.format(d3),"takeaway");
 				}	
-				else if(deliveryRadio.isSelected()) {
-							
-					expectedDelivery.append(datePickUP.getValue().toString()+" ");
-					expectedDelivery.append(hoursPickUpComboBox.getValue().toString());
-					System.out.println(expectedDelivery.toString());
-					orderDate=Calendar.getInstance().getTime();
-					System.out.println(dateFormat.format(orderDate));
-					orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(orderDate),expectedDelivery.toString(),true);
-				}
-				
-				
-				//order fine 
-				if(orderID!=0)
+				else if(deliveryRadio.isSelected() || ImidiateOrderRadio.isSelected()  ) {
+					reciverName = deliveryPersonNameTxtField.getText();
+					reciverLastName=deliveryLastNameTxtField.getText();
+					address=deliveryAddressTxtField.getText();
+					phoneNumberStart=deliveryPhoneStartTxtField.getText();
+					phoneNumberEnd=deliveryPhoneEndTxtField.getText();
+					
 					if(deliveryRadio.isSelected())
 					{
-						reciverName = deliveryPersonNameTxtField.getText();
-						address=deliveryAddressTxtField.getText();
-						phoneNumber=deliveryPhoneStartTxtField.getText()+deliveryPhoneEndTxtField.getText();						
+						expectedDelivery.append(datePickUP.getValue().toString()+" ");
+						expectedDelivery.append(hoursPickUpComboBox.getValue().toString());
+					}
+					
+					
+					
+					if(reciverName.equals(""))
+					{
+						OrderMassageLabel.setText("No Name set , please write one");
+						return;
+					}
+					else if(reciverLastName.equals(""))
+					{
+						OrderMassageLabel.setText("No LastName set , please write one");
+						return;
+					}
+					else if (address.equals(""))
+					{
+						OrderMassageLabel.setText("No Address set , please write one");
+						return;
+					}
+					else if(phoneNumberStart.equals("05#"))
+					{
+						OrderMassageLabel.setText("No area code set , please write one");
+						return;
+					}
+					else if (phoneNumberStart.length()>3 || phoneNumberStart.length()<3) {
+						OrderMassageLabel.setText("Wrong area code , please write correct one");
+						return;
+					}
+					else if (phoneNumberEnd.length()>7 ||  phoneNumberEnd.length()<7) {
+						OrderMassageLabel.setText("Wrong phone number , please write correct one");
+						return;
+					}
+					else {    // check time 
+						  
+					}
+					
+					
+					
+					if(deliveryRadio.isSelected()) 
+					{
+						System.out.println(expectedDelivery.toString());
+						orderDate=Calendar.getInstance().getTime();
+						System.out.println(dateFormat.format(orderDate));
+						orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(orderDate),expectedDelivery.toString(),"delivery");
+					}
+					else if (ImidiateOrderRadio.isSelected())
+					{
+						d1 = new Date();
+						d2 = new Date();
+						c1 = Calendar.getInstance();
+						// d1 current time
+						d1=c1.getTime();
+						c1.add(Calendar.HOUR,3);
+						// d2 current time
+						d2=c1.getTime();
+						System.out.println("current->" + dateFormat.format(d1));
+						System.out.println("3 later ->" + dateFormat.format(d2));
+						orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(d1),dateFormat.format(d2),"delivery");
+					}
+					
+				}
+				
+				//order fine and set
+				if(orderID!=0)         // if delivery regular
+					if(deliveryRadio.isSelected())
+					{
 						successCreateDeilivery = ClientHandleTransmission.addDelivery(0,orderID,getBranchName.getValue(),dateFormat.format(orderDate),expectedDelivery.toString()
-								,reciverName,address,phoneNumber);
+								,reciverName+reciverLastName,address,phoneNumberStart+phoneNumberEnd);
 						
 						if(!successCreateDeilivery) {
 							System.out.println("problem with create delivery ");
 						}
 					}
-					
-
+					else if(ImidiateOrderRadio.isSelected())
+					{
+						successCreateDeilivery = ClientHandleTransmission.addDelivery(0,orderID,getBranchName.getValue(),dateFormat.format(d1),dateFormat.format(d2)
+								,reciverName+reciverLastName,address,phoneNumberStart+phoneNumberEnd);
+						
+						if(!successCreateDeilivery) {
+							System.out.println("problem with create delivery ");
+						}
+					}
+				
 					progressIndicator.setProgress(1f);
 					//label order screen
 					OrderMassageLabel.setText("Order("+ orderID +") accepted and waiting to approved ");
 					//pop-up massage init
-					popMessageHandler.setMessage("Order("+ orderID +") accepted and waiting to approved ");
+					if(deliveryRadio.isSelected() || ImidiateOrderRadio.isSelected())
+						popMessageHandler.setMessage("Order("+ orderID +") accepted and waiting to approved \n"
+								+ "We let you know by Email when delivery on the way \n"
+								+ "Have a nice day :)");
+					else
+						popMessageHandler.setMessage("Order("+ orderID +") accepted and waiting to approved \n"
+								+ "We let you know by Email when to pickup\n"
+								+ "Have a nice day :)");
+					
 					popMessageHandler.setTitle("Order Completed");
 
 					//open Customer Main screen 
@@ -299,7 +376,6 @@ public class OrderPageController implements Initializable{
 						e.printStackTrace();
 					}
 	
-					
 			}	
 		}		
 	}
@@ -330,28 +406,28 @@ public class OrderPageController implements Initializable{
     		greetingCard.setVisible(false);
     }
 	
-    /**   click radio button to request TakeAway  
-     * 
-     * @param event of click on TakeAway radio button 
-     */
+
     @FXML
     void ImidiateOrderSelected(ActionEvent event) {
     	//step progress 
     	progressIndicator.setProgress(0.92f);
     	
-    	//cancel date option pickup 
+    	//open date option pickup 
     	datePickUP.setDisable(true);
-    	hoursPickUpComboBox.setDisable(true);    	
+    	hoursPickUpComboBox.setDisable(true); 
     	
-    	if(ImidiateOrderRadio.isSelected()) {
+    	
+    	if(deliveryRadio.isSelected()) {
     		//close Immediate option
     		deliveryRadio.setSelected(false);
-    		deliveryOptionsSelection("close");
     	}
-    	else {
-    		deliveryRadio.setSelected(true);
+    	else
+    	{
+    		takeAwayRadio.setSelected(false);
+    		//open options Visibility
+    		deliveryOptionsSelection("open");
     	}
-
+    	
     }
     
     /**   click radio button to request delivery 
@@ -372,13 +448,36 @@ public class OrderPageController implements Initializable{
     	if(deliveryRadio.isSelected()) {
     		//close Immediate option
     		ImidiateOrderRadio.setSelected(false);
+    		takeAwayRadio.setSelected(false);
     		//open options Visibility
     		deliveryOptionsSelection("open");
     	}
-    	else {
-    		ImidiateOrderRadio.setSelected(true);
-    	}
+
     }
+    
+    /**   click radio button to request TakeAway  
+     * 
+     * @param event of click on TakeAway radio button 
+     */
+    @FXML
+    void takeAwaySelected(ActionEvent event) {
+    	//step progress 
+    	progressIndicator.setProgress(0.92f);
+    	
+    	//cancel date option pickup 
+    	datePickUP.setDisable(true);
+    	hoursPickUpComboBox.setDisable(true);    	
+    	
+    	if(takeAwayRadio.isSelected()) {
+    		//close Immediate option
+    		deliveryRadio.setSelected(false);
+    		ImidiateOrderRadio.setSelected(false);
+    		deliveryOptionsSelection("close");
+    	}
+ 
+    }
+    
+    
     
     /** open or close  delivery options on screen 
      * 

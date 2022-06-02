@@ -24,6 +24,7 @@ import entities_catalog.Product;
 import entities_catalog.ProductInBranch;
 import entities_catalog.ProductInOrder;
 import entities_general.Branch;
+import entities_general.Cancellation;
 import entities_general.CreditCard;
 import entities_general.Deliveries;
 import entities_general.Login;
@@ -1460,6 +1461,11 @@ public class ServerQuaries {
 		}
 	}
 
+	/** get customer orders for cancellation process and products view of relevant orders 
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void getCustomerOrdersCancelation(TransmissionPack obj, Connection con) {
 		// TODO Auto-generated method stub
 
@@ -1504,7 +1510,7 @@ public class ServerQuaries {
 					rs2.close();
 
 					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
-							rs.getString(5), rs.getTimestamp(7).toString(), rs.getTimestamp(8).toString(), products);
+							rs.getString(5), rs.getString(7), rs.getString(8), products);
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
 
 					orders.add(order);
@@ -1533,6 +1539,12 @@ public class ServerQuaries {
 		obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
 	}
 
+	
+	/** get customer orders for history of orders and products view of relevant orders 
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void getCustomerOrdersHistory(TransmissionPack obj, Connection con) {
 		// TODO Auto-generated method stub
 
@@ -1577,7 +1589,7 @@ public class ServerQuaries {
 					rs2.close();
 
 					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
-							rs.getString(5), rs.getTimestamp(7).toString(), rs.getTimestamp(8).toString(), products);
+							rs.getString(5), rs.getString(7), rs.getString(8), products);
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
 
 					orders.add(order);
@@ -1932,5 +1944,129 @@ public class ServerQuaries {
 			obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
 			return;
 		}
+	}
+
+	
+	/** request to cancel order by user , create cancellation and update order status 
+	 *  to CANCEL_ORDER_BY_CUSTOMER
+	 *  
+	 * @param obj
+	 * @param con
+	 */
+	public static void cancelOrderByCustomer(TransmissionPack obj, Connection con) {
+		// TODO Auto-generated method stub
+		if (obj instanceof TransmissionPack) {
+			if (obj.getInformation() instanceof Cancellation) {
+				PreparedStatement pstmt;
+				//Cancellation -> CancelationID, OrderID , CustomerID , expectedRefund
+				Cancellation info = (Cancellation)obj.getInformation();
+				String query = "UPDATE zerli.order SET status = 'CANCEL_ORDER_BY_CUSTOMER' WHERE orderID = ?;";
+				String query2= "INSERT INTO zerli.cancelation (CancelationID, orderID,customerID,expectedRefund) VALUES (?,?,?,?);";
+				
+				try {
+					//update order status 
+					pstmt = con.prepareStatement(query);
+					pstmt.setString(1, info.getOrderID());
+					pstmt.executeUpdate();
+					
+					//refund information setup 
+					pstmt = con.prepareStatement(query2);
+					pstmt.setString(1, null);
+					pstmt.setString(2, info.getOrderID());
+					pstmt.setString(3, info.getCustomerID());
+					pstmt.setDouble(4, info.getExpectedRefund());
+					pstmt.executeUpdate();				
+					
+				} catch (SQLException e) {
+					obj.setResponse(Response.CANCEL_ORDER_BY_CUSTOMER_FAILD);
+					e.printStackTrace();
+					return;
+				}
+				obj.setResponse(Response.CANCEL_ORDER_BY_CUSTOMER_SUCCESS);
+				return;
+			} else {
+				obj.setResponse(Response.CANCEL_ORDER_BY_CUSTOMER_FAILD);
+			}
+		}
+		
+	}
+
+	/** get order on cancellation waiting progress - CANCEL_ORDER_BY_CUSTOMER. 
+	 * 
+	 * @param obj
+	 * @param con
+	 */
+	public static void getCustomerOrdersCancelationWaiting(TransmissionPack obj, Connection con) {
+		// TODO Auto-generated method stub
+		if (obj instanceof TransmissionPack) {
+			ResultSet rs, rs2;
+			Statement stmt, stmt2;
+			List<Order> orders = new ArrayList<>();
+			String customerID;
+
+			if (obj.getInformation() == null)
+				throw new NullPointerException();
+			else
+				customerID = (String) obj.getInformation();
+
+			String query = "SELECT * FROM zerli.order  WHERE (customerID = '" + customerID
+					+ "') AND (status = 'CANCEL_ORDER_BY_CUSTOMER');";
+			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+
+					Map<String, List<ProductInOrder>> products = new HashMap<>();
+
+					stmt2 = con.createStatement();
+
+					rs2 = stmt2.executeQuery(query1 + rs.getString(1) + "';");
+					while (rs2.next()) {
+
+						ProductInOrder newProduct = new ProductInOrder(rs2.getString(1), rs2.getString(2),
+								rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7),
+								rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0);
+						if (!products.containsKey(rs2.getString(3))) {
+							List<ProductInOrder> product = new ArrayList<>();
+							product.add(newProduct);
+							products.put(rs2.getString(3), product);
+						} else {
+							products.get(rs2.getString(3)).add(newProduct);
+						}
+
+					}
+					rs2.close();
+
+					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
+							rs.getString(5), rs.getString(7), rs.getString(8), products);
+					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
+
+					orders.add(order);
+				}
+
+				rs.close();
+				System.out.println(orders);
+				if (orders.size() > 0) {
+					obj.setInformation(orders);
+					obj.setResponse(Response.GET_CUSTOMER_ORDERS_SUCCESS);
+					return;
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
+				return;
+			} catch (NullPointerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
+				return;
+			}
+
+		}
+		obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
+		
+		
 	}
 }

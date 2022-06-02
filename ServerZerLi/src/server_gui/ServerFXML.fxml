@@ -12,11 +12,25 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="ServerPane" prefHeight="614.0" prefWidth="842.0" styleClass="backgroundServerMainScreen" stylesheets="@ServerScreenDesign.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server_gui.ServerScreenController">
+<Pane fx:id="ServerPane" prefHeight="614.0" prefWidth="842.0" styleClass="backgroundServerMainScreen" stylesheets="@ServerScreenDesign.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server_gui.ServerScreenController">
    <children>
+      <AnchorPane prefHeight="614.0" prefWidth="842.0">
+         <children>
+            <Pane layoutX="302.0" layoutY="-176.0" prefHeight="325.0" prefWidth="452.0" rotate="49.1" style="-fx-background-color: #859E8E; -fx-background-radius: 70;">
+               <effect>
+                  <BoxBlur />
+               </effect>
+            </Pane>
+            <Label layoutX="475.0" layoutY="39.0" prefHeight="104.0" prefWidth="226.0" text="ZerLi-G7 ">
+               <font>
+                  <Font name="Cambria Bold" size="48.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
       <AnchorPane layoutX="406.0" layoutY="358.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="245.0" prefWidth="429.0">
          <children>
-            <Label layoutX="150.0" layoutY="50.0" prefHeight="35.0" prefWidth="126.0" text="Connected Users" textFill="WHITE">
+            <Label layoutX="150.0" layoutY="50.0" prefHeight="35.0" prefWidth="126.0" text="Connected Users" textFill="#484848">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
@@ -32,32 +46,32 @@
       </AnchorPane>
       <AnchorPane prefHeight="443.0" prefWidth="857.0">
          <children>
-            <Label layoutX="113.0" layoutY="14.0" prefHeight="34.0" prefWidth="218.0" text="Server Configuration " textFill="WHITE">
+            <Label layoutX="113.0" layoutY="14.0" prefHeight="34.0" prefWidth="218.0" text="Server Configuration " textFill="#484848">
                <font>
                   <Font name="System Bold Italic" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="38.0" layoutY="70.0" prefHeight="20.0" prefWidth="61.0" text="IP" textFill="WHITE">
+            <Label layoutX="38.0" layoutY="70.0" prefHeight="20.0" prefWidth="61.0" text="IP" textFill="#484848">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="36.0" layoutY="118.0" prefHeight="35.0" prefWidth="53.0" text="Port" textFill="WHITE">
+            <Label layoutX="36.0" layoutY="118.0" prefHeight="35.0" prefWidth="53.0" text="Port" textFill="#484848">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="36.0" layoutY="174.0" text="Data Base" textFill="WHITE">
+            <Label layoutX="36.0" layoutY="174.0" text="Data Base" textFill="#484848">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="36.0" layoutY="227.0" prefHeight="27.0" prefWidth="98.0" text="User Name" textFill="WHITE">
+            <Label layoutX="36.0" layoutY="227.0" prefHeight="27.0" prefWidth="98.0" text="User Name" textFill="#484848">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="38.0" layoutY="277.0" text="Password" textFill="WHITE">
+            <Label layoutX="38.0" layoutY="277.0" text="Password" textFill="#484848">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -81,11 +95,6 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Pane layoutX="324.0" layoutY="-137.0" prefHeight="325.0" prefWidth="452.0" rotate="50.4" style="-fx-background-color: #FF4355; -fx-background-radius: 70;">
-               <effect>
-                  <BoxBlur />
-               </effect>
-            </Pane>
             <PasswordField fx:id="TxtPassword" layoutX="177.0" layoutY="276.0" prefHeight="30.0" prefWidth="149.0" promptText="************" />
             <TableView fx:id="msgTable" layoutX="429.0" layoutY="246.0" prefHeight="121.0" prefWidth="374.0">
               <columns>

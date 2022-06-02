@@ -102,7 +102,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		// show button function
-		showCol.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("Details", (OrderPreview o) -> {
+		showCol.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("+", (OrderPreview o) -> {
 
 			// need to send list to screen
 			// ObservableList<Product>

@@ -10,6 +10,7 @@ import java.util.Set;
 
 import entities_catalog.ProductInBranch;
 import entities_catalog.ProductInOrder;
+import entities_general.Order;
 import entities_general.OrderCartPreview;
 import entities_general.OrderCustomCartPreview;
 import entities_general.OrderPreview;
@@ -56,14 +57,29 @@ public class OrderHandleController implements nofityOrderListner {
 	 */
 	private static boolean closeEvent=false;
 	
-	
+
 	private static List<OrderPreview> ordersForBranchManager = new ArrayList<>();
 	private static OrderPreview order;
 	
-	
-	private static List<OrderPreview> cancelationOrdersPreview = new ArrayList<>();
-	private static List<OrderPreview> historyOrdersPreview = new ArrayList<>();
-	private static OrderPreview customerOrderView ;
+	/*
+	 *   cancellation orders preview for view on screen.  
+	 */
+	private static List<Order> cancelationOrdersPreview = new ArrayList<>();
+	/*
+	 *   history orders preview for view on screen.
+	 */
+	private static List<Order> historyOrdersPreview = new ArrayList<>();
+	/*
+	 *   cancelRequesthistory orders preview for view on screen.
+	 */
+	private static List<Order> cancelRequestHistOrdersPreview = new ArrayList<>();
+	/*
+	 *  order view to pop up details screen . 
+	 */
+	private static Order customerOrderView ;
+	/*
+	 *  order view for custom products to pop up details screen . 
+	 */
 	private static Map<String, List<ProductInOrder>> customerOrderDetails = new HashMap<>();;
 	
 	
@@ -88,27 +104,36 @@ public class OrderHandleController implements nofityOrderListner {
 	 *  customer section method 
 	 * 		@return
 	 */
-	public static List<OrderPreview> getCancelationOrdersPreview() {
+	public static List<Order> getCancelationOrdersPreview() {
 		return cancelationOrdersPreview;
 	}
 
-	public static void setCancelationOrdersPreview(List<OrderPreview> cancelationOrdersPreview) {
+	public static void setCancelationOrdersPreview(List<Order> cancelationOrdersPreview) {
 		OrderHandleController.cancelationOrdersPreview = cancelationOrdersPreview;
 	}
 
-	public static List<OrderPreview> getHistoryOrdersPreview() {
+	public static List<Order> getHistoryOrdersPreview() {
 		return historyOrdersPreview;
 	}
 
-	public static void setHistoryOrdersPreview(List<OrderPreview> historyOrdersPreview) {
+
+	public static List<Order> getCancelRequestHistOrdersPreview() {
+		return cancelRequestHistOrdersPreview;
+	}
+
+	public static void setCancelRequestHistOrdersPreview(List<Order> cancelRequestHistOrdersPreview) {
+		OrderHandleController.cancelRequestHistOrdersPreview = cancelRequestHistOrdersPreview;
+	}
+
+	public static void setHistoryOrdersPreview(List<Order> historyOrdersPreview) {
 		OrderHandleController.historyOrdersPreview = historyOrdersPreview;
 	}
 
-	public static OrderPreview getCustomerOrderView() {
+	public static Order getCustomerOrderView() {
 		return customerOrderView;
 	}
 
-	public static void setCustomerOrderView(OrderPreview customerOrderView) {
+	public static void setCustomerOrderView(Order customerOrderView) {
 		OrderHandleController.customerOrderView = customerOrderView;
 	}
 
@@ -124,6 +149,13 @@ public class OrderHandleController implements nofityOrderListner {
 		return customProductInOrderFinallCart;
 	}
 
+	
+	/** add temporary custom product to Final cart . 
+	 * 
+	 * @param key - name of custom product 
+	 * @param customProductInOrderFinallCart - list of productInOrder To add to Final cart 
+	 * @author Almog-Madar
+	 */
 	public static void addCustomProductInOrderFinallCart(String key,
 			List<ProductInOrder> customProductInOrderFinallCart) {
 		OrderHandleController.customProductInOrderFinallCart.put(key, customProductInOrderFinallCart);
@@ -137,6 +169,13 @@ public class OrderHandleController implements nofityOrderListner {
 		OrderHandleController.customProductInOrder = customProductInOrder;
 	}
 
+	
+	
+	/** add productInOrder to specific custom.
+	 * @param key - name of custom 
+	 * @param productInOrderList - List of productInOrder added to custom product.
+	 * @author Almog-Madar
+	 */
 	public static void addCustomProductInOrder(String key, List<ProductInOrder> productInOrderList) {
 		OrderHandleController.customProductInOrder.put(key, productInOrderList);
 		int price = 0;
@@ -149,8 +188,12 @@ public class OrderHandleController implements nofityOrderListner {
 	public static List<ProductInOrder> getProductInOrder() {
 		return productInOrder;
 	}
-
 	
+	
+	/** add productInOrder to regular List. 
+	 * @param productInOrder - add productInOrder to regular list. 
+	 * @author Almog-Madar
+	 */
 	public static void addProductInOrder(ProductInOrder productInOrder) {
 		OrderHandleController.productInOrder.add(productInOrder);
 		OrderHandleController.totalPrice += (double) productInOrder.getProductQuantityInCart()
@@ -158,8 +201,11 @@ public class OrderHandleController implements nofityOrderListner {
 		priceLabel.setText(String.valueOf(totalPrice));
 	}
 
-	// to manage the custom item hashmap
-	// add productInOrder to Custom product that exist.
+	/** To manage the custom item HashMap 
+	 *  Add productInOrder to Custom product that exist.
+	 * @param key - name of custom
+	 * @param productInOrder - List of productInOrder added to custom product.
+	 */
 	public static void addToExistItemOnList(String key, ProductInOrder productInOrder) {
 		List<ProductInOrder> productlist = customProductInOrder.get(key);
 		if (productlist.contains(productInOrder)) {

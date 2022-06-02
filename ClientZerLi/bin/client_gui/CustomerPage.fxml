@@ -140,14 +140,20 @@
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="Cambria Bold" size="12.0" />
+                                 </font>
                               </Label>
                               <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
                               <HBox alignment="CENTER" prefHeight="59.0" prefWidth="91.0">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="117.0" text="Customer Menu" textFill="RED">
+                                    <Label prefHeight="17.0" prefWidth="117.0" text="Customer Menu" textFill="#cb0606">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
@@ -183,7 +189,6 @@
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -218,8 +223,6 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1" />
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </children>
