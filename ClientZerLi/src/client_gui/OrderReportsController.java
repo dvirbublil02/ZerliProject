@@ -137,6 +137,7 @@ public class OrderReportsController implements Initializable {
 			ObservableList<PieChart.Data> pieChartData2) {
 		List<Double> amount = new ArrayList<>();
 		double bouquet = 0, single = 0;
+		System.out.println(reportOnList);
 		branchInfo = reportOnList.get(0); // here we getting the branch information
 		reportTitle.setText("Zerli " + branchInfo.get(1) + "(ID-" + branchInfo.get(0) + ")" + " - " + branchInfo.get(2)
 				+ "-th orders based on products");
@@ -152,31 +153,33 @@ public class OrderReportsController implements Initializable {
 		for (int i = 1; i < reportOnList.size(); i++) {
 			List<String> productInfo = new ArrayList();
 			productInfo = reportOnList.get(i);
-			if (productInfo.get(0).equals("product")) {
+			if (productInfo.get(0).equals("product") ||productInfo.get(0).equals("Product")) {
 				StringBuilder name = new StringBuilder();
-				name.append(productInfo.get(1) + " ");
-				name.append(productInfo.get(2));
+				for(int j=2;j<productInfo.size();j++) {
+					name.append(productInfo.get(j) + " ");
+				}
 				if (flag == false) {
 					pieChartData = FXCollections.observableArrayList(new PieChart.Data(name.toString(),
-							((Integer.parseInt(productInfo.get(3)) / amount.get(0)))));
+							((Integer.parseInt(productInfo.get(1)) / amount.get(0)))));
 
 				} else {
 					pieChartData.add(new PieChart.Data(name.toString(),
-							((Integer.parseInt(productInfo.get(3)) / amount.get(0)))));
+							((Integer.parseInt(productInfo.get(1)) / amount.get(0)))));
 				}
 				flag = true;
 			}
-			if (productInfo.get(0).equals("item")) {
+			if (productInfo.get(0).equals("item") ||productInfo.get(0).equals("Item")) {
 				StringBuilder name = new StringBuilder();
-				name.append(productInfo.get(1) + " ");
-				name.append(productInfo.get(2));
+				for(int j=2;j<productInfo.size();j++) {
+					name.append(productInfo.get(j) + " ");
+				}
 				if (flag2 == false) {
 					pieChartData2 = FXCollections.observableArrayList(new PieChart.Data(name.toString(),
-							((Integer.parseInt(productInfo.get(3)) / amount.get(0)))));
+							((Integer.parseInt(productInfo.get(1)) / amount.get(0)))));
 
 				} else {
 					pieChartData2.add(new PieChart.Data(name.toString(),
-							((Integer.parseInt(productInfo.get(3)) / amount.get(0)))));
+							((Integer.parseInt(productInfo.get(1)) / amount.get(0)))));
 				}
 				flag2 = true;
 			}
@@ -223,16 +226,19 @@ public class OrderReportsController implements Initializable {
 		for (int i = 1; i < reportOnList.size(); i++) {
 			List<String> productInfo = new ArrayList();
 			productInfo = reportOnList.get(i);
-			if (Integer.parseInt(productInfo.get(3)) > bestSellerAmount) {
-				bestSellerAmount = Integer.parseInt(productInfo.get(3));
-				bestSellerName = new StringBuilder();
-				bestSellerName.append(productInfo.get(1) + " ");
-				bestSellerName.append(productInfo.get(2));
-			} else if (Integer.parseInt(productInfo.get(3)) < worstSellerAmount) {
-				worstSellerAmount = Integer.parseInt(productInfo.get(3));
+			if (Integer.parseInt(productInfo.get(1)) > bestSellerAmount) {
+				bestSellerAmount = Integer.parseInt(productInfo.get(1));
+				 bestSellerName = new StringBuilder();
+				for(int j=2;j<productInfo.size();j++) {
+					bestSellerName.append(productInfo.get(j) + " ");
+				}
+
+			} else if (Integer.parseInt(productInfo.get(1)) < worstSellerAmount) {
+				worstSellerAmount = Integer.parseInt(productInfo.get(1));
 				worstSellerName = new StringBuilder();
-				worstSellerName.append(productInfo.get(1) + " ");
-				worstSellerName.append(productInfo.get(2));
+					for(int j=2;j<productInfo.size();j++) {
+						worstSellerName.append(productInfo.get(j) + " ");
+					}
 			}
 		}
 		worstSeller.setText(worstSellerName.toString());
@@ -258,20 +264,25 @@ public class OrderReportsController implements Initializable {
 
 			List<String> productInfo = new ArrayList();
 			productInfo = reportOnList.get(i);
-			if (productInfo.get(0).equals("product")) {
+			if (productInfo.get(0).equals("product")||productInfo.get(0).equals("Product")) {
 				StringBuilder name = new StringBuilder();
-				name.append(productInfo.get(1) + " ");
-				name.append(productInfo.get(2));
-				series2.getData().add(new XYChart.Data<>(name.toString(), Integer.parseInt(productInfo.get(3))));
-				bouquet += Integer.parseInt(productInfo.get(3));
+				for(int k=2;k<productInfo.size();k++) {
+				System.out.println(productInfo.get(k));
+					name.append(productInfo.get(k) + " ");
+				}
+				System.out.println(name +" "+productInfo.get(1));
+				series2.getData().add(new XYChart.Data<>(name.toString(), Integer.parseInt(productInfo.get(1))));
+				bouquet += Integer.parseInt(productInfo.get(1));
 
 			}
-			if (productInfo.get(0).equals("item")) {
+			if (productInfo.get(0).equals("item") ||productInfo.get(0).equals("Item")) {
 				StringBuilder name = new StringBuilder();
-				name.append(productInfo.get(1) + " ");
-				name.append(productInfo.get(2));
-				series1.getData().add(new XYChart.Data<>(name.toString(), Integer.parseInt(productInfo.get(3))));
-				single += Integer.parseInt(productInfo.get(3));
+				for(int k=2;k<productInfo.size();k++) {
+					name.append(productInfo.get(k) + " ");
+				}
+				System.out.println(name +" "+productInfo.get(1));
+				series1.getData().add(new XYChart.Data<>(name.toString(), Integer.parseInt(productInfo.get(1))));
+				single += Integer.parseInt(productInfo.get(1));
 
 			}
 

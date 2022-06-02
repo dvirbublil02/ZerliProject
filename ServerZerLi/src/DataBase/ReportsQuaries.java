@@ -180,7 +180,7 @@ public class ReportsQuaries {
 
 		if (ordersID.size() > 0) {
 			for (int i = 0; i < ordersID.size(); i++) {
-				String getBranchOrderProucts = "SELECT itemType,nameOfItem,productQuantityInOrder from zerli.productinorder WHERE orderID='"
+				String getBranchOrderProucts = "SELECT itemType,productQuantityInOrder,nameOfItem from zerli.productinorder WHERE orderID='"
 						+ ordersID.get(i) + "';";
 
 				try {
