@@ -2,9 +2,13 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -126,6 +130,8 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 
 	private DeliveryPreview currDeliveryPreview = null;
 
+	String branchID, branchName, branchIDTitle;
+
 	/**
 	 * @param stage
 	 * @throws IOException
@@ -149,6 +155,11 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 		ClientController.initalizeUserDetails(networkManagerName, phoneNumber, userStatus, welcomeBackUserName,
 				userRole, ((DeliveryAgent) ClientController.user).toString());
 
+		branchID = ((DeliveryAgent) ClientController.user).getBranchID();
+		branchName = ClientHandleTransmission.getBranchName(branchID);
+		branchIDTitle = branchNameLbl.getText() + " " + branchName + "(" + branchID + ")";
+		branchNameLbl.setText(branchIDTitle);
+
 		AnimationTimer time = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
@@ -171,7 +182,7 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 		 * get the deliveries from the DB and add them to list that we will present in
 		 * the table view
 		 */
-		deliveriesList = ClientHandleTransmission.getDeliveries();
+		deliveriesList = ClientHandleTransmission.getDeliveries(branchID);
 		for (Deliveries delivery : deliveriesList) {
 			deliveriesView.add(new DeliveryPreview(delivery.getDeliveryID(), delivery.getOrderID(),
 					delivery.getBranchID(), delivery.getCustomerID(), delivery.getPrice(), delivery.getOrderDate(),
@@ -238,9 +249,9 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 			System.out.println(dp.getDeliveryStatusComboBox().getValue());
 		}
 		/**
-		 * update the list that we will send to the server
+		 * update the list that we will send to the server with the delivery arrival
+		 * time.
 		 */
-
 		for (int i = 0; i < deliveriesList.size(); i++) {
 			deliveriesList.get(i).setDeliveryStatus(deliveriesView.get(i).getDeliveryStatus());
 			if (deliveriesList.get(i).getDeliveryStatus() == DeliveryStatus.ARRIVED) {
@@ -254,20 +265,68 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 		 * so remove the deliveries from the list. else, present a message that update
 		 * failed.
 		 */
-		if (ClientHandleTransmission.UpdateDeliveriesStatus(deliveriesList) == Response.UPDATE_DELIVERIES_STATUS_SUCCESS) {
+		if (ClientHandleTransmission
+				.UpdateDeliveriesStatus(deliveriesList) == Response.UPDATE_DELIVERIES_STATUS_SUCCESS) {
+
 			SuccessFailedLbl.setText("Update Success!");
 			SuccessFailedLbl.setTextFill(Color.GREEN);
 			List<Integer> indexes = new ArrayList<>();
+			/**
+			 * going through the deliveries we have and if they arrived to the destination
+			 * we will check if the customer got it on time or the delivery was late. if it
+			 * was late so the customer get full refund.
+			 */
 			for (int i = 0; i < deliveriesList.size(); i++) {
 				if (deliveriesList.get(i).getDeliveryStatus() == DeliveryStatus.ARRIVED) {
 					indexes.add(i);
+
+					Date expecteDate = null;
+					Date arrivedDate = null;
+
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					try {
+						arrivedDate = sdf.parse(deliveriesList.get(i).getArrivedDate());
+						System.out.println(arrivedDate);
+						expecteDate = sdf.parse(deliveriesList.get(i).getExpectedDelivery());
+						System.out.println(expecteDate);
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					Calendar c1 = Calendar.getInstance();
+					Calendar c2 = Calendar.getInstance();
+
+					c1.setTime(arrivedDate);
+					c2.setTime(expecteDate);
+					System.out.println(c1 + "\n" + c2);
+
+					if (arrivedDate.after(expecteDate)) {
+						System.out.println(deliveriesList.get(i).getDeliveryStatus());
+						if (ClientHandleTransmission.DeliveryWasLateRefund(
+								deliveriesList.get(i)) == Response.UPDATE_DELIVERY_LATE_REFUND_SUCCESS) {
+							
+							List<String> emailPhone = ClientHandleTransmission.getCustomerEmail(deliveriesList.get(i).getCustomerID());
+							System.out.println(emailPhone);
+							if(emailPhone == null) {
+								try {
+									SendMessage(emailPhone);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+								
+						}
+					}
 				}
 			}
-			for(int j = 0; j<indexes.size(); j++) {
+			for (int j = 0; j < indexes.size(); j++) {
 				deliveriesList.remove(indexes.get(j));
 				deliveriesView.remove(indexes.get(j));
 			}
-		} else {
+		} else if (ClientHandleTransmission
+				.UpdateDeliveriesStatus(deliveriesList) == Response.UPDATE_DELIVERIES_STATUS_FAILED) {
 			SuccessFailedLbl.setText("Update Failed!");
 			SuccessFailedLbl.setTextFill(Color.RED);
 		}
@@ -337,5 +396,11 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 		DeliveryAgentPageController deliveryAgentPageController = new DeliveryAgentPageController();
 		deliveryAgentPageController.start(primaryStage);
 	}
-
+	
+	public static void SendMessage(List<String> details) throws Exception {
+		
+	
+	}
+	
+	
 }

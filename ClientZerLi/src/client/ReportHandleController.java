@@ -104,18 +104,72 @@ public class ReportHandleController {
 
 			}
 		}
+
+		double [] firstMonth=new double[31];
+		double [] secondMonth=new double[31];
+		double [] thridMonth=new double[31];
+		for(int i = 0; i<reportOnList.size();i++) {
+			List<String> productInfo = new ArrayList<>();
+			productInfo = reportOnList.get(i);
+			if(productInfo.get(0).equals("month1")) {
+				 if(Integer.valueOf(productInfo.get(2)) <=7) {
+					 firstMonth[1]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+				 }
+				 if(Integer.valueOf(productInfo.get(2)) <=14 && Integer.valueOf(productInfo.get(2)) >7) {
+					 firstMonth[2]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+				 }
+				 if(Integer.valueOf(productInfo.get(2)) <=21 && Integer.valueOf(productInfo.get(2)) >14) {
+					 firstMonth[3]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+				 }
+				 if(Integer.valueOf(productInfo.get(2)) <=30 && Integer.valueOf(productInfo.get(2)) >21) {
+					 firstMonth[4]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+				 }
+			}else
+			if(productInfo.get(0).equals("month2")) {
+				 if(Integer.valueOf(productInfo.get(2)) <=7) {
+					 secondMonth[5]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+				 }
+				 if(Integer.valueOf(productInfo.get(2)) <=14 && Integer.valueOf(productInfo.get(2)) >7) {
+					 secondMonth[6]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+				 }
+				 if(Integer.valueOf(productInfo.get(2)) <=21 && Integer.valueOf(productInfo.get(2)) >14) {
+					 secondMonth[7]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+				 }
+				 if(Integer.valueOf(productInfo.get(2)) <=30 && Integer.valueOf(productInfo.get(2)) >21) {
+					 secondMonth[8]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+				 }
+				 
+			}
+			else
+				if(productInfo.get(0).equals("month3")) {
+					 if(Integer.valueOf(productInfo.get(2)) <=7) {
+						 thridMonth[9]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+					 }
+					 if(Integer.valueOf(productInfo.get(2)) <=14 && Integer.valueOf(productInfo.get(2)) >7) {
+						 thridMonth[10]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+					 }
+					 if(Integer.valueOf(productInfo.get(2)) <=21 && Integer.valueOf(productInfo.get(2)) >14) {
+						 thridMonth[11]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+					 }
+					 if(Integer.valueOf(productInfo.get(2)) <=30 && Integer.valueOf(productInfo.get(2)) >21) {
+						 thridMonth[12]+=Integer.parseInt(productInfo.get(3)) * Double.parseDouble(productInfo.get(4));
+					 }
+		}
+		}
 		StringBuilder day=new StringBuilder();
 		day.append("0 - 1(Month)");
-		series.getData().add(new XYChart.Data(day.toString(),
-				(MaxMin[1])));
-		 day=new StringBuilder();
-		day.append("1 - 2(Month)");
-		series2.getData().add(new XYChart.Data(day.toString(),
-				(MaxMin[2])));
-		 day=new StringBuilder();
-		day.append("2 - 3(Month)");
-		series3.getData().add(new XYChart.Data(day.toString(),
-				(MaxMin[3])));
+		for(int i=1;i<31;i++) {
+			if(firstMonth[i]>0) {
+			series.getData().add(new XYChart.Data("Week " +i,(firstMonth[i])));
+			}
+			if(secondMonth[i]>0) {
+				series2.getData().add(new XYChart.Data("Week " +i,(secondMonth[i])));
+				}
+			if(thridMonth[i]>0) {
+				series3.getData().add(new XYChart.Data("Week " +i,(thridMonth[i])));
+				}
+		}
+		
 		if(MaxMin[1]>MaxMin[2] && MaxMin[2]<=MaxMin[3]) {
 			bestMonth.setText("First month of this querter");
 			worstMonth.setText("Second month of this querter");

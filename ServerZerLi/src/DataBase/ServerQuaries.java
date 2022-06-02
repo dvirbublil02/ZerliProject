@@ -370,10 +370,10 @@ public class ServerQuaries {
 		}
 		case "deliveryagent": {
 			rs = getRowFromTable(userID, type, pstmt);
-			List<String> ordersID = Arrays.asList(rs.getString(9).split("[\\s,]+"));
+			
 			DeliveryAgent deliveryagent = new DeliveryAgent(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
-					rs.getString(8), ordersID);
+					rs.getString(8));
 			obj.setInformation(deliveryagent);
 			break;
 		}
@@ -1931,6 +1931,110 @@ public class ServerQuaries {
 		} else {
 			obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
 			return;
+		}
+	}
+	public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			Deliveries deliveries = (Deliveries)obj.getInformation();
+			Statement stmt;
+			double currentBalance, newBalance;
+			String currBalance = null, getCurrentBalance, updateRefundTable;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs;
+				/*get the current balance of the customer that we will be able to update it correct */
+				getCurrentBalance = "SELECT balance FROM zerli.customer WHERE customerID='"
+					+ deliveries.getCustomerID() +"';";
+				System.out.println("query 1: " + getCurrentBalance);
+				rs = stmt.executeQuery(getCurrentBalance);
+				while(rs.next()) {
+					currBalance = rs.getString(1); /* the current balance of the customer */
+					System.out.println(currBalance);
+				}
+				rs.close();
+				currentBalance = Double.parseDouble(currBalance); /* parse the current balance to double */
+				System.out.println(currentBalance);
+				newBalance = currentBalance + deliveries.getPrice(); /* the real new balance of the customer */
+				System.out.println(newBalance);
+				/**
+				 * Update the customer table - add the amount of the refund to the balance of the specific customer 
+				 */
+				DeliveryLateRefundBalance(con, deliveries, newBalance);
+				/**
+				 * Update refund table with the refund details
+				 */
+				updateRefundsTable(con, deliveries);
+				obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_SUCCESS);
+				return;
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_FAILED);
+				return;
+			}
+		}
+		else {
+			obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_FAILED);
+			return;
+		}
+	}
+
+	private static void updateRefundsTable(Connection con, Deliveries deliveries) throws SQLException {
+		String updateRefundTable;
+		updateRefundTable =	"INSERT INTO zerli.refunds(refundID, orderID, customerID, ammount, reason, date)VALUES(?,?,?,?,?,?);";
+		PreparedStatement pstmt = con.prepareStatement(updateRefundTable);	
+		pstmt.setString(1, null);
+		pstmt.setString(2, deliveries.getOrderID());
+		pstmt.setString(3, deliveries.getCustomerID());
+		pstmt.setString(4, String.valueOf(deliveries.getPrice()));
+		pstmt.setString(5, "Delivery");		
+		Calendar c = Calendar.getInstance();
+		java.sql.Timestamp timestamp = new java.sql.Timestamp(c.getTimeInMillis());
+		pstmt.setTimestamp(6, timestamp);
+		pstmt.executeUpdate();
+	}
+
+	private static void DeliveryLateRefundBalance(Connection con, Deliveries deliveries, double newBalance)
+			throws SQLException {
+		String giveRefund;
+		giveRefund = "UPDATE zerli.customer SET balance=(?) WHERE customerID='"
+				+ deliveries.getCustomerID() + "';";
+		System.out.println("query 2: " + giveRefund);
+
+		PreparedStatement pstmt = con.prepareStatement(giveRefund);
+		pstmt.setString(1, String.valueOf(newBalance));
+		pstmt.executeUpdate();
+	}
+
+	public static void getCustomerEmailAndPhoneFromDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			String customerID = (String)obj.getInformation();
+			System.out.println(customerID);
+			List<String> details = new ArrayList<>();
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs;
+				String getDetails ="SELECT email, phoneNumber FROM zerli.customer WHERE customerID='" 
+						+ customerID + "';";
+				rs= stmt.executeQuery(getDetails);
+				while(rs.next() != false) {
+					details.add(rs.getString(1));
+					details.add(rs.getString(2));
+				}
+				rs.close();
+				System.out.println(details);
+				obj.setInformation(details);
+				obj.setResponse(Response.GET_CUSTOMER_EMAIL_PHONE_SUCCESS);
+				return;
+			}catch (Exception e) {
+				e.printStackTrace();
+				obj.setResponse(Response.GET_CUSTOMER_EMAIL_PHONE_FAILED);
+				return;
+			}
+		}
+		else {
+			obj.setResponse(Response.GET_CUSTOMER_EMAIL_PHONE_FAILED);
 		}
 	}
 }

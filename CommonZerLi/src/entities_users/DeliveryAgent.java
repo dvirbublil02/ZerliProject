@@ -33,7 +33,7 @@ public class DeliveryAgent extends User implements Serializable{
 	 * @param orders
 	 */
 	public DeliveryAgent(String iD, String firstName, String lastName, String email, String phoneNumber,
-			AccountStatus accountStatus, boolean isLoggedIn, String branchID, List<String> orders) {
+			AccountStatus accountStatus, boolean isLoggedIn, String branchID) {
 		super(iD, firstName, lastName, email, phoneNumber, accountStatus, isLoggedIn);
 		this.branchID = branchID;
 		this.orders = orders;
@@ -60,20 +60,5 @@ public class DeliveryAgent extends User implements Serializable{
 		this.branchID = branchID;
 	}
 
-	/**
-	 * returns the list of the orders that need to be sent
-	 * 
-	 * @return
-	 */
-	public List<String> getOrders() {
-		return orders;
-	}
-
-	/**
-	 * @param orders
-	 */
-	public void setOrders(List<String> orders) {
-		this.orders = orders;
-	}
 
 }

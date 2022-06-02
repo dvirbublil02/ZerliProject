@@ -232,6 +232,19 @@ public class MissionAnalyze {
 			ExternalDBquaries.ImportUsersData(obj,con);
 			break;
 		}
+		case DELIVERY_LATE_REFUND: {
+			ServerQuaries.UpdateDeliveryWasLateDB(obj, con);
+			break;
+		}
+		case GET_BRANCH_NAME_BY_ID:{
+			String branchNameString = ReportsQuaries.getBranchNamebyBranchID((String)obj.getInformation(),con);
+			obj.setInformation(branchNameString);
+			break;
+		}
+		case GET_CUSTOMER_EMAIL_PHONE:{
+			ServerQuaries.getCustomerEmailAndPhoneFromDB(obj,con);
+			break;
+		}
 
 		}
 		
