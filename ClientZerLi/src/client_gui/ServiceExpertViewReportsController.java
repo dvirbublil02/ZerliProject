@@ -2,12 +2,18 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
 import communication.TransmissionPack;
 import entities_reports.Report;
+import entities_users.NetworkManager;
+import entities_users.ServiceExpert;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,7 +29,8 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class ServiceExpertViewReportsController implements Initializable {
-
+	@FXML
+	private Label timer;
 	  @FXML
 	    private Button BackBtn;
 
@@ -56,6 +63,8 @@ public class ServiceExpertViewReportsController implements Initializable {
 
 	    @FXML
 	    private Label welcomeBackUserNameLbl;
+	    @FXML
+	    private Label reportNotFoundLabel;
 
     private ObservableList<String> monthList;
 	private ObservableList<String> yearList;
@@ -84,7 +93,7 @@ public class ServiceExpertViewReportsController implements Initializable {
 
     @FXML
     void Submit(ActionEvent event) {
-    	
+    	if(PickBranch.getValue()!=null && pickYearCB.getValue() !=null &&pickMonthCB.getValue() != null&&pickSurveyCB.getValue()!=null) {
     	if (ClientHandleTransmission.getServiceReport(PickBranch.getValue(), pickYearCB.getValue(),pickMonthCB.getValue(),pickSurveyCB.getValue()))
     	{
 			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
@@ -99,11 +108,17 @@ public class ServiceExpertViewReportsController implements Initializable {
 
     	}
     	else {
-    		ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!","No Report Avaliable");
+    		reportNotFoundLabel.setText("The Requested Report Missing");
     	}
+    	}
+    	reportNotFoundLabel.setText("Some Information Missing");
     }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		AnimationTimer time = addingTimer();
+		time.start();
+		ClientController.initalizeUserDetails(networkManagerNameLbl, phoneNumberLbl, accountStatusLbl, new Label(), userRoleLbl,
+				((ServiceExpert) ClientController.user).toString());
 		monthList = FXCollections.observableArrayList();
 		for (int i = 1; i <= 12; i++) {
 			if (i < 10)
@@ -119,6 +134,15 @@ public class ServiceExpertViewReportsController implements Initializable {
 		surveyList = FXCollections.observableArrayList("Cusromer Service","TBD");
 		pickSurveyCB.setItems(surveyList);
 		
+	}
+	private AnimationTimer addingTimer() {
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		return time;
 	}
 
 }

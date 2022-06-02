@@ -24,8 +24,7 @@ import javafx.stage.Stage;
 
 public class AnoterQuarterlyReportPopupController implements Initializable {
 
-	@FXML
-	private Label alertLabel;
+	
 	@FXML
 	private ComboBox<String> PickBranch;
 
@@ -40,6 +39,9 @@ public class AnoterQuarterlyReportPopupController implements Initializable {
 
 	@FXML
 	private Button submitBtn;
+
+    @FXML
+    private Label reportNotFoundLabel;
 
 	private ObservableList<String> quarterlyQuarterList;
 	private ObservableList<String> quarterlyYearList;
@@ -67,10 +69,13 @@ public class AnoterQuarterlyReportPopupController implements Initializable {
 				PopupSecondIncomeQuarterlyReportsController secondIncomeQuarterly = new PopupSecondIncomeQuarterlyReportsController();
 				secondIncomeQuarterly.start(primaryStage);
 			}
+			else {
+				reportNotFoundLabel.setText("The Requested Report Missing");
+			}
 		} else if (!ReportHandleController.isDualReport())
-			alertLabel.setText("Requested report didnt exist!");
+			reportNotFoundLabel.setText("Some Information Missing");
 		else {
-			alertLabel.setText("You cant open more then two reports in parallel!");
+			reportNotFoundLabel.setText("You cant open more then two reports in parallel!");
 		}
 
 	}

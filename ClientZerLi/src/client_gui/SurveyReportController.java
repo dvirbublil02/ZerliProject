@@ -23,12 +23,14 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
 import client.ReportHandleController;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
+import entities_users.ServiceExpert;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,6 +68,17 @@ public class SurveyReportController implements Initializable {
 	@FXML
 	private Button submitBtn;
 
+    @FXML
+    private Label userName;
+
+    @FXML
+    private Label role;
+
+    @FXML
+    private Label phoneNumber;
+
+    @FXML
+    private Label accountStatus;
 	List<String> titleInfo = new ArrayList<>();
 
 	public void start(Stage stage) throws IOException {
@@ -157,6 +170,8 @@ public class SurveyReportController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, new Label(), role,
+				((ServiceExpert) ClientController.user).toString());
 		List<List<String>> surveyResult = new ArrayList<>();
 		surveyResult = ReportHandleController.getSurveyReportResult();
 		titleInfo = surveyResult.get(0);

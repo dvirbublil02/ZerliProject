@@ -6,13 +6,20 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
+import client.ClientController;
+import client.ClientHandleTransmission;
 import client.ReportHandleController;
+import entities_users.BranchManager;
+import entities_users.NetworkManager;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -43,6 +50,22 @@ import javafx.stage.Stage;
  */
 public class OrderReportsController implements Initializable {
 
+
+    @FXML
+    private Label accountStatus;
+    @FXML
+    private Label branchDetials;
+    @FXML
+    private Label role;
+
+    @FXML
+    private Label userName;
+    @FXML
+    private Label branchTitle;
+    @FXML
+    private Label headTitle;
+    @FXML
+    private Label phoneNumber;
 	@FXML
 	private Button BackBtn;
 
@@ -59,6 +82,8 @@ public class OrderReportsController implements Initializable {
 	private PieChart pieChartRegular;
 	@FXML
 	private Label reportTitle;
+	@FXML
+	private Label timer;
 
 	private static final DecimalFormat df = new DecimalFormat("0.000");
 	List<List<String>> reportOnList = new ArrayList<>();
@@ -78,6 +103,29 @@ public class OrderReportsController implements Initializable {
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		AnimationTimer time = addingTimer();
+		time.start();
+		switch (ReportHandleController.getUserReport().toString()) {
+		case "Branch Manager": {
+			
+			ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, new Label(), role,
+					((BranchManager) ClientController.user).toString());
+			String branchName=ClientHandleTransmission.getBranchName(((BranchManager) ClientController.user).getBranchID().toString());
+			if(branchName!=null)
+				branchDetials.setText(branchName+" ("+((BranchManager) ClientController.user).getBranchID().toString()+")");
+			headTitle.setText("BranchManager menu");
+			branchTitle.setText("Branch");
+			break;
+		}
+		case "Network Manager":{
+			ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, new Label(), role,
+					((NetworkManager) ClientController.user).toString());
+			branchDetials.setDisable(true);
+			branchTitle.setDisable(true);
+			headTitle.setText("NetworkManager menu");
+			break;
+		}
+		}
 		ObservableList<PieChart.Data> pieChartData = null;
 		ObservableList<PieChart.Data> pieChartData2 = null;
 		reportOnList = ReportHandleController.getOrdersReportOnListMonth();
@@ -262,6 +310,15 @@ public class OrderReportsController implements Initializable {
 		}
 		}
 
+	}
+	private AnimationTimer addingTimer() {
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		return time;
 	}
 
 }

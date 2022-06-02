@@ -98,6 +98,7 @@ public class CustomerPageController implements Initializable {
 		// TODO Auto-generated method stub
 		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
 				((Customer) ClientController.user).toString());
+		
 	}
 
 }
