@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 import client.ClientController;
 import client.ClientHandleTransmission;
 import client.DeliveriesController;
+import client.EmailSending;
 import communication.Response;
 import entities_catalog.ProductInOrder;
 import entities_general.Deliveries;
@@ -116,6 +117,9 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 	private Label welcomeBackUserName;
 
 	@FXML
+    private Label branchDetails;
+	
+	@FXML
 	private Label SuccessFailedLbl;
 
 	static boolean showOrderFlag = false;// false = can click, true = can not click
@@ -154,12 +158,12 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		ClientController.initalizeUserDetails(networkManagerName, phoneNumber, userStatus, welcomeBackUserName,
 				userRole, ((DeliveryAgent) ClientController.user).toString());
-
+	
 		branchID = ((DeliveryAgent) ClientController.user).getBranchID();
 		branchName = ClientHandleTransmission.getBranchName(branchID);
 		branchIDTitle = branchNameLbl.getText() + " " + branchName + "(" + branchID + ")";
 		branchNameLbl.setText(branchIDTitle);
-
+		branchDetails.setText(" " + branchName +" ("+branchID+")");
 		AnimationTimer time = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
@@ -305,13 +309,26 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 						System.out.println(deliveriesList.get(i).getDeliveryStatus());
 						if (ClientHandleTransmission.DeliveryWasLateRefund(
 								deliveriesList.get(i)) == Response.UPDATE_DELIVERY_LATE_REFUND_SUCCESS) {
-							
-							List<String> emailPhone = ClientHandleTransmission.getCustomerEmail(deliveriesList.get(i).getCustomerID());
-							System.out.println(emailPhone);
-							if(emailPhone == null) {
-								SendMessage(emailPhone);
+
+							List<String> customerDetails = ClientHandleTransmission
+									.getCustomerDetails(deliveriesList.get(i).getCustomerID());
+							System.out.println(customerDetails);
+							if (customerDetails != null) {
+								try {
+									/**
+									 * send email to the customer with apologizing message.
+									 */
+									EmailSending.sendMail("shalevomri10@gmail.com",
+											deliveriesList.get(i).getPhoneNumber(),
+											customerDetails.get(0)
+													+ " We are apologizing for the delivery was late.\n You will get full refund for this order\n. Total Refund: "
+													+ deliveriesList.get(i).getPrice(),
+											"Zerli Refund Message");
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 							}
-								
 						}
 					}
 				}
@@ -391,9 +408,9 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 		DeliveryAgentPageController deliveryAgentPageController = new DeliveryAgentPageController();
 		deliveryAgentPageController.start(primaryStage);
 	}
-	
+
 	void SendMessage(List<String> emailPhone) {
-		
+
 	}
 
 }

@@ -233,8 +233,28 @@ public class MissionAnalyze {
 			obj.setInformation(branchNameString);
 			break;
 		}
-		case GET_CUSTOMER_EMAIL_PHONE:{
-			ServerQuaries.getCustomerEmailAndPhoneFromDB(obj,con);
+		case GET_CUSTOMER_DETAILS:{
+			ServerQuaries.getCustomerDetailsFromDB(obj, con);
+			break;
+		}
+		case GET_MAX_PRODUCT_ID:{
+			ServerQuaries.getMaxProductIDFromDB(obj,con);
+			break;
+		}
+		case REMOVE_PRODUCTS_FROM_CATALOG:{
+			ServerQuaries.marketingWorkerRemoveFromCatalog(obj, con);
+			break;
+		}
+		case ADD_PRODUCTS_TO_CATALOG:{
+			try {
+				ServerQuaries.marketingWorkerAddToCatalog(obj, con);
+				break;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		case EDIT_PRODUCTS_IN_CATALOG:{
+			ServerQuaries.marketingWorkerEditCatalog(obj, con);
 			break;
 		}
 		}

@@ -1,12 +1,15 @@
 package client_gui;
 
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
 import entities_general.CreditCard;
 import entities_users.Customer;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -74,6 +77,9 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 
 	@FXML
 	private Label SuccessFailedLbl;
+	
+    @FXML
+    private Label timer;
 
 	@FXML
 	private ComboBox<String> MonthComboBox;
@@ -128,11 +134,12 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	 * the list that will contain the customers from DB we will use this list to get
 	 * details from the DB and then send this details to an observable list.
 	 */
-	List<Customer> pendingCustomers; //
+	private	List<Customer> pendingCustomers; //
 
-	Customer customer = null;
+	private	Customer customer = null;
 
-	CreditCard cc = null;
+	private	CreditCard cc = null;
+	
 
 	/**
 	 * initialize the page at the start create the pending customer table and fill
@@ -140,6 +147,22 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+	
+//		ClientController.initalizeUserDetails(networkManagerName, phoneNumber, userStatus, welcomeBackUserName, userRole,
+//				((BranchManager) ClientController.user).toString());
+//		
+//		branchID = ((DeliveryAgent) ClientController.user).getBranchID();
+//		branchName = ClientHandleTransmission.getBranchName(branchID);
+//		branchDetails.setText(" " +branchName +" ("+branchID+")");
+		
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		time.start();
+		
 		ApproveBtn.setDisable(true);
 		IDCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("ID"));
 		firstNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));

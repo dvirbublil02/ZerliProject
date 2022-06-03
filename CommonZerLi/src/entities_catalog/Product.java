@@ -124,20 +124,44 @@ public class Product  implements Serializable{
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(productID);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((productID == null) ? 0 : productID.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
 		Product other = (Product) obj;
-		return Objects.equals(productID, other.productID);
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (productID == null) {
+			if (other.productID != null)
+				return false;
+		} else if (!productID.equals(other.productID))
+			return false;
+		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Product [name=" + name + ", imgSrc=" + imgSrc + ", price=" + price + ", backGroundColor="
+				+ backGroundColor + ", productID=" + productID + ", quantity=" + quantity + ", itemType=" + itemType
+				+ ", dominateColor=" + dominateColor + ", isOnSale=" + isOnSale + ", fixPrice=" + fixPrice + "]";
+	}
+
+//	@Override
+//	public String toString() {
+//		return "Product [name=" + name + ", productID=" + productID + "]";
+//	}
+	
+	
 
 	
 }

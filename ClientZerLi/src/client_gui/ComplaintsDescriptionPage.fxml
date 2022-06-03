@@ -258,7 +258,7 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="55.0" prefWidth="162.0">
                                        <children>
-                                          <Label text="Refound">
+                                          <Label text="Refund">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
@@ -269,7 +269,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="211.0">
                                  <children>
-                                    <TextField fx:id="refound" alignment="CENTER" prefHeight="30.0" prefWidth="218.0" promptText="Refound" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" />
+                                    <TextField fx:id="refound" alignment="CENTER" prefHeight="30.0" prefWidth="218.0" promptText="Refund" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="49.0" prefWidth="194.0">

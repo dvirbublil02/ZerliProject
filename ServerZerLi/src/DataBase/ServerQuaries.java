@@ -1916,15 +1916,18 @@ public class ServerQuaries {
 					System.out.println(d);
 					String updateStatuses = "UPDATE zerli.deliveries SET status=?, arrivedDate =? WHERE deliveryID='"
 							+ d.getDeliveryID() + "';";
+					String updateOrderArrived ="UPDATE zerli.order SET status=? WHERE orderID='"
+							+ d.getOrderID() +"';";
 					// if (d.getDeliveryStatus() == DeliveryStatus.ARRIVED) {
-					PreparedStatement pstmt = con.prepareStatement(updateStatuses);
-					pstmt.setString(1, d.getDeliveryStatus().name());
-					pstmt.setString(2, d.getArrivedDate());
-					pstmt.executeUpdate(); // check if the query failed
-//						obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_FAILED);
-//						return;
-//					}
-//					// }
+					PreparedStatement pstmt1 = con.prepareStatement(updateStatuses);
+					pstmt1.setString(1, d.getDeliveryStatus().name());
+					pstmt1.setString(2, d.getArrivedDate());
+					pstmt1.executeUpdate(); // check if the query failed
+				
+					PreparedStatement pstmt2 = con.prepareStatement(updateOrderArrived);
+					pstmt2.setString(1, d.getDeliveryStatus().name());
+					pstmt2.executeUpdate(); // check if the query failed
+
 				}
 				obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_SUCCESS);
 			} catch (Exception e) {
@@ -2011,7 +2014,7 @@ public class ServerQuaries {
 		pstmt.executeUpdate();
 	}
 
-	public static void getCustomerEmailAndPhoneFromDB(TransmissionPack obj, Connection con) {
+	public static void getCustomerDetailsFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			String customerID = (String)obj.getInformation();
 			System.out.println(customerID);
@@ -2020,26 +2023,183 @@ public class ServerQuaries {
 			try {
 				stmt = con.createStatement();
 				ResultSet rs;
-				String getDetails ="SELECT email, phoneNumber FROM zerli.customer WHERE customerID='" 
+				String getDetails ="SELECT firstName, email, phoneNumber FROM zerli.customer WHERE customerID='" 
 						+ customerID + "';";
 				rs= stmt.executeQuery(getDetails);
 				while(rs.next() != false) {
 					details.add(rs.getString(1));
 					details.add(rs.getString(2));
+					details.add(rs.getString(3));
 				}
 				rs.close();
 				System.out.println(details);
 				obj.setInformation(details);
-				obj.setResponse(Response.GET_CUSTOMER_EMAIL_PHONE_SUCCESS);
+				obj.setResponse(Response.GET_CUSTOMER_DETAILS_SUCCESS);
 				return;
 			}catch (Exception e) {
 				e.printStackTrace();
-				obj.setResponse(Response.GET_CUSTOMER_EMAIL_PHONE_FAILED);
+				obj.setResponse(Response.GET_CUSTOMER_DETAILS_FAILED);
 				return;
 			}
 		}
 		else {
-			obj.setResponse(Response.GET_CUSTOMER_EMAIL_PHONE_FAILED);
+			obj.setResponse(Response.GET_CUSTOMER_DETAILS_FAILED);
 		}
 	}
+	/**
+	 * Get the highest ID from the products we have.
+	 * @param obj
+	 * @param con
+	 */
+	public static void getMaxProductIDFromDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			String maxID = null;
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs;
+				String getMaxID ="SELECT max(productID) FROM zerli.product;";		
+				rs = stmt.executeQuery(getMaxID);
+				if(rs.next()) {
+					maxID = rs.getString(1);
+				}
+				rs.close();
+				System.out.println(maxID);
+				obj.setInformation(maxID);
+				obj.setResponse(Response.GET_MAX_PRODUCT_ID_SUCCESS);
+				return;
+			}catch (SQLException e){	
+				e.printStackTrace();
+				obj.setResponse(Response.GET_MAX_PRODUCT_ID_FAILED);
+				return;
+			}
+		}
+		obj.setResponse(Response.GET_MAX_PRODUCT_ID_FAILED);			
+	}
+	
+	/**
+	 * in this method we editing an exist proudct on the catalog by his id
+	 * @param obj
+	 * @param con
+	 */
+	public static void marketingWorkerEditCatalog(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<Product> productsToAdd=new ArrayList<>();
+			productsToAdd=(List<Product>) obj.getInformation();
+			int countRemoving=0;
+			for(int i=0;i<productsToAdd.size();i++) {
+				String updateStatuses = "UPDATE zerli.product SET name=?, price =?, backGroundColor=?, picture=?, quantity=?, itemType=?, dominateColor=?, isOnSale=?, fixPrice=? WHERE productID='"
+						+ productsToAdd.get(i).getID() + "';";
+				
+				try {
+					PreparedStatement pstmt = con.prepareStatement(updateStatuses);
+					pstmt.setString(1, productsToAdd.get(i).getName());
+					pstmt.setDouble(2, productsToAdd.get(i).getPrice());
+					pstmt.setString(3, productsToAdd.get(i).getbackGroundColor());
+					pstmt.setString(4, productsToAdd.get(i).getImgSrc());
+					pstmt.setInt(5, productsToAdd.get(i).getQuantity());
+					pstmt.setString(6, productsToAdd.get(i).getItemType());
+					pstmt.setString(7, productsToAdd.get(i).getDominateColor());
+					pstmt.setBoolean(8, productsToAdd.get(i).getIsOnSale());
+					pstmt.setDouble(9, productsToAdd.get(i).getFixPrice());
+					if(pstmt.executeUpdate()!=0) {
+						countRemoving++;
+					}
+					if(countRemoving==productsToAdd.size()) {
+						obj.setResponse(Response.EDIT_PRODUCTS_ON_THE_CATALOG_SUCCESS);
+						return;
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		else {
+			obj.setResponse(Response.EDIT_PRODUCTS_ON_THE_CATALOG_FAILED);
+		}
+		
+		
+		
+	}
+	/**
+	 * in this method we remove the items that the marketingworker send to us ,by the product id.
+	 * @param obj
+	 * @param con
+	 */
+	public static void marketingWorkerRemoveFromCatalog(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<String> productsToRemove=new ArrayList<>();
+			productsToRemove=(List<String>) obj.getInformation();
+			int removeSucess=0;
+			for(int i=0;i<productsToRemove.size();i++) {
+				
+				try {
+					PreparedStatement st = con.prepareStatement("DELETE FROM zerli.product WHERE productID= ?");
+					st.setString(1,productsToRemove.get(i));
+					if(st.executeUpdate()!=0) {
+						removeSucess++;
+					}
+					if(removeSucess==productsToRemove.size()) {
+						obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_SUCCESS);
+						return;
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
+					return;
+				}
+			}
+		}
+		else {
+			obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
+		}
+	}
+	/**
+	 * in this method we adding new products into the catalog, we getting them on list of products and, adding one by one.
+	 * @param obj
+	 * @param con
+	 * @throws SQLException 
+	 */
+	public static void marketingWorkerAddToCatalog(TransmissionPack obj, Connection con) throws SQLException {
+		if (obj instanceof TransmissionPack) {
+		List<Product> productsToAdd=new ArrayList<>();
+		productsToAdd=(List<Product>) obj.getInformation();
+		int countInseration=0;
+		String insertNewItem ="INSERT INTO zerli.product(productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, isOnSale, fixPrice)VALUES(?,?,?,?,?,?,?,?,?,?);";
+			for(int i=0;i<productsToAdd.size();i++) {
+				PreparedStatement pstmt;
+				try {
+					pstmt = con.prepareStatement(insertNewItem);
+					pstmt.setString(1, productsToAdd.get(i).getID());
+					pstmt.setString(2, productsToAdd.get(i).getName());
+					pstmt.setDouble(3, productsToAdd.get(i).getPrice());
+					pstmt.setString(4, productsToAdd.get(i).getbackGroundColor());
+					pstmt.setString(5, productsToAdd.get(i).getImgSrc());
+					pstmt.setInt(6, productsToAdd.get(i).getQuantity());
+					pstmt.setString(7, productsToAdd.get(i).getItemType());
+					pstmt.setString(8, productsToAdd.get(i).getDominateColor());
+					pstmt.setBoolean(9, productsToAdd.get(i).getIsOnSale());
+					pstmt.setDouble(10, productsToAdd.get(i).getFixPrice());
+					if(pstmt.executeUpdate()!=0) {
+						countInseration++;
+					}
+					if(countInseration==productsToAdd.size()) {
+						obj.setResponse(Response.ADDING_TO_THE_CATALOG_SUCCESS);
+						return;
+					}
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
+					return;
+				}	
+			}
+		}else {
+			obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
+		}
+	}
+	
 }
