@@ -294,21 +294,32 @@ public class ClientHandleTransmission {
 	 * 
 	 */
 
-	public static int addOrder(Branches branchName, String greetingCard, String orderDate, String expectedDelivery,
+	public static int addOrder(Branches branchName, String greetingCard ,String orderDate, String expectedDelivery,
 			String status) {
 
 		// get Custom + regular products in order
 		Map<String, List<ProductInOrder>> productInOrderFinallCart = OrderHandleController.getCustomProductInOrder();
 		productInOrderFinallCart.put("Regular", OrderHandleController.getProductInOrder());
-
-		Order order = new Order(null, ClientController.user.getID(), String.valueOf(branchName.getNumber()),
-				OrderHandleController.getTotalPrice(), greetingCard, orderDate, expectedDelivery,
-				productInOrderFinallCart);
+		Order order;
+		
+		//new customer order or not price updated 
+		if(((Customer) ClientController.user).getIsNewCustomer()) {
+			order = new Order(null, ClientController.user.getID(), String.valueOf(branchName.getNumber()),
+					OrderHandleController.getTotalPrice()*0.8, greetingCard, orderDate, expectedDelivery,
+					productInOrderFinallCart);
+		}
+		else
+		{
+			order = new Order(null, ClientController.user.getID(), String.valueOf(branchName.getNumber()),
+					OrderHandleController.getTotalPrice(), greetingCard, orderDate, expectedDelivery,
+					productInOrderFinallCart);
+		}
+		
 		
 		if (status.equals("delivery"))
 			order.setStatus(OrderStatus.PENDING_WITH_DELIVERY);
 		else if ((status.equals("takeaway"))) 
-				order.setStatus(OrderStatus.APPROVE);	
+				order.setStatus(OrderStatus.PENDING);	
 
 
 		TransmissionPack tp = new TransmissionPack(Mission.ADD_ORDER, null, order);

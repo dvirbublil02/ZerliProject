@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Time;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -125,6 +126,9 @@ public class OrderPageController implements Initializable{
     private TextField deliveryLastNameTxtField;
     
     @FXML
+    private Label newCustomerLabel;
+    
+    @FXML
     private Label totalPriceLabel;
     
     @FXML
@@ -138,6 +142,7 @@ public class OrderPageController implements Initializable{
     int orderID;
     String reciverName ,reciverLastName, phoneNumberStart,phoneNumberEnd , address ;
     boolean successCreateDeilivery=false , successImidiateOrder=false ;
+    DecimalFormat df = new DecimalFormat("#,###.##");
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	StringBuilder expectedDelivery = new StringBuilder();
 	Date orderDate = new Date();
@@ -185,7 +190,14 @@ public class OrderPageController implements Initializable{
 		}
 		
 		datePickUP.setValue(LocalDate.now());
-		totalPriceLabel.setText(String.valueOf(OrderHandleController.getTotalPrice()));
+		
+		
+		if(((Customer) ClientController.user).getIsNewCustomer())
+		{
+			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8));
+		}
+		else
+			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()));
 		
     	//cancel date option pickup 
     	datePickUP.setDisable(true);
@@ -245,6 +257,7 @@ public class OrderPageController implements Initializable{
 				if(takeAwayRadio.isSelected())
 				{
 					Date d3=Calendar.getInstance().getTime();
+					//System.out.println("priceLabel->"+Double.parseDouble(totalPriceLabel.getText()));
 					orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(d3),dateFormat.format(d3),"takeaway");
 				}	
 				else if(deliveryRadio.isSelected() || ImidiateOrderRadio.isSelected()  ) {
@@ -259,7 +272,6 @@ public class OrderPageController implements Initializable{
 						expectedDelivery.append(datePickUP.getValue().toString()+" ");
 						expectedDelivery.append(hoursPickUpComboBox.getValue().toString());
 					}
-					
 					
 					
 					if(reciverName.equals(""))
@@ -295,12 +307,12 @@ public class OrderPageController implements Initializable{
 					}
 					
 					
-					
 					if(deliveryRadio.isSelected()) 
 					{
 						System.out.println(expectedDelivery.toString());
 						orderDate=Calendar.getInstance().getTime();
 						System.out.println(dateFormat.format(orderDate));
+						//System.out.println("priceLabel->"+Double.parseDouble(totalPriceLabel.getText()));	
 						orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(orderDate),expectedDelivery.toString(),"delivery");
 					}
 					else if (ImidiateOrderRadio.isSelected())
@@ -313,8 +325,11 @@ public class OrderPageController implements Initializable{
 						c1.add(Calendar.HOUR,3);
 						// d2 current time
 						d2=c1.getTime();
+						
 						System.out.println("current->" + dateFormat.format(d1));
 						System.out.println("3 later ->" + dateFormat.format(d2));
+						//System.out.println("priceLabel->"+Double.parseDouble(totalPriceLabel.getText()));
+						
 						orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(d1),dateFormat.format(d2),"delivery");
 					}
 					
@@ -482,6 +497,7 @@ public class OrderPageController implements Initializable{
     /** open or close  delivery options on screen 
      * 
      * 	@param mission - open or close hbox area
+     * 	@author Almog-Madar
      */
     private void deliveryOptionsSelection(String mission) {
     	
@@ -491,7 +507,16 @@ public class OrderPageController implements Initializable{
     		hbox3.setVisible(true);
     		hbox4.setVisible(true);
     		deliveryPriceLabel.setVisible(true);
-    		totalPriceLabel.setText(String.valueOf(OrderHandleController.getTotalPrice()+OrderHandleController.getShippingPrice()));
+    		
+    		if(((Customer) ClientController.user).getIsNewCustomer()) {
+    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8+OrderHandleController.getShippingPrice()));
+    			newCustomerLabel.setVisible(true);
+    		}
+    		else
+    		{
+    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()+OrderHandleController.getShippingPrice()));
+    			newCustomerLabel.setVisible(false);
+    		}
     	}
     	else
     	{
@@ -500,7 +525,17 @@ public class OrderPageController implements Initializable{
     		hbox3.setVisible(false);
     		hbox4.setVisible(false);
     		deliveryPriceLabel.setVisible(false);
-    		totalPriceLabel.setText(String.valueOf(OrderHandleController.getTotalPrice()));
+    		
+    		if(((Customer) ClientController.user).getIsNewCustomer()) {
+    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8));
+    			newCustomerLabel.setVisible(true);
+    		}
+    		else
+    		{
+    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()));
+    			newCustomerLabel.setVisible(false);
+    		}
+    		
     	}
 
     }
@@ -509,7 +544,8 @@ public class OrderPageController implements Initializable{
     
     /**Initialize time comboBox with object of Time (08:00 until 20:00)
      * 
-     * @param orderTimesPickUp - list to add time Initialize
+     * @param ObservableList<Time> orderTimesPickUp - list to add time Initialize
+     * @author Almog-Madar
      */
 	private void timeInit8To20(ObservableList<Time> orderTimesPickUp) {
 		Time time;

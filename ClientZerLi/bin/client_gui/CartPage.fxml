@@ -354,11 +354,20 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="96.0" prefWidth="142.0">
                                  <children>
                                     <Label fx:id="priceLabel" textFill="#cb0606">
                                        <font>
                                           <Font name="Cambria Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="96.0" prefWidth="166.0">
+                                 <children>
+                                    <Label fx:id="newCustomerLabel" text="(New Customer)" textFill="#cb0606">
+                                       <font>
+                                          <Font name="Cambria Italic" size="14.0" />
                                        </font>
                                     </Label>
                                  </children>

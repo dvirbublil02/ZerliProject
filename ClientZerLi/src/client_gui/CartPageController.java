@@ -2,6 +2,7 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +98,9 @@ public class CartPageController implements Initializable {
     private Label phoneNumber;
     
     @FXML
+    private Label newCustomerLabel;
+    
+    @FXML
     private ProgressIndicator progressIndicator;
  
 	@FXML
@@ -114,6 +118,8 @@ public class CartPageController implements Initializable {
     @FXML
     private TableColumn<OrderCustomCartPreview, Double> priceCustomColTbl;
     
+
+    DecimalFormat df = new DecimalFormat("#,###.##");
 	static ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
 	private ObservableList<OrderCartPreview> listViewRegular = FXCollections.observableArrayList();
 
@@ -238,8 +244,11 @@ public class CartPageController implements Initializable {
 		
 		
 		//priceLabel.setText(OrderHandleController.getTotalPrice()+"");
-		priceLabel.setText(OrderHandleController.getTotalPrice()+"");
+        //priceLabel.setText(OrderHandleController.getTotalPrice()+"");
+		
+		OrderHandleController.setNewCustomer(newCustomerLabel);
 		OrderHandleController.setPriceLabel(priceLabel);
+		OrderHandleController.updateTotalPrice();
 		
 		// Progress bar state - 70%
 		progressIndicator.setStyle("-fx-color: #D0F6DD ; -fx-accent: green;");
@@ -296,7 +305,6 @@ public class CartPageController implements Initializable {
 			massageLabel.setText("Custom Cart Allready Empty");
 		try {
 			
-			
 			//remove all custom product in orderHandler
 			notifyRemoveCustomProduct(productSelected);
 		
@@ -313,8 +321,6 @@ public class CartPageController implements Initializable {
 	    	OrderHandleController.setTotalPrice(0);
 			
 		OrderHandleController.updateTotalPrice();
-		
-		
 			
     }
     
@@ -351,7 +357,6 @@ public class CartPageController implements Initializable {
 	    	OrderHandleController.setTotalPrice(0);
 		
 		OrderHandleController.updateTotalPrice();
-		//priceLabel=OrderHandleController.getPriceLabel();
 
     }
     

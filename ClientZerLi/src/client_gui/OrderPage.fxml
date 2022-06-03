@@ -477,7 +477,7 @@
                            <children>
                               <HBox prefHeight="100.0" prefWidth="382.0">
                                  <children>
-                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER_RIGHT" prefHeight="51.0" prefWidth="138.0">
                                        <children>
                                           <Label text="Total Price : ">
                                              <font>
@@ -488,11 +488,24 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <Label fx:id="totalPriceLabel" text="20.55">
-                                             <font>
-                                                <Font name="Cambria Bold Italic" size="18.0" />
-                                             </font>
-                                          </Label>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="135.0">
+                                             <children>
+                                                <Label fx:id="totalPriceLabel" text="20.55">
+                                                   <font>
+                                                      <Font name="Cambria Bold Italic" size="18.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <Label fx:id="newCustomerLabel" text="(New Customer)" textFill="#cb0606">
+                                                   <font>
+                                                      <Font name="Cambria Italic" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
                                        </children>
                                     </HBox>
                                  </children></HBox>
