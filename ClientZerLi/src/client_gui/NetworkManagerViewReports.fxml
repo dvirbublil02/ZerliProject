@@ -137,7 +137,7 @@
                            <children>
                               <HBox prefHeight="66.0" prefWidth="592.0">
                                  <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="189.0">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="247.0">
                                        <children>
                                           <Label prefHeight="17.0" prefWidth="66.0" text="ZerLi Login">
                                              <HBox.margin>
@@ -145,9 +145,9 @@
                                              </HBox.margin>
                                           </Label>
                                           <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
-                                          <HBox alignment="CENTER" prefHeight="59.0" prefWidth="91.0">
+                                          <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0">
                                              <children>
-                                                <Label prefHeight="17.0" prefWidth="117.0" text="Manager Menu" textFill="RED">
+                                                <Label prefHeight="17.0" prefWidth="196.0" text="NetworkManager Menu -">
                                                    <HBox.margin>
                                                       <Insets left="5.0" />
                                                    </HBox.margin>
@@ -159,19 +159,22 @@
                                           <Insets left="5.0" />
                                        </HBox.margin>
                                     </HBox>
-                                    <HBox alignment="CENTER" prefHeight="59.0" prefWidth="83.0" />
+                                    <HBox alignment="CENTER" prefHeight="66.0" prefWidth="222.0">
+                                       <children>
+                                          <Label prefHeight="17.0" prefWidth="200.0" text=" View Report" textFill="RED" />
+                                       </children></HBox>
                                     <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="54.0" prefWidth="78.0" />
-                                             </children>
-                                          </HBox>
+                                          <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0" />
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER" prefHeight="65.0" prefWidth="232.0">
+                                    <HBox alignment="CENTER" prefHeight="66.0" prefWidth="243.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0" />
+                                          <Label fx:id="timer" prefHeight="38.0" prefWidth="205.0" text="Time:" textAlignment="CENTER">
+                                             <font>
+                                                <Font name="Calibri Bold" size="18.0" />
+                                             </font>
+                                          </Label>
                                        </children>
                                     </HBox>
                                  </children>
@@ -182,7 +185,7 @@
                                        <children>
                                           <Label text="Choose Report" textFill="#11862a">
                                              <font>
-                                                <Font size="33.0" />
+                                                <Font name="Cambria Bold Italic" size="33.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -200,7 +203,10 @@
                                                             <HBox alignment="CENTER" prefHeight="101.0" prefWidth="203.0">
                                                                <children>
                                                                   <HBox prefHeight="85.0" prefWidth="137.0" />
-                                                                  <Label text="Pick Branch" />
+                                                                  <Label prefHeight="16.0" prefWidth="74.0" text="Pick Branch">
+                                                                     <font>
+                                                                        <Font name="Cambria Bold" size="12.0" />
+                                                                     </font></Label>
                                                                </children>
                                                             </HBox>
                                                          </children>
@@ -228,12 +234,18 @@
                                                                <children>
                                                                   <HBox prefHeight="50.0" prefWidth="200.0">
                                                                      <children>
-                                                                        <CheckBox fx:id="monthlyReportsRadioBtn" mnemonicParsing="false" onAction="#ShowMonthlyReports" prefHeight="40.0" prefWidth="224.0" text="Monthly Report" textFill="#009400" />
+                                                                        <CheckBox fx:id="monthlyReportsRadioBtn" mnemonicParsing="false" onAction="#ShowMonthlyReports" prefHeight="40.0" prefWidth="224.0" text="Monthly Report" textFill="#009400">
+                                                                           <font>
+                                                                              <Font name="Cambria Bold Italic" size="12.0" />
+                                                                           </font></CheckBox>
                                                                      </children>
                                                                   </HBox>
                                                                   <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0">
                                                                      <children>
-                                                                        <Label text="Pick Year" />
+                                                                        <Label text="Pick Year">
+                                                                           <font>
+                                                                              <Font name="Cambria Bold" size="12.0" />
+                                                                           </font></Label>
                                                                      </children>
                                                                   </HBox>
                                                                   <HBox alignment="CENTER" prefHeight="80.0" prefWidth="80.0">
@@ -252,7 +264,10 @@
                                                                   <HBox prefHeight="50.0" prefWidth="200.0" />
                                                                   <HBox alignment="CENTER" prefHeight="67.0" prefWidth="200.0">
                                                                      <children>
-                                                                        <Label text="Pick Month" />
+                                                                        <Label text="Pick Month">
+                                                                           <font>
+                                                                              <Font name="Cambria Bold" size="12.0" />
+                                                                           </font></Label>
                                                                      </children>
                                                                   </HBox>
                                                                   <HBox alignment="CENTER" prefHeight="80.0" prefWidth="80.0">
@@ -271,7 +286,10 @@
                                                                   <HBox prefHeight="50.0" prefWidth="200.0" />
                                                                   <HBox alignment="CENTER" prefHeight="67.0" prefWidth="200.0">
                                                                      <children>
-                                                                        <Label text="Pick Report Type" />
+                                                                        <Label text="Pick Report Type">
+                                                                           <font>
+                                                                              <Font name="Cambria Bold" size="12.0" />
+                                                                           </font></Label>
                                                                      </children>
                                                                   </HBox>
                                                                   <HBox alignment="CENTER" prefHeight="80.0" prefWidth="80.0">
@@ -297,12 +315,18 @@
                                                                <children>
                                                                   <HBox prefHeight="50.0" prefWidth="200.0">
                                                                      <children>
-                                                                        <CheckBox fx:id="quarterlyReportsRadioBtn" mnemonicParsing="false" onAction="#ShowQuarterlyReports" prefHeight="40.0" prefWidth="224.0" text="Quarterly Report" textFill="#009400" />
+                                                                        <CheckBox fx:id="quarterlyReportsRadioBtn" mnemonicParsing="false" onAction="#ShowQuarterlyReports" prefHeight="40.0" prefWidth="224.0" text="Quarterly Report" textFill="#009400">
+                                                                           <font>
+                                                                              <Font name="Cambria Bold Italic" size="12.0" />
+                                                                           </font></CheckBox>
                                                                      </children>
                                                                   </HBox>
                                                                   <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0">
                                                                      <children>
-                                                                        <Label text="Pick Year" />
+                                                                        <Label text="Pick Year">
+                                                                           <font>
+                                                                              <Font name="Cambria Bold" size="12.0" />
+                                                                           </font></Label>
                                                                      </children>
                                                                   </HBox>
                                                                   <HBox alignment="CENTER" prefHeight="80.0" prefWidth="80.0">
@@ -321,7 +345,10 @@
                                                                   <HBox prefHeight="50.0" prefWidth="200.0" />
                                                                   <HBox alignment="CENTER" prefHeight="80.0" prefWidth="80.0">
                                                                      <children>
-                                                                        <Label text="Pick Quarter" />
+                                                                        <Label text="Pick Quarter">
+                                                                           <font>
+                                                                              <Font name="Cambria Bold" size="12.0" />
+                                                                           </font></Label>
                                                                      </children>
                                                                   </HBox>
                                                                   <HBox alignment="CENTER" layoutX="10.0" layoutY="66.0" prefHeight="80.0" prefWidth="80.0">
@@ -340,7 +367,10 @@
                                                                   <HBox prefHeight="50.0" prefWidth="200.0" />
                                                                   <HBox alignment="CENTER" prefHeight="80.0" prefWidth="80.0">
                                                                      <children>
-                                                                        <Label text="Pick Report Type" />
+                                                                        <Label text="Pick Report Type">
+                                                                           <font>
+                                                                              <Font name="Cambria Bold" size="12.0" />
+                                                                           </font></Label>
                                                                      </children>
                                                                   </HBox>
                                                                   <HBox alignment="CENTER" layoutX="10.0" layoutY="66.0" prefHeight="80.0" prefWidth="80.0">
@@ -362,7 +392,7 @@
                               </VBox>
                               <VBox alignment="CENTER" prefHeight="80.0" prefWidth="100.0">
                                  <children>
-                                    <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#Submit" prefHeight="46.0" prefWidth="109.0" styleClass="buttonUpdate" stylesheets="@Style.css" text="Submit" />
+                                    <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#Submit" prefHeight="46.0" prefWidth="109.0" styleClass="buttonConfirm" stylesheets="@Style.css" text="Submit" />
                                  </children>
                               </VBox>
                            </children>

@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import client.ClientHandleTransmission;
 import client.ReportHandleController;
 import client.popMessageHandler;
+import enums.Branches;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,7 +27,7 @@ public class AnoterQuarterlyReportPopupController implements Initializable {
 
 	
 	@FXML
-	private ComboBox<String> PickBranch;
+	private ComboBox<Branches> PickBranch;
 
 	@FXML
 	private ComboBox<String> pickQuarterQuarterlyCB;
@@ -45,7 +46,7 @@ public class AnoterQuarterlyReportPopupController implements Initializable {
 
 	private ObservableList<String> quarterlyQuarterList;
 	private ObservableList<String> quarterlyYearList;
-	private ObservableList<String> branchesObser;
+	private ObservableList<Branches> branchesObser;
 	private ObservableList<String> reportTypeList;
 
 	public void start(Stage stage) throws Exception {
@@ -61,7 +62,7 @@ public class AnoterQuarterlyReportPopupController implements Initializable {
 	void Submit(ActionEvent event) throws IOException {
 		if (PickBranch.getValue() != null && pickYearQuarterlyCB.getValue() != null
 				&& pickQuarterQuarterlyCB.getValue() != null && ReportHandleController.isDualReport() == false) {
-			if (ClientHandleTransmission.getQuarterIncomeReport(PickBranch.getValue(), pickYearQuarterlyCB.getValue(),
+			if (ClientHandleTransmission.getQuarterIncomeReport(String.valueOf(PickBranch.getValue().getNumber()), pickYearQuarterlyCB.getValue(),
 					pickQuarterQuarterlyCB.getValue())) {
 				ReportHandleController.setDualReport(true);
 				((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
@@ -91,17 +92,16 @@ public class AnoterQuarterlyReportPopupController implements Initializable {
 			quarterlyYearList = FXCollections.observableArrayList();
 		}
 		pickYearQuarterlyCB.setItems(quarterlyYearList);
-		branchesObser = FXCollections.observableArrayList("2525", "1005", "4554");
-		PickBranch.setItems(branchesObser);
+		branchesObser = FXCollections.observableArrayList();
+		
 		reportTypeList = FXCollections.observableArrayList("Income");
 		pickTypeQuarterlyCB.setItems(reportTypeList);
-		// need to add the branches after merge geting almog method.
-//		List<Branches> brances=ClientHandleTransmission.getBranches();
-//		if(brances.size() != 0) {
-//			branchesObser.addAll(brances);
-//		}
-//		PickBranch.setItems(branchesObser);
-
+		
+		List<Branches> brances=ClientHandleTransmission.getBranches();
+		if(brances.size() != 0) {
+			branchesObser.addAll(brances);
+		}
+		PickBranch.setItems(branchesObser);
 	}
 
 }

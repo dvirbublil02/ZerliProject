@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import client.ClientController;
@@ -13,6 +14,7 @@ import communication.TransmissionPack;
 import entities_reports.Report;
 import entities_users.NetworkManager;
 import entities_users.ServiceExpert;
+import enums.Branches;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +37,7 @@ public class ServiceExpertViewReportsController implements Initializable {
 	    private Button BackBtn;
 
 	    @FXML
-	    private ComboBox<String> PickBranch;
+	    private ComboBox<Branches> PickBranch;
 
 	    @FXML
 	    private Label accountStatusLbl;
@@ -68,7 +70,7 @@ public class ServiceExpertViewReportsController implements Initializable {
 
     private ObservableList<String> monthList;
 	private ObservableList<String> yearList;
-	private ObservableList<String> branchList;
+	private ObservableList<Branches> branchList;
 	private ObservableList<String> surveyList;
 
     public void start(Stage stage) throws IOException {
@@ -94,7 +96,7 @@ public class ServiceExpertViewReportsController implements Initializable {
     @FXML
     void Submit(ActionEvent event) {
     	if(PickBranch.getValue()!=null && pickYearCB.getValue() !=null &&pickMonthCB.getValue() != null&&pickSurveyCB.getValue()!=null) {
-    	if (ClientHandleTransmission.getServiceReport(PickBranch.getValue(), pickYearCB.getValue(),pickMonthCB.getValue(),pickSurveyCB.getValue()))
+    	if (ClientHandleTransmission.getServiceReport(String.valueOf(PickBranch.getValue().getNumber()), pickYearCB.getValue(),pickMonthCB.getValue(),pickSurveyCB.getValue()))
     	{
 			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 			Stage primaryStage = new Stage();
@@ -110,8 +112,12 @@ public class ServiceExpertViewReportsController implements Initializable {
     	else {
     		reportNotFoundLabel.setText("The Requested Report Missing");
     	}
+    	
     	}
-    	reportNotFoundLabel.setText("Some Information Missing");
+    	else {
+    		
+    		reportNotFoundLabel.setText("Some Information Missing");
+    	}
     }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -127,13 +133,25 @@ public class ServiceExpertViewReportsController implements Initializable {
 				monthList.add("" + i);
 		}
 		pickMonthCB.setItems(monthList);
-		yearList = FXCollections.observableArrayList("2019", "2020", "2021", "2022");
-		pickYearCB.setItems(yearList);
-		branchList = FXCollections.observableArrayList("2525", "1005", "4554");
-		PickBranch.setItems(branchList);
+		branchList = FXCollections.observableArrayList();
 		surveyList = FXCollections.observableArrayList("Cusromer Service","TBD");
 		pickSurveyCB.setItems(surveyList);
 		
+		
+		// need to add the branches after merge geting almog method.
+		List<Branches> brances=ClientHandleTransmission.getBranches();
+		if(brances.size() != 0) {
+			branchList.addAll(brances);
+		}
+		PickBranch.setItems(branchList);
+		
+		List<String> querterYear = ClientHandleTransmission.getYearsForComboBox("MONTHLY", "reports");
+		if (querterYear.size() > 0) {
+			yearList = FXCollections.observableArrayList(querterYear);
+		} else {
+			yearList = FXCollections.observableArrayList();
+		}
+		pickYearCB.setItems(yearList);
 	}
 	private AnimationTimer addingTimer() {
 		AnimationTimer time = new AnimationTimer() {

@@ -209,8 +209,8 @@ public class OrderReportsController implements Initializable {
 				@Override
 				public void handle(MouseEvent event) {
 
-					Tooltip tooltipCustom = new Tooltip(data.getName() + " " + df.format(data.getPieValue()) + "%");
-					Tooltip.install(data.getNode(), tooltipCustom);
+					Tooltip tooltipReguler = new Tooltip(data.getName() + " " + df.format(data.getPieValue()) + "%");
+					Tooltip.install(data.getNode(), tooltipReguler);
 				}
 			});
 		});

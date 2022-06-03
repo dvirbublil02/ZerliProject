@@ -122,9 +122,12 @@ public class SurveyReportController implements Initializable {
 		}
 		// created PDF document instance
 		Document doc = new Document();
+		File file = null;
 		try {
 			// generate a PDF at the specified location
-			String file = "C:/expert/"+titleInfo.get(2) + "/" + titleInfo.get(1)+"expertPdf.pdf";
+			 file=new File(titleInfo.get(2) + "-" + titleInfo.get(1)+"ExpertPDF.pdf");
+			file.createNewFile();
+			//String file = "C:/expert/"+titleInfo.get(2) + "/" + titleInfo.get(1)+"expertPdf.pdf";
 			PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(file));
 			System.out.println("PDF created.");
 			// opens the PDF
@@ -146,7 +149,6 @@ public class SurveyReportController implements Initializable {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		File file=new File("ExpertPDF.pdf");
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    final InputStream in = new FileInputStream(file);
 	    final byte[] buffer = new byte[500];
