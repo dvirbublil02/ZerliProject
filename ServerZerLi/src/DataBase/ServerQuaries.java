@@ -2037,4 +2037,128 @@ public class ServerQuaries {
 			obj.setResponse(Response.GET_CUSTOMER_EMAIL_PHONE_FAILED);
 		}
 	}
+	/**
+	 * in this method we editing an exist proudct on the catalog by his id
+	 * @param obj
+	 * @param con
+	 */
+	public static void marketingWorkerEditCatalog(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<Product> productsToAdd=new ArrayList<>();
+			productsToAdd=(List<Product>) obj.getInformation();
+			int countRemoving=0;
+			for(int i=0;i<productsToAdd.size();i++) {
+				String updateStatuses = "UPDATE zerli.product SET name=?, price =?, backGroundColor=?, picture=?, quantity=?, itemType=?, dominateColor=?, isOnSale=?, fixPrice=? WHERE productID='"
+						+ productsToAdd.get(i).getID() + "';";
+				
+				try {
+					PreparedStatement pstmt = con.prepareStatement(updateStatuses);
+					pstmt.setString(1, productsToAdd.get(i).getName());
+					pstmt.setDouble(2, productsToAdd.get(i).getPrice());
+					pstmt.setString(3, productsToAdd.get(i).getbackGroundColor());
+					pstmt.setString(4, productsToAdd.get(i).getImgSrc());
+					pstmt.setInt(5, productsToAdd.get(i).getQuantity());
+					pstmt.setString(6, productsToAdd.get(i).getItemType());
+					pstmt.setString(7, productsToAdd.get(i).getDominateColor());
+					pstmt.setBoolean(8, productsToAdd.get(i).getIsOnSale());
+					pstmt.setDouble(9, productsToAdd.get(i).getFixPrice());
+					if(pstmt.executeUpdate()!=0) {
+						countRemoving++;
+					}
+					if(countRemoving==productsToAdd.size()) {
+						obj.setResponse(Response.EDIT_PRODUCTS_ON_THE_CATALOG_SUCCESS);
+						return;
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		else {
+			obj.setResponse(Response.EDIT_PRODUCTS_ON_THE_CATALOG_FAILED);
+		}
+		
+		
+		
+	}
+	/**
+	 * in this method we remove the items that the marketingworker send to us ,by the product id.
+	 * @param obj
+	 * @param con
+	 */
+	public static void marketingWorkerRemoveFromCatalog(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<String> productsToRemove=new ArrayList<>();
+			productsToRemove=(List<String>) obj.getInformation();
+			int removeSucess=0;
+			for(int i=0;i<productsToRemove.size();i++) {
+				
+				try {
+					PreparedStatement st = con.prepareStatement("DELETE FROM zerli.product WHERE productID= ?");
+					st.setString(1,productsToRemove.get(i));
+					if(st.executeUpdate()!=0) {
+						removeSucess++;
+					}
+					if(removeSucess==productsToRemove.size()) {
+						obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_SUCCESS);
+						return;
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
+					return;
+				}
+			}
+		}
+		else {
+			obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
+		}
+	}
+	/**
+	 * in this method we adding new products into the catalog, we getting them on list of products and, adding one by one.
+	 * @param obj
+	 * @param con
+	 * @throws SQLException 
+	 */
+	public static void marketingWorkerAddToCatalog(TransmissionPack obj, Connection con) throws SQLException {
+		if (obj instanceof TransmissionPack) {
+		List<Product> productsToAdd=new ArrayList<>();
+		productsToAdd=(List<Product>) obj.getInformation();
+		int countInseration=0;
+		String insertNewItem ="INSERT INTO zerli.product(productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, isOnSale, fixPrice)VALUES(?,?,?,?,?,?,?,?,?,?);";
+			for(int i=0;i<productsToAdd.size();i++) {
+				PreparedStatement pstmt;
+				try {
+					pstmt = con.prepareStatement(insertNewItem);
+					pstmt.setString(1, productsToAdd.get(i).getID());
+					pstmt.setString(2, productsToAdd.get(i).getName());
+					pstmt.setDouble(3, productsToAdd.get(i).getPrice());
+					pstmt.setString(4, productsToAdd.get(i).getbackGroundColor());
+					pstmt.setString(5, productsToAdd.get(i).getImgSrc());
+					pstmt.setInt(6, productsToAdd.get(i).getQuantity());
+					pstmt.setString(7, productsToAdd.get(i).getItemType());
+					pstmt.setString(8, productsToAdd.get(i).getDominateColor());
+					pstmt.setBoolean(9, productsToAdd.get(i).getIsOnSale());
+					pstmt.setDouble(10, productsToAdd.get(i).getFixPrice());
+					if(pstmt.executeUpdate()!=0) {
+						countInseration++;
+					}
+					if(countInseration==productsToAdd.size()) {
+						obj.setResponse(Response.ADDING_TO_THE_CATALOG_SUCCESS);
+						return;
+					}
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
+					return;
+				}	
+			}
+		}else {
+			obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
+		}
+	}
 }

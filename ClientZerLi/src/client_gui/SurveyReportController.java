@@ -124,7 +124,8 @@ public class SurveyReportController implements Initializable {
 		Document doc = new Document();
 		try {
 			// generate a PDF at the specified location
-			PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("ExpertPDF.pdf"));
+			String file = "C:/expert/"+titleInfo.get(2) + "/" + titleInfo.get(1)+"expertPdf.pdf";
+			PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(file));
 			System.out.println("PDF created.");
 			// opens the PDF
 			doc.open();
@@ -159,7 +160,7 @@ public class SurveyReportController implements Initializable {
 		ClientUI.chat.accept(tp);
 		tp=ClientUI.chat.getObj();
 		if(tp.getResponse()==Response.INSERT_SURVEY_REPORT_SUCCESS) {
-   			ClientHandleTransmission.popUp("Thank you Service Expert, your report(PDF) store in the DataBase","Success create pdf");
+   			ClientHandleTransmission.popUp("Report(PDF) store in the DataBase","Success create pdf");
 
 		}else {
    			ClientHandleTransmission.popUp("Faild to create the PDF file.","Faild To Create pdf");

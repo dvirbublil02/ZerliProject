@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import communication.TransmissionPack;
-
+import entities_catalog.Product;
 import ocsf.server.ConnectionToClient;
 
 import entities_users.User;
@@ -58,8 +58,7 @@ public class MissionAnalyze {
 		}
 
 		case USER_LOGIN: {
-			
-			
+
 			// ServerQuaries.getUser(obj, con);
 			ServerQuaries.Login(obj, con);
 			break;
