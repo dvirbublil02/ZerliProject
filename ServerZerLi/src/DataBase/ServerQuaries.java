@@ -1560,7 +1560,8 @@ public class ServerQuaries {
 				customerID = (String) obj.getInformation();
 
 			String query = "SELECT * FROM zerli.order  WHERE (customerID = '" + customerID
-					+ "') AND (status = 'ARRIVED') OR (status = 'TAKEAWAY');";
+					+ "') AND (status = 'ARRIVED') OR (status = 'APPROVE_ORDER_CANCELATION') OR ('DECLINE_ORDER_CANCELATION') OR "
+					+  " (status = 'APPROVE_ORDER_DELIVERY_CANCELATION') OR (status = 'DECLINE_ORDER_DELIVERY_CANCELATION') ;";
 			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
 				stmt = con.createStatement();

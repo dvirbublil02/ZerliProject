@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="362.0" prefWidth="435.0" styleClass="backgroundConnectToServerScreen" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.ConnectToServerController">
+<AnchorPane prefHeight="362.0" prefWidth="435.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.ConnectToServerController">
    <children>
       <HBox prefHeight="414.0" prefWidth="435.0">
          <children>
-            <VBox prefHeight="414.0" prefWidth="136.0" style="-fx-background-color: #89A392;">
+            <VBox prefHeight="414.0" prefWidth="136.0" styleClass="backgroundConnectToServerScreen">
                <children>
                   <Label alignment="CENTER" prefHeight="50.0" prefWidth="138.0" text="ZerLi ">
                      <font>
