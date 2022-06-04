@@ -134,7 +134,7 @@
                <children>
                   <HBox prefHeight="66.0" prefWidth="592.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="189.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="213.0">
                            <children>
                               <Label prefHeight="17.0" prefWidth="66.0" text="ZerLi Login">
                                  <HBox.margin>
@@ -145,7 +145,7 @@
                                  </font>
                               </Label>
                               <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
-                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="91.0">
+                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="122.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="117.0" text="Customer Menu" textFill="#cb0606">
                                        <HBox.margin>
@@ -161,7 +161,6 @@
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin></HBox>
-                        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="83.0" />
                         <HBox alignment="CENTER" prefHeight="66.0" prefWidth="90.0" />
                         <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
                            <children>
