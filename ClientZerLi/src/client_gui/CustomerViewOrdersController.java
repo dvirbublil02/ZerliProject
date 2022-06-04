@@ -24,6 +24,7 @@ import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,7 +35,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class CustomerViewOrdersController implements Initializable{
@@ -68,6 +71,9 @@ public class CustomerViewOrdersController implements Initializable{
     
     @FXML
     private Label timer;
+    
+    @FXML
+    private Button infoBtn;
 
     @FXML
     private TableColumn<Order, String> cancelBranchID;
@@ -205,6 +211,18 @@ public class CustomerViewOrdersController implements Initializable{
 			}
 		};
 		time.start();
+		
+		infoBtn.setOnMouseMoved(event -> {
+			Tooltip tooltipCustom = new Tooltip("Dear Customer\n"
+					+"Here You Can :\n"
+					+ "1.View History.\n"
+					+ "2.Cancel Orders.");
+			tooltipCustom.setStyle("-fx-font-size: 20");
+			Tooltip.install(infoBtn,tooltipCustom);
+			
+		});
+	
+		
 							
 		cancelOrderID.setCellValueFactory(new PropertyValueFactory<Order, String>("orderID"));
 		cancelBranchID.setCellValueFactory(new PropertyValueFactory<Order, String>("branchID"));

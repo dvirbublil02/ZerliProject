@@ -172,7 +172,7 @@
                               </Label>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="58.0" prefWidth="262.0">
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="182.0">
                            <children>
                               <Label fx:id="timer">
                                  <font>
@@ -181,11 +181,11 @@
                               </Label>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="58.0" prefWidth="143.0">
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="188.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="99.0">
+                              <HBox alignment="CENTER" prefHeight="62.0" prefWidth="85.0">
                                  <children>
-                                    <Button fx:id="refreshBtn" mnemonicParsing="false" onAction="#refershScreenInfo" styleClass="handHover" stylesheets="@Style.css">
+                                    <Button fx:id="refreshBtn" mnemonicParsing="false" onAction="#refershScreenInfo" styleClass="buttonRefresh" stylesheets="@Style.css">
                                        <graphic>
                                           <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -195,6 +195,19 @@
                                        </graphic>
                                     </Button>
                                  </children></HBox>
+                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="99.0">
+                                 <children>
+                                    <Button fx:id="infoBtn" mnemonicParsing="false" styleClass="buttonInfo" stylesheets="@Style.css">
+                                       <graphic>
+                                          <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../javafx_images/infoHelp.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                         </HBox>
                      </children>

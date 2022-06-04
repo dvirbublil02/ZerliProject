@@ -255,6 +255,40 @@
 	-fx-border-width: 30 0 0 30;
 }
 
+.buttonRefresh{
+	-fx-background-color: #37413A;
+	-fx-background-radius: 100;
+}
+
+.buttonRefresh:hover{
+	-fx-background-color: #677A6D;
+	-fx-background-radius: 100;
+	-fx-cursor:hand;
+}
+
+.buttonRefresh:pressed{
+	-fx-background-color: #37413A;
+	-fx-border-width: 30 0 0 30;
+}
+
+
+
+.buttonInfo{
+	-fx-background-color: #6691C7;
+	-fx-background-radius: 100;
+}
+
+.buttonInfo:hover{
+	-fx-background-color: #66869B;
+	-fx-background-radius: 100;
+	-fx-cursor:hand;
+}
+
+.buttonInfo:pressed{
+	-fx-background-color: #6691C7;
+	-fx-border-width: 30 0 0 30;
+}
+
 
 .backgroundConnectToServerScreen{
 	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #D0F6DD , #A5C4B0);

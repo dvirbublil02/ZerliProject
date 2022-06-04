@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import client.OrderHandleController;
 import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
+import entities_users.Customer;
+import enums.AccountStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -85,6 +89,9 @@ public class CatalogScreenController implements Initializable {
 	@FXML
 	private Button searchBtn;
 
+    @FXML
+    private Button infoBtn;
+
 	@FXML
 	private ProgressIndicator progressIndicator;
 
@@ -131,6 +138,7 @@ public class CatalogScreenController implements Initializable {
 		primaryStage.setTitle("ZerLi Catalog");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event -> {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 		});
@@ -206,6 +214,28 @@ public class CatalogScreenController implements Initializable {
 
 		// catalog item initialize
 		InitilizeProductGrid("None", "None", "None");
+		
+		
+		infoBtn.setOnMouseMoved(event -> {
+			Tooltip tooltipCustom = new Tooltip("Dear Customer\n"
+					+"Here You Can :\n"
+					+ "1.View Product.\n"
+					+ "2.Build and Add Custom Product.\n"
+					+ "3.Add Regular Product.");
+			tooltipCustom.setStyle("-fx-font-size: 20");
+			Tooltip.install(infoBtn,tooltipCustom);
+			
+		});
+		
+		/**
+		 * customer permissions 
+		 */
+		if(((Customer) ClientController.user).getAccountStatus()==AccountStatus.FROZEN) {
+			addToCustomBtn.setDisable(true);
+			addToCartBtn.setDisable(true);
+			cartPageImage.setDisable(true);
+			vboxAddToCustom.setVisible(false);
+		}
 
 	}
 
@@ -235,8 +265,11 @@ public class CatalogScreenController implements Initializable {
 				public void onClickListener(Product item) {
 
 					// open addToCart button first time
-					addToCartBtn.setDisable(false);
-					addToCustomBtn.setDisable(false);
+					if(((Customer) ClientController.user).getAccountStatus()==AccountStatus.CONFIRMED) {
+						addToCartBtn.setDisable(false);
+						addToCustomBtn.setDisable(false);
+					}
+					
 					// load chosenCard and ProductInOrder that chosen
 					setChosenItemCard(item);
 					

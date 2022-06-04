@@ -215,6 +215,9 @@
                                        <padding>
                                           <Insets left="5.0" />
                                        </padding>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                     <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
                                  </children>
@@ -225,6 +228,9 @@
                                        <padding>
                                           <Insets left="5.0" />
                                        </padding>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
@@ -235,10 +241,13 @@
                                           <Insets left="5.0" />
                                        </HBox.margin>
                                     </Line>
-                                    <Label prefHeight="17.0" prefWidth="135.0" text="ZerLi Custom Catalog" textFill="RED">
+                                    <Label prefHeight="17.0" prefWidth="135.0" text="ZerLi Custom Catalog" textFill="#cb0606">
                                        <padding>
                                           <Insets left="5.0" />
                                        </padding>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
@@ -250,20 +259,32 @@
                                        </children>
                                     </HBox>
                                  </children></HBox>
-                              <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
+                              <HBox alignment="CENTER" prefHeight="70.0" prefWidth="43.0">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0">
+                                    <HBox alignment="CENTER" prefHeight="70.0" prefWidth="53.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="54.0" prefWidth="78.0" />
+                                          <HBox alignment="CENTER" prefHeight="70.0" prefWidth="51.0" />
                                        </children>
                                     </HBox>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="65.0" prefWidth="232.0">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0">
+                                    <HBox alignment="CENTER" prefHeight="70.0" prefWidth="182.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0" />
+                                          <HBox alignment="CENTER" prefHeight="58.0" prefWidth="99.0">
+                                             <children>
+                                                <Button fx:id="infoBtn" mnemonicParsing="false" styleClass="buttonInfo" stylesheets="@Style.css">
+                                                   <graphic>
+                                                      <ImageView fitHeight="45.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../javafx_images/infoHelp.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </Button>
+                                             </children>
+                                          </HBox>
                                        </children>
                                     </HBox>
                                  </children>

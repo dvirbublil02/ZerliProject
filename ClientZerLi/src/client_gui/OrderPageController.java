@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -25,6 +26,7 @@ import entities_general.Branch;
 import entities_general.Order;
 import entities_users.Customer;
 import enums.Branches;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,6 +43,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 /**
@@ -84,10 +87,15 @@ public class OrderPageController implements Initializable{
     @FXML
     private TextField deliveryPhoneStartTxtField;
     
-    
     @FXML
     private RadioButton deliveryRadio;
     
+    @FXML
+    private Label timer;
+    
+    @FXML
+    private Button infoBtn;
+
     
     @FXML
     private ComboBox<Time> hoursPickUpComboBox;
@@ -180,6 +188,27 @@ public class OrderPageController implements Initializable{
 		timeInit8To20(orderTimesPickUp);
 		hoursPickUpComboBox.setItems(orderTimesPickUp);
 		
+		//timer on screen 
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		time.start();
+		//info button 
+		infoBtn.setOnMouseMoved(event -> {
+			Tooltip tooltipCustom = new Tooltip("Dear Customer\n"
+					+"Here You Can:\n"
+					+ "1.Add Blessing Card.\n"
+					+ "2.Choose Take Away.\n"
+					+ "3.Choose Imidiate Delivery.\n"
+					+ "4.Choose Regualr Delivery.");
+			tooltipCustom.setStyle("-fx-font-size: 20");
+			Tooltip.install(infoBtn,tooltipCustom);
+			
+		});
+		
 		if(LocalTime.now().getMinute()>30)
 		{
 			hoursPickUpComboBox.setValue(new Time(LocalTime.now().getHour()+4,0,0));
@@ -202,6 +231,7 @@ public class OrderPageController implements Initializable{
     	//cancel date option pickup 
     	datePickUP.setDisable(true);
     	hoursPickUpComboBox.setDisable(true);
+    	
 	
 		//get branches from database 
 		

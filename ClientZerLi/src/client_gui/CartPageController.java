@@ -3,6 +3,8 @@ package client_gui;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import entities_general.OrderCustomCartPreview;
 import entities_reports.ComplaintPreview;
 import entities_users.Customer;
 import enums.ComplaintsStatus;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -36,6 +39,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -99,6 +103,13 @@ public class CartPageController implements Initializable {
     
     @FXML
     private Label newCustomerLabel;
+    
+    @FXML
+    private Button infoBtn;
+    
+    @FXML
+    private Label timer;
+    
     
     @FXML
     private ProgressIndicator progressIndicator;
@@ -253,6 +264,28 @@ public class CartPageController implements Initializable {
 		// Progress bar state - 70%
 		progressIndicator.setStyle("-fx-color: #D0F6DD ; -fx-accent: green;");
 		progressIndicator.setProgress(0.70f);
+		
+		//timer on screen 
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		time.start();
+		//info button 
+		infoBtn.setOnMouseMoved(event -> {
+			Tooltip tooltipCustom = new Tooltip("Dear Customer\n"
+					+"Here You Can:\n"
+					+ "1.View Cart Selection.\n"
+					+ "2.Remove Regualr Products.\n"
+					+ "3.Remove Custom Products.\n"
+					+ "4.View Custom Selection Details.");
+			tooltipCustom.setStyle("-fx-font-size: 20");
+			Tooltip.install(infoBtn,tooltipCustom);
+			
+		});
+		
 		
 		//add listener to OrderHandleController to perform remove on background
 		addSubscriber(new OrderHandleController());
