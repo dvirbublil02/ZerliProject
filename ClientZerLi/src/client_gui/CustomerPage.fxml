@@ -172,9 +172,9 @@
                               </HBox>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="347.0">
+                        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="307.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="233.0">
+                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="222.0">
                                  <children>
                                     <Label fx:id="timer">
                                        <font>
