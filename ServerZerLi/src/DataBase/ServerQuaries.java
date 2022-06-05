@@ -43,7 +43,7 @@ import enums.Branches;
 import enums.ComplaintsStatus;
 import enums.DeliveryStatus;
 import enums.OrderStatus;
-import enums.ShopWorkerActivity;
+import enums.ShopworkerRole;
 
 /**
  * In this class there are all the server quarries
@@ -388,7 +388,7 @@ public class ServerQuaries {
 
 			ShopWorker shopworker = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
 					rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7), rs.getString(8),
-					ShopWorkerActivity.valueOf(rs.getString(9)));
+					ShopworkerRole.valueOf(rs.getString(9)));
 			obj.setInformation(shopworker);
 			break;
 		}
@@ -461,7 +461,7 @@ public class ServerQuaries {
 				while (rs.next()) {
 					ShopWorker sw = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
 							rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
-							rs.getString(8), ShopWorkerActivity.valueOf(rs.getString(9)));
+							rs.getString(8), ShopworkerRole.valueOf(rs.getString(9)));
 
 					list.add(sw);
 				}

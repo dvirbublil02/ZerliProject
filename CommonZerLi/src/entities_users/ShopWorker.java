@@ -3,7 +3,7 @@ package entities_users;
 import java.io.Serializable;
 
 import enums.AccountStatus;
-import enums.ShopWorkerActivity;
+import enums.ShopworkerRole;
 
 @SuppressWarnings("serial")
 public class ShopWorker extends User implements Serializable{
@@ -11,7 +11,7 @@ public class ShopWorker extends User implements Serializable{
 	 * the branch that the worker works in.
 	 */
 	private String branchID;
-	private ShopWorkerActivity activityStatus;
+	private ShopworkerRole activityStatus;
 
 	/**
 	 * @param iD
@@ -24,7 +24,7 @@ public class ShopWorker extends User implements Serializable{
 	 * @param branchID
 	 */
 	public ShopWorker(String iD, String firstName, String lastName, String email, String phoneNumber,
-			AccountStatus workerActivity, boolean isLoggedIn, String branchID,ShopWorkerActivity activityStatus) {
+			AccountStatus workerActivity, boolean isLoggedIn, String branchID,ShopworkerRole activityStatus) {
 		super(iD, firstName, lastName, email, phoneNumber, workerActivity, isLoggedIn);
 		this.branchID = branchID;
 		this.setActivityStatus(activityStatus);
@@ -52,12 +52,12 @@ public class ShopWorker extends User implements Serializable{
 	}
 
 
-	public ShopWorkerActivity getActivityStatus() {
+	public ShopworkerRole getActivityStatus() {
 		return activityStatus;
 	}
 
 
-	public void setActivityStatus(ShopWorkerActivity activityStatus) {
+	public void setActivityStatus(ShopworkerRole activityStatus) {
 		this.activityStatus = activityStatus;
 	}
 

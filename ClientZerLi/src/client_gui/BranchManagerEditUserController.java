@@ -14,7 +14,7 @@ import entities_users.BranchManager;
 import entities_users.Customer;
 import entities_users.ShopWorker;
 import enums.AccountStatus;
-import enums.ShopWorkerActivity;
+import enums.ShopworkerRole;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,7 +40,7 @@ public class BranchManagerEditUserController implements Initializable {
 	private TableColumn<CustomersPreview, ComboBox<AccountStatus>> accountStatusCol;
 
 	@FXML
-	private TableColumn<WorkersPreview, ComboBox<ShopWorkerActivity>> activityStatusCol;
+	private TableColumn<WorkersPreview, ComboBox<ShopworkerRole>> activityStatusCol;
 
 	@FXML
 	private Label editResultCustomerLabel;
@@ -135,6 +135,7 @@ public class BranchManagerEditUserController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		ClientController.initalizeUserDetails(branchManagerNameLbl, phoneNumberLbl, accountStatusLbl, welcomeUserNameLbl, userRoleLbl,
 				((BranchManager) ClientController.user).toString());
 
@@ -158,7 +159,7 @@ public class BranchManagerEditUserController implements Initializable {
 		shopWorkerIDCol.setCellValueFactory(new PropertyValueFactory<WorkersPreview, String>("ID"));
 		branchIDcol.setCellValueFactory(new PropertyValueFactory<WorkersPreview, String>("branchID"));
 		activityStatusCol.setCellValueFactory(
-				new PropertyValueFactory<WorkersPreview, ComboBox<ShopWorkerActivity>>("activityStatusCB"));
+				new PropertyValueFactory<WorkersPreview, ComboBox<ShopworkerRole>>("activityStatusCB"));
 		List<ShopWorker> listOfShopWorkers = ClientHandleTransmission.getShopWorkers();
 		if (listOfShopWorkers.size() > 0) {
 			for (ShopWorker sw : listOfShopWorkers) {
