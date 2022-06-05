@@ -11,6 +11,7 @@ import client.SurveyHandle;
 import communication.Mission;
 import communication.TransmissionPack;
 import entities_users.ShopWorker;
+import enums.Branches;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,6 +43,9 @@ public class ShopWorkerPageController implements Initializable{
 	private Label phoneNumber;
 	@FXML
 	private Label employeeType;
+
+    @FXML
+    private Label branchName;
 
 	@FXML
 	private Button viewcomplaintsBtn;
@@ -123,7 +127,7 @@ public class ShopWorkerPageController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println(((ShopWorker)ClientController.user).getBranchID());
+		branchName.setText(ClientHandleTransmission.getBranchName(((ShopWorker) ClientController.user).getBranchID())+"("+((ShopWorker) ClientController.user).getBranchID()+")");
 		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
 				((ShopWorker) ClientController.user).toString());
 

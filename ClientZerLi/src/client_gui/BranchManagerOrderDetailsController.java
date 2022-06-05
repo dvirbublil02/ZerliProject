@@ -51,6 +51,8 @@ public class BranchManagerOrderDetailsController implements Initializable{
     
     @SuppressWarnings("unused")
 	private ObservableList<ProductInOrder> listView = FXCollections.observableArrayList();
+    
+    
 
 
 

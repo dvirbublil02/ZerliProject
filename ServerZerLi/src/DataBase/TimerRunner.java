@@ -10,9 +10,10 @@ import communication.Mission;
 import communication.TransmissionPack;
 
 /**
- * class that run thread that check if there is new month it create new report
+ * Class Description:
+ * class that run thread every 10 minutes that check if there is new month it create new report
  * for each branch and after 24 hours it notify to all customer service that
- * stll don't close there complaint that are still open
+ * still don't close there complaint that are still open
  * 
  * @author Mor Ben Haim
  */
@@ -33,19 +34,17 @@ public class TimerRunner extends TimerTask {
 		Date prevMonth = c.getTime();
 		c.add(Calendar.MONTH, -2);
 		Date prevQuarter = c.getTime();
-	//	if(current.getDay()!= newDate.getDay()) {
+		//if(current.getDay()!= newDate.getDay()) {
 			System.out.println("New Day");
 			//TBD : Add actions after one day.
-			//String budgetType = BudgetType.DAILY.toString();
 			TransmissionPack obj=new TransmissionPack(Mission.NOTIFY,null,null);
-			MissionAnalyze.MissionsAnalyze(obj, DBController.getCon());
-//			ServerQuaries.notifyCustomerService(obj,DBController.getCon());
+			ServerQuaries.notifyCustomerService(obj, null);
+
 	//	}
 		
 		if (current.getMonth() != newDate.getMonth()) {
 			System.out.println("New Month");
 			// TBD : Add actions after one month.
-			
 			List<String> reportCreate = ServerQuaries.getAllBranchId(DBController.getCon());
 			for (String b : reportCreate) {
 				String month=ReportsQuaries.getMonthFormat(newDate.getMonth() + 1);
@@ -54,21 +53,16 @@ public class TimerRunner extends TimerTask {
 			}
 
 		}
-		
-//		if(current.getDay() > newDate.getDay()) {
-//			System.out.println("New Week");
-//			//TBD : Add actions after one week.
-//			String budgetType = BudgetType.WEEKLY.toString();
-//			Query.updateBusinessCustomersBudgetUsed("budgetType='"+budgetType+"'"); //update budgetUsed to 0 every week for weekly budget type
-//			
-//		}
-//		
-//		if((current.getMonth() /3 ) + 1 !=  (newDate.getMonth()/3) + 1) {
-//			System.out.println("New Quarater");
-//			//TBD : Add actions after one quarter.
-//			ReportsController.pullData(sdf.format(prevQuarter), sdf.format(newDate), "quarterly");
-//			ReportsController.uploadReports();
-//		}
+				
+		if((current.getMonth() /3 ) + 1 !=  (newDate.getMonth()/3) + 1) {
+			System.out.println("New Quarater");
+			//TBD : Add actions after one quarter.
+			List<String> reportCreate = ServerQuaries.getAllBranchId(DBController.getCon());
+			for (String b : reportCreate) {
+				String month=ReportsQuaries.getMonthFormat(newDate.getMonth() + 1);
+				createReports.quarterIncomeReport(b, month, String.valueOf(current.getYear()));
+			}
+		}
 
 		current = newDate;
 

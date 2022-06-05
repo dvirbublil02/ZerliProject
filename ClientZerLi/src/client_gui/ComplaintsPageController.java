@@ -1,7 +1,6 @@
 package client_gui;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -12,7 +11,8 @@ import communication.Response;
 import entities_reports.ComplaintPreview;
 import entities_users.CustomerService;
 import enums.ComplaintsStatus;
-import enums.OrderStatus;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -158,12 +158,28 @@ public class ComplaintsPageController implements Initializable {
 
 		statusCol.setCellValueFactory(new PropertyValueFactory<ComplaintPreview, ComboBox<ComplaintsStatus>>("status"));
 
+		statusCol.setOnEditCommit(e -> {
+ 
+            // Do what you want to update the row
+            System.out.printf("Updated supplier from %d to %d, %s%n",
+                    e.getOldValue(), e.getNewValue(), e.getRowValue().getComplainState());
+             
+        });
+
+         
+		
+			
+			
+		
 		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
 				((CustomerService) ClientController.user).toString());
-
-		listView.addAll(ClientHandleTransmission.getComplaintsForCustomerService(ClientController.user.getID()));
+		List<ComplaintPreview>cp=ClientHandleTransmission.getComplaintsForCustomerService(ClientController.user.getID());
+		createListenerToComboBoxChanges(cp);
+		listView.addAll(cp);
 
 		Complaints.setItems(listView);
+		
+		
 		/**
 		 * this listener paint the complaint row in red if the complaint still opening after 24 hours
 		 */
@@ -175,14 +191,37 @@ public class ComplaintsPageController implements Initializable {
 				super.updateItem(item, empty);
 				if (item == null || item.getComplaintsStatus() == ComplaintsStatus.STILL_GOT_TIME) {
 					String style=getStyle();
-					setStyle(style);
+					setStyle("-fx-background-color: transparent");
+					
 				} else if (item.getComplaintsStatus() == ComplaintsStatus.DELAY) {
 					
 					setStyle("-fx-background-color: red;");
 				}
 
 			}
+			
 		});
+	}
+	/**
+	 * create Listener to combobox in each complaint that display on the screen
+	 * in reset the feedBackMSg 
+	 * @param cp
+	 */
+	private void createListenerToComboBoxChanges(List<ComplaintPreview> cp) {
+		for(ComplaintPreview c:cp) {
+			c.getStatus().valueProperty().addListener(new ChangeListener<ComplaintsStatus>() {
+
+				@Override
+				public void changed(ObservableValue<? extends ComplaintsStatus> observable, ComplaintsStatus oldValue,
+						ComplaintsStatus newValue) {
+					if (oldValue != newValue) {
+						feedbackMsg.setText("");
+
+					}
+					
+				}
+			});
+		}
 	}
 
 	/**

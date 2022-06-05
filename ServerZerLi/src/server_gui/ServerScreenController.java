@@ -83,7 +83,7 @@ public class ServerScreenController implements Initializable {
 	private static boolean ifFirstConnector;
 	private static boolean ifFirstMsg;
 	private List<String> data = new ArrayList<String>();
-	static ObservableList<ClientDetails> clients = FXCollections.observableArrayList();
+	private static ObservableList<ClientDetails> clients = FXCollections.observableArrayList();
 	static ObservableList<msgClass> listView2 = FXCollections.observableArrayList();
 	final public String externalDB="jdbc:mysql://localhost/externaldb?serverTimezone=IST";
 
@@ -103,6 +103,17 @@ public class ServerScreenController implements Initializable {
 		primaryStage.show();
 		primaryStage.setResizable(false);
 	}
+	
+
+	public static ObservableList<ClientDetails> getClients() {
+		return clients;
+	}
+
+
+	public static void setClients(ObservableList<ClientDetails> clients) {
+		ServerScreenController.clients = clients;
+	}
+
 
 	/**
 	 * In this method we handling with the connect button click , we getting the
