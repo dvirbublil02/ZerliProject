@@ -109,6 +109,16 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
+                        <Label text="Branch Name">
+                           <font>
+                              <Font name="Corbel Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="branchName" text="CONFIRMED" textFill="#9a9a9a">
+                           <font>
+                              <Font name="Corbel Bold" size="18.0" />
+                           </font>
+                        </Label>
                      </children>
                   </VBox>
                   <VBox prefHeight="0.0" prefWidth="308.0" VBox.vgrow="ALWAYS" />

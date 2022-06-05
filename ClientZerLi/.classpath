@@ -11,5 +11,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/OCSF"/>
 	<classpathentry kind="lib" path="src/PdfExternelJre/pdfbox-3.0.0-alpha3.jar"/>
 	<classpathentry kind="lib" path="src/PdfExternelJre/itextpdf-5.5.13.2.jar"/>
+	<classpathentry kind="lib" path="javax.activation-1.2.0.jar"/>
+	<classpathentry kind="lib" path="javax.mail-1.6.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

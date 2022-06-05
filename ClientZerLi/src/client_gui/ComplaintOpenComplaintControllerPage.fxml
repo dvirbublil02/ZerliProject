@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -319,8 +320,8 @@
                               </HBox>
                               <HBox prefHeight="50.0" prefWidth="294.0">
                                  <children>
-                                    <HBox prefHeight="50.0" prefWidth="603.0" />
-                                    <Label fx:id="numberValidationCheck2" prefHeight="44.0" prefWidth="317.0" textAlignment="CENTER">
+                                    <HBox prefHeight="50.0" prefWidth="34.0" />
+                                    <Label fx:id="numberValidationCheck2" prefHeight="44.0" prefWidth="323.0" textAlignment="CENTER">
                                        <font>
                                           <Font name="Calibri Bold" size="18.0" />
                                        </font>
@@ -350,7 +351,7 @@
                                     <HBox prefHeight="50.0" prefWidth="16.0" />
                                  </children>
                               </HBox>
-                              <HBox prefHeight="50.0" prefWidth="225.0">
+                              <HBox prefHeight="50.0" prefWidth="215.0">
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="50.0" prefWidth="206.0">
                                        <children>
@@ -361,12 +362,15 @@
                                     </HBox>
                                  </children>
                               </HBox>
-                              <HBox prefHeight="50.0" prefWidth="315.0">
+                              <HBox prefHeight="50.0" prefWidth="322.0">
                                  <children>
-                                    <Label fx:id="numberValidationCheck3" prefHeight="44.0" prefWidth="251.0" textAlignment="CENTER">
+                                    <Label fx:id="numberValidationCheck3" prefHeight="44.0" prefWidth="256.0" textAlignment="CENTER">
                                        <font>
                                           <Font name="Calibri Bold" size="18.0" />
                                        </font>
+                                       <padding>
+                                          <Insets right="20.0" />
+                                       </padding>
                                     </Label>
                                  </children>
                               </HBox>
@@ -385,7 +389,7 @@
                                  </children></HBox>
                               <HBox alignment="CENTER" prefHeight="187.0" prefWidth="478.0">
                                  <children>
-                                    <TextField fx:id="description" alignment="TOP_LEFT" prefHeight="173.0" prefWidth="468.0" promptText="Enter Discription" />
+                                    <TextArea fx:id="description" prefHeight="187.0" prefWidth="499.0" promptText="Enter Discription" />
                                  </children>
                               </HBox>
                            </children>

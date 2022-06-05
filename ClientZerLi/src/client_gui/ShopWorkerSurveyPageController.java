@@ -72,6 +72,8 @@ public class ShopWorkerSurveyPageController implements Initializable {
 
 	@FXML
 	private Button backBtn;
+	@FXML
+	private Label branchName;
 
 	@FXML
 	private Label employeeName;
@@ -150,8 +152,10 @@ public class ShopWorkerSurveyPageController implements Initializable {
 		}
 		checkInsertResponse();
 	}
+
 	/**
-	 * send mission to the server after the shop worker adding the customer answer to the survey
+	 * send mission to the server after the shop worker adding the customer answer
+	 * to the survey
 	 */
 	private void checkInsertResponse() {
 		if (ClientHandleTransmission.insertSurvey(question) == Response.ISERT_SURVEY_SUCCEED) {
@@ -162,8 +166,11 @@ public class ShopWorkerSurveyPageController implements Initializable {
 			feedBackMsg.setTextFill(Color.RED);
 		}
 	}
+
 	/**
-	 * loop run all combobox in the screen if one of them is empty it mark him in red
+	 * loop run all combobox in the screen if one of them is empty it mark him in
+	 * red
+	 * 
 	 * @param flag
 	 * @return
 	 */
@@ -189,6 +196,7 @@ public class ShopWorkerSurveyPageController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		AnimationTimer time = addingTimer();
 		time.start();
+		branchName.setText(ClientHandleTransmission.getBranchName(((ShopWorker) ClientController.user).getBranchID())+"("+((ShopWorker) ClientController.user).getBranchID()+")");
 
 		qurstios = Arrays.asList(question1, question2, question3, question4, question5, question6);
 		comboxes = Arrays.asList(answer1, answer2, answer3, answer4, answer5, answer6);
@@ -200,8 +208,10 @@ public class ShopWorkerSurveyPageController implements Initializable {
 				((ShopWorker) ClientController.user).toString());
 
 	}
+
 	/**
 	 * add Thread timer that give the current Time on the screen
+	 * 
 	 * @return
 	 */
 	private AnimationTimer addingTimer() {
@@ -213,6 +223,7 @@ public class ShopWorkerSurveyPageController implements Initializable {
 		};
 		return time;
 	}
+
 	/**
 	 * set the question that were get from the DB
 	 */
@@ -223,6 +234,7 @@ public class ShopWorkerSurveyPageController implements Initializable {
 
 		}
 	}
+
 	/**
 	 * add Listener for each combobox after validCheck
 	 */

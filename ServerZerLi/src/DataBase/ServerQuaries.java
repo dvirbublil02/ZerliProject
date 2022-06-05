@@ -46,7 +46,6 @@ import enums.DeliveryStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
 
-
 import ocsf.server.ConnectionToClient;
 import server.EchoServer;
 import server.ServerUI;
@@ -1211,7 +1210,6 @@ public class ServerQuaries {
 				e.printStackTrace();
 			}
 
-
 			obj.setResponse(Response.OPEN_COMPLAINT_SUCCEED);
 
 		} else {
@@ -1620,17 +1618,23 @@ public class ServerQuaries {
 			Statement stmt;
 			String query = "SELECT complaintOpening FROM zerli.complaints WHERE status='OPEN'";
 			try {
+				if(con!=null) {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while (rs.next()) {
-					// if(getSatus(rs.getString(1))==ComplaintsStatus.DELAY) {
+					 if(getSatus(rs.getString(1))==ComplaintsStatus.DELAY) {
 					obj.setResponse(Response.NOTIFY_CUSTOMER_SERVICE);
+					System.out.println("here");
+					ServerUI.sv.notifyCustomer(obj);
+					 }
 
+				}
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 
 		} else {
 			obj.setResponse(null);
@@ -1652,7 +1656,7 @@ public class ServerQuaries {
 			ResultSet rs;
 			String updateOrderID = "UPDATE zerli.order SET status=? WHERE orderID='";
 			String updateDeliveryStatus = "UPDATE zerli.deliveries SET status='READY_TO_GO' WHERE orderID='";
-			String getRefund="SELECT expectedRefund FROM zerli.cancelation WHERE orderID='";
+			String getRefund = "SELECT expectedRefund FROM zerli.cancelation WHERE orderID='";
 			String updateCusomerBalance = "UPDATE zerli.customer SET balance=balance+? WHERE customerID='";
 			String updateQuantityInAllZerLi = "UPDATE zerli.product SET quantity=quantity-? WHERE productID='";
 			String updateQuantityInBranch = "UPDATE zerli.productinbranch SET quantity=quantity-? WHERE productID='";
@@ -1671,7 +1675,7 @@ public class ServerQuaries {
 						break;
 					}
 					case APPROVE_WITH_DELIVERY: {
-						updateDelivryStatus(con, updateDeliveryStatus, o);
+						updateDelivryStatusToReadyToGo(con, updateDeliveryStatus, o);
 						updateOrderIDStatus(con, updateOrderID, o);
 						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
 						break;
@@ -1687,7 +1691,7 @@ public class ServerQuaries {
 						deleteProductInOrder(con, deleteProductformOrder, o);
 						break;
 					}
-					case DECLINE_ORDER_CANCELATION:{
+					case DECLINE_ORDER_CANCELATION: {
 						updateOrderIDStatus(con, updateOrderID, o);
 						/**
 						 * loop run on all the product in the specific order
@@ -1695,23 +1699,24 @@ public class ServerQuaries {
 						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
 						break;
 					}
-					case DECLINE_ORDER_DELIVERY_CANCELATION:{
+					case DECLINE_ORDER_DELIVERY_CANCELATION: {
 						updateDelivryStatus(con, updateDeliveryStatus, o);
 						updateOrderIDStatus(con, updateOrderID, o);
 						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
 						break;
 					}
-					case APPROVE_ORDER_DELIVERY_CANCELATION:{
+					case APPROVE_ORDER_DELIVERY_CANCELATION: {
 						updateOrderIDStatus(con, updateOrderID, o);
 						updateCustomerBalance(con, getRefund, updateCusomerBalance, o);
 						deleteDelivery(con, deleteProductformDelivery, o);
 						deleteProductInOrder(con, deleteProductformOrder, o);
 						break;
 					}
-					case APPROVE_ORDER_CANCELATION:{
+					case APPROVE_ORDER_CANCELATION: {
+						updateCustomerBalance(con, getRefund, updateCusomerBalance, o);
 						updateOrderIDStatus(con, updateOrderID, o);
 						deleteProductInOrder(con, deleteProductformOrder, o);
-						
+
 						break;
 					}
 					default:
@@ -1729,31 +1734,146 @@ public class ServerQuaries {
 		}
 
 	}
-	
 
+	/**
+	 * this method get all customers details that there order were cancel or approve
+	 * 
+	 * @param obj
+	 * @param con
+	 */
+	public static void getCustomerDetailsForNotify(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<List<String>> cutomers = (List<List<String>>) obj.getInformation();
+			List<List<User>> cutomersCallBack = new ArrayList<>();
+			Statement stmt;
+			for (List<String> list : cutomers) {
+				List<User> users = new ArrayList<>();
+				for (String detail : list) {
+					try {
+						stmt = con.createStatement();
+						ResultSet rs;
+						String getDetails = "SELECT firstName, email, phoneNumber FROM zerli.customer WHERE customerID='"
+								+ detail + "';";
+						rs = stmt.executeQuery(getDetails);
+						while (rs.next() != false) {
+							User u = new User(null, rs.getString(1), null, rs.getString(2), rs.getString(3), null,
+									false);
+							users.add(u);
+						}
+						rs.close();
+					} catch (SQLException e) {
+						obj.setResponse(Response.GET_ALL_CUTOMERS_TO_NOTIFIY_FAILED);
+						e.printStackTrace();
+					}
+					System.out.println(users);
+				}
+				cutomersCallBack.add(users);
+			}
+			obj.setInformation(cutomersCallBack);
+			obj.setResponse(Response.GET_ALL_CUTOMERS_TO_NOTIFIY_SUCCEED);
+
+		} else {
+			obj.setResponse(Response.GET_ALL_CUTOMERS_TO_NOTIFIY_FAILED);
+		}
+	}
+
+	public static void getCustomerDetailsFromDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			String customerID = (String) obj.getInformation();
+			System.out.println(customerID);
+			List<String> details = new ArrayList<>();
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs;
+				String getDetails = "SELECT firstName, email, phoneNumber FROM zerli.customer WHERE customerID='"
+						+ customerID + "';";
+				rs = stmt.executeQuery(getDetails);
+				while (rs.next() != false) {
+					details.add(rs.getString(1));
+					details.add(rs.getString(2));
+					details.add(rs.getString(3));
+				}
+				rs.close();
+				System.out.println(details);
+				obj.setInformation(details);
+				obj.setResponse(Response.GET_CUSTOMER_DETAILS_SUCCESS);
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+				obj.setResponse(Response.GET_CUSTOMER_DETAILS_FAILED);
+				return;
+			}
+		} else {
+			obj.setResponse(Response.GET_CUSTOMER_DETAILS_FAILED);
+		}
+	}
+
+	/**
+	 * update the customer balance if the specific customer cancel request was
+	 * approve and he is deserves it
+	 * 
+	 * @param con
+	 * @param getRefund
+	 * @param updateCusomerBalance
+	 * @param o
+	 * @throws SQLException
+	 */
 	private static void updateCustomerBalance(Connection con, String getRefund, String updateCusomerBalance, Order o)
 			throws SQLException {
 		Statement stmt;
 		PreparedStatement pstmt;
 		ResultSet rs;
-		stmt=con.createStatement();
-		rs=stmt.executeQuery(getRefund+o.getOrderID()+"'");					
-		while(rs.next()) {
-		pstmt=con.prepareStatement(updateCusomerBalance+o.getCustomerID()+"'");
-		pstmt.setString(1, rs.getString(1));
-		pstmt.executeUpdate();
+		stmt = con.createStatement();
+		rs = stmt.executeQuery(getRefund + o.getOrderID() + "'");
+		while (rs.next()) {
+			pstmt = con.prepareStatement(updateCusomerBalance + o.getCustomerID() + "'");
+			pstmt.setString(1, rs.getString(1));
+			pstmt.executeUpdate();
 		}
 	}
 
+	/**
+	 * update the delivery status if the status was change from pending to cancel
+	 * 
+	 * @param con
+	 * @param updateDeliveryStatus
+	 * @param o
+	 * @throws SQLException
+	 */
 	private static void updateDelivryStatus(Connection con, String updateDeliveryStatus, Order o) throws SQLException {
 		PreparedStatement pstmt1;
-		
-		
+
 		pstmt1 = con.prepareStatement(updateDeliveryStatus + o.getOrderID() + "'");
 		pstmt1.setString(1, o.getStatus().name());
 		pstmt1.executeUpdate();
 	}
 
+	/**
+	 * if the order delivery was approve it change his status to ready to go for the
+	 * delivery agent
+	 * 
+	 * @param con
+	 * @param updateDeliveryStatus
+	 * @param o
+	 * @throws SQLException
+	 */
+	private static void updateDelivryStatusToReadyToGo(Connection con, String updateDeliveryStatus, Order o)
+			throws SQLException {
+		PreparedStatement pstmt1;
+
+		pstmt1 = con.prepareStatement(updateDeliveryStatus + o.getOrderID() + "'");
+
+		pstmt1.executeUpdate();
+	}
+	/**
+	 * Update the orders quantity if the orders was approve it update the product quantity
+	 * @param con
+	 * @param updateQuantityInAllZerLi
+	 * @param updateQuantityInBranch
+	 * @param o
+	 * @throws SQLException
+	 */
 	private static void updateProducts(Connection con, String updateQuantityInAllZerLi, String updateQuantityInBranch,
 			Order o) throws SQLException {
 		for (String key : o.getItems().keySet()) {
@@ -1763,7 +1883,13 @@ public class ServerQuaries {
 			}
 		}
 	}
-
+	/**
+	 * if the delivery request wasn't approve it delete the specific order from the the delivery table
+	 * @param con
+	 * @param deleteProductformDelivery
+	 * @param o
+	 * @throws SQLException
+	 */
 	private static void deleteDelivery(Connection con, String deleteProductformDelivery, Order o) throws SQLException {
 		PreparedStatement pstmt3;
 		pstmt3 = con.prepareStatement(deleteProductformDelivery + o.getOrderID() + "'");

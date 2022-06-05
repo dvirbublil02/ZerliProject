@@ -3,14 +3,17 @@ package client_gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import client.ClientHandleTransmission;
+import client.EmailSending;
 import client.OrderHandleController;
 import communication.Response;
 import entities_general.Order;
 import entities_general.OrderPreview;
+import entities_users.User;
 import enums.OrderStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,8 +36,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
+ * Class Description:
  * this class is handle the branch manager order screen controller the branch
- * manager can approve or cancel the request
+ * manager can approve or cancel the request.
+ * if the order was approve or the cancel request of the order was approve
+ * by the branch manager the system will sent them an email to notice them of about
+ * there request status
  * 
  * @author Mor Ben Haim
  * @author Dvir Bublil
@@ -173,8 +180,7 @@ public class BranchManagerOrderManagementController implements Initializable {
     private TabPane tabPane;
 
 	private ObservableList<OrderPreview> listViewCD = FXCollections.observableArrayList();
-	 @FXML
-	    private Tab dsds;
+	
 
 	@FXML
 	public void start(Stage primaryStage) throws Exception {
@@ -234,10 +240,6 @@ public class BranchManagerOrderManagementController implements Initializable {
 	private void initCancelDeliveryOrdersTable() {
 		showColCD.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("Details", (OrderPreview o) -> {
 
-			// need to send list to screen
-			// ObservableList<Product>
-			// listToNextScreen=FXCollections.observableArrayList(o.getItems());
-
 			List<OrderPreview> details = OrderHandleController.getOrdersForBranchManagerCD();
 			for (OrderPreview or : details) {
 				if (or.equals(o)) {
@@ -247,12 +249,12 @@ public class BranchManagerOrderManagementController implements Initializable {
 				}
 			}
 
-			// open screen of details -- > need to init before starting
+			
 			Stage primaryStage = new Stage();
 			BranchManagerOrderDetailsController ordersDetails = new BranchManagerOrderDetailsController();
 
 			try {
-//				ordersDetails.list.addAll(orderPrivie.getItems());
+
 				ordersDetails.start(primaryStage);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -260,7 +262,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 
 			return o;
 		}));
-
+		
 		statusColCD.setCellValueFactory(new PropertyValueFactory<OrderPreview, ComboBox<OrderStatus>>("comboStatus"));
 		orderIDColCD.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderID"));
 		customerIDColCD.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("customerID"));
@@ -269,8 +271,6 @@ public class BranchManagerOrderManagementController implements Initializable {
 		orderDateColCD.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderDate"));
 		expectedDeliveryColCD.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("expectedDelivery"));
 
-//		
-
 		OrderHandleController.setOrdersForBranchManagerCD(ClientHandleTransmission.getListOrderPreview().get(3));
 		listViewCD.addAll(OrderHandleController.getOrdersForBranchManagerCD());
 		OrdersDeliveryCancel.setItems(listViewCD);
@@ -278,10 +278,6 @@ public class BranchManagerOrderManagementController implements Initializable {
 
 	private void initCanelOrdersTable() {
 		showColC.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("Details", (OrderPreview o) -> {
-
-			// need to send list to screen
-			// ObservableList<Product>
-			// listToNextScreen=FXCollections.observableArrayList(o.getItems());
 
 			List<OrderPreview> details = OrderHandleController.getOrdersForBranchManagerC();
 			for (OrderPreview or : details) {
@@ -297,7 +293,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 			BranchManagerOrderDetailsController ordersDetails = new BranchManagerOrderDetailsController();
 
 			try {
-//				ordersDetails.list.addAll(orderPrivie.getItems());
+
 				ordersDetails.start(primaryStage);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -314,7 +310,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 		orderDateColC.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderDate"));
 		expectedDeliveryColC.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("expectedDelivery"));
 
-//		
+
 
 		OrderHandleController.setOrdersForBranchManagerC(ClientHandleTransmission.getListOrderPreview().get(2));
 		listViewC.addAll(OrderHandleController.getOrdersForBranchManagerC());
@@ -325,9 +321,6 @@ public class BranchManagerOrderManagementController implements Initializable {
 		// show button function
 		showColD.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("Details", (OrderPreview o) -> {
 
-			// need to send list to screen
-			// ObservableList<Product>
-			// listToNextScreen=FXCollections.observableArrayList(o.getItems());
 
 			List<OrderPreview> details = OrderHandleController.getOrdersForBranchManagerD();
 			for (OrderPreview or : details) {
@@ -338,12 +331,12 @@ public class BranchManagerOrderManagementController implements Initializable {
 				}
 			}
 
-			// open screen of details -- > need to init before starting
+			
 			Stage primaryStage = new Stage();
 			BranchManagerOrderDetailsController ordersDetails = new BranchManagerOrderDetailsController();
 
 			try {
-//				ordersDetails.list.addAll(orderPrivie.getItems());
+
 				ordersDetails.start(primaryStage);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -360,7 +353,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 		orderDateColD.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderDate"));
 		expectedDeliveryColD.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("expectedDelivery"));
 
-//		
+	
 
 		OrderHandleController.setOrdersForBranchManagerD(ClientHandleTransmission.getListOrderPreview().get(1));
 		listViewD.addAll(OrderHandleController.getOrdersForBranchManagerD());
@@ -370,10 +363,6 @@ public class BranchManagerOrderManagementController implements Initializable {
 	private void initOrdinaryOrderTable() {
 		// show button function
 		showCol.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("Details", (OrderPreview o) -> {
-
-			// need to send list to screen
-			// ObservableList<Product>
-			// listToNextScreen=FXCollections.observableArrayList(o.getItems());
 
 			List<OrderPreview> details = OrderHandleController.getOrdersForBranchManager();
 			for (OrderPreview or : details) {
@@ -389,7 +378,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 			BranchManagerOrderDetailsController ordersDetails = new BranchManagerOrderDetailsController();
 
 			try {
-//				ordersDetails.list.addAll(orderPrivie.getItems());
+
 				ordersDetails.start(primaryStage);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -406,7 +395,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 		orderDateCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderDate"));
 		expectedDeliveryCol.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("expectedDelivery"));
 
-//		
+	
 
 		OrderHandleController.setOrdersForBranchManager(ClientHandleTransmission.getListOrderPreview().get(0));
 		listView.addAll(OrderHandleController.getOrdersForBranchManager());
@@ -421,20 +410,114 @@ public class BranchManagerOrderManagementController implements Initializable {
 	@FXML
 	void updateBtn(ActionEvent event) {
 		List<OrderPreview> orderPreview = OrderHandleController.getOrdersForBranchManager();
+		List<OrderPreview>orderPreviewD=OrderHandleController.getOrdersForBranchManagerD();
+		List<String>approve=new ArrayList<>();
+		List<String>cancel=new ArrayList<>();
+		List<List<String>>details=new ArrayList<>();
+		
+		List<OrderPreview>orderPreviewC=OrderHandleController.getOrdersForBranchManagerC();
+		List<OrderPreview>orderPreviewCD=OrderHandleController.getOrdersForBranchManagerCD();
+		List<List<OrderPreview>>orders=Arrays.asList(orderPreview,orderPreviewD,orderPreviewC,orderPreviewCD);
 		List<Order> order = new ArrayList<>();
-		for (OrderPreview or : orderPreview) {
-			Order o = new Order(or.getOrderID(), or.getCustomerID(), or.getBranchID(), or.getPrice(),
-					or.getGreetingCard(), or.getOrderDate(), or.getExpectedDelivery(), or.getItems());
-			o.setStatus(or.getComboStatus().getValue());
-			order.add(o);
+		for(List<OrderPreview>list:orders) {
+		for (OrderPreview or : list) {
+			
+			Order o = createOrderUpdate(order, or);
+			addingCustomerToNotifyLists(approve, cancel, o);
+			
 		}
+		}
+		
+		sendAllOrderToDB(approve, cancel, details, order);
+	}
+	/**
+	 * send all the orders after there status change or not change and update
+	 * the data in the DB
+	 * @param approve
+	 * @param cancel
+	 * @param details
+	 * @param order
+	 */
+	private void sendAllOrderToDB(List<String> approve, List<String> cancel, List<List<String>> details,
+			List<Order> order) {
 		if (ClientHandleTransmission.updateOrders(order) == Response.UPDATE_ORDER_SUCCEED) {
 			upadteFeedBack.setText("Update Succeed");
 			upadteFeedBack.setTextFill(Color.GREEN);
+			details.addAll(Arrays.asList(approve,cancel));
+			try {
+	
+				List<List<User>>users=ClientHandleTransmission.getCutomersUserDetails(details);
+				List<User>userOrderApprove=new ArrayList<>();
+				List<User>userOrderCancelApprove=new ArrayList<>();
+				/**
+				 * return List of user that there orders was approve
+				 * by the branch manager
+				 */
+				userOrderApprove=users.get(0);
+				/**
+				 * return List of user that there orders cancel was approve
+				 * by the branch manager
+				 */
+				userOrderCancelApprove=users.get(1);
+				notifyAllCustomerOrdersApprove(userOrderApprove);
+				notifyAllCutomerOrderCnacelApprove(userOrderCancelApprove);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
 
 		} else {
 			upadteFeedBack.setText("Update Failed");
 			upadteFeedBack.setTextFill(Color.RED);
+		}
+	}
+	/**
+	 * Create new orders object and adding him to the list
+	 * @param order
+	 * @param or
+	 * @return
+	 */
+	private Order createOrderUpdate(List<Order> order, OrderPreview or) {
+		Order o = new Order(or.getOrderID(), or.getCustomerID(), or.getBranchID(), or.getPrice(),
+				or.getGreetingCard(), or.getOrderDate(), or.getExpectedDelivery(), or.getItems());
+		o.setStatus(or.getComboStatus().getValue());
+		order.add(o);
+		return o;
+	}
+	/**
+	 * adding customers to notify list if there order status is equals
+	 * to approve order or cancellation of any kind
+	 * @param approve
+	 * @param cancel
+	 * @param o
+	 */
+	private void addingCustomerToNotifyLists(List<String> approve, List<String> cancel, Order o) {
+		if(o.getStatus().equals(OrderStatus.APPROVE) || o.getStatus().equals(OrderStatus.APPROVE_WITH_DELIVERY)) {
+			approve.add(o.getCustomerID());
+		}
+		if(o.getStatus().equals(OrderStatus.APPROVE_ORDER_CANCELATION) || o.getStatus().equals(OrderStatus.APPROVE_ORDER_DELIVERY_CANCELATION)) {
+			
+			cancel.add(o.getCustomerID());
+		}
+	}
+	/**
+	 * send email to all users that there orders request was approve
+	 * @param userOrderCancelApprove
+	 * @throws Exception
+	 */
+	private void notifyAllCutomerOrderCnacelApprove(List<User> userOrderCancelApprove) throws Exception {
+		for(User u:userOrderCancelApprove) {
+			EmailSending.sendMail(u.getEmail(),u.getPhoneNumber(),u.getFirstName()+" Order Cancel was Approve ","Order Cancel");
+		}
+	}
+	/**
+	 * send email to all users that there orders cancel request was approve
+	 * @param userOrderCancelApprove
+	 * @throws Exception
+	 */
+	private void notifyAllCustomerOrdersApprove(List<User> userOrderApprove) throws Exception {
+		for(User u:userOrderApprove) {
+		EmailSending.sendMail(u.getEmail(),u.getPhoneNumber(),u.getFirstName()+" Order Approve ","Order Approve");
 		}
 	}
 

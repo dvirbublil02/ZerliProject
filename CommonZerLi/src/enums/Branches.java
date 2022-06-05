@@ -1,5 +1,8 @@
 package enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Constant Enum that contain all the branches in Zerli with there identify
  * numbers
@@ -12,13 +15,17 @@ public enum Branches {
 	HAIFA("Haifa",2525),
 	TEL_AVIV("Tel-Aviv",5555);
 	
+	
+
 	private int number;
 	private String name;
 
 	private Branches(String name,int number) {
 	 this.number=number;
 	 this.name=name;
+	 
 	}
+	
 	
 	public int getNumber() {
 		return number;

@@ -216,7 +216,7 @@
                                        <children>
                                           <Label fx:id="feedbackMsg">
                                              <font>
-                                                <Font name="Candara Bold" size="12.0" />
+                                                <Font name="Candara Bold" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>

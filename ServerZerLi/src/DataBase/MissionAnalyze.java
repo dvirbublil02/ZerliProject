@@ -228,6 +228,19 @@ public class MissionAnalyze {
 			ServerQuaries.getCustomerOrdersHistory(obj, con);
 			break;
 		}
+		case GET_CUSTOMER_DETAILS:{
+			ServerQuaries.getCustomerDetailsFromDB(obj, con);
+			break;
+		}
+		case GET_CUTOMER_TO_NOTIFY:{
+			ServerQuaries.getCustomerDetailsForNotify(obj, con);
+			break;
+		}
+		case GET_BRANCH_NAME_BY_ID:{
+			String branchNameString = ReportsQuaries.getBranchNamebyBranchID((String)obj.getInformation(),con);
+			obj.setInformation(branchNameString);
+			break;
+		}
 
 		}
 		

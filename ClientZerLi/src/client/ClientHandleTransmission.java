@@ -383,6 +383,26 @@ public class ClientHandleTransmission {
 		return orderPreviews;
 	}
 	
+	public static List<String> getCustomerDetails(String customerID) {
+		TransmissionPack tp = new TransmissionPack(Mission.GET_CUSTOMER_DETAILS, null, customerID); // The user is Branch manager
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		if(tp.getResponse() == Response.GET_CUSTOMER_DETAILS_SUCCESS) {
+			return (List<String>) tp.getInformation();
+		}
+		return null;
+	}
+	@SuppressWarnings("unchecked")
+	public static List<List<User>>getCutomersUserDetails(List<List<String>>details){
+		TransmissionPack tp = new TransmissionPack(Mission.GET_CUTOMER_TO_NOTIFY, null, details); // The user is Branch manager
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		if(tp.getResponse() == Response.GET_ALL_CUTOMERS_TO_NOTIFIY_SUCCEED) {
+			return (List<List<User>>) tp.getInformation();
+		}
+		return null;
+	}
+	
 
 	private static void loadTheRightScreen(MouseEvent event, TransmissionPack tp) throws Exception {
 		((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
@@ -1087,6 +1107,15 @@ public class ClientHandleTransmission {
 			return false;
 		}
 
+	}
+	public static String getBranchName(String branchID) {
+		if(branchID == null) {
+			return null;
+		}
+		TransmissionPack tp = new TransmissionPack(Mission.GET_BRANCH_NAME_BY_ID, null, branchID); // The user is Branch manager
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		return (String) tp.getInformation();
 	}
 
 }
