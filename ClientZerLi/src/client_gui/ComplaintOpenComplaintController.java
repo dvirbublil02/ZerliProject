@@ -270,6 +270,7 @@ public class ComplaintOpenComplaintController implements Initializable {
 				}
 			});
 	}
+	
 	/**
 	 * create listener to ComboBox, the listener reset the borders and the
 	 * feedBackMessage to change after the validation check were finish

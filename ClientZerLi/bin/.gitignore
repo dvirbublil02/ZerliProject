@@ -1,2 +1,7 @@
 /client/
 /client_gui/
+/client_gui_prototype/
+/entities/
+/itextpdf-5.5.13.2.jar
+/javafx_images/
+/pdfbox-3.0.0-alpha3.jar
