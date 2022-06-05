@@ -158,14 +158,18 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-	
+		/*
+		 * get the user details to the left side of the screen
+		 */
 		ClientController.initalizeUserDetails(branchManagerNameLbl, phoneNumberLbl, accountStatusLbl, welcomeUserNameLbl, userRoleLbl,
 				((BranchManager) ClientController.user).toString());
 
 		branchID = ((BranchManager) ClientController.user).getBranchID();
 		branchName = ClientHandleTransmission.getBranchName(branchID);
 		branchLbl.setText(" " + branchName + " (" + branchID + ")");
-		
+		/**
+		 * create a living clock on the screen
+		 */
 		AnimationTimer time = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
@@ -173,8 +177,11 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 			}
 		};
 		time.start();
-		
+		/**
+		 * at start lock the remove product button
+		 */
 		ApproveBtn.setDisable(true);
+		
 		IDCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("ID"));
 		firstNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
 		lastNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
@@ -195,18 +202,18 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		}
 		table.setItems(customers);
 		
-//		cvvInfo.setOnMouseMoved(event -> {	
-//			Tooltip tooltipCustom = new Tooltip("CVV 3 digits\n Back of the card.");
-//			Tooltip.install(cvvInfo, tooltipCustom);
-//
-//		});
-//		
-//		creditCardInfo.setOnMouseMoved(event -> {	
-//			Tooltip tooltipCustom = new Tooltip("Credit card number:\n 16 digits");
-//			tooltipCustom.setStyle("-fx-font-size: 20");
-//			Tooltip.install(creditCardInfo, tooltipCustom);
-//
-//		});
+		cvvInfo.setOnMouseMoved(event -> {	
+			Tooltip tooltipCustom = new Tooltip("CVV 3 digits\n Back of the card.");
+			Tooltip.install(cvvInfo, tooltipCustom);
+
+		});
+		
+		creditCardInfo.setOnMouseMoved(event -> {	
+			Tooltip tooltipCustom = new Tooltip("Credit card number:\n 16 digits");
+			tooltipCustom.setStyle("-fx-font-size: 20");
+			Tooltip.install(creditCardInfo, tooltipCustom);
+
+		});
 	}
 
 	/**
