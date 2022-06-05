@@ -184,6 +184,7 @@ public class CustomerViewOrdersController implements Initializable{
 		primaryStage.setTitle("View Orders");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event -> {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 		});

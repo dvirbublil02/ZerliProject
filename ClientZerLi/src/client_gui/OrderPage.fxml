@@ -510,14 +510,14 @@
                                        <children>
                                           <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="135.0">
                                              <children>
-                                                <Label fx:id="totalPriceLabel" text="20.55">
+                                                <Label fx:id="totalPriceLabel" prefHeight="22.0" prefWidth="100.0" text="20.55">
                                                    <font>
                                                       <Font name="Cambria Bold Italic" size="18.0" />
                                                    </font>
                                                 </Label>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                          <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="131.0">
                                              <children>
                                                 <Label fx:id="newCustomerLabel" text="(New Customer)" textFill="#cb0606">
                                                    <font>
@@ -542,7 +542,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <Label fx:id="deliveryPriceLabel" text="20.55">
+                                          <Label fx:id="deliveryPriceLabel" prefHeight="22.0" prefWidth="71.0" text="20.55 ₪">
                                              <font>
                                                 <Font name="Cambria Bold Italic" size="18.0" />
                                              </font>

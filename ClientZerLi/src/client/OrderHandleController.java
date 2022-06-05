@@ -423,7 +423,7 @@ public class OrderHandleController implements nofityOrderListner {
 			newCustomer.setVisible(true);
 			
 			try {
-				priceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8) + "");
+				priceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8) + " ¤");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -436,7 +436,7 @@ public class OrderHandleController implements nofityOrderListner {
 			newCustomer.setVisible(false);
 			
 			try {
-			priceLabel.setText(df.format(OrderHandleController.getTotalPrice())+ "");
+			priceLabel.setText(df.format(OrderHandleController.getTotalPrice())+ " ¤");
 			} catch (Exception e) {
 			// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -444,6 +444,7 @@ public class OrderHandleController implements nofityOrderListner {
 		}
 		
 		System.out.println("total price updated ->" + priceLabel.getText());
+		System.out.println(OrderHandleController.getTotalPrice());
 	}
 
 	public static boolean isDetailsAllreadyOpen() {

@@ -25,6 +25,7 @@ import entities_catalog.ProductInBranch;
 import entities_general.Branch;
 import entities_general.Order;
 import entities_users.Customer;
+import enums.AccountStatus;
 import enums.Branches;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
@@ -167,6 +168,7 @@ public class OrderPageController implements Initializable{
 		primaryStage.setTitle("Order Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event ->{
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 			});	
@@ -223,10 +225,10 @@ public class OrderPageController implements Initializable{
 		
 		if(((Customer) ClientController.user).getIsNewCustomer())
 		{
-			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8));
+			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8)+" ¤");
 		}
 		else
-			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()));
+			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice())+" ¤");
 		
     	//cancel date option pickup 
     	datePickUP.setDisable(true);
@@ -386,6 +388,7 @@ public class OrderPageController implements Initializable{
 						}
 					}
 				
+								
 					progressIndicator.setProgress(1f);
 					//label order screen
 					OrderMassageLabel.setText("Order("+ orderID +") accepted and waiting to approved ");
@@ -400,6 +403,13 @@ public class OrderPageController implements Initializable{
 								+ "Have a nice day :)");
 					
 					popMessageHandler.setTitle("Order Completed");
+					
+					
+					//next order without discount 
+					if(((Customer) ClientController.user).getIsNewCustomer()) {
+						((Customer) ClientController.user).setNewCustomer(false);
+					}
+				
 
 					//open Customer Main screen 
 					((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
@@ -539,12 +549,12 @@ public class OrderPageController implements Initializable{
     		deliveryPriceLabel.setVisible(true);
     		
     		if(((Customer) ClientController.user).getIsNewCustomer()) {
-    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8+OrderHandleController.getShippingPrice()));
+    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8+OrderHandleController.getShippingPrice())+" ¤");
     			newCustomerLabel.setVisible(true);
     		}
     		else
     		{
-    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()+OrderHandleController.getShippingPrice()));
+    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()+OrderHandleController.getShippingPrice())+" ¤");
     			newCustomerLabel.setVisible(false);
     		}
     	}
@@ -557,12 +567,12 @@ public class OrderPageController implements Initializable{
     		deliveryPriceLabel.setVisible(false);
     		
     		if(((Customer) ClientController.user).getIsNewCustomer()) {
-    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8));
+    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8)+" ¤");
     			newCustomerLabel.setVisible(true);
     		}
     		else
     		{
-    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice()));
+    			totalPriceLabel.setText(df.format(OrderHandleController.getTotalPrice())+" ¤");
     			newCustomerLabel.setVisible(false);
     		}
     		

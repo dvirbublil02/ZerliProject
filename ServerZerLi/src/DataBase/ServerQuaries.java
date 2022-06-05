@@ -663,8 +663,8 @@ public class ServerQuaries {
 	 * this method is insert order that customer performed and save it to wate for
 	 * branch manger for improving it save also the order details that in progress
 	 * 
-	 * @param obj
-	 * @param con
+	 * @param TransmissionPack obj - (Mission) + null + (Order)  
+	 * @param Connection con - dataBase connection 
 	 * @author Almog Madar , Mor Ben-Haim
 	 */
 	@SuppressWarnings("null")
@@ -684,6 +684,7 @@ public class ServerQuaries {
 				String query2 = "SELECT MAX(orderID) FROM zerli.order;";
 				String query3 = "INSERT INTO zerli.productinorder(productID, orderID , nameOfproduct, price, backGroundColor, picture, quantity, itemType, dominateColor, productQuantityInOrder, nameOfItem) "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+				String query4 = "UPDATE zerli.customer SET isNewCustomer = '0' WHERE (customerID = (?));";
 
 				try {
 					// insert order to database
@@ -732,6 +733,11 @@ public class ServerQuaries {
 						}
 
 					}
+					
+					//if new customer clear flag in database 
+					pstmt = con.prepareStatement(query4);
+					pstmt.setString(1, order.getCustomerID());
+					pstmt.executeUpdate();
 
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -2070,4 +2076,5 @@ public class ServerQuaries {
 		
 		
 	}
+
 }
