@@ -2473,15 +2473,24 @@ public class ServerQuaries {
 	 * @throws SQLException
 	 */
 	@SuppressWarnings("unchecked")
-	public static void marketingWorkerAddToCatalog(TransmissionPack obj, Connection con) {
+	public static void marketingWorkerAddToCatalog(TransmissionPack obj, Connection con)  {
 		if (obj instanceof TransmissionPack) {
 			List<Product> productsToAdd = new ArrayList<>();
 			productsToAdd = (List<Product>) obj.getInformation();
 			int countInseration = 0;
 			String insertNewItem = "INSERT INTO zerli.product(productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, isOnSale, fixPrice)VALUES(?,?,?,?,?,?,?,?,?,?);";
+			List<String> branchList = getAllBranchId(con);
+			System.out.println(branchList.get(0));
+			System.out.println(branchList.get(1));
+			System.out.println(branchList.get(2));
+
+			String divideProductsToBranches = "INSERT INTO zerli.productinbranch (branchID , productID, quantity) VALUES (?,?,?);";
+			int quantityInBranch, remaining;
+			List<ProductInBranch> productInBranchs = new ArrayList<>();
+			
 			try {
 				for (int i = 0; i < productsToAdd.size(); i++) {
-					PreparedStatement pstmt;
+					PreparedStatement pstmt, pstmt2;
 					pstmt = con.prepareStatement(insertNewItem);
 					pstmt.setString(1, productsToAdd.get(i).getID());
 					pstmt.setString(2, productsToAdd.get(i).getName());
@@ -2497,6 +2506,32 @@ public class ServerQuaries {
 						countInseration++;
 						System.out.println(productsToAdd.get(i));
 					}
+				
+					quantityInBranch = Integer.valueOf(productsToAdd.get(i).getQuantity()) / branchList.size();
+					remaining = Integer.valueOf(productsToAdd.get(i).getQuantity()) % branchList.size();
+					System.out.println("quantity: " + quantityInBranch);
+					System.out.println("remaining: " + remaining);
+					for(int j= 0; j < branchList.size(); j++) {
+						ProductInBranch p = new ProductInBranch(branchList.get(j),productsToAdd.get(i).getID() , quantityInBranch);
+						productInBranchs.add(p);
+						System.out.println(p);
+					}						
+					if(remaining > 0) { // if there is a remaining we give it to the first branch.
+						productInBranchs.get(0).setQuantity(productInBranchs.get(0).getQuantity() +remaining);
+					}
+					
+					for(int k = 0; k < productInBranchs.size(); k++) {
+						pstmt2 = con.prepareStatement(divideProductsToBranches);
+						pstmt2.setString(1, productInBranchs.get(k).getBranchID());
+						pstmt2.setString(2, productInBranchs.get(k).getProductID());
+						pstmt2.setString(3,String.valueOf(productInBranchs.get(k).getQuantity()));
+						System.out.println(productInBranchs.get(k));
+						if(pstmt2.executeUpdate() == 0) {
+							System.out.println("here");
+							obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
+							return;
+						}
+					}
 					if (countInseration == productsToAdd.size()) {
 						obj.setResponse(Response.ADDING_TO_THE_CATALOG_SUCCESS);
 						return;
@@ -2510,7 +2545,6 @@ public class ServerQuaries {
 		} else {
 			obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
 		}
-
 	}
 
 }
