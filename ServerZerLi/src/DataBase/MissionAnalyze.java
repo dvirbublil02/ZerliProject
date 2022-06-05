@@ -198,10 +198,10 @@ public class MissionAnalyze {
 			ServerQuaries.updateOrder(obj, con);
 			break;
 		}
-		case NOTIFY: {
-			ServerQuaries.notifyCustomerService(obj, con);
-			break;
-		}
+//		case NOTIFY: {
+//			ServerQuaries.notifyCustomerService(obj, con);
+//			break;
+//		}
 		case GET_SURVEY_QUESTIONS: {
 			System.out.println("mission analyze step");
 			ServerQuaries.getSurvyQuestions(obj, con);
@@ -228,6 +228,7 @@ public class MissionAnalyze {
 			ServerQuaries.getCustomerOrdersHistory(obj, con);
 			break;
 		}
+
 		case GET_CUSTOMER_DETAILS:{
 			ServerQuaries.getCustomerDetailsFromDB(obj, con);
 			break;
@@ -239,9 +240,19 @@ public class MissionAnalyze {
 		case GET_BRANCH_NAME_BY_ID:{
 			String branchNameString = ReportsQuaries.getBranchNamebyBranchID((String)obj.getInformation(),con);
 			obj.setInformation(branchNameString);
+		}
+
+		case CANCEL_ORDER_BY_CUSTOMER: {
+			ServerQuaries.cancelOrderByCustomer(obj, con);
+			break;
+		}
+		case GET_CUSTOMER_ORDERS_WAITING_CANCELATION: {
+			ServerQuaries.getCustomerOrdersCancelationWaiting(obj, con);
+
 			break;
 		}
 
+	
 		}
 		
 		

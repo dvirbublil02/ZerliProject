@@ -28,7 +28,7 @@ public class EchoServer extends AbstractServer {
 	 * The default port to listen on.
 	 */
 	final public static int DEFAULT_PORT = 5556;
-	private Map<ClientDetails,ConnectionToClient>map=new HashMap<>();
+
 	
 
 	// Constructors ******
@@ -64,8 +64,7 @@ public class EchoServer extends AbstractServer {
 		System.out.println("Message received: " + mission1 + " from " + client);
 
 		try {
-			map.put(ServerScreenController.getClients().get(0),client);
-			System.out.println(map);
+			
 			client.sendToClient(mission1);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -91,14 +90,7 @@ public class EchoServer extends AbstractServer {
 		ServerScreenController.SetMsg("Server has stopped listening for connections.");//adding the msg into his place on the server screen
 	}
 
-	public void notifyCustomer(TransmissionPack tp) {
-		try {
-			map.get(ServerScreenController.getClients().get(0)).sendToClient(tp);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 	
 
 }

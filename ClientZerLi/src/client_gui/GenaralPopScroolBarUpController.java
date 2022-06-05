@@ -21,6 +21,11 @@ import javafx.stage.StageStyle;
 
 public class GenaralPopScroolBarUpController implements Initializable {
 
+	/**	Pop up with Scroll Bar Massage 
+	 *  @author Almog-Madar
+	 */
+	
+	
 	@FXML
 	private Button OKbutton;
 

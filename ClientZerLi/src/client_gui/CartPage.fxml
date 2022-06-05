@@ -131,26 +131,32 @@
                <children>
                   <HBox prefHeight="66.0" prefWidth="592.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="94.0">
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="117.0">
                            <children>
                               <Label prefHeight="17.0" prefWidth="71.0" text="ZerLi Login">
                                  <padding>
                                     <Insets left="5.0" />
                                  </padding>
+                                 <font>
+                                    <Font name="Cambria Bold" size="12.0" />
+                                 </font>
                               </Label>
-                              <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
+                              <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-78.01419067382812" startY="0.050262607634067535" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="116.0">
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="122.0">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="98.0" text="Customer Menu">
+                              <Label prefHeight="18.0" prefWidth="102.0" text="Customer Menu">
                                  <padding>
                                     <Insets left="5.0" />
                                  </padding>
+                                 <font>
+                                    <Font name="Cambria Bold" size="12.0" />
+                                 </font>
                               </Label>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="107.0">
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="122.0">
                            <children>
                               <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0">
                                  <HBox.margin>
@@ -161,38 +167,56 @@
                                  <padding>
                                     <Insets left="5.0" />
                                  </padding>
+                                 <font>
+                                    <Font name="Book Antiqua Bold" size="12.0" />
+                                 </font>
                               </Label>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="92.0">
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="102.0">
                            <children>
                               <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </Line>
-                              <Label text="Cart Page" textFill="RED">
+                              <Label text="Cart Page" textFill="#cb0606">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="Cambria Bold Italic" size="12.0" />
+                                 </font>
                               </Label>
                            </children></HBox>
                         <HBox alignment="CENTER" prefHeight="66.0" prefWidth="90.0">
                            <children>
                               <ProgressIndicator fx:id="progressIndicator" progress="0.0" />
                            </children></HBox>
-                        <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="219.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0">
-                                 <children>
-                                    <HBox alignment="CENTER" prefHeight="54.0" prefWidth="78.0" />
-                                 </children>
-                              </HBox>
+                              <Label fx:id="timer">
+                                 <font>
+                                    <Font name="Cambria Bold" size="12.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="65.0" prefWidth="232.0">
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="128.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0" />
+                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="99.0">
+                                 <children>
+                                    <Button fx:id="infoBtn" mnemonicParsing="false" styleClass="buttonInfo" stylesheets="@Style.css">
+                                       <graphic>
+                                          <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../javafx_images/infoHelp.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                         </HBox>
                      </children>
@@ -342,11 +366,20 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="96.0" prefWidth="142.0">
                                  <children>
                                     <Label fx:id="priceLabel" textFill="#cb0606">
                                        <font>
                                           <Font name="Cambria Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="96.0" prefWidth="166.0">
+                                 <children>
+                                    <Label fx:id="newCustomerLabel" text="(New Customer)" textFill="#cb0606">
+                                       <font>
+                                          <Font name="Cambria Italic" size="14.0" />
                                        </font>
                                     </Label>
                                  </children>

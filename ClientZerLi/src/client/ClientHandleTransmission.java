@@ -46,6 +46,7 @@ import entities_catalog.ProductInBranch;
 import entities_catalog.ProductInOrder;
 
 import entities_general.Branch;
+import entities_general.Cancellation;
 import entities_general.CreditCard;
 
 import entities_general.CustomersPreview;
@@ -294,19 +295,33 @@ public class ClientHandleTransmission {
 	 * 
 	 */
 
-	public static int addOrder(Branches branchName, String greetingCard, String orderDate, String expectedDelivery,
-			boolean status) {
+	public static int addOrder(Branches branchName, String greetingCard ,String orderDate, String expectedDelivery,
+			String status) {
 
 		// get Custom + regular products in order
 		Map<String, List<ProductInOrder>> productInOrderFinallCart = OrderHandleController.getCustomProductInOrder();
 		productInOrderFinallCart.put("Regular", OrderHandleController.getProductInOrder());
-
-		Order order = new Order(null, ClientController.user.getID(), String.valueOf(branchName.getNumber()),
-				OrderHandleController.getTotalPrice(), greetingCard, orderDate, expectedDelivery,
-				productInOrderFinallCart);
-
-		if (status)
+		Order order;
+		
+		//new customer order or not price updated 
+		if(((Customer) ClientController.user).getIsNewCustomer()) {
+			order = new Order(null, ClientController.user.getID(), String.valueOf(branchName.getNumber()),
+					OrderHandleController.getTotalPrice()*0.8, greetingCard, orderDate, expectedDelivery,
+					productInOrderFinallCart);
+		}
+		else
+		{
+			order = new Order(null, ClientController.user.getID(), String.valueOf(branchName.getNumber()),
+					OrderHandleController.getTotalPrice(), greetingCard, orderDate, expectedDelivery,
+					productInOrderFinallCart);
+		}
+		
+		
+		if (status.equals("delivery"))
 			order.setStatus(OrderStatus.PENDING_WITH_DELIVERY);
+		else if ((status.equals("takeaway"))) 
+				order.setStatus(OrderStatus.PENDING);	
+
 
 		TransmissionPack tp = new TransmissionPack(Mission.ADD_ORDER, null, order);
 
@@ -1116,6 +1131,49 @@ public class ClientHandleTransmission {
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		return (String) tp.getInformation();
+	}
+
+	
+	/**
+	 * cancel order request by customer and create cancellation object ;
+	 * @param orderID
+	 * @return
+	 */
+	public static boolean customerCancelOrder(Cancellation info) {
+
+	TransmissionPack tp = new TransmissionPack(Mission.CANCEL_ORDER_BY_CUSTOMER, null,info);
+			ClientUI.chat.accept(tp);
+			tp = ClientUI.chat.getObj();
+			switch (tp.getResponse()) {
+			case CANCEL_ORDER_BY_CUSTOMER_SUCCESS: {
+				return true;
+			}
+
+			case CANCEL_ORDER_BY_CUSTOMER_FAILD: {
+				return false;
+			}
+			}
+
+			return false;
+	}
+
+	public static List<Order> getCancellationRequetsOrder() {
+		// TODO Auto-generated method stub
+		TransmissionPack tp = new TransmissionPack(Mission.GET_CUSTOMER_ORDERS_WAITING_CANCELATION, null,
+				ClientController.user.getID());
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		switch (tp.getResponse()) {
+		case GET_CUSTOMER_ORDERS_SUCCESS: {
+			return (List<Order>) tp.getInformation();
+		}
+
+		case GET_CUSTOMER_ORDERS_FAILD: {
+			return new ArrayList<Order>();
+		}
+		}
+
+		return new ArrayList<Order>();
 	}
 
 }

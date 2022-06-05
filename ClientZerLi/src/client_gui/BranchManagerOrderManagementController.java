@@ -362,7 +362,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 
 	private void initOrdinaryOrderTable() {
 		// show button function
-		showCol.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("Details", (OrderPreview o) -> {
+		showCol.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("+", (OrderPreview o) -> {
 
 			List<OrderPreview> details = OrderHandleController.getOrdersForBranchManager();
 			for (OrderPreview or : details) {

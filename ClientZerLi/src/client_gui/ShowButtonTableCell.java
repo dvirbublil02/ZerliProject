@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 
 public class ShowButtonTableCell<S> extends TableCell<S, Button> {
@@ -14,7 +16,12 @@ public class ShowButtonTableCell<S> extends TableCell<S, Button> {
     public ShowButtonTableCell(String label, Function<S,S> function) {
         //this.getStyleClass().add("action-button-table-cell");
 
-        this.actionButton = new Button(label);
+        this.actionButton = new Button();
+		Image image1 = new Image("/javafx_images/details.png", 24, 24, true, true);
+		ImageView imageView1 = new ImageView(image1);
+		imageView1.setImage(image1);
+		actionButton.setGraphic(imageView1);
+		actionButton.setStyle("-fx-cursor:hand;");
         this.actionButton.setOnAction((ActionEvent e) -> {
             function.apply(getCurrentItem());
         });

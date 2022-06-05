@@ -34,14 +34,14 @@ public class TimerRunner extends TimerTask {
 		Date prevMonth = c.getTime();
 		c.add(Calendar.MONTH, -2);
 		Date prevQuarter = c.getTime();
-		//if(current.getDay()!= newDate.getDay()) {
-			System.out.println("New Day");
-			//TBD : Add actions after one day.
-			TransmissionPack obj=new TransmissionPack(Mission.NOTIFY,null,null);
-			ServerQuaries.notifyCustomerService(obj, null);
-
-	//	}
-		
+//		//if(current.getDay()!= newDate.getDay()) {
+//			System.out.println("New Day");
+//			//TBD : Add actions after one day.
+//			TransmissionPack obj=new TransmissionPack(Mission.NOTIFY,null,null);
+//			ServerQuaries.notifyCustomerService(obj, null);
+//
+//	//	}
+//		
 		if (current.getMonth() != newDate.getMonth()) {
 			System.out.println("New Month");
 			// TBD : Add actions after one month.
