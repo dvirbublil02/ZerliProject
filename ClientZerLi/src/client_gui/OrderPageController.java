@@ -362,7 +362,7 @@ public class OrderPageController implements Initializable{
 						System.out.println("3 later ->" + dateFormat.format(d2));
 						//System.out.println("priceLabel->"+Double.parseDouble(totalPriceLabel.getText()));
 						
-						orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(d1),dateFormat.format(d2),"delivery");
+						orderID=ClientHandleTransmission.addOrder(getBranchName.getValue(),greetingCard.getText(),dateFormat.format(d1),dateFormat.format(d2),"Imidiate delivery");
 					}
 					
 				}

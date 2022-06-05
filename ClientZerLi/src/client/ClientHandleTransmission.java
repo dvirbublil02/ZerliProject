@@ -316,7 +316,9 @@ public class ClientHandleTransmission {
 		else if ((status.equals("takeaway"))) 
 				order.setStatus(OrderStatus.PENDING);	
 
-
+		else if(status.equals("Imidiate delivery")) {
+			order.setStatus(OrderStatus.PENDING_WITH_IMIDATE_DELIVERY);
+		}
 		TransmissionPack tp = new TransmissionPack(Mission.ADD_ORDER, null, order);
 
 		ClientUI.chat.accept(tp);
@@ -327,6 +329,7 @@ public class ClientHandleTransmission {
 			int orderID = (int) tp.getInformation();
 			return orderID;
 		}
+		
 
 		return 0;
 	}
@@ -342,6 +345,7 @@ public class ClientHandleTransmission {
 		tp = ClientUI.chat.getObj();
 		List<OrderPreview> orderPreviewOrdinary = new ArrayList<>();
 		List<OrderPreview> orderPreviewDelivery = new ArrayList<>();
+		List<OrderPreview> orderPreviewDeliveryImidate = new ArrayList<>();
 		List<OrderPreview> orderPreviewCancel = new ArrayList<>();
 		List<OrderPreview> orderPreviewCancelDelivery = new ArrayList<>();
 		List<List<OrderPreview>> orderPreviews = new ArrayList<>();
@@ -369,6 +373,12 @@ public class ClientHandleTransmission {
 					orderPreviewDelivery.add(screen);
 					break;
 				}
+				case PENDING_WITH_IMIDATE_DELIVERY:{
+					ObservableList<OrderStatus>list=FXCollections.observableArrayList(OrderStatus.PENDING_WITH_IMIDATE_DELIVERY,OrderStatus.APPROVE_WITH_IMIDATE_DELIVERY,OrderStatus.CANCEL_WITH_DELIVERY);
+					screen.getComboStatus().setItems(list);
+					orderPreviewDeliveryImidate.add(screen);
+					break;
+				}
 				case CANCEL_ORDER_BY_CUSTOMER:{
 					ObservableList<OrderStatus>list=FXCollections.observableArrayList(OrderStatus.APPROVE_ORDER_CANCELATION,OrderStatus.DECLINE_ORDER_CANCELATION);
 					screen.getComboStatus().setItems(list);
@@ -387,7 +397,7 @@ public class ClientHandleTransmission {
 				}
 				
 			}
-			orderPreviews.addAll(Arrays.asList(orderPreviewOrdinary,orderPreviewDelivery,orderPreviewCancel,orderPreviewCancelDelivery));
+			orderPreviews.addAll(Arrays.asList(orderPreviewOrdinary,orderPreviewDelivery,orderPreviewDeliveryImidate,orderPreviewCancel,orderPreviewCancelDelivery));
 		}
 		return orderPreviews;
 	}

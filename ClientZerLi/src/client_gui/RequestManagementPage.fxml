@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderManagementController">
+<AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderManagementController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1006.0">
          <children>
@@ -193,7 +193,7 @@
                                  <children>
                                     <TabPane fx:id="tabPane" prefHeight="406.0" prefWidth="698.0" tabClosingPolicy="UNAVAILABLE">
                                       <tabs>
-                                        <Tab  text="Ordinary Order">
+                                        <Tab text="Ordinary Order">
                                           <content>
                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                    <children>
@@ -287,6 +287,49 @@
                                                 </AnchorPane>
                                           </content>
                                         </Tab>
+                                          <Tab text="Delivery Order Imidiate">
+                                            <content>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <VBox prefHeight="485.0" prefWidth="698.0">
+                                                         <children>
+                                                            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="698.0">
+                                                               <children>
+                                                                  <HBox prefHeight="35.0" prefWidth="3.0" />
+                                                                  <Label prefWidth="131.0" text="Order Requests">
+                                                                     <font>
+                                                                        <Font name="System Bold" size="13.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                               </children>
+                                                            </HBox>
+                                                            <HBox prefHeight="444.0" prefWidth="698.0">
+                                                               <children>
+                                                                  <TableView fx:id="OrdersDeliveryImdidate" prefHeight="414.0" prefWidth="698.0" HBox.hgrow="ALWAYS">
+                                                                     <columns>
+                                                                        <TableColumn fx:id="showColDI" prefWidth="75.0" text="show" />
+                                                                        <TableColumn fx:id="statusColDI" prefWidth="113.5999755859375" text="status" />
+                                                                        <TableColumn fx:id="orderIDColDI" prefWidth="56.800048828125" text="orderID" />
+                                                                        <TableColumn fx:id="customerIDColDI" prefWidth="72.7999267578125" text="customerID" />
+                                                                        <TableColumn fx:id="branchIDColDI" prefWidth="63.20001220703125" text="branchID" />
+                                                                        <TableColumn fx:id="priceColDI" prefWidth="54.4000244140625" text="price" />
+                                                                        <TableColumn fx:id="orderDateColDI" prefWidth="132.0" text="orderDate" />
+                                                                        <TableColumn fx:id="expectedDeliveryColDI" prefWidth="143.199951171875" text="expectedDelivery" />
+                                                                     </columns>
+                                                                  </TableView>
+                                                               </children>
+                                                            </HBox>
+                                                            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                                               <children>
+                                                                  <VBox alignment="CENTER" prefHeight="61.0" prefWidth="698.0" />
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </AnchorPane>
+                                            </content>
+                                          </Tab>
                                           <Tab text="Cancel Order">
                                             <content>
                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">

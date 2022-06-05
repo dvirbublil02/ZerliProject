@@ -243,14 +243,7 @@ public class ServerQuaries {
 					System.out.println(rs.getString(4));
 					if (user.getUserName().equals(rs.getString(1)) && user.getPassword().equals(rs.getString(2))) {
 						if (checkIfLoggedin(user, rs.getString(3), rs.getString(4), obj, con) == false) {
-							if (rs.getString(4).equals("shopworker")) {
-								stmt2 = con.createStatement();
-								ResultSet rs2 = stmt2
-										.executeQuery("SELECT branchID FROM zerli.shopworker WHERE shopworkerID='"
-												+ rs.getString(3) + "'");
-
-								((ShopWorker) obj.getInformation()).setBranchID(rs2.getString(1));
-							}
+							
 							obj.setResponse(Response.USER_EXIST);
 
 							return;
@@ -751,7 +744,7 @@ public class ServerQuaries {
 
 			List<Order> orders = new ArrayList<>();
 
-			String query = "SELECT * FROM zerli.order WHERE status='PENDING' OR status='PENDING_WITH_DELIVERY' OR status='CANCEL_ORDER_DELIVERY_BY_CUSTOMER' OR status='CANCEL_ORDER_BY_CUSTOMER'";
+			String query = "SELECT * FROM zerli.order WHERE status='PENDING' OR status='PENDING_WITH_DELIVERY' OR status='CANCEL_ORDER_DELIVERY_BY_CUSTOMER' OR status='CANCEL_ORDER_BY_CUSTOMER' OR status='PENDING_WITH_IMIDATE_DELIVERY'";
 
 			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
@@ -786,7 +779,7 @@ public class ServerQuaries {
 					rs2.close();
 
 					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
-							rs.getString(5), rs.getTimestamp(7).toString(), rs.getTimestamp(8).toString(), products);
+							rs.getString(5), rs.getString(7), rs.getString(8), products);
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
 
 					orders.add(order);
@@ -1665,7 +1658,7 @@ public class ServerQuaries {
 			Statement stmt;
 			PreparedStatement pstmt;
 			ResultSet rs;
-			String updateOrderID = "UPDATE zerli.order SET status=? WHERE orderID='";
+			String updateOrderID = "UPDATE zerli.order SET status=?, expectedDelivery=? WHERE orderID='";
 			String updateDeliveryStatus = "UPDATE zerli.deliveries SET status='READY_TO_GO' WHERE orderID='";
 			String getRefund = "SELECT expectedRefund FROM zerli.cancelation WHERE orderID='";
 			String updateCusomerBalance = "UPDATE zerli.customer SET balance=balance+? WHERE customerID='";
@@ -1686,6 +1679,26 @@ public class ServerQuaries {
 						break;
 					}
 					case APPROVE_WITH_DELIVERY: {
+						updateDelivryStatusToReadyToGo(con, updateDeliveryStatus, o);
+						updateOrderIDStatus(con, updateOrderID, o);
+						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
+						break;
+					}
+					case APPROVE_WITH_IMIDATE_DELIVERY:{
+						Date d=new Date();
+						DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						try {
+							d = sdf.parse(o.getOrderDate());
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Calendar cl = Calendar.getInstance();
+						cl.setTime(d);
+						cl.add(Calendar.HOUR_OF_DAY, 3);
+						Date currentDatePlusOne = cl.getTime();
+						o.setExpectedDelivery(sdf.format(currentDatePlusOne));
+						
 						updateDelivryStatusToReadyToGo(con, updateDeliveryStatus, o);
 						updateOrderIDStatus(con, updateOrderID, o);
 						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
@@ -1825,6 +1838,7 @@ public class ServerQuaries {
 
 		pstmt1 = con.prepareStatement(updateDeliveryStatus + o.getOrderID() + "'");
 		pstmt1.setString(1, o.getStatus().name());
+		
 		pstmt1.executeUpdate();
 	}
 
@@ -1918,7 +1932,12 @@ public class ServerQuaries {
 	 * @throws SQLException
 	 */
 	private static void updateOrderIDStatus(Connection con, String query, Order o) throws SQLException {
-		updateDelivryStatus(con, query, o);
+		PreparedStatement pstmt1;
+
+		pstmt1 = con.prepareStatement(query + o.getOrderID() + "'");
+		pstmt1.setString(1, o.getStatus().name());
+		pstmt1.setString(2, o.getExpectedDelivery());
+		pstmt1.executeUpdate();
 	}
 
 	public static void getSurvyQuestions(TransmissionPack obj, Connection con) {
@@ -2275,7 +2294,7 @@ public class ServerQuaries {
 				customerID = (String) obj.getInformation();
 
 			String query = "SELECT * FROM zerli.order  WHERE (customerID = '" + customerID
-					+ "') AND (status = 'CANCEL_ORDER_BY_CUSTOMER');";
+					+ "') AND (status = 'CANCEL_ORDER_BY_CUSTOMER') OR (status = 'CANCEL_ORDER_DELIVERY_BY_CUSTOMER');";
 			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
 				stmt = con.createStatement();

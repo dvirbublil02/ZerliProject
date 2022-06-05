@@ -114,6 +114,35 @@ public class BranchManagerOrderManagementController implements Initializable {
 	private TableColumn<OrderPreview, ComboBox<OrderStatus>> statusColD;
 
 	private ObservableList<OrderPreview> listViewD = FXCollections.observableArrayList();
+	
+	@FXML
+	private TableView<OrderPreview> OrdersDeliveryImdidate;
+
+	@FXML
+	private TableColumn<OrderPreview, String> branchIDColDI;
+
+	@FXML
+	private TableColumn<OrderPreview, String> customerIDColDI;
+
+	@FXML
+	private TableColumn<OrderPreview, String> expectedDeliveryColDI;
+
+	@FXML
+	private TableColumn<OrderPreview, String> orderDateColDI;
+
+	@FXML
+	private TableColumn<OrderPreview, String> orderIDColDI;
+
+	@FXML
+	private TableColumn<OrderPreview, String> priceColDI;
+
+	@FXML
+	private TableColumn<OrderPreview, Button> showColDI;
+
+	@FXML
+	private TableColumn<OrderPreview, ComboBox<OrderStatus>> statusColDI;
+
+	private ObservableList<OrderPreview> listViewDI = FXCollections.observableArrayList();
 
 	@FXML
 	private Label upadteFeedBackC;
@@ -213,6 +242,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 
 		
 		initDeliveryOrderTable();
+		initDeliveryImidateOrderTable();
 
 		
 		initCanelOrdersTable();
@@ -271,7 +301,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 		orderDateColCD.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderDate"));
 		expectedDeliveryColCD.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("expectedDelivery"));
 
-		OrderHandleController.setOrdersForBranchManagerCD(ClientHandleTransmission.getListOrderPreview().get(3));
+		OrderHandleController.setOrdersForBranchManagerCD(ClientHandleTransmission.getListOrderPreview().get(4));
 		listViewCD.addAll(OrderHandleController.getOrdersForBranchManagerCD());
 		OrdersDeliveryCancel.setItems(listViewCD);
 	}
@@ -312,9 +342,52 @@ public class BranchManagerOrderManagementController implements Initializable {
 
 
 
-		OrderHandleController.setOrdersForBranchManagerC(ClientHandleTransmission.getListOrderPreview().get(2));
+		OrderHandleController.setOrdersForBranchManagerC(ClientHandleTransmission.getListOrderPreview().get(3));
 		listViewC.addAll(OrderHandleController.getOrdersForBranchManagerC());
 		OrdersCancel.setItems(listViewC);
+	}
+	
+	private void initDeliveryImidateOrderTable() {
+		// show button function
+		showColDI.setCellFactory(ShowButtonTableCell.<OrderPreview>forTableColumn("Details", (OrderPreview o) -> {
+
+
+			List<OrderPreview> details = OrderHandleController.getOrdersForBranchManagerDI();
+			for (OrderPreview or : details) {
+				if (or.equals(o)) {
+					OrderHandleController.setOrder(or);
+					System.out.println(or);
+					break;
+				}
+			}
+
+			
+			Stage primaryStage = new Stage();
+			BranchManagerOrderDetailsController ordersDetails = new BranchManagerOrderDetailsController();
+
+			try {
+
+				ordersDetails.start(primaryStage);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			return o;
+		}));
+
+		statusColDI.setCellValueFactory(new PropertyValueFactory<OrderPreview, ComboBox<OrderStatus>>("comboStatus"));
+		orderIDColDI.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderID"));
+		customerIDColDI.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("customerID"));
+		branchIDColDI.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("branchID"));
+		priceColDI.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("price"));
+		orderDateColDI.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("orderDate"));
+		expectedDeliveryColDI.setCellValueFactory(new PropertyValueFactory<OrderPreview, String>("expectedDelivery"));
+
+	
+
+		OrderHandleController.setOrdersForBranchManagerDI(ClientHandleTransmission.getListOrderPreview().get(2));
+		listViewDI.addAll(OrderHandleController.getOrdersForBranchManagerDI());
+		OrdersDeliveryImdidate.setItems(listViewDI);
 	}
 
 	private void initDeliveryOrderTable() {
@@ -414,10 +487,10 @@ public class BranchManagerOrderManagementController implements Initializable {
 		List<String>approve=new ArrayList<>();
 		List<String>cancel=new ArrayList<>();
 		List<List<String>>details=new ArrayList<>();
-		
+		List<OrderPreview>orderPreviewDI=OrderHandleController.getOrdersForBranchManagerDI();
 		List<OrderPreview>orderPreviewC=OrderHandleController.getOrdersForBranchManagerC();
 		List<OrderPreview>orderPreviewCD=OrderHandleController.getOrdersForBranchManagerCD();
-		List<List<OrderPreview>>orders=Arrays.asList(orderPreview,orderPreviewD,orderPreviewC,orderPreviewCD);
+		List<List<OrderPreview>>orders=Arrays.asList(orderPreview,orderPreviewD,orderPreviewDI,orderPreviewC,orderPreviewCD);
 		List<Order> order = new ArrayList<>();
 		for(List<OrderPreview>list:orders) {
 		for (OrderPreview or : list) {
@@ -492,7 +565,7 @@ public class BranchManagerOrderManagementController implements Initializable {
 	 * @param o
 	 */
 	private void addingCustomerToNotifyLists(List<String> approve, List<String> cancel, Order o) {
-		if(o.getStatus().equals(OrderStatus.APPROVE) || o.getStatus().equals(OrderStatus.APPROVE_WITH_DELIVERY)) {
+		if(o.getStatus().equals(OrderStatus.APPROVE) || o.getStatus().equals(OrderStatus.APPROVE_WITH_DELIVERY) || o.getStatus().equals(OrderStatus.APPROVE_WITH_IMIDATE_DELIVERY)) {
 			approve.add(o.getCustomerID());
 		}
 		if(o.getStatus().equals(OrderStatus.APPROVE_ORDER_CANCELATION) || o.getStatus().equals(OrderStatus.APPROVE_ORDER_DELIVERY_CANCELATION)) {

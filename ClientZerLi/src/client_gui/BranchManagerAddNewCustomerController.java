@@ -202,18 +202,18 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		}
 		table.setItems(customers);
 		
-		cvvInfo.setOnMouseMoved(event -> {	
-			Tooltip tooltipCustom = new Tooltip("CVV 3 digits\n Back of the card.");
-			Tooltip.install(cvvInfo, tooltipCustom);
-
-		});
-		
-		creditCardInfo.setOnMouseMoved(event -> {	
-			Tooltip tooltipCustom = new Tooltip("Credit card number:\n 16 digits");
-			tooltipCustom.setStyle("-fx-font-size: 20");
-			Tooltip.install(creditCardInfo, tooltipCustom);
-
-		});
+//		cvvInfo.setOnMouseMoved(event -> {	
+//			Tooltip tooltipCustom = new Tooltip("CVV 3 digits\n Back of the card.");
+//			Tooltip.install(cvvInfo, tooltipCustom);
+//
+//		});
+//		
+//		creditCardInfo.setOnMouseMoved(event -> {	
+//			Tooltip tooltipCustom = new Tooltip("Credit card number:\n 16 digits");
+//			tooltipCustom.setStyle("-fx-font-size: 20");
+//			Tooltip.install(creditCardInfo, tooltipCustom);
+//
+//		});
 	}
 
 	/**

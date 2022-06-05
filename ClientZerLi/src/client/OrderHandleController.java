@@ -64,6 +64,8 @@ public class OrderHandleController implements nofityOrderListner {
 
 	private static List<OrderPreview> ordersForBranchManager = new ArrayList<>();
 	private static List<OrderPreview> ordersForBranchManagerD = new ArrayList<>();
+	private static List<OrderPreview> ordersForBranchManagerDI = new ArrayList<>();
+	
 	private static List<OrderPreview> ordersForBranchManagerC = new ArrayList<>();
 	private static List<OrderPreview> ordersForBranchManagerCD = new ArrayList<>();
 	private static OrderPreview order;
@@ -74,6 +76,14 @@ public class OrderHandleController implements nofityOrderListner {
 	
 	
 	
+
+	public static List<OrderPreview> getOrdersForBranchManagerDI() {
+		return ordersForBranchManagerDI;
+	}
+
+	public static void setOrdersForBranchManagerDI(List<OrderPreview> ordersForBranchManagerDI) {
+		OrderHandleController.ordersForBranchManagerDI = ordersForBranchManagerDI;
+	}
 
 	public static List<OrderPreview> getOrdersForBranchManagerD() {
 		return ordersForBranchManagerD;
