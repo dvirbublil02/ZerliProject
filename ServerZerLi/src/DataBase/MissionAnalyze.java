@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import communication.TransmissionPack;
-
+import entities_catalog.Product;
 import ocsf.server.ConnectionToClient;
 
 import entities_users.User;
@@ -224,6 +224,23 @@ public class MissionAnalyze {
 			ServerQuaries.getCustomerOrdersHistory(obj, con);
 			break;
 		}
+		case EXTERNAL_IMPOART:{
+			ExternalDBquaries.ImportUsersData(obj,con);
+			break;
+		}
+		case DELIVERY_LATE_REFUND: {
+			ServerQuaries.UpdateDeliveryWasLateDB(obj, con);
+			break;
+		}
+		case GET_BRANCH_NAME_BY_ID:{
+			String branchNameString = ReportsQuaries.getBranchNamebyBranchID((String)obj.getInformation(),con);
+			obj.setInformation(branchNameString);
+			break;
+		}
+		case GET_CUSTOMER_EMAIL_PHONE:{
+			ServerQuaries.getCustomerEmailAndPhoneFromDB(obj,con);
+			break;
+		}
 
 
 		case GET_CUSTOMER_DETAILS:{
@@ -235,17 +252,7 @@ public class MissionAnalyze {
 			break;
 		}
 
-		case DELIVERY_LATE_REFUND: {
-			ServerQuaries.UpdateDeliveryWasLateDB(obj, con);
 
-			break;
-		}
-		case GET_BRANCH_NAME_BY_ID:{
-			String branchNameString = ReportsQuaries.getBranchNamebyBranchID((String)obj.getInformation(),con);
-			obj.setInformation(branchNameString);
-			break;
-
-		}
 
 		case CANCEL_ORDER_BY_CUSTOMER: {
 			ServerQuaries.cancelOrderByCustomer(obj, con);

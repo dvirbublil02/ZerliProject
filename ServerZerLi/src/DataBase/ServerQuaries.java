@@ -352,10 +352,10 @@ public class ServerQuaries {
 		}
 		case "deliveryagent": {
 			rs = getRowFromTable(userID, type, pstmt);
-			List<String> ordersID = Arrays.asList(rs.getString(9).split("[\\s,]+"));
+			
 			DeliveryAgent deliveryagent = new DeliveryAgent(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
-					rs.getString(8), ordersID);
+					rs.getString(8));
 			obj.setInformation(deliveryagent);
 			break;
 		}
@@ -2117,6 +2117,7 @@ public class ServerQuaries {
 		}
 	}
 
+
 	/**
 	 * request to cancel order by user , create cancellation and update order status
 	 * to CANCEL_ORDER_BY_CUSTOMER
@@ -2166,63 +2167,68 @@ public class ServerQuaries {
 
 	// get order on cancellation waiting progress - CANCEL_ORDER_BY_CUSTOMER.
 
-	public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con) {
-		if (obj instanceof TransmissionPack) {
-			Deliveries deliveries = (Deliveries) obj.getInformation();
-			Statement stmt;
-			double currentBalance, newBalance;
-			String currBalance = null, getCurrentBalance, updateRefundTable;
-			try {
-				stmt = con.createStatement();
-				ResultSet rs;
-				/*
-				 * get the current balance of the customer that we will be able to update it
-				 * correct
-				 */
-				getCurrentBalance = "SELECT balance FROM zerli.customer WHERE customerID='" + deliveries.getCustomerID()
-						+ "';";
-				System.out.println("query 1: " + getCurrentBalance);
-				rs = stmt.executeQuery(getCurrentBalance);
-				while (rs.next()) {
-					currBalance = rs.getString(1); /* the current balance of the customer */
-					System.out.println(currBalance);
-				}
-				rs.close();
-				currentBalance = Double.parseDouble(currBalance); /* parse the current balance to double */
-				System.out.println(currentBalance);
-				newBalance = currentBalance + deliveries.getPrice(); /* the real new balance of the customer */
-				System.out.println(newBalance);
-				/**
-				 * Update the customer table - add the amount of the refund to the balance of
-				 * the specific customer
-				 */
-				DeliveryLateRefundBalance(con, deliveries, newBalance);
-				/**
-				 * Update refund table with the refund details
-				 */
-				updateRefundsTable(con, deliveries);
-				obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_SUCCESS);
-				return;
-			} catch (Exception e) {
-				e.printStackTrace();
-				obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_FAILED);
-				return;
+
+public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con) {
+	if (obj instanceof TransmissionPack) {
+		Deliveries deliveries = (Deliveries) obj.getInformation();
+		Statement stmt;
+		double currentBalance, newBalance;
+		String currBalance = null, getCurrentBalance, updateRefundTable;
+		try {
+			stmt = con.createStatement();
+			ResultSet rs;
+			/*
+			 * get the current balance of the customer that we will be able to update it
+			 * correct
+			 */
+			getCurrentBalance = "SELECT balance FROM zerli.customer WHERE customerID='" + deliveries.getCustomerID()
+					+ "';";
+			System.out.println("query 1: " + getCurrentBalance);
+			rs = stmt.executeQuery(getCurrentBalance);
+			while (rs.next()) {
+				currBalance = rs.getString(1); /* the current balance of the customer */
+				System.out.println(currBalance);
 			}
-		} else {
+			rs.close();
+			currentBalance = Double.parseDouble(currBalance); /* parse the current balance to double */
+			System.out.println(currentBalance);
+			newBalance = currentBalance + deliveries.getPrice(); /* the real new balance of the customer */
+			System.out.println(newBalance);
+			/**
+			 * Update the customer table - add the amount of the refund to the balance of
+			 * the specific customer
+			 */
+			DeliveryLateRefundBalance(con, deliveries, newBalance);
+			/**
+			 * Update refund table with the refund details
+			 */
+			updateRefundsTable(con, deliveries);
+			obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_SUCCESS);
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
 			obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_FAILED);
 			return;
 		}
+	} else {
+		obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_FAILED);
+		return;
 	}
+}
 
 	private static void updateRefundsTable(Connection con, Deliveries deliveries) throws SQLException {
 		String updateRefundTable;
+
 		updateRefundTable = "INSERT INTO zerli.refunds(refundID, orderID, customerID, ammount, reason, date)VALUES(?,?,?,?,?,?);";
 		PreparedStatement pstmt = con.prepareStatement(updateRefundTable);
+
 		pstmt.setString(1, null);
 		pstmt.setString(2, deliveries.getOrderID());
 		pstmt.setString(3, deliveries.getCustomerID());
 		pstmt.setString(4, String.valueOf(deliveries.getPrice()));
+
 		pstmt.setString(5, "Delivery");
+
 		Calendar c = Calendar.getInstance();
 		java.sql.Timestamp timestamp = new java.sql.Timestamp(c.getTimeInMillis());
 		pstmt.setTimestamp(6, timestamp);
@@ -2232,7 +2238,9 @@ public class ServerQuaries {
 	private static void DeliveryLateRefundBalance(Connection con, Deliveries deliveries, double newBalance)
 			throws SQLException {
 		String giveRefund;
+
 		giveRefund = "UPDATE zerli.customer SET balance=(?) WHERE customerID='" + deliveries.getCustomerID() + "';";
+
 		System.out.println("query 2: " + giveRefund);
 
 		PreparedStatement pstmt = con.prepareStatement(giveRefund);
@@ -2240,15 +2248,18 @@ public class ServerQuaries {
 		pstmt.executeUpdate();
 	}
 
-	public static void getCustomerDetailsFromDB(TransmissionPack obj, Connection con) {
+
+	public static void getCustomerEmailAndPhoneFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-			String customerID = (String) obj.getInformation();
+			String customerID = (String)obj.getInformation();
+
 			System.out.println(customerID);
 			List<String> details = new ArrayList<>();
 			Statement stmt;
 			try {
 				stmt = con.createStatement();
 				ResultSet rs;
+
 				String getDetails = "SELECT firstName, email, phoneNumber FROM zerli.customer WHERE customerID='"
 						+ customerID + "';";
 				rs = stmt.executeQuery(getDetails);
@@ -2256,10 +2267,12 @@ public class ServerQuaries {
 					details.add(rs.getString(1));
 					details.add(rs.getString(2));
 					details.add(rs.getString(3));
+
 				}
 				rs.close();
 				System.out.println(details);
 				obj.setInformation(details);
+
 				obj.setResponse(Response.GET_CUSTOMER_DETAILS_SUCCESS);
 				return;
 			} catch (Exception e) {
@@ -2378,6 +2391,7 @@ public class ServerQuaries {
 		obj.setResponse(Response.GET_MAX_PRODUCT_ID_FAILED);
 	}
 
+
 	/**
 	 * in this method we editing an exist proudct on the catalog by his id
 	 * 
@@ -2450,45 +2464,7 @@ public class ServerQuaries {
 		}
 
 	}
-	/**
-	 * in this method we remove the items that the marketingworker send to us ,by
-	 * the product id.
-	 * 
-	 * @param obj
-	 * @param con
-	 */
-	@SuppressWarnings("unchecked")
-	public static void marketingWorkerRemoveFromCatalog(TransmissionPack obj, Connection con) {
-		if (obj instanceof TransmissionPack) {
-			List<String> productsToRemove = new ArrayList<>();
-			productsToRemove = (List<String>) obj.getInformation();
-			int removeSucess = 0;
-			try {
-				for (int i = 0; i < productsToRemove.size(); i++) {
-					PreparedStatement st = con.prepareStatement("DELETE FROM zerli.product WHERE productID= ?");
-					st.setString(1, productsToRemove.get(i));
-					if (st.executeUpdate() != 0) {
-						removeSucess++;
-					}
-					if (removeSucess == productsToRemove.size()) {
-						obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_SUCCESS);
-						return;
-					}
-
-					obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
-					return;
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
-				return;
-			}
-		} else {
-			obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
-		}
-
-	}
+	
 
 	/**
 	 * in this method we adding new products into the catalog, we getting them on
@@ -2572,5 +2548,79 @@ public class ServerQuaries {
 			obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
 		}
 	}
-
+	/**
+	 * in this method we remove the items that the marketingworker send to us ,by
+	 * the product id.
+	 * 
+	 * @param obj
+	 * @param con
+	 */
+	@SuppressWarnings("unchecked")
+	public static void marketingWorkerRemoveFromCatalog(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			List<String> productsToRemove = new ArrayList<>();
+			productsToRemove = (List<String>) obj.getInformation();
+			int removeSucess = 0;
+			String removeProductsFromBranches = "DELETE FROM zerli.productinbranch WHERE productID= ? ";
+			PreparedStatement pstmt1, pstmt2;
+			try {
+				for (int i = 0; i < productsToRemove.size(); i++) {
+					pstmt1 = con.prepareStatement("DELETE FROM zerli.product WHERE productID= ?");
+					pstmt1.setString(1, productsToRemove.get(i));
+					if (pstmt1.executeUpdate() != 0) {
+						removeSucess++;
+					}
+					pstmt2 = con.prepareStatement(removeProductsFromBranches);
+					pstmt2.setString(1, productsToRemove.get(i));
+					if(pstmt2.executeUpdate() == 0) {
+						obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
+						return;						
+					}
+					if (removeSucess == productsToRemove.size()) {
+						obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_SUCCESS);
+						return;
+					}
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
+				return;
+			}
+		} else {
+			obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
+		}
+	}
+	public static void getCustomerDetailsFromDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			String customerID = (String) obj.getInformation();
+			System.out.println(customerID);
+			List<String> details = new ArrayList<>();
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs;
+				String getDetails = "SELECT firstName, email, phoneNumber FROM zerli.customer WHERE customerID='"
+						+ customerID + "';";
+				rs = stmt.executeQuery(getDetails);
+				while (rs.next() != false) {
+					details.add(rs.getString(1));
+					details.add(rs.getString(2));
+					details.add(rs.getString(3));
+				}
+				rs.close();
+				System.out.println(details);
+				obj.setInformation(details);
+				obj.setResponse(Response.GET_CUSTOMER_DETAILS_SUCCESS);
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+				obj.setResponse(Response.GET_CUSTOMER_DETAILS_FAILED);
+				return;
+			}
+		} else {
+			obj.setResponse(Response.GET_CUSTOMER_DETAILS_FAILED);
+		}
+	}
+	
 }

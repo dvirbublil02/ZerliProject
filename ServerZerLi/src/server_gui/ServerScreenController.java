@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import DataBase.DBController;
+import DataBase.MissionAnalyze;
+import communication.Mission;
 import communication.TransmissionPack;
 import communication.msgClass;
 import javafx.collections.FXCollections;
@@ -191,15 +194,17 @@ public class ServerScreenController implements Initializable {
 	// to be continued
 	@FXML
 	void Import(ActionEvent event) {
-		System.out.println(data);
+		
 		data.add(externalDB);
 		data.add(TxtUserName.getText());
 		data.add(TxtPassword.getText());
 		
-		String p=getport();
+		String p=getport()+"1";
 		if (ServerUI.runServer(p, data)) {
-			
+			TransmissionPack importData=new TransmissionPack(Mission.EXTERNAL_IMPOART,null,null);
+			MissionAnalyze.MissionsAnalyze(importData,DBController.getExternalCon());
 		}
+		this.BTNImport.setDisable(true);
 		
 	}
 

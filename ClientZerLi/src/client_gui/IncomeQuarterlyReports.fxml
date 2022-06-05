@@ -41,7 +41,7 @@
                               <Image url="@../javafx_images/userImageSideScreen.png" />
                            </image>
                         </ImageView>
-                        <Label text="Eran Smith" textFill="WHITE">
+                        <Label fx:id="userName" text="Eran Smith" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="2.0" />
                            </VBox.margin>
@@ -49,7 +49,7 @@
                               <Font name="Corbel Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label text=" Branch Manager" textFill="#323232">
+                        <Label fx:id="role" text=" Branch Manager" textFill="#323232">
                            <font>
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>
@@ -80,7 +80,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="+972-524667888" textFill="#9a9a9a">
+                        <Label fx:id="phoneNumber" text="+972-524667888" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -96,7 +96,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="CONFIRMED" textFill="#9a9a9a">
+                        <Label fx:id="accountStatus" text="CONFIRMED" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -104,7 +104,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="Branch">
+                        <Label>
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -112,7 +112,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="&quot;Karmial&quot;, B.id 5" textFill="#9a9a9a">
+                        <Label textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -153,6 +153,9 @@
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                                  <HBox.margin>
@@ -170,6 +173,9 @@
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
@@ -184,6 +190,9 @@
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
@@ -200,6 +209,9 @@
                                              <HBox.margin>
                                                 <Insets left="5.0" />
                                              </HBox.margin>
+                                             <font>
+                                                <Font name="Cambria" size="12.0" />
+                                             </font>
                                           </Label>
                                        </children>
                                     </HBox>
@@ -207,7 +219,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="61.0" prefWidth="217.0">
                                  <children>
-                                    <Button fx:id="addAnotherReportBTN" mnemonicParsing="false" onAction="#addAnotherReport" prefHeight="42.0" prefWidth="180.0" styleClass="buttonConfirm" stylesheets="@Style.css" text="View Another Quarterly report" />
+                                    <Button fx:id="addAnotherReportBTN" mnemonicParsing="false" onAction="#addAnotherReport" prefHeight="42.0" prefWidth="180.0" style="-fx-border-radius: 30;" styleClass="buttonConfirm" stylesheets="@Style.css" text="View Another Quarterly report" />
                                  </children></HBox>
                            </children>
                         </HBox>
@@ -227,10 +239,10 @@
                            <children>
                               <StackedBarChart fx:id="IncomeLineChart" prefHeight="368.0" prefWidth="683.0" style="-fx-background-radius: 30;" stylesheets="@Style.css">
                                 <xAxis>
-                                  <CategoryAxis side="BOTTOM" />
+                                  <CategoryAxis side="BOTTOM" styleClass="axis-label" stylesheets="@Style.css" tickLabelFill="WHITE" />
                                 </xAxis>
                                 <yAxis>
-                                  <NumberAxis label="Income (ILS)" side="LEFT" />
+                                  <NumberAxis label="Income (ILS)" side="LEFT" styleClass="axis-label" stylesheets="@Style.css" tickLabelFill="WHITE" />
                                 </yAxis>
                               </StackedBarChart>
                            </children>

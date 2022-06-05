@@ -29,7 +29,7 @@ public class DeliveryAgent extends User implements Serializable{
 	
 	 */
 	public DeliveryAgent(String iD, String firstName, String lastName, String email, String phoneNumber,
-			AccountStatus accountStatus, boolean isLoggedIn, String branchID, List<String> orders) {
+			AccountStatus accountStatus, boolean isLoggedIn, String branchID) {
 		super(iD, firstName, lastName, email, phoneNumber, accountStatus, isLoggedIn);
 		this.branchID = branchID;
 	}
@@ -54,5 +54,8 @@ public class DeliveryAgent extends User implements Serializable{
 	public void setBranchID(String branchID) {
 		this.branchID = branchID;
 	}
+
+
+
 
 }

@@ -23,12 +23,14 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
 import client.ReportHandleController;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
+import entities_users.ServiceExpert;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,6 +68,17 @@ public class SurveyReportController implements Initializable {
 	@FXML
 	private Button submitBtn;
 
+    @FXML
+    private Label userName;
+
+    @FXML
+    private Label role;
+
+    @FXML
+    private Label phoneNumber;
+
+    @FXML
+    private Label accountStatus;
 	List<String> titleInfo = new ArrayList<>();
 
 	public void start(Stage stage) throws IOException {
@@ -109,9 +122,13 @@ public class SurveyReportController implements Initializable {
 		}
 		// created PDF document instance
 		Document doc = new Document();
+		File file = null;
 		try {
 			// generate a PDF at the specified location
-			PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("ExpertPDF.pdf"));
+			 file=new File(titleInfo.get(2) + "-" + titleInfo.get(1)+"ExpertPDF.pdf");
+			file.createNewFile();
+			//String file = "C:/expert/"+titleInfo.get(2) + "/" + titleInfo.get(1)+"expertPdf.pdf";
+			PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(file));
 			System.out.println("PDF created.");
 			// opens the PDF
 			doc.open();
@@ -132,7 +149,6 @@ public class SurveyReportController implements Initializable {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		File file=new File("ExpertPDF.pdf");
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    final InputStream in = new FileInputStream(file);
 	    final byte[] buffer = new byte[500];
@@ -146,7 +162,7 @@ public class SurveyReportController implements Initializable {
 		ClientUI.chat.accept(tp);
 		tp=ClientUI.chat.getObj();
 		if(tp.getResponse()==Response.INSERT_SURVEY_REPORT_SUCCESS) {
-   			ClientHandleTransmission.popUp("Thank you Service Expert, your report(PDF) store in the DataBase","Success create pdf");
+   			ClientHandleTransmission.popUp("Report(PDF) store in the DataBase","Success create pdf");
 
 		}else {
    			ClientHandleTransmission.popUp("Faild to create the PDF file.","Faild To Create pdf");
@@ -157,6 +173,8 @@ public class SurveyReportController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, new Label(), role,
+				((ServiceExpert) ClientController.user).toString());
 		List<List<String>> surveyResult = new ArrayList<>();
 		surveyResult = ReportHandleController.getSurveyReportResult();
 		titleInfo = surveyResult.get(0);

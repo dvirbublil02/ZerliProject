@@ -77,7 +77,7 @@ public class ComplaintsReportController implements Initializable {
 	// @Override
 	public void initialize(URL location, ResourceBundle resources) {
 		reportOnList = ReportHandleController.getComplaintsReportResult();
-		System.out.println(reportOnList);
+		
 		// LineChart
 		XYChart.Series series = new XYChart.Series();
 		XYChart.Series series2 = new XYChart.Series();

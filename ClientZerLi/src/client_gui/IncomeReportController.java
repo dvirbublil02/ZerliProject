@@ -3,6 +3,8 @@ package client_gui;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,7 +12,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientController;
+import client.ClientHandleTransmission;
 import client.ReportHandleController;
+import entities_users.BranchManager;
+import entities_users.NetworkManager;
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +33,8 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class IncomeReportController implements Initializable {
-
+	 @FXML
+	    private Label timer;
 	 @FXML
 	    private Button BackBtn;
 
@@ -34,18 +42,33 @@ public class IncomeReportController implements Initializable {
 	    private LineChart<String, Double> IncomeLineChart;
 
 	    @FXML
+	    private Label accountStatus;
+
+	    @FXML
 	    private Label bestDay;
+
+	    @FXML
+	    private Label branch;
 
 	    @FXML
 	    private Label incomeTitle;
 
 	    @FXML
+	    private Label phoneNumber;
+
+	    @FXML
+	    private Label role;
+
+	    @FXML
 	    private Label totalIncomeLabel;
 
 	    @FXML
-	    private Label worstDay;
+	    private Label userName;
 
-	    
+	    @FXML
+	    private Label worstDay;
+	    @FXML
+	    private Label branchTitleLabel;
 
 	List<List<String>> reportOnList = new ArrayList<>();
 	List<String> branchInfo = new ArrayList();
@@ -65,6 +88,25 @@ public class IncomeReportController implements Initializable {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		AnimationTimer time = addingTimer();
+		time.start();
+		switch (ReportHandleController.getUserReport().toString()) {
+		case "Branch Manager": {
+			ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, new Label(), role,
+					((BranchManager) ClientController.user).toString());
+			String branchName=ClientHandleTransmission.getBranchName(((BranchManager) ClientController.user).getBranchID().toString());
+			if(branchName!=null)
+			branch.setText(branchName+" ("+((BranchManager) ClientController.user).getBranchID().toString()+")");
+			break;
+		}
+		case "Network Manager":{
+			ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, new Label(), role,
+					((NetworkManager) ClientController.user).toString());
+			branch.setDisable(true);
+			branchTitleLabel.setDisable(true);
+			break;
+		}
+		}
 		reportOnList = ReportHandleController.getOrdersReportOnListMonth();
 		// LineChart
 		XYChart.Series series = new XYChart.Series();
@@ -187,5 +229,14 @@ public class IncomeReportController implements Initializable {
 
 		}
 		}
+	}
+	private AnimationTimer addingTimer() {
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		return time;
 	}
 }

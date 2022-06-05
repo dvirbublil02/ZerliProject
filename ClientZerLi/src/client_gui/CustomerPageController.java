@@ -140,6 +140,7 @@ public class CustomerPageController implements Initializable {
 		
 		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
 				((Customer) ClientController.user).toString());
+		
 	}
 
 }

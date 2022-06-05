@@ -1,6 +1,8 @@
 package client_gui;
 
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -12,6 +14,8 @@ import client.popMessageHandler;
 import communication.TransmissionPack;
 import entities_reports.Report;
 import entities_users.BranchManager;
+import entities_users.ShopWorker;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,7 +32,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class BranchManagerViewReportPageController implements Initializable {
-//shir changed
+
 	@FXML
 	private Label MonthlyMonthLabel;
 
@@ -70,7 +74,25 @@ public class BranchManagerViewReportPageController implements Initializable {
 
 	@FXML
 	private ComboBox<String> pickYearForQuarterCB;
+	
+    @FXML
+    private Label reportNotFoundLabel;
+    @FXML
+    private Label timer;
 
+    @FXML
+    private Label phoneNumber;
+    @FXML
+    private Label accountStatus;
+
+    @FXML
+    private Label role;
+    @FXML
+    private Label branch;
+
+    @FXML
+    private Label userName;
+    
 	private ObservableList<String> reportTypeList;
 	private ObservableList<String> monthlyMonthList;
 	private ObservableList<String> monthlyYearList;
@@ -86,10 +108,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 		branchPager.start(primaryStage);
 
 	}
-	// private static ObservableList<String[]> months = {"Month", "January",
-	// "February", "March", "April", "May", "June", "July", "August", "September",
-	// "October", "November", "December"};
-
+	
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/BranchManagerviewReportPage.fxml"));
 
@@ -103,7 +122,14 @@ public class BranchManagerViewReportPageController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		AnimationTimer time = addingTimer();
+		time.start();
+		ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, new Label(), role,
+				((BranchManager) ClientController.user).toString());
+		String branchName=ClientHandleTransmission.getBranchName(((BranchManager) ClientController.user).getBranchID().toString());
+		if(branchName!=null)
+		branch.setText(branchName+" ("+((BranchManager) ClientController.user).getBranchID().toString()+")");
+		
 		pickMonthForMonthlyCB.setDisable(true);
 		pickReportTypeForMonthlyCB.setDisable(true);
 		pickYearForMonthlyCB.setDisable(true);
@@ -187,7 +213,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 	void ViewAction(ActionEvent event) throws Exception {
 		if (MonthlyReportButton.isSelected()) {
 			String branchID = ClientHandleTransmission.getBranchID();
-			if (branchID != null) {
+			if (branchID != null && pickYearForMonthlyCB.getValue() !=null && pickMonthForMonthlyCB.getValue() !=null && pickReportTypeForMonthlyCB.getValue() !=null) {
 
 				if (ClientHandleTransmission.getMonthlyReport(branchID, pickYearForMonthlyCB.getValue(),
 						pickMonthForMonthlyCB.getValue(), pickReportTypeForMonthlyCB.getValue())) {
@@ -210,28 +236,44 @@ public class BranchManagerViewReportPageController implements Initializable {
 					}
 
 				} else {
-					ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!",
-							"No Report Avaliable");
+					reportNotFoundLabel.setText("The Requested Report Missing");
 				}
+			}
+			else {
+				reportNotFoundLabel.setText("Some Information Missing");
 			}
 
 		} else if (QuartelyReportButton.isSelected()) {
 			String branchID = ClientHandleTransmission.getBranchID();
-			if (branchID != null) {
+			if (branchID != null && pickQuarterCB.getValue() !=null && pickYearForQuarterCB.getValue() !=null) {
 				if (ClientHandleTransmission.getComliantsQuarterlyReport(branchID,
 						pickQuarterCB.getValue(), pickYearForQuarterCB.getValue())) {
-					TransmissionPack tp = ClientUI.chat.getObj();
-					Report returned = ((Report) tp.getInformation());
+					
 					ReportHandleController.setUserReport((BranchManager) ClientController.user); // down cast
 					((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 					Stage primaryStage = new Stage();
 					ComplaintsReportController complaintReport = new ComplaintsReportController();
 					complaintReport.start(primaryStage);
+				}else {
+					reportNotFoundLabel.setText("The Requested Report Missing");
 				}
+					
 			}else
-			ClientHandleTransmission.popUp("There is no avaliable report yet!\nPlease choose different one!",
-					"No Report Avaliable");
-			// else should be pop up that say : Choose Report first
+				reportNotFoundLabel.setText("Some Information Missing");
+			
 		}
+	}
+	/**
+	 * add Thread timer that give the current Time on the screen
+	 * @return
+	 */
+	private AnimationTimer addingTimer() {
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		return time;
 	}
 }

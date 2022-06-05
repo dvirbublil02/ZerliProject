@@ -8,8 +8,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ReportHandleController;
+import entities_users.NetworkManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,8 +32,19 @@ import javafx.stage.Stage;
 
 public class IncomeQuarterlyReportsController implements Initializable {
 
+
+    @FXML
+    private Label phoneNumber;
+
+    @FXML
+    private Label userName;
+    @FXML
+    private Label accountStatus;
+
 	@FXML
 	private Button BackBtn;
+	@FXML
+	private Label role;
 
 	@FXML
 	private StackedBarChart<String, Double> IncomeLineChart;
@@ -64,6 +77,8 @@ public class IncomeQuarterlyReportsController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, new Label(), role,
+				((NetworkManager) ClientController.user).toString());
 		reportOnList = ReportHandleController.getOrdersReportOnListQuarter();
 		
 		XYChart.Series series = new XYChart.Series();

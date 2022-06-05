@@ -410,8 +410,6 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 		deliveryAgentPageController.start(primaryStage);
 	}
 
-	void SendMessage(List<String> emailPhone) {
-
-	}
+	
 
 }

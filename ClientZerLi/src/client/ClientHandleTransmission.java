@@ -924,11 +924,20 @@ public class ClientHandleTransmission {
 	}
 
 	/**
+
 	 * get the list of deliveries that are still not arrived to the customers
 	 * @return the list of this customers
+	 *
+
+	 * send request to the DB for a list of the deliveries that was approved by the
+	 * manager.
+	 * @param branchID 
+	 * 
+	 * @return
 	 */
 	public static List<DeliveryPreview> getDeliveries(String branchID) {
-		TransmissionPack tp = new TransmissionPack(Mission.GET_DELIVERIES, null, branchID); 
+		TransmissionPack tp = new TransmissionPack(Mission.GET_DELIVERIES, null, branchID); // The user is Branch manager
+
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		List<Deliveries> deliveries = (List<Deliveries>) tp.getInformation();
@@ -1086,7 +1095,7 @@ public class ClientHandleTransmission {
 				 returndReport = (Report) tp.getInformation();
 				 
 					ByteArrayInputStream stream = new ByteArrayInputStream(returndReport.getBlob());
-					InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+					InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8); 
 					BufferedReader bufferedReader = new BufferedReader(streamReader);
 					List<List<String>> reportOnList = new ArrayList<>();
 					String line;
@@ -1099,7 +1108,7 @@ public class ClientHandleTransmission {
 					}
 					ReportHandleController.setComplaintsReportResult(reportOnList);
 					
-					ClientUI.chat.getObj().setInformation(returndReport);
+					ClientUI.chat.getObj().setInformation(reportOnList);
 					return true;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -1115,6 +1124,19 @@ public class ClientHandleTransmission {
 			return false;
 		}
 
+	}
+
+
+	
+
+	public static List<String> getCustomerEmail(String customerID) {
+		TransmissionPack tp = new TransmissionPack(Mission.GET_CUSTOMER_EMAIL_PHONE, null, customerID); // The user is Branch manager
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		if(tp.getResponse() == Response.GET_CUSTOMER_EMAIL_PHONE_SUCCESS) {
+			return (List<String>) tp.getInformation();
+		}
+		return null;
 	}
 
 	/**

@@ -15,7 +15,11 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
+<<<<<<< HEAD
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.ShopWorkerSurveyPageController">
+=======
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" fx:controller="client_gui.ShopWorkerSurveyPageController">
+>>>>>>> origin/dvir-01-06
 	<children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -102,6 +106,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
+<<<<<<< HEAD
                         <Label text="Branch Name">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
@@ -112,6 +117,8 @@
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
                         </Label>
+=======
+>>>>>>> origin/dvir-01-06
                      </children>
                   </VBox>
                   <VBox prefHeight="0.0" prefWidth="308.0" VBox.vgrow="ALWAYS" />

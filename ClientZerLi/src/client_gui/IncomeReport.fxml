@@ -41,7 +41,7 @@
                               <Image url="@../javafx_images/userImageSideScreen.png" />
                            </image>
                         </ImageView>
-                        <Label text="Eran Smith" textFill="WHITE">
+                        <Label fx:id="userName" text="Eran Smith" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="2.0" />
                            </VBox.margin>
@@ -49,7 +49,7 @@
                               <Font name="Corbel Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label text=" Branch Manager" textFill="#323232">
+                        <Label fx:id="role" text=" Branch Manager" textFill="#323232">
                            <font>
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>
@@ -80,7 +80,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="+972-524667888" textFill="#9a9a9a">
+                        <Label fx:id="phoneNumber" text="+972-524667888" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -96,7 +96,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="CONFIRMED" textFill="#9a9a9a">
+                        <Label fx:id="accountStatus" text="CONFIRMED" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -104,7 +104,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="Branch">
+                        <Label fx:id="branchTitleLabel">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -112,7 +112,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="&quot;Karmial&quot;, B.id 5" textFill="#9a9a9a">
+                        <Label fx:id="branch" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -153,6 +153,9 @@
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                                  <HBox.margin>
@@ -170,6 +173,9 @@
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
@@ -178,12 +184,15 @@
                                     <Line endX="-76.2928466796875" endY="0.050252676010131836" startX="-80.0" />
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="61.0" prefWidth="101.0">
+                              <HBox alignment="CENTER" prefHeight="61.0" prefWidth="99.0">
                                  <children>
                                     <Label prefHeight="18.0" prefWidth="98.0" text="Income Report">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children></HBox>
                               <HBox alignment="CENTER" prefHeight="62.0" prefWidth="15.0">
@@ -193,17 +202,27 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="66.0" prefWidth="137.0">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="61.0" prefWidth="127.0">
+                                    <HBox alignment="CENTER" prefHeight="61.0" prefWidth="128.0">
                                        <children>
-                                          <Label prefHeight="18.0" prefWidth="129.0" text="July Income Report" textFill="RED">
+                                          <Label prefHeight="18.0" prefWidth="129.0" text="Income Report" textFill="RED">
                                              <HBox.margin>
                                                 <Insets left="5.0" />
                                              </HBox.margin>
+                                             <font>
+                                                <Font name="Cambria Bold" size="12.0" />
+                                             </font>
                                           </Label>
                                        </children>
                                     </HBox>
                                  </children></HBox>
-                              <HBox alignment="CENTER" prefHeight="61.0" prefWidth="217.0" />
+                              <HBox alignment="CENTER" prefHeight="61.0" prefWidth="217.0">
+                                 <children>
+                                    <Label fx:id="timer" prefHeight="38.0" prefWidth="205.0" text="Time:" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Calibri Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children></HBox>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="57.0" prefWidth="692.0">

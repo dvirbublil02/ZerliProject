@@ -2,6 +2,8 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -15,7 +17,7 @@ import entities_reports.Report;
 import entities_users.BranchManager;
 import entities_users.NetworkManager;
 import enums.Branches;
-
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,6 +34,8 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class NetworkManagerViewReportsController implements Initializable {
+	 @FXML
+	    private Label timer;
 
 	@FXML
 	private Button BackBtn;
@@ -52,7 +56,7 @@ public class NetworkManagerViewReportsController implements Initializable {
 	private ComboBox<String> pickMonthMonthlyCB;
 
 	@FXML
-	private ComboBox<String> PickBranch;
+	private ComboBox<Branches> PickBranch;
 
 	@FXML
 
@@ -105,12 +109,13 @@ public class NetworkManagerViewReportsController implements Initializable {
 
 	private ObservableList<String> pickTypeQuarterly;
 	private ObservableList<String> quarterlyYearList;
-	private ObservableList<String> branchesObser;
+	private ObservableList<Branches> branchesObser;
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		AnimationTimer time = addingTimer();
+		time.start();
 		pickMonthMonthlyCB.setDisable(true);
 
 		pickQuarterQuarterlyCB.setDisable(true);
@@ -125,7 +130,7 @@ public class NetworkManagerViewReportsController implements Initializable {
 		monthlyReportsRadioBtn.setDisable(false);
 
 
-		reportTypeList = FXCollections.observableArrayList("Income", "Orders", "Satisfaction");
+		reportTypeList = FXCollections.observableArrayList("Income", "Orders");
 		pickTypeMonthlyCB.setItems(reportTypeList);
 		monthlyMonthList = FXCollections.observableArrayList();
 		for (int i = 1; i <= 12; i++) {
@@ -154,17 +159,16 @@ public class NetworkManagerViewReportsController implements Initializable {
 		}
 		pickYearQuarterlyCB.setItems(quarterlyYearList);
 
-		branchesObser = FXCollections.observableArrayList("2525", "1005", "4554");
-		PickBranch.setItems(branchesObser);
+		branchesObser = FXCollections.observableArrayList();
 
 		pickTypeQuarterly = FXCollections.observableArrayList("Income");
 		pickTypeQuarterlyCB.setItems(pickTypeQuarterly);
 		// need to add the branches after merge geting almog method.
-//		List<Branches> brances=ClientHandleTransmission.getBranches();
-//		if(brances.size() != 0) {
-//			branchesObser.addAll(brances);
-//		}
-//		PickBranch.setItems(branchesObser);
+		List<Branches> brances=ClientHandleTransmission.getBranches();
+		if(brances.size() != 0) {
+			branchesObser.addAll(brances);
+		}
+		PickBranch.setItems(branchesObser);
 
 
 	}
@@ -229,7 +233,7 @@ public class NetworkManagerViewReportsController implements Initializable {
 
 	void Submit(ActionEvent event) throws IOException {
 		if (quarterlyReportsRadioBtn.isSelected()) {
-			if (ClientHandleTransmission.getQuarterIncomeReport(PickBranch.getValue(), pickYearQuarterlyCB.getValue(),
+			if (ClientHandleTransmission.getQuarterIncomeReport(String.valueOf(PickBranch.getValue().getNumber()), pickYearQuarterlyCB.getValue(),
 					pickQuarterQuarterlyCB.getValue().toUpperCase())) {
 				((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 				Stage primaryStage = new Stage();
@@ -241,7 +245,7 @@ public class NetworkManagerViewReportsController implements Initializable {
 			}
 		} else {
 			if (monthlyReportsRadioBtn.isSelected()) {
-				if (ClientHandleTransmission.getMonthlyReport(PickBranch.getValue(), pickYearForMonthlyCB.getValue(),
+				if (ClientHandleTransmission.getMonthlyReport(String.valueOf(PickBranch.getValue().getNumber()), pickYearForMonthlyCB.getValue(),
 						pickMonthMonthlyCB.getValue(), pickTypeMonthlyCB.getValue())) {
 					TransmissionPack tp = ClientUI.chat.getObj();
 					Report returned = ((Report) tp.getInformation());
@@ -267,6 +271,19 @@ public class NetworkManagerViewReportsController implements Initializable {
 			}
 
 		}
+	}
+	/**
+	 * add Thread timer that give the current Time on the screen
+	 * @return
+	 */
+	private AnimationTimer addingTimer() {
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		return time;
 	}
 
 }

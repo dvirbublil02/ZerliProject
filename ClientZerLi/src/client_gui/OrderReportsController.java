@@ -6,13 +6,20 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
+import client.ClientController;
+import client.ClientHandleTransmission;
 import client.ReportHandleController;
+import entities_users.BranchManager;
+import entities_users.NetworkManager;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -43,6 +50,22 @@ import javafx.stage.Stage;
  */
 public class OrderReportsController implements Initializable {
 
+
+    @FXML
+    private Label accountStatus;
+    @FXML
+    private Label branchDetials;
+    @FXML
+    private Label role;
+
+    @FXML
+    private Label userName;
+    @FXML
+    private Label branchTitle;
+    @FXML
+    private Label headTitle;
+    @FXML
+    private Label phoneNumber;
 	@FXML
 	private Button BackBtn;
 
@@ -59,6 +82,8 @@ public class OrderReportsController implements Initializable {
 	private PieChart pieChartRegular;
 	@FXML
 	private Label reportTitle;
+	@FXML
+	private Label timer;
 
 	private static final DecimalFormat df = new DecimalFormat("0.000");
 	List<List<String>> reportOnList = new ArrayList<>();
@@ -78,6 +103,29 @@ public class OrderReportsController implements Initializable {
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		AnimationTimer time = addingTimer();
+		time.start();
+		switch (ReportHandleController.getUserReport().toString()) {
+		case "Branch Manager": {
+			
+			ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, new Label(), role,
+					((BranchManager) ClientController.user).toString());
+			String branchName=ClientHandleTransmission.getBranchName(((BranchManager) ClientController.user).getBranchID().toString());
+			if(branchName!=null)
+				branchDetials.setText(branchName+" ("+((BranchManager) ClientController.user).getBranchID().toString()+")");
+			headTitle.setText("BranchManager menu");
+			branchTitle.setText("Branch");
+			break;
+		}
+		case "Network Manager":{
+			ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, new Label(), role,
+					((NetworkManager) ClientController.user).toString());
+			branchDetials.setDisable(true);
+			branchTitle.setDisable(true);
+			headTitle.setText("NetworkManager menu");
+			break;
+		}
+		}
 		ObservableList<PieChart.Data> pieChartData = null;
 		ObservableList<PieChart.Data> pieChartData2 = null;
 		reportOnList = ReportHandleController.getOrdersReportOnListMonth();
@@ -89,6 +137,7 @@ public class OrderReportsController implements Initializable {
 			ObservableList<PieChart.Data> pieChartData2) {
 		List<Double> amount = new ArrayList<>();
 		double bouquet = 0, single = 0;
+		System.out.println(reportOnList);
 		branchInfo = reportOnList.get(0); // here we getting the branch information
 		reportTitle.setText("Zerli " + branchInfo.get(1) + "(ID-" + branchInfo.get(0) + ")" + " - " + branchInfo.get(2)
 				+ "-th orders based on products");
@@ -104,31 +153,33 @@ public class OrderReportsController implements Initializable {
 		for (int i = 1; i < reportOnList.size(); i++) {
 			List<String> productInfo = new ArrayList();
 			productInfo = reportOnList.get(i);
-			if (productInfo.get(0).equals("product")) {
+			if (productInfo.get(0).equals("product") ||productInfo.get(0).equals("Product")) {
 				StringBuilder name = new StringBuilder();
-				name.append(productInfo.get(1) + " ");
-				name.append(productInfo.get(2));
+				for(int j=2;j<productInfo.size();j++) {
+					name.append(productInfo.get(j) + " ");
+				}
 				if (flag == false) {
 					pieChartData = FXCollections.observableArrayList(new PieChart.Data(name.toString(),
-							((Integer.parseInt(productInfo.get(3)) / amount.get(0)))));
+							((Integer.parseInt(productInfo.get(1)) / amount.get(0)))));
 
 				} else {
 					pieChartData.add(new PieChart.Data(name.toString(),
-							((Integer.parseInt(productInfo.get(3)) / amount.get(0)))));
+							((Integer.parseInt(productInfo.get(1)) / amount.get(0)))));
 				}
 				flag = true;
 			}
-			if (productInfo.get(0).equals("item")) {
+			if (productInfo.get(0).equals("item") ||productInfo.get(0).equals("Item")) {
 				StringBuilder name = new StringBuilder();
-				name.append(productInfo.get(1) + " ");
-				name.append(productInfo.get(2));
+				for(int j=2;j<productInfo.size();j++) {
+					name.append(productInfo.get(j) + " ");
+				}
 				if (flag2 == false) {
 					pieChartData2 = FXCollections.observableArrayList(new PieChart.Data(name.toString(),
-							((Integer.parseInt(productInfo.get(3)) / amount.get(0)))));
+							((Integer.parseInt(productInfo.get(1)) / amount.get(0)))));
 
 				} else {
 					pieChartData2.add(new PieChart.Data(name.toString(),
-							((Integer.parseInt(productInfo.get(3)) / amount.get(0)))));
+							((Integer.parseInt(productInfo.get(1)) / amount.get(0)))));
 				}
 				flag2 = true;
 			}
@@ -158,8 +209,8 @@ public class OrderReportsController implements Initializable {
 				@Override
 				public void handle(MouseEvent event) {
 
-					Tooltip tooltipCustom = new Tooltip(data.getName() + " " + df.format(data.getPieValue()) + "%");
-					Tooltip.install(data.getNode(), tooltipCustom);
+					Tooltip tooltipReguler = new Tooltip(data.getName() + " " + df.format(data.getPieValue()) + "%");
+					Tooltip.install(data.getNode(), tooltipReguler);
 				}
 			});
 		});
@@ -175,16 +226,19 @@ public class OrderReportsController implements Initializable {
 		for (int i = 1; i < reportOnList.size(); i++) {
 			List<String> productInfo = new ArrayList();
 			productInfo = reportOnList.get(i);
-			if (Integer.parseInt(productInfo.get(3)) > bestSellerAmount) {
-				bestSellerAmount = Integer.parseInt(productInfo.get(3));
-				bestSellerName = new StringBuilder();
-				bestSellerName.append(productInfo.get(1) + " ");
-				bestSellerName.append(productInfo.get(2));
-			} else if (Integer.parseInt(productInfo.get(3)) < worstSellerAmount) {
-				worstSellerAmount = Integer.parseInt(productInfo.get(3));
+			if (Integer.parseInt(productInfo.get(1)) > bestSellerAmount) {
+				bestSellerAmount = Integer.parseInt(productInfo.get(1));
+				 bestSellerName = new StringBuilder();
+				for(int j=2;j<productInfo.size();j++) {
+					bestSellerName.append(productInfo.get(j) + " ");
+				}
+
+			} else if (Integer.parseInt(productInfo.get(1)) < worstSellerAmount) {
+				worstSellerAmount = Integer.parseInt(productInfo.get(1));
 				worstSellerName = new StringBuilder();
-				worstSellerName.append(productInfo.get(1) + " ");
-				worstSellerName.append(productInfo.get(2));
+					for(int j=2;j<productInfo.size();j++) {
+						worstSellerName.append(productInfo.get(j) + " ");
+					}
 			}
 		}
 		worstSeller.setText(worstSellerName.toString());
@@ -210,20 +264,25 @@ public class OrderReportsController implements Initializable {
 
 			List<String> productInfo = new ArrayList();
 			productInfo = reportOnList.get(i);
-			if (productInfo.get(0).equals("product")) {
+			if (productInfo.get(0).equals("product")||productInfo.get(0).equals("Product")) {
 				StringBuilder name = new StringBuilder();
-				name.append(productInfo.get(1) + " ");
-				name.append(productInfo.get(2));
-				series2.getData().add(new XYChart.Data<>(name.toString(), Integer.parseInt(productInfo.get(3))));
-				bouquet += Integer.parseInt(productInfo.get(3));
+				for(int k=2;k<productInfo.size();k++) {
+				System.out.println(productInfo.get(k));
+					name.append(productInfo.get(k) + " ");
+				}
+				System.out.println(name +" "+productInfo.get(1));
+				series2.getData().add(new XYChart.Data<>(name.toString(), Integer.parseInt(productInfo.get(1))));
+				bouquet += Integer.parseInt(productInfo.get(1));
 
 			}
-			if (productInfo.get(0).equals("item")) {
+			if (productInfo.get(0).equals("item") ||productInfo.get(0).equals("Item")) {
 				StringBuilder name = new StringBuilder();
-				name.append(productInfo.get(1) + " ");
-				name.append(productInfo.get(2));
-				series1.getData().add(new XYChart.Data<>(name.toString(), Integer.parseInt(productInfo.get(3))));
-				single += Integer.parseInt(productInfo.get(3));
+				for(int k=2;k<productInfo.size();k++) {
+					name.append(productInfo.get(k) + " ");
+				}
+				System.out.println(name +" "+productInfo.get(1));
+				series1.getData().add(new XYChart.Data<>(name.toString(), Integer.parseInt(productInfo.get(1))));
+				single += Integer.parseInt(productInfo.get(1));
 
 			}
 
@@ -262,6 +321,15 @@ public class OrderReportsController implements Initializable {
 		}
 		}
 
+	}
+	private AnimationTimer addingTimer() {
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		return time;
 	}
 
 }
