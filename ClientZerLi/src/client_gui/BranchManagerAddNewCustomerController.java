@@ -1,12 +1,17 @@
 package client_gui;
 
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import entities_general.CreditCard;
+import entities_users.BranchManager;
 import entities_users.Customer;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +27,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -52,7 +58,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	private Label userRoleLbl;
 
 	@FXML
-	private Label welcomeBackUserNameLbl;
+	private Label welcomeUserNameLbl;
 //////////////////////////////////////////////////////////////
 	@FXML
 	private Label CreditCardNumberLbl;
@@ -68,12 +74,21 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 
 	@FXML
 	private Button BackBtn;
+	
+	@FXML
+    private Button creditCardInfo;
+	
+	@FXML
+    private Button cvvInfo;
 
 	@FXML
 	private TextField CvvTxt;
 
 	@FXML
 	private Label SuccessFailedLbl;
+	
+    @FXML
+    private Label timer;
 
 	@FXML
 	private ComboBox<String> MonthComboBox;
@@ -128,11 +143,14 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	 * the list that will contain the customers from DB we will use this list to get
 	 * details from the DB and then send this details to an observable list.
 	 */
-	List<Customer> pendingCustomers; //
+	private	List<Customer> pendingCustomers; //
 
-	Customer customer = null;
+	private	Customer customer = null;
 
-	CreditCard cc = null;
+	private	CreditCard cc = null;
+	
+	String branchID, branchName;
+
 
 	/**
 	 * initialize the page at the start create the pending customer table and fill
@@ -140,7 +158,30 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		/*
+		 * get the user details to the left side of the screen
+		 */
+		ClientController.initalizeUserDetails(branchManagerNameLbl, phoneNumberLbl, accountStatusLbl, welcomeUserNameLbl, userRoleLbl,
+				((BranchManager) ClientController.user).toString());
+
+		branchID = ((BranchManager) ClientController.user).getBranchID();
+		branchName = ClientHandleTransmission.getBranchName(branchID);
+		branchLbl.setText(" " + branchName + " (" + branchID + ")");
+		/**
+		 * create a living clock on the screen
+		 */
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		time.start();
+		/**
+		 * at start lock the remove product button
+		 */
 		ApproveBtn.setDisable(true);
+		
 		IDCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("ID"));
 		firstNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
 		lastNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
@@ -160,6 +201,19 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 			customers.add(customer);
 		}
 		table.setItems(customers);
+		
+		cvvInfo.setOnMouseMoved(event -> {	
+			Tooltip tooltipCustom = new Tooltip("CVV 3 digits\n Back of the card.");
+			Tooltip.install(cvvInfo, tooltipCustom);
+
+		});
+		
+		creditCardInfo.setOnMouseMoved(event -> {	
+			Tooltip tooltipCustom = new Tooltip("Credit card number:\n 16 digits");
+			tooltipCustom.setStyle("-fx-font-size: 20");
+			Tooltip.install(creditCardInfo, tooltipCustom);
+
+		});
 	}
 
 	/**
@@ -174,6 +228,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		primaryStage.setTitle("Add New Customer");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event -> {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 		});

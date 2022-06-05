@@ -56,7 +56,7 @@
                                     <Font name="Corbel Bold Italic" size="16.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="welcomeBackUserNameLbl" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back" textFill="#3c3131">
+                              <Label fx:id="welcomeUserNameLbl" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome" textFill="#3c3131">
                                  <font>
                                     <Font name="Cambria" size="16.0" />
                                  </font>
@@ -111,7 +111,7 @@
                                     <Insets left="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="Branch">
+                              <Label text=" Branch">
                                  <font>
                                     <Font name="Corbel Bold" size="18.0" />
                                  </font>
@@ -152,15 +152,39 @@
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="165.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="120.0">
                                  <children>
-                                    <Label text="Add New Customer" textFill="RED" />
+                                    <Label text="Add New Customer" textFill="#cb0606">
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font></Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="250.0">
+                                 <children>
+                                    <Label fx:id="timer">
+                                       <font>
+                                          <Font name="Cambria Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="99.0">
+                                 <children>
+                                    <Button fx:id="info" mnemonicParsing="false" styleClass="handHover" stylesheets="@Style.css">
+                                       <graphic>
+                                          <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
+                                       </graphic>
+                                    </Button>
                                  </children>
                               </HBox>
                            </children>
@@ -169,9 +193,9 @@
                            <children>
                               <VBox alignment="CENTER" prefHeight="67.0" prefWidth="698.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Approve New Customer" textAlignment="JUSTIFY" textFill="#0f803a" textOverrun="CLIP">
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Approve New Customer" textAlignment="JUSTIFY" textFill="#11862a" textOverrun="CLIP">
                                        <font>
-                                          <Font name="Cambria Bold Italic" size="20.0" />
+                                          <Font name="Cambria Bold Italic" size="22.0" />
                                        </font>
                                     </Label>
                                  </children>
@@ -198,9 +222,9 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <Label text="Enter Customer Credit Card details" textFill="#0f803a">
+                                          <Label text="Enter Customer Credit Card details" textFill="#11862a">
                                              <font>
-                                                <Font name="System Bold" size="16.0" />
+                                                <Font name="Cambria Bold Italic" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -218,15 +242,26 @@
                                           </VBox>
                                           <VBox alignment="CENTER" prefHeight="50.0" prefWidth="140.0">
                                              <children>
-                                                <TextField fx:id="creditCardNumTxt" prefWidth="140.0" />
-                                                <Label fx:id="CreditCardNumberLbl" />
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <TextField fx:id="creditCardNumTxt" prefWidth="140.0" />
+                                                      <Label fx:id="CreditCardNumberLbl" />
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
-                                          <HBox prefHeight="100.0" prefWidth="25.0" />
-                                          <VBox alignment="CENTER" prefHeight="50.0" prefWidth="85.0">
+                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="50.0">
                                              <children>
-                                                <Label text="Expiration Date" />
-                                                <Label fx:id="ExpirationDateLbl" />
+                                                <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="25.0" text="?" />
+                                             </children></HBox>
+                                          <VBox alignment="CENTER" prefHeight="100.0" prefWidth="85.0">
+                                             <children>
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Expiration Date" />
+                                                      <Label fx:id="ExpirationDateLbl" />
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
                                           <VBox prefHeight="200.0" prefWidth="25.0" />
@@ -258,13 +293,34 @@
                                           </VBox>
                                           <VBox alignment="CENTER" prefHeight="50.0" prefWidth="140.0">
                                              <children>
-                                                <TextField fx:id="CvvTxt" />
-                                                <Label fx:id="CvvLbl" />
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <TextField fx:id="CvvTxt" />
+                                                      <Label fx:id="CvvLbl" />
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
                                           <VBox alignment="CENTER" prefHeight="60.0" prefWidth="418.0">
                                              <children>
-                                                <Label fx:id="SuccessFailedLbl" />
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                         <children>
+                                                            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="50.0">
+                                                               <children>
+                                                                  <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="25.0" text="?" />
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                         <children>
+                                                            <Label fx:id="SuccessFailedLbl" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
                                        </children>
@@ -273,7 +329,15 @@
                               </VBox>
                               <VBox alignment="CENTER" prefHeight="50.0" prefWidth="698.0">
                                  <children>
-                                    <Button fx:id="ApproveBtn" mnemonicParsing="false" onAction="#ApproveCustomer" text="Approve" />
+                                    <Button fx:id="ApproveBtn" mnemonicParsing="false" onAction="#ApproveCustomer" stylesheets="@Style.css" text="Approve">
+                                       <styleClass>
+                                          <String fx:value="buttonConfirm" />
+                                          <String fx:value="transparent" />
+                                          <String fx:value="shadow" />
+                                       </styleClass>
+                                       <font>
+                                          <Font name="Cambria" size="12.0" />
+                                       </font></Button>
                                  </children>
                               </VBox>
                            </children>

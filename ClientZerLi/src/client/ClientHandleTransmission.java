@@ -14,30 +14,25 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+
 import client_gui.BranchManagerPageController;
 import client_gui.CustomerPageController;
-
-import client_gui.DeliveryAgentPageController;
-import client_gui.GenaralPopUpController;
-
 import client_gui.CustomerServicePageController;
 import client_gui.DeliveryAgentPageController;
+import client_gui.GenaralPopUpController;
 import client_gui.LoginController;
+import client_gui.MarketingWorkerManageCatalogController;
+import client_gui.MarketingWorkerOpeningController;
 import client_gui.NetworkManagerPageController;
-
-import client_gui.ShopWorkerPageController;
-
 import client_gui.ServiceExpertPageController;
-
+import client_gui.ShopWorkerPageController;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
@@ -45,15 +40,16 @@ import entities_catalog.Product;
 import entities_catalog.ProductInBranch;
 import entities_catalog.ProductInOrder;
 
+
 import entities_general.Branch;
 import entities_general.Cancellation;
 import entities_general.CreditCard;
 
+
+
 import entities_general.CustomersPreview;
 import entities_general.Deliveries;
-
 import entities_general.DeliveryPreview;
-
 import entities_general.Login;
 import entities_general.Order;
 import entities_general.OrderPreview;
@@ -72,8 +68,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -281,10 +275,10 @@ public class ClientHandleTransmission {
 		TransmissionPack tp = new TransmissionPack(Mission.GET_COLORS, null, null);
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
-		if (tp.getResponse() == Response.DID_NOT_FIND_COLORS) {
-			// adding pop screen
+		if (tp.getResponse() == Response.FOUND_COLORS) {
+			return (ArrayList<String>) tp.getInformation();
 		}
-		return (ArrayList<String>) tp.getInformation();
+		return null;
 	}
 
 	/**
@@ -398,15 +392,7 @@ public class ClientHandleTransmission {
 		return orderPreviews;
 	}
 	
-	public static List<String> getCustomerDetails(String customerID) {
-		TransmissionPack tp = new TransmissionPack(Mission.GET_CUSTOMER_DETAILS, null, customerID); // The user is Branch manager
-		ClientUI.chat.accept(tp);
-		tp = ClientUI.chat.getObj();
-		if(tp.getResponse() == Response.GET_CUSTOMER_DETAILS_SUCCESS) {
-			return (List<String>) tp.getInformation();
-		}
-		return null;
-	}
+
 	@SuppressWarnings("unchecked")
 	public static List<List<User>>getCutomersUserDetails(List<List<String>>details){
 		TransmissionPack tp = new TransmissionPack(Mission.GET_CUTOMER_TO_NOTIFY, null, details); // The user is Branch manager
@@ -445,11 +431,11 @@ public class ClientHandleTransmission {
 			menu.start(primaryStage);
 			break;
 		}
-//		case "Marketing Worker": {
-//			MarketingWorkerPageController menu = new MarketingWorkerPageController();
-//			menu.start(primaryStage);
-//			break; 
-//		}
+		case "Marketing Worker": {
+			MarketingWorkerOpeningController menu = new MarketingWorkerOpeningController();
+			menu.start(primaryStage);
+			break; 
+		}
 		case "Network Manager": {
 			NetworkManagerPageController menu = new NetworkManagerPageController();
 			menu.start(primaryStage);
@@ -928,13 +914,11 @@ public class ClientHandleTransmission {
 	}
 
 	/**
-	 * send request to the DB for a list of the deliveries that was approved by the
-	 * manager.
-	 * 
-	 * @return
+	 * get the list of deliveries that are still not arrived to the customers
+	 * @return the list of this customers
 	 */
-	public static List<DeliveryPreview> getDeliveries() {
-		TransmissionPack tp = new TransmissionPack(Mission.GET_DELIVERIES, null, null); // The user is Branch manager
+	public static List<DeliveryPreview> getDeliveries(String branchID) {
+		TransmissionPack tp = new TransmissionPack(Mission.GET_DELIVERIES, null, branchID); 
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		List<Deliveries> deliveries = (List<Deliveries>) tp.getInformation();
@@ -953,8 +937,7 @@ public class ClientHandleTransmission {
 	/**
 	 * Send to DB the updated statuses of the deliveries and then got back the
 	 * response if the update was a success of not.
-	 * 
-	 * @param deliveriesList
+	 * @param if the update was as success or a failure.
 	 * @return
 	 */
 	public static Response UpdateDeliveriesStatus(List<DeliveryPreview> deliveriesList) {
@@ -1023,7 +1006,7 @@ public class ClientHandleTransmission {
 	}
 
 	public static String getBranchID() {
-		TransmissionPack tp= new TransmissionPack(Mission.GET_BRANCHID_BY_USER,null,ClientController.user); // The user is Branch manager
+		TransmissionPack tp= new TransmissionPack(Mission.GET_BRANCHID_BY_USER,null,ClientController.user); 
 		ClientUI.chat.accept(tp);
 		tp= ClientUI.chat.getObj();
 		return (String)tp.getInformation();
@@ -1123,15 +1106,40 @@ public class ClientHandleTransmission {
 		}
 
 	}
+
+	/**
+	 * give full refund to the customer that his delivery was late
+	 * we send here to the server the delivery details that we will
+	 * update in the DB his refund.
+	 * @param delivery
+	 */
+	public static Response DeliveryWasLateRefund(DeliveryPreview delivery) {
+		DeliveryPreview dp = delivery;
+		Deliveries d = new Deliveries(dp.getDeliveryID(), dp.getOrderID(), dp.getBranchID(), dp.getCustomerID(),
+				dp.getPrice(), dp.getOrderDate(), dp.getExpectedDelivery(), dp.getArrivedDate(),
+				dp.getReceiverName(), dp.getAddress(), dp.getPhoneNumber(), DeliveryStatus.ARRIVED,
+				dp.getOrderProducts());
+		//System.out.println(dp.getDeliveryStatusComboBox());
+		System.out.println(d.getDeliveryStatus());
+		TransmissionPack tp = new TransmissionPack(Mission.DELIVERY_LATE_REFUND, null, d); 
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		return tp.getResponse();
+	}
+
+
 	public static String getBranchName(String branchID) {
 		if(branchID == null) {
 			return null;
 		}
-		TransmissionPack tp = new TransmissionPack(Mission.GET_BRANCH_NAME_BY_ID, null, branchID); // The user is Branch manager
+
+		TransmissionPack tp = new TransmissionPack(Mission.GET_BRANCH_NAME_BY_ID, null, branchID); 
+
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		return (String) tp.getInformation();
 	}
+
 
 	
 	/**
@@ -1175,5 +1183,69 @@ public class ClientHandleTransmission {
 
 		return new ArrayList<Order>();
 	}
+
+	public static List<String> getCustomerDetails(String customerID) {
+		if(customerID == null) {
+			return null;
+		}
+		TransmissionPack tp = new TransmissionPack(Mission.GET_CUSTOMER_DETAILS, null, customerID); 
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		if(tp.getResponse() == Response.GET_CUSTOMER_DETAILS_SUCCESS) {
+			return (List<String>) tp.getInformation();
+		}
+		return null;
+	}
+
+	public static String getMaxProductID() {
+		TransmissionPack tp = new TransmissionPack(Mission.GET_MAX_PRODUCT_ID, null, null); 
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		if(tp.getResponse() == Response.GET_MAX_PRODUCT_ID_SUCCESS) {
+			return (String) tp.getInformation();
+		}
+		return null;
+	}
+
+	public static boolean RemoveProductsFromCatalog(List<String> removeProductsList) {
+		if(removeProductsList == null) 
+			return false;
+		TransmissionPack tp = new TransmissionPack(Mission.REMOVE_PRODUCTS_FROM_CATALOG, null, removeProductsList); 
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		if(tp.getResponse() == Response.REMOVE_FROM_THE_CATALOG_SUCCESS) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean AddNewProductsToCatalog(List<Product> addProductsList) {
+		if(addProductsList == null) 
+			return false;	
+		TransmissionPack tp = new TransmissionPack(Mission.ADD_PRODUCTS_TO_CATALOG, null, addProductsList); 
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		if(tp.getResponse() == Response.ADDING_TO_THE_CATALOG_SUCCESS) {
+			return true;
+		}
+		return false;
+		
+	}
+
+	public static boolean EditProductsInCatalog(List<Product> editedProductsList) {
+		if(editedProductsList == null) 
+			return false;	
+		TransmissionPack tp = new TransmissionPack(Mission.EDIT_PRODUCTS_IN_CATALOG, null, editedProductsList); 
+		ClientUI.chat.accept(tp);
+		tp = ClientUI.chat.getObj();
+		if(tp.getResponse() == Response.EDIT_PRODUCTS_ON_THE_CATALOG_SUCCESS) {
+			return true;
+		}
+		return false;
+		
+	}
+	
+	
+
 
 }

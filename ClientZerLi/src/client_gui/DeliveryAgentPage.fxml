@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.DeliveryAgentPageController">
@@ -113,6 +112,16 @@
                                           <Insets left="5.0" />
                                        </VBox.margin>
                                     </Label>
+                                    <Label text=" Branch">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="branchDetails" layoutX="15.0" layoutY="98.0" text=" " textFill="#9a9a9a">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </VBox>
                               <VBox prefHeight="0.0" prefWidth="308.0" VBox.vgrow="ALWAYS" />
@@ -136,49 +145,49 @@
                      <center>
                         <VBox prefHeight="600.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                            <children>
-                              <HBox prefHeight="66.0" prefWidth="592.0">
+                              <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                                  <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="189.0">
+                                    <VBox prefHeight="200.0" prefWidth="698.0">
                                        <children>
-                                          <Label prefHeight="17.0" prefWidth="66.0" text="ZerLi Login">
-                                             <HBox.margin>
-                                                <Insets />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
-                                          <HBox alignment="CENTER" prefHeight="59.0" prefWidth="91.0">
+                                          <HBox prefHeight="66.0" prefWidth="100.0">
                                              <children>
-                                                <Label prefHeight="17.0" prefWidth="117.0" text="Manager Menu" textFill="RED">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="80.0">
+                                                   <children>
+                                                      <Label prefHeight="17.0" prefWidth="80.0" text="ZerLi Login -  ">
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font name="Cambria Bold" size="12.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
                                                    <HBox.margin>
                                                       <Insets left="5.0" />
                                                    </HBox.margin>
-                                                </Label>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Delivery Agent Menu" textFill="#cb0606">
+                                                         <font>
+                                                            <Font name="Cambria" size="12.0" />
+                                                         </font></Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="408.0">
+                                                   <children>
+                                                      <Label fx:id="timer">
+                                                         <font>
+                                                            <Font name="Cambria Bold" size="14.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </HBox>
                                        </children>
-                                       <HBox.margin>
-                                          <Insets left="5.0" />
-                                       </HBox.margin>
-                                    </HBox>
-                                    <HBox alignment="CENTER" prefHeight="59.0" prefWidth="83.0" />
-                                    <HBox alignment="CENTER" prefHeight="66.0" prefWidth="90.0" />
-                                    <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
-                                       <children>
-                                          <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0">
-                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="54.0" prefWidth="78.0" />
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER" prefHeight="65.0" prefWidth="232.0">
-                                       <children>
-                                          <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </HBox>
-                              <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" />
+                                    </VBox>
+                                 </children></VBox>
                               <VBox prefHeight="600.0" prefWidth="100.0">
                                  <children>
                                     <GridPane alignment="CENTER" prefHeight="485.0" prefWidth="948.0">

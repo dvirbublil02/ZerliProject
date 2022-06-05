@@ -1,5 +1,6 @@
 package entities_general;
 
+import java.io.Serializable;
 import java.util.List;
 
 import entities_catalog.ProductInOrder;
@@ -8,7 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 
-public class DeliveryPreview extends Deliveries {
+public class DeliveryPreview extends Deliveries implements Serializable {
 
 	/**
 	 * 

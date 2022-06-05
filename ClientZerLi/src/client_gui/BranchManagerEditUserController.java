@@ -1,16 +1,21 @@
 package client_gui;
 
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import entities_general.CustomersPreview;
 import entities_general.WorkersPreview;
+import entities_users.BranchManager;
 import entities_users.Customer;
 import entities_users.ShopWorker;
 import enums.AccountStatus;
 import enums.ShopWorkerActivity;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -75,12 +80,38 @@ public class BranchManagerEditUserController implements Initializable {
 
 	@FXML
 	private TableView<WorkersPreview> workers;
+
 	@FXML
 	private TableView<CustomersPreview> customers;
 
+	@FXML
+    private Button info;
+	
+	@FXML
+    private Label timer;
+
+    @FXML
+    private Label userRoleLbl;
+
+    @FXML
+    private Label welcomeUserNameLbl;
+    
+    @FXML
+    private Label phoneNumberLbl;
+    
+    @FXML
+    private Label branchLbl;
+	
+    @FXML
+    private Label branchManagerNameLbl;
+    
+    @FXML
+    private Label accountStatusLbl;
+
+	String branchID, branchName;
+
 	private ObservableList<WorkersPreview> workersListView = FXCollections.observableArrayList();
 	private ObservableList<CustomersPreview> customersListView = FXCollections.observableArrayList();
-	
 
 	@FXML
 	void back(ActionEvent event) throws Exception {
@@ -103,9 +134,25 @@ public class BranchManagerEditUserController implements Initializable {
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {// each cell will show a value of a field from the
-																	// type we defined on the right and the object we
-																	// defined on the left
+	public void initialize(URL location, ResourceBundle resources) {
+		ClientController.initalizeUserDetails(branchManagerNameLbl, phoneNumberLbl, accountStatusLbl, welcomeUserNameLbl, userRoleLbl,
+				((BranchManager) ClientController.user).toString());
+
+		branchID = ((BranchManager) ClientController.user).getBranchID();
+		branchName = ClientHandleTransmission.getBranchName(branchID);
+		branchLbl.setText(" " + branchName + " (" + branchID + ")");
+		
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		time.start();
+				
+		/* each cell will show a value of a field from the type we defined on the right
+		 * and the object we defined on the left
+		 */
 		firstNameCol.setCellValueFactory(new PropertyValueFactory<WorkersPreview, String>("firstName"));
 		lastNameCol.setCellValueFactory(new PropertyValueFactory<WorkersPreview, String>("lastName"));
 		shopWorkerIDCol.setCellValueFactory(new PropertyValueFactory<WorkersPreview, String>("ID"));
@@ -123,11 +170,9 @@ public class BranchManagerEditUserController implements Initializable {
 			workers.setItems(workersListView);// adding to the table view and display
 		}
 
-		
-		
-		//accountStatusCol.setCellFactory(
-		
-		//myListener=new myListenerStatus(accountStatusCol);
+		// accountStatusCol.setCellFactory(
+
+		// myListener=new myListenerStatus(accountStatusCol);
 		customerIDCol.setCellValueFactory(new PropertyValueFactory<CustomersPreview, String>("ID"));
 		emailCol.setCellValueFactory(new PropertyValueFactory<CustomersPreview, String>("email"));
 		balanceCol.setCellValueFactory(new PropertyValueFactory<CustomersPreview, String>("balance"));
@@ -148,7 +193,7 @@ public class BranchManagerEditUserController implements Initializable {
 
 	@FXML
 	void approvCustomerEdit(ActionEvent event) {
-		
+
 		if (ClientHandleTransmission.sendEditedCustomersFromBranchManager(customersListView))
 			editResultCustomerLabel.setText("customer edit succeeded");
 		else
@@ -156,8 +201,7 @@ public class BranchManagerEditUserController implements Initializable {
 	}
 
 	@FXML
-	void approvWorkerEdit(ActionEvent event) 
-	{
+	void approvWorkerEdit(ActionEvent event) {
 		if (ClientHandleTransmission.sendEditedWorkersFromBranchManager(workersListView))
 			editResultWorkerLabel.setText("worker edit succeeded");
 		else

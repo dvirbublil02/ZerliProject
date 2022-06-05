@@ -16,7 +16,6 @@ import ocsf.server.ConnectionToClient;
 import entities_users.User;
 import enums.ReportType;
 
-
 /**
  * In this class we analyze the mission that we got from the client , and then
  * we go into the right queries(ServerQuries) by switch case. according to the
@@ -120,47 +119,44 @@ public class MissionAnalyze {
 			break;
 		}
 
-		case OPEN_COMPLAINT:{
-			
-				try {
-					ServerQuaries.openComplaint(obj, con);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		case OPEN_COMPLAINT: {
+
+			try {
+				ServerQuaries.openComplaint(obj, con);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
-			
+
 		}
-		case GET_MONTHLY_REPORT:
-		{
-			
-	//		ReportsQuaries.createQuarterReportInformation(tp);
-			ReportsQuaries.getMonthlyReport(obj,con);
-		//	createReports.monthlyOrders("2525", "05","2022");
-		//	createReports.monthlyIncome("2525","05","2022");
-			
+		case GET_MONTHLY_REPORT: {
+
+			// ReportsQuaries.createQuarterReportInformation(tp);
+			ReportsQuaries.getMonthlyReport(obj, con);
+			// createReports.monthlyOrders("2525", "05","2022");
+			// createReports.monthlyIncome("2525","05","2022");
+
 			break;
 		}
-		case GET_QUARTER_INCOME_REPORT:
-		{
+		case GET_QUARTER_INCOME_REPORT: {
 			ReportsQuaries.getQuarterIncomeReport(obj, con);
 			break;
 		}
-		case GET_BRANCHID_BY_USER:{
-			
-		
-			String branchID=null;
-			branchID=ServerQuaries.getBranchId( (User) obj.getInformation(), con);
+		case GET_BRANCHID_BY_USER: {
+
+			String branchID = null;
+			branchID = ServerQuaries.getBranchId((User) obj.getInformation(), con);
 			obj.setInformation(branchID);
 			break;
 		}
-		case GET_YEARS_FOR_COMOBOX:{
-			ReportsQuaries.getYears(obj,con);
+		case GET_YEARS_FOR_COMOBOX: {
+			ReportsQuaries.getYears(obj, con);
 			break;
 		}
-		case GET_SURVEY_REPORT:{
+		case GET_SURVEY_REPORT: {
 			try {
-				ReportsQuaries.getSurveyReport(obj,con);
+				ReportsQuaries.getSurveyReport(obj, con);
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -170,11 +166,11 @@ public class MissionAnalyze {
 			}
 			break;
 		}
-		case INSERT_SURVEY_BY_EXPERT:{
-			ReportsQuaries.insertSurveyResult(obj,con);
+		case INSERT_SURVEY_BY_EXPERT: {
+			ReportsQuaries.insertSurveyResult(obj, con);
 			break;
 		}
-		case GET_QUARTER_COMPLAINTS_REPORT:{
+		case GET_QUARTER_COMPLAINTS_REPORT: {
 			ReportsQuaries.getQuarterComplaintsReport(obj, con);
 
 			break;
@@ -229,6 +225,7 @@ public class MissionAnalyze {
 			break;
 		}
 
+
 		case GET_CUSTOMER_DETAILS:{
 			ServerQuaries.getCustomerDetailsFromDB(obj, con);
 			break;
@@ -237,9 +234,17 @@ public class MissionAnalyze {
 			ServerQuaries.getCustomerDetailsForNotify(obj, con);
 			break;
 		}
+
+		case DELIVERY_LATE_REFUND: {
+			ServerQuaries.UpdateDeliveryWasLateDB(obj, con);
+
+			break;
+		}
 		case GET_BRANCH_NAME_BY_ID:{
 			String branchNameString = ReportsQuaries.getBranchNamebyBranchID((String)obj.getInformation(),con);
 			obj.setInformation(branchNameString);
+			break;
+
 		}
 
 		case CANCEL_ORDER_BY_CUSTOMER: {
@@ -253,9 +258,27 @@ public class MissionAnalyze {
 		}
 
 	
+
+
+		case GET_MAX_PRODUCT_ID:{
+			ServerQuaries.getMaxProductIDFromDB(obj,con);
+			break;
 		}
-		
-		
+		case REMOVE_PRODUCTS_FROM_CATALOG:{
+			ServerQuaries.marketingWorkerRemoveFromCatalog(obj, con);
+			break;
+		}
+		case ADD_PRODUCTS_TO_CATALOG:{
+			ServerQuaries.marketingWorkerAddToCatalog(obj, con);
+			break;
+			
+		}
+		case EDIT_PRODUCTS_IN_CATALOG:{
+			ServerQuaries.marketingWorkerEditCatalog(obj, con);
+			break;
+		}
+
+		}
 
 	}
 }

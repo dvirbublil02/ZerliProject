@@ -2,13 +2,8 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.Observable;
 import java.util.ResourceBundle;
 
-import javax.imageio.plugins.tiff.ExifGPSTagSet;
-
-import client.ClientHandleTransmission;
 import client.DeliveriesController;
 import entities_catalog.ProductInOrder;
 import entities_general.DeliveryPreview;
@@ -37,6 +32,9 @@ public class DeliveryAgentViewOrderController implements Initializable {
 
 	@FXML
 	private Label customSelectionDetailsLabel;
+	
+	@FXML
+	private Label timer;
 
 	@FXML
 	private TableColumn<ProductInOrder, String> productNameCol;
@@ -60,6 +58,7 @@ public class DeliveryAgentViewOrderController implements Initializable {
 			stage.setTitle("Delivery Agent View Order");
 			stage.setScene(scene);
 			stage.show();
+	    	stage.setResizable(false);
 			stage.setOnCloseRequest(event -> {
 				products.clear();
 				flag = false;
