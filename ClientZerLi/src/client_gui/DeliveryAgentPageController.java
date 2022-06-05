@@ -2,14 +2,17 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import client.ClientController;
+import client.ClientHandleTransmission;
 import client.ClientUI;
 import communication.Mission;
 import communication.TransmissionPack;
-import entities_users.CustomerService;
 import entities_users.DeliveryAgent;
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,7 +47,14 @@ public class DeliveryAgentPageController implements Initializable{
     @FXML
     private Label welcomeBackUserName;
 
-   
+    @FXML
+    private Label branchDetails;
+
+    @FXML
+    private Label timer;
+    
+    private String branchID, branchName;
+    
     @FXML
     public void start(Stage stage) throws IOException {
     	Parent root = FXMLLoader.load(getClass().getResource("/client_gui/DeliveryAgentPage.fxml"));
@@ -78,5 +88,15 @@ public class DeliveryAgentPageController implements Initializable{
 		ClientController.initalizeUserDetails(networkManagerName, phoneNumber, userStatus, welcomeBackUserName, userRole,
 				((DeliveryAgent) ClientController.user).toString());
 		
+		branchID = ((DeliveryAgent) ClientController.user).getBranchID();
+		branchName = ClientHandleTransmission.getBranchName(branchID);
+		branchDetails.setText(" " +branchName +" ("+branchID+")");
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		time.start();
 	}
 }
