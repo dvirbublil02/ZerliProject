@@ -1091,6 +1091,8 @@ public class ClientHandleTransmission {
 	}
 
 	public static boolean RemoveProductsFromCatalog(List<String> removeProductsList) {
+		if(removeProductsList == null) 
+			return false;
 		TransmissionPack tp = new TransmissionPack(Mission.REMOVE_PRODUCTS_FROM_CATALOG, null, removeProductsList); 
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
@@ -1101,7 +1103,9 @@ public class ClientHandleTransmission {
 	}
 
 	public static boolean AddNewProductsToCatalog(List<Product> addProductsList) {
-		TransmissionPack tp = new TransmissionPack(Mission.REMOVE_PRODUCTS_FROM_CATALOG, null, addProductsList); 
+		if(addProductsList == null) 
+			return false;	
+		TransmissionPack tp = new TransmissionPack(Mission.ADD_PRODUCTS_TO_CATALOG, null, addProductsList); 
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		if(tp.getResponse() == Response.ADDING_TO_THE_CATALOG_SUCCESS) {
@@ -1112,7 +1116,9 @@ public class ClientHandleTransmission {
 	}
 
 	public static boolean EditProductsInCatalog(List<Product> editedProductsList) {
-		TransmissionPack tp = new TransmissionPack(Mission.REMOVE_PRODUCTS_FROM_CATALOG, null, editedProductsList); 
+		if(editedProductsList == null) 
+			return false;	
+		TransmissionPack tp = new TransmissionPack(Mission.EDIT_PRODUCTS_IN_CATALOG, null, editedProductsList); 
 		ClientUI.chat.accept(tp);
 		tp = ClientUI.chat.getObj();
 		if(tp.getResponse() == Response.EDIT_PRODUCTS_ON_THE_CATALOG_SUCCESS) {

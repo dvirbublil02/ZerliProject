@@ -56,7 +56,7 @@
                                     <Font name="Corbel Bold Italic" size="16.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="welcomeBackUserNameLbl" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back" textFill="#3c3131">
+                              <Label fx:id="welcomeUserNameLbl" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome" textFill="#3c3131">
                                  <font>
                                     <Font name="Cambria" size="16.0" />
                                  </font>
@@ -111,7 +111,7 @@
                                     <Insets left="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="Branch">
+                              <Label text=" Branch">
                                  <font>
                                     <Font name="Corbel Bold" size="18.0" />
                                  </font>
@@ -169,13 +169,22 @@
                                        </font></Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="355.0">
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="250.0">
                                  <children>
                                     <Label fx:id="timer">
                                        <font>
                                           <Font name="Cambria Bold" size="14.0" />
                                        </font>
                                     </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="99.0">
+                                 <children>
+                                    <Button fx:id="info" mnemonicParsing="false" styleClass="handHover" stylesheets="@Style.css">
+                                       <graphic>
+                                          <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
+                                       </graphic>
+                                    </Button>
                                  </children>
                               </HBox>
                            </children>
@@ -233,15 +242,26 @@
                                           </VBox>
                                           <VBox alignment="CENTER" prefHeight="50.0" prefWidth="140.0">
                                              <children>
-                                                <TextField fx:id="creditCardNumTxt" prefWidth="140.0" />
-                                                <Label fx:id="CreditCardNumberLbl" />
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <TextField fx:id="creditCardNumTxt" prefWidth="140.0" />
+                                                      <Label fx:id="CreditCardNumberLbl" />
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
-                                          <HBox prefHeight="100.0" prefWidth="25.0" />
-                                          <VBox alignment="CENTER" prefHeight="50.0" prefWidth="85.0">
+                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="50.0">
                                              <children>
-                                                <Label text="Expiration Date" />
-                                                <Label fx:id="ExpirationDateLbl" />
+                                                <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="25.0" text="?" />
+                                             </children></HBox>
+                                          <VBox alignment="CENTER" prefHeight="100.0" prefWidth="85.0">
+                                             <children>
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label text="Expiration Date" />
+                                                      <Label fx:id="ExpirationDateLbl" />
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
                                           <VBox prefHeight="200.0" prefWidth="25.0" />
@@ -273,13 +293,34 @@
                                           </VBox>
                                           <VBox alignment="CENTER" prefHeight="50.0" prefWidth="140.0">
                                              <children>
-                                                <TextField fx:id="CvvTxt" />
-                                                <Label fx:id="CvvLbl" />
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <TextField fx:id="CvvTxt" />
+                                                      <Label fx:id="CvvLbl" />
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
                                           <VBox alignment="CENTER" prefHeight="60.0" prefWidth="418.0">
                                              <children>
-                                                <Label fx:id="SuccessFailedLbl" />
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                         <children>
+                                                            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="50.0">
+                                                               <children>
+                                                                  <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="25.0" text="?" />
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                         <children>
+                                                            <Label fx:id="SuccessFailedLbl" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
                                        </children>

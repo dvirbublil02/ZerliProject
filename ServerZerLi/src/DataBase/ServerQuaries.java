@@ -49,7 +49,6 @@ import enums.DeliveryStatus;
 import enums.OrderStatus;
 import enums.ShopWorkerActivity;
 
-
 import ocsf.server.ConnectionToClient;
 import server.EchoServer;
 import server.ServerUI;
@@ -1214,7 +1213,6 @@ public class ServerQuaries {
 				e.printStackTrace();
 			}
 
-
 			obj.setResponse(Response.OPEN_COMPLAINT_SUCCEED);
 
 		} else {
@@ -1860,14 +1858,15 @@ public class ServerQuaries {
 
 	public static void GetDeliveriesFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-			String branchID = (String)obj.getInformation();
+			String branchID = (String) obj.getInformation();
 			List<Deliveries> deliveries = new ArrayList<>();
 			List<ProductInOrder> orderProducts = null;
 			Statement stmt1, stmt2;
 			try {
 				stmt1 = con.createStatement();
 				ResultSet rs1, rs2;
-				String getDeliveries = "SELECT * FROM zerli.deliveries WHERE status = 'READY_TO_GO' AND branchID ='" + branchID + "';";
+				String getDeliveries = "SELECT * FROM zerli.deliveries WHERE status = 'READY_TO_GO' AND branchID ='"
+						+ branchID + "';";
 				rs1 = stmt1.executeQuery(getDeliveries);
 				while (rs1.next()) {
 					// nameOfproduct, productQuantityInOrder, price
@@ -1916,14 +1915,14 @@ public class ServerQuaries {
 					System.out.println(d);
 					String updateStatuses = "UPDATE zerli.deliveries SET status=?, arrivedDate =? WHERE deliveryID='"
 							+ d.getDeliveryID() + "';";
-					String updateOrderArrived ="UPDATE zerli.order SET status=? WHERE orderID='"
-							+ d.getOrderID() +"';";
+					String updateOrderArrived = "UPDATE zerli.order SET status=? WHERE orderID='" + d.getOrderID()
+							+ "';";
 					// if (d.getDeliveryStatus() == DeliveryStatus.ARRIVED) {
 					PreparedStatement pstmt1 = con.prepareStatement(updateStatuses);
 					pstmt1.setString(1, d.getDeliveryStatus().name());
 					pstmt1.setString(2, d.getArrivedDate());
 					pstmt1.executeUpdate(); // check if the query failed
-				
+
 					PreparedStatement pstmt2 = con.prepareStatement(updateOrderArrived);
 					pstmt2.setString(1, d.getDeliveryStatus().name());
 					pstmt2.executeUpdate(); // check if the query failed
@@ -1943,19 +1942,22 @@ public class ServerQuaries {
 
 	public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-			Deliveries deliveries = (Deliveries)obj.getInformation();
+			Deliveries deliveries = (Deliveries) obj.getInformation();
 			Statement stmt;
 			double currentBalance, newBalance;
 			String currBalance = null, getCurrentBalance, updateRefundTable;
 			try {
 				stmt = con.createStatement();
 				ResultSet rs;
-				/*get the current balance of the customer that we will be able to update it correct */
-				getCurrentBalance = "SELECT balance FROM zerli.customer WHERE customerID='"
-					+ deliveries.getCustomerID() +"';";
+				/*
+				 * get the current balance of the customer that we will be able to update it
+				 * correct
+				 */
+				getCurrentBalance = "SELECT balance FROM zerli.customer WHERE customerID='" + deliveries.getCustomerID()
+						+ "';";
 				System.out.println("query 1: " + getCurrentBalance);
 				rs = stmt.executeQuery(getCurrentBalance);
-				while(rs.next()) {
+				while (rs.next()) {
 					currBalance = rs.getString(1); /* the current balance of the customer */
 					System.out.println(currBalance);
 				}
@@ -1965,7 +1967,8 @@ public class ServerQuaries {
 				newBalance = currentBalance + deliveries.getPrice(); /* the real new balance of the customer */
 				System.out.println(newBalance);
 				/**
-				 * Update the customer table - add the amount of the refund to the balance of the specific customer 
+				 * Update the customer table - add the amount of the refund to the balance of
+				 * the specific customer
 				 */
 				DeliveryLateRefundBalance(con, deliveries, newBalance);
 				/**
@@ -1974,14 +1977,12 @@ public class ServerQuaries {
 				updateRefundsTable(con, deliveries);
 				obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_SUCCESS);
 				return;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_FAILED);
 				return;
 			}
-		}
-		else {
+		} else {
 			obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_FAILED);
 			return;
 		}
@@ -1989,13 +1990,13 @@ public class ServerQuaries {
 
 	private static void updateRefundsTable(Connection con, Deliveries deliveries) throws SQLException {
 		String updateRefundTable;
-		updateRefundTable =	"INSERT INTO zerli.refunds(refundID, orderID, customerID, ammount, reason, date)VALUES(?,?,?,?,?,?);";
-		PreparedStatement pstmt = con.prepareStatement(updateRefundTable);	
+		updateRefundTable = "INSERT INTO zerli.refunds(refundID, orderID, customerID, ammount, reason, date)VALUES(?,?,?,?,?,?);";
+		PreparedStatement pstmt = con.prepareStatement(updateRefundTable);
 		pstmt.setString(1, null);
 		pstmt.setString(2, deliveries.getOrderID());
 		pstmt.setString(3, deliveries.getCustomerID());
 		pstmt.setString(4, String.valueOf(deliveries.getPrice()));
-		pstmt.setString(5, "Delivery");		
+		pstmt.setString(5, "Delivery");
 		Calendar c = Calendar.getInstance();
 		java.sql.Timestamp timestamp = new java.sql.Timestamp(c.getTimeInMillis());
 		pstmt.setTimestamp(6, timestamp);
@@ -2005,8 +2006,7 @@ public class ServerQuaries {
 	private static void DeliveryLateRefundBalance(Connection con, Deliveries deliveries, double newBalance)
 			throws SQLException {
 		String giveRefund;
-		giveRefund = "UPDATE zerli.customer SET balance=(?) WHERE customerID='"
-				+ deliveries.getCustomerID() + "';";
+		giveRefund = "UPDATE zerli.customer SET balance=(?) WHERE customerID='" + deliveries.getCustomerID() + "';";
 		System.out.println("query 2: " + giveRefund);
 
 		PreparedStatement pstmt = con.prepareStatement(giveRefund);
@@ -2016,17 +2016,17 @@ public class ServerQuaries {
 
 	public static void getCustomerDetailsFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-			String customerID = (String)obj.getInformation();
+			String customerID = (String) obj.getInformation();
 			System.out.println(customerID);
 			List<String> details = new ArrayList<>();
 			Statement stmt;
 			try {
 				stmt = con.createStatement();
 				ResultSet rs;
-				String getDetails ="SELECT firstName, email, phoneNumber FROM zerli.customer WHERE customerID='" 
+				String getDetails = "SELECT firstName, email, phoneNumber FROM zerli.customer WHERE customerID='"
 						+ customerID + "';";
-				rs= stmt.executeQuery(getDetails);
-				while(rs.next() != false) {
+				rs = stmt.executeQuery(getDetails);
+				while (rs.next() != false) {
 					details.add(rs.getString(1));
 					details.add(rs.getString(2));
 					details.add(rs.getString(3));
@@ -2036,18 +2036,19 @@ public class ServerQuaries {
 				obj.setInformation(details);
 				obj.setResponse(Response.GET_CUSTOMER_DETAILS_SUCCESS);
 				return;
-			}catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				obj.setResponse(Response.GET_CUSTOMER_DETAILS_FAILED);
 				return;
 			}
-		}
-		else {
+		} else {
 			obj.setResponse(Response.GET_CUSTOMER_DETAILS_FAILED);
 		}
 	}
+
 	/**
 	 * Get the highest ID from the products we have.
+	 * 
 	 * @param obj
 	 * @param con
 	 */
@@ -2058,9 +2059,9 @@ public class ServerQuaries {
 			try {
 				stmt = con.createStatement();
 				ResultSet rs;
-				String getMaxID ="SELECT max(productID) FROM zerli.product;";		
+				String getMaxID = "SELECT MAX(CAST(productID AS SIGNED)) FROM zerli.product;";
 				rs = stmt.executeQuery(getMaxID);
-				if(rs.next()) {
+				if (rs.next()) {
 					maxID = rs.getString(1);
 				}
 				rs.close();
@@ -2068,30 +2069,32 @@ public class ServerQuaries {
 				obj.setInformation(maxID);
 				obj.setResponse(Response.GET_MAX_PRODUCT_ID_SUCCESS);
 				return;
-			}catch (SQLException e){	
+			} catch (SQLException e) {
 				e.printStackTrace();
 				obj.setResponse(Response.GET_MAX_PRODUCT_ID_FAILED);
 				return;
 			}
 		}
-		obj.setResponse(Response.GET_MAX_PRODUCT_ID_FAILED);			
+		obj.setResponse(Response.GET_MAX_PRODUCT_ID_FAILED);
 	}
-	
+
 	/**
 	 * in this method we editing an exist proudct on the catalog by his id
+	 * 
 	 * @param obj
 	 * @param con
 	 */
+	@SuppressWarnings("unchecked")
 	public static void marketingWorkerEditCatalog(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-			List<Product> productsToAdd=new ArrayList<>();
-			productsToAdd=(List<Product>) obj.getInformation();
-			int countRemoving=0;
-			for(int i=0;i<productsToAdd.size();i++) {
-				String updateStatuses = "UPDATE zerli.product SET name=?, price =?, backGroundColor=?, picture=?, quantity=?, itemType=?, dominateColor=?, isOnSale=?, fixPrice=? WHERE productID='"
-						+ productsToAdd.get(i).getID() + "';";
-				
-				try {
+			List<Product> productsToAdd = new ArrayList<>();
+			productsToAdd = (List<Product>) obj.getInformation();
+			int countRemoving = 0;
+			try {
+				for (int i = 0; i < productsToAdd.size(); i++) {
+					String updateStatuses = "UPDATE zerli.product SET name=(?), price =(?), backGroundColor=(?), picture=(?), quantity=(?), itemType=(?), dominateColor=(?), isOnSale=(?), fixPrice=(?) WHERE productID='"
+							+ productsToAdd.get(i).getID() + "';";
+
 					PreparedStatement pstmt = con.prepareStatement(updateStatuses);
 					pstmt.setString(1, productsToAdd.get(i).getName());
 					pstmt.setDouble(2, productsToAdd.get(i).getPrice());
@@ -2102,75 +2105,79 @@ public class ServerQuaries {
 					pstmt.setString(7, productsToAdd.get(i).getDominateColor());
 					pstmt.setBoolean(8, productsToAdd.get(i).getIsOnSale());
 					pstmt.setDouble(9, productsToAdd.get(i).getFixPrice());
-					if(pstmt.executeUpdate()!=0) {
+					if (pstmt.executeUpdate() != 0) {
 						countRemoving++;
 					}
-					if(countRemoving==productsToAdd.size()) {
+					if (countRemoving == productsToAdd.size()) {
 						obj.setResponse(Response.EDIT_PRODUCTS_ON_THE_CATALOG_SUCCESS);
 						return;
 					}
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				obj.setResponse(Response.EDIT_PRODUCTS_ON_THE_CATALOG_FAILED);
+				return;
 			}
-		}
-		else {
+		} else {
 			obj.setResponse(Response.EDIT_PRODUCTS_ON_THE_CATALOG_FAILED);
 		}
-		
-		
-		
+
 	}
+
 	/**
-	 * in this method we remove the items that the marketingworker send to us ,by the product id.
+	 * in this method we remove the items that the marketingworker send to us ,by
+	 * the product id.
+	 * 
 	 * @param obj
 	 * @param con
 	 */
+	@SuppressWarnings("unchecked")
 	public static void marketingWorkerRemoveFromCatalog(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-			List<String> productsToRemove=new ArrayList<>();
-			productsToRemove=(List<String>) obj.getInformation();
-			int removeSucess=0;
-			for(int i=0;i<productsToRemove.size();i++) {
-				
-				try {
+			List<String> productsToRemove = new ArrayList<>();
+			productsToRemove = (List<String>) obj.getInformation();
+			int removeSucess = 0;
+			try {
+				for (int i = 0; i < productsToRemove.size(); i++) {
 					PreparedStatement st = con.prepareStatement("DELETE FROM zerli.product WHERE productID= ?");
-					st.setString(1,productsToRemove.get(i));
-					if(st.executeUpdate()!=0) {
+					st.setString(1, productsToRemove.get(i));
+					if (st.executeUpdate() != 0) {
 						removeSucess++;
 					}
-					if(removeSucess==productsToRemove.size()) {
+					if (removeSucess == productsToRemove.size()) {
 						obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_SUCCESS);
 						return;
 					}
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
-					return;
 				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
+				return;
 			}
-		}
-		else {
+		} else {
 			obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
 		}
 	}
+
 	/**
-	 * in this method we adding new products into the catalog, we getting them on list of products and, adding one by one.
+	 * in this method we adding new products into the catalog, we getting them on
+	 * list of products and, adding one by one.
+	 * 
 	 * @param obj
 	 * @param con
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
-	public static void marketingWorkerAddToCatalog(TransmissionPack obj, Connection con) throws SQLException {
+	@SuppressWarnings("unchecked")
+	public static void marketingWorkerAddToCatalog(TransmissionPack obj, Connection con)  {
 		if (obj instanceof TransmissionPack) {
-		List<Product> productsToAdd=new ArrayList<>();
-		productsToAdd=(List<Product>) obj.getInformation();
-		int countInseration=0;
-		String insertNewItem ="INSERT INTO zerli.product(productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, isOnSale, fixPrice)VALUES(?,?,?,?,?,?,?,?,?,?);";
-			for(int i=0;i<productsToAdd.size();i++) {
-				PreparedStatement pstmt;
-				try {
+			List<Product> productsToAdd = new ArrayList<>();
+			productsToAdd = (List<Product>) obj.getInformation();
+			int countInseration = 0;
+			String insertNewItem = "INSERT INTO zerli.product(productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, isOnSale, fixPrice)VALUES(?,?,?,?,?,?,?,?,?,?);";
+			try {
+				for (int i = 0; i < productsToAdd.size(); i++) {
+					PreparedStatement pstmt;
 					pstmt = con.prepareStatement(insertNewItem);
 					pstmt.setString(1, productsToAdd.get(i).getID());
 					pstmt.setString(2, productsToAdd.get(i).getName());
@@ -2182,24 +2189,23 @@ public class ServerQuaries {
 					pstmt.setString(8, productsToAdd.get(i).getDominateColor());
 					pstmt.setBoolean(9, productsToAdd.get(i).getIsOnSale());
 					pstmt.setDouble(10, productsToAdd.get(i).getFixPrice());
-					if(pstmt.executeUpdate()!=0) {
+					if (pstmt.executeUpdate() != 0) {
 						countInseration++;
+						System.out.println(productsToAdd.get(i));
 					}
-					if(countInseration==productsToAdd.size()) {
+					if (countInseration == productsToAdd.size()) {
 						obj.setResponse(Response.ADDING_TO_THE_CATALOG_SUCCESS);
 						return;
 					}
-					
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
-					return;
-				}	
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
+				return;
 			}
-		}else {
+		} else {
 			obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
 		}
 	}
-	
+
 }

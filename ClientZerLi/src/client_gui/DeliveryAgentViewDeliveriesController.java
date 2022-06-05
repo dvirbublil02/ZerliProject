@@ -146,6 +146,7 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 		stage.setTitle("Delivery Agent View Delivieries");
 		stage.setScene(scene);
 		stage.show();
+    	stage.setResizable(false);
 		stage.setOnCloseRequest(event -> {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 		});

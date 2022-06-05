@@ -12,6 +12,8 @@ import client.ClientUI;
 import communication.Mission;
 import communication.TransmissionPack;
 import entities_users.DeliveryAgent;
+import entities_users.MarketingWorker;
+import enums.AccountStatus;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -62,6 +64,10 @@ public class DeliveryAgentPageController implements Initializable{
     	stage.setTitle("Delivery Agent Menu");
     	stage.setScene(scene);
     	stage.show();
+    	stage.setResizable(false);
+    	stage.setOnCloseRequest(event -> {
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+		});
     }	
 
     @FXML
@@ -98,5 +104,9 @@ public class DeliveryAgentPageController implements Initializable{
 			}
 		};
 		time.start();
+		
+		if (((DeliveryAgent) ClientController.user).getAccountStatus() == AccountStatus.FROZEN) {
+			viewDeliveriesBtn.setDisable(true);
+		}
 	}
 }

@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.MarketingWorkerOpeningController">
@@ -38,7 +37,7 @@
                               <Image url="@../javafx_images/userImageSideScreen.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="employeeName" text="Alice Smith" textFill="WHITE">
+                        <Label fx:id="employeeName" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="2.0" />
                            </VBox.margin>
@@ -46,12 +45,12 @@
                               <Font name="Corbel Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label fx:id="employeeType" text="Manager" textFill="#323232">
+                        <Label fx:id="employeeType" textFill="#323232">
                            <font>
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="entryGreeting" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back Alice !" textFill="#3c3131">
+                        <Label fx:id="entryGreeting" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome" textFill="#3c3131">
                            <font>
                               <Font name="Cambria" size="16.0" />
                            </font>
@@ -82,7 +81,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label fx:id="phoneNumber" text="+972-524667888" textFill="#9a9a9a">
+                        <Label fx:id="phoneNumber" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -98,7 +97,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label fx:id="accountStatus" text="CONFIRMED" textFill="#9a9a9a">
+                        <Label fx:id="accountStatus" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -131,41 +130,45 @@
                <children>
                   <HBox prefHeight="66.0" prefWidth="592.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="189.0">
+                        <HBox prefHeight="66.0" prefWidth="698.0">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="66.0" text="ZerLi Login">
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </Label>
-                              <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
-                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="91.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="80.0">
                                  <children>
-                                    <Label prefHeight="18.0" prefWidth="118.0" text="Marketing worker Menu" textFill="RED">
+                                    <Label prefHeight="17.0" prefWidth="80.0" text="ZerLi Login  -  ">
                                        <HBox.margin>
-                                          <Insets left="5.0" />
+                                          <Insets />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="165.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Label text=" Marketing Worker Menu " textFill="#cb0606">
+                                             <font>
+                                                <Font name="Cambria Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="440.0">
+                                 <children>
+                                    <Label fx:id="timer">
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
-                           </children>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin></HBox>
-                        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="83.0" />
-                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="90.0" />
-                        <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0">
-                                 <children>
-                                    <HBox alignment="CENTER" prefHeight="54.0" prefWidth="78.0" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="65.0" prefWidth="232.0">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0" />
                            </children>
                         </HBox>
                      </children>

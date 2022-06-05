@@ -6,8 +6,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import entities_general.CreditCard;
+import entities_users.BranchManager;
 import entities_users.Customer;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
@@ -25,6 +27,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -55,7 +58,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	private Label userRoleLbl;
 
 	@FXML
-	private Label welcomeBackUserNameLbl;
+	private Label welcomeUserNameLbl;
 //////////////////////////////////////////////////////////////
 	@FXML
 	private Label CreditCardNumberLbl;
@@ -71,6 +74,12 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 
 	@FXML
 	private Button BackBtn;
+	
+	@FXML
+    private Button creditCardInfo;
+	
+	@FXML
+    private Button cvvInfo;
 
 	@FXML
 	private TextField CvvTxt;
@@ -140,6 +149,8 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 
 	private	CreditCard cc = null;
 	
+	String branchID, branchName;
+
 
 	/**
 	 * initialize the page at the start create the pending customer table and fill
@@ -148,12 +159,12 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 	
-//		ClientController.initalizeUserDetails(networkManagerName, phoneNumber, userStatus, welcomeBackUserName, userRole,
-//				((BranchManager) ClientController.user).toString());
-//		
-//		branchID = ((DeliveryAgent) ClientController.user).getBranchID();
-//		branchName = ClientHandleTransmission.getBranchName(branchID);
-//		branchDetails.setText(" " +branchName +" ("+branchID+")");
+		ClientController.initalizeUserDetails(branchManagerNameLbl, phoneNumberLbl, accountStatusLbl, welcomeUserNameLbl, userRoleLbl,
+				((BranchManager) ClientController.user).toString());
+
+		branchID = ((BranchManager) ClientController.user).getBranchID();
+		branchName = ClientHandleTransmission.getBranchName(branchID);
+		branchLbl.setText(" " + branchName + " (" + branchID + ")");
 		
 		AnimationTimer time = new AnimationTimer() {
 			@Override
@@ -183,6 +194,19 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 			customers.add(customer);
 		}
 		table.setItems(customers);
+		
+//		cvvInfo.setOnMouseMoved(event -> {	
+//			Tooltip tooltipCustom = new Tooltip("CVV 3 digits\n Back of the card.");
+//			Tooltip.install(cvvInfo, tooltipCustom);
+//
+//		});
+//		
+//		creditCardInfo.setOnMouseMoved(event -> {	
+//			Tooltip tooltipCustom = new Tooltip("Credit card number:\n 16 digits");
+//			tooltipCustom.setStyle("-fx-font-size: 20");
+//			Tooltip.install(creditCardInfo, tooltipCustom);
+//
+//		});
 	}
 
 	/**
@@ -197,6 +221,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		primaryStage.setTitle("Add New Customer");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event -> {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 		});

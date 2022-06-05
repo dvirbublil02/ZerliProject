@@ -246,12 +246,9 @@ public class MissionAnalyze {
 			break;
 		}
 		case ADD_PRODUCTS_TO_CATALOG:{
-			try {
-				ServerQuaries.marketingWorkerAddToCatalog(obj, con);
-				break;
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			ServerQuaries.marketingWorkerAddToCatalog(obj, con);
+			break;
+			
 		}
 		case EDIT_PRODUCTS_IN_CATALOG:{
 			ServerQuaries.marketingWorkerEditCatalog(obj, con);

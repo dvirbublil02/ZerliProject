@@ -58,6 +58,7 @@ public class DeliveryAgentViewOrderController implements Initializable {
 			stage.setTitle("Delivery Agent View Order");
 			stage.setScene(scene);
 			stage.show();
+	    	stage.setResizable(false);
 			stage.setOnCloseRequest(event -> {
 				products.clear();
 				flag = false;

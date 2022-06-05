@@ -149,17 +149,17 @@ public class Product  implements Serializable{
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Product [name=" + name + ", imgSrc=" + imgSrc + ", price=" + price + ", backGroundColor="
-				+ backGroundColor + ", productID=" + productID + ", quantity=" + quantity + ", itemType=" + itemType
-				+ ", dominateColor=" + dominateColor + ", isOnSale=" + isOnSale + ", fixPrice=" + fixPrice + "]";
-	}
-
 //	@Override
 //	public String toString() {
-//		return "Product [name=" + name + ", productID=" + productID + "]";
+//		return "Product [name=" + name + ", imgSrc=" + imgSrc + ", price=" + price + ", backGroundColor="
+//				+ backGroundColor + ", productID=" + productID + ", quantity=" + quantity + ", itemType=" + itemType
+//				+ ", dominateColor=" + dominateColor + ", isOnSale=" + isOnSale + ", fixPrice=" + fixPrice + "]";
 //	}
+
+	@Override
+	public String toString() {
+		return "Product [name=" + name + ", productID=" + productID + "]";
+	}
 	
 	
 

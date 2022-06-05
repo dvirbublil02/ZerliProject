@@ -8,18 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.itextpdf.text.xml.simpleparser.NewLineHandler;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
+
+import com.itextpdf.text.log.SysoCounter;
 
 import client.ClientController;
 import client.ClientHandleTransmission;
 import entities_catalog.Product;
-import entities_general.ProductPreview;
 import entities_users.MarketingWorker;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -45,11 +45,11 @@ import javafx.util.converter.IntegerStringConverter;
 public class MarketingWorkerManageCatalogController implements Initializable {
 
 	@FXML
-    private Label successFailLbl;
+	private Label successFailLbl;
 
-    @FXML
-    private Label timer;
-	
+	@FXML
+	private Label timer;
+
 	@FXML
 	private Button saveBtn;
 
@@ -121,33 +121,39 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 	 * flag = boolean flag that gives a sign that there is a sale on a product.
 	 * productIsValid = when we want to add new product we check if it is valid.
 	 */
-	private boolean flag = false, productIsValid = false, removeBtnLock = false;
+	private boolean saleFlag = false, removeBtnLock = false;
 
 	/**
-	 * firstMaxID = the max id we get at the begining id = id that we can use as we
+	 * firstMaxID = the max id we get at the beginning id = id that we can use as we
 	 * needed currMaxID = the id we use to increase each time
 	 */
-	private String firstMaxID, id;
-	private int currMaxID;
+	private String firstMaxIDstr, id;
+	private int currMaxID, firstMaxIDint;
 	/**
-	 * removeProductsList: the list will contain the 
-	 * products that the user will remove from the catalog
+	 * removeProductsListString: the list will contain the products that the user
+	 * will remove from the catalog
 	 */
-	private List<String> removeProductsList = new ArrayList<>();
+	private List<String> removeProductsListString = new ArrayList<>();
 	/**
-	 * editedProductsList: the list will contain the 
-	 * products that the user will edit from the current catalog
+	 * removeProductsList: using this list to keep the removed products and use them
+	 * later to create the editedProductsList
+	 */
+	private List<Product> removeProductsList = new ArrayList<>();
+
+	/**
+	 * editedProductsList: the list will contain the products that the user will
+	 * edit from the current catalog
 	 */
 	private List<Product> editedProductsList = new ArrayList<>();
 	/**
-	 * addProductsList: the list will contain the 
-	 * products that the user will add to the catalog
+	 * addProductsList: the list will contain the products that the user will add to
+	 * the catalog
 	 */
 	private List<Product> addProductsList = new ArrayList<>();
+//	private List<Product> tempAddProductsList = new ArrayList<>()
 	/**
-	 * backUpList: the list will contain the products
-	 * that we will get from the DB at first get when
-	 * we upload this page 
+	 * backUpList: the list will contain the products that we will get from the DB
+	 * at first get when we upload this page
 	 */
 	private List<Product> backUpList = new ArrayList<>();
 	/**
@@ -157,7 +163,7 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 	/**
 	 * listOfProducts: the list is the one that got the data from the DB
 	 */
-	private	List<Product> listOfProducts;
+	private List<Product> listOfProducts;
 
 	/**
 	 * 
@@ -170,16 +176,23 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 		primaryStage.setTitle("catalog managment page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
+		primaryStage.setOnCloseRequest(event -> {
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+		});
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		/*
+		 * get the user details to the left side of the screen
+		 */
 		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
 				((MarketingWorker) ClientController.user).toString());
+		
 		/**
-		 * get the highest product ID in the list
+		 * create a living clock on the screen
 		 */
-
 		AnimationTimer time = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
@@ -187,7 +200,9 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 			}
 		};
 		time.start();
-
+		/**
+		 * at start lock the remove product button
+		 */
 		if (removeBtnLock == false) {
 			removeButton.setDisable(true);
 		}
@@ -225,7 +240,6 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 			}
 		}));
 		List<String> colors = new ArrayList<>();
-		colors.add("UNDEFINED");
 		colors.addAll(ClientHandleTransmission.getColorsForFilter());
 		dominateColorCol.setCellValueFactory(new PropertyValueFactory<Product, String>("dominateColor"));
 		if (colors != null) {
@@ -247,18 +261,26 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 				}
 			}
 		}));
-
-		// isOnSaleCol.getCellData(0).setAlignment(Pos.CENTER);
-		/* calls the quary->returns the info from the obj */
-		listOfProducts = ClientHandleTransmission.getDataProduct();
-
-		backUpList.addAll(productsListView);
-
-		firstMaxID = ClientHandleTransmission.getMaxProductID();
-		currMaxID = Integer.valueOf(firstMaxID);
 		/**
-		 * save the ID of the products we get at the start
-		 * we will use that to collect all the 
+		 * get the products from the DB
+		 */
+		listOfProducts = ClientHandleTransmission.getDataProduct();
+		/**
+		 * save a backup list of the products we get from the DB 
+		 * we will use this list after.
+		 */
+		backUpList.addAll(listOfProducts);
+		System.out.println("backup list: \n" + backUpList);
+		/**
+		 * get the highest productID 
+		 * we need it when we add new product
+		 */
+		firstMaxIDstr = ClientHandleTransmission.getMaxProductID();
+		firstMaxIDint = Integer.valueOf(firstMaxIDstr);
+
+		/**
+		 * save the ID of the products we get at the start we will use that to collect
+		 * all the
 		 */
 		for (Product p : listOfProducts) {
 			beginingProductsID.add(p.getID());
@@ -272,7 +294,7 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 			removeButton.setDisable(true);
 		} else {
 			for (Product p : listOfProducts) {
-				productsListView.add(new ProductPreview(p.getID(), p.getName(), p.getPrice(), p.getbackGroundColor(),
+				productsListView.add(new Product(p.getID(), p.getName(), p.getPrice(), p.getbackGroundColor(),
 						p.getImgSrc(), p.getQuantity(), p.getItemType(), p.getDominateColor(), p.getIsOnSale(),
 						p.getFixPrice()));
 			}
@@ -290,11 +312,11 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 				 */
 				if (event1.getRowValue().getIsOnSale() == true) {
 					System.out.println("is on sale = true");
-					flag = true;
+					saleFlag = true;
 				} else {
 					System.out.println("is on sale = false");
 					event1.getRowValue().setFixPrice(event1.getRowValue().getPrice());
-					flag = false;
+					saleFlag = false;
 					System.out.println("dont set new price");
 				}
 				productsTable.refresh();
@@ -305,19 +327,30 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 			 */
 			priceAfterDiscountCol.setOnEditCommit(event2 -> {
 				System.out.println("got in event 2");
-				if (flag == true) { // there is a sale on this product
+				if (saleFlag == true) { // there is a sale on this product
 					System.out.println("flag is true");
 					/**
 					 * if the price after discount is bigger then the real price or the new price is
 					 * less then 1 or the user entered letters we set the price as the original
 					 * price
 					 */
-					if (event2.getNewValue() > event2.getOldValue() || event2.getNewValue() < 1
-							|| (!(String.valueOf(event2.getNewValue()).matches("[0-9.]+[0-9]")))
-							|| event2.getNewValue().isNaN()) {
+					System.out.println("old" + event2.getOldValue());
+
+					System.out.println("new" + event2.getNewValue());
+
+					if (event2.getNewValue() > event2.getRowValue().getPrice() || event2.getNewValue() < 1) {
 						event2.getRowValue()
 								.setFixPrice(event2.getRowValue().getPrice()); /* set as the original price */
-						System.out.println("dont set new price");
+						System.out.println(event2.getRowValue().getPrice());
+						System.out.println("1-dont set new price");
+					} else if (!(String.valueOf(event2.getNewValue()).matches("[0-9.]+[0-9]"))) {
+						event2.getRowValue()
+								.setFixPrice(event2.getRowValue().getPrice()); /* set as the original price */
+						System.out.println("2-dont set new price");
+					} else if (event2.getNewValue().isNaN()) {
+						event2.getRowValue()
+								.setFixPrice(event2.getRowValue().getPrice()); /* set as the original price */
+						System.out.println("3-dont set new price");
 					} else { // update the new price
 						event2.getRowValue().setFixPrice(event2.getNewValue());
 						System.out.println("set new price");
@@ -372,8 +405,8 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 				event6.getRowValue().setName(event6.getNewValue());
 				productsTable.refresh();
 			});
-			
-			dominateColorCol.setOnEditCommit(event7->{
+
+			dominateColorCol.setOnEditCommit(event7 -> {
 				System.out.println("dominate color: " + event7.getNewValue());
 				event7.getRowValue().setDominateColor(event7.getNewValue());
 				productsTable.refresh();
@@ -397,7 +430,7 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 			removeBtnLock = true;
 			product = productsTable.getSelectionModel().getSelectedItem();
 			if (product != null && removeBtnLock == true) {
-				System.out.println("PRODUCT ID IS: " + product.getID());
+				System.out.println(product);
 				removeButton.setDisable(false);
 			}
 		} catch (Exception e) {
@@ -418,7 +451,8 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 		String productID = product.getID();
 		for (String p : beginingProductsID) {
 			if (p.equals(productID)) {
-				removeProductsList.add(productID);
+				removeProductsListString.add(productID);
+				removeProductsList.add(product);
 			}
 			productsListView.remove(product);
 		}
@@ -426,76 +460,83 @@ public class MarketingWorkerManageCatalogController implements Initializable {
 
 	@FXML
 	void AddNewProductToCatalog(ActionEvent event) {
-		currMaxID++;
-		id = String.valueOf(currMaxID);
+		currMaxID = Integer.valueOf(ClientHandleTransmission.getMaxProductID());
+		if (firstMaxIDint < currMaxID) {
+			firstMaxIDint = currMaxID;
+		}
+		firstMaxIDint++;
+		System.out.println(firstMaxIDint);
+		id = String.valueOf(firstMaxIDint);
 		System.out.println(id);
 		Product generic = new Product(id, "Name", 0.0, "172D42", "/javafx_images/CustomOrderPicture.png", 0, "Type",
 				"UNDEFINED", false, 0.0);
 		productsListView.add(generic);
 		productsTable.setItems(productsListView);
+		addProductsList.add(generic);
 	}
 
 	@FXML
 	void SaveUpdates(ActionEvent event) {
-		boolean add = false, remove= false, edit = false;
-		addProductsList.clear();
+		boolean add = true, remove = true, edit = true;
 		/**
 		 * First, we are sending the products that was removed from by the marketing
 		 * worker to the DB
 		 */
-		if (removeProductsList != null) {
-			System.out.println("remove list:\n " + removeProductsList);
-			remove = ClientHandleTransmission.RemoveProductsFromCatalog(removeProductsList);
+		if (!removeProductsListString.isEmpty()) {
+			System.out.println("String remove list:\n " + removeProductsListString);
+			System.out.println("Products remove list:\n " + removeProductsList);
+			remove = ClientHandleTransmission.RemoveProductsFromCatalog(removeProductsListString);
+			removeProductsListString.clear();
+
 		}
 		/**
-		 * Second, we are sending all the products that we will add to the catalog to
-		 * the DB
-		 */
-		System.out.println("add list at start: " + addProductsList);
-		addProductsList.addAll(productsListView);
-		System.out.println("add list after add the current gui list:\n " + addProductsList);
-		addProductsList.removeAll(listOfProducts);
-		System.out.println("add list after removed the original:\n " + addProductsList);
-		for (int i = 0; i < addProductsList.size(); i++) {
-			if (addProductsList.get(i).getName().equals("Name")
-					|| (addProductsList.get(i).equals(productsListView.get(i)))) {
-				addProductsList.remove(addProductsList.get(i));
-				productsListView.remove(addProductsList.get(i));
-
-			} else if (addProductsList.get(i).getPrice() == 0) {
-				System.out.println("price is 0.0");
-				productsListView.remove(addProductsList.get(i));
-				addProductsList.remove(addProductsList.get(i));
-
-			} else if (addProductsList.get(i).getItemType().equals("Type")) {
-				System.out.println("didnt chose type");
-				addProductsList.remove(addProductsList.get(i));
-				productsListView.remove(addProductsList.get(i));
-			}
-			else {
-				System.out.println("final add list:\n " + addProductsList);
-				add = ClientHandleTransmission.AddNewProductsToCatalog(addProductsList);
-			}
-		}	
-		/**
-		 * Third, we are sending the edited original products list to the DB
+		 * Second, we are sending the edited original products list to the DB
 		 */
 		System.out.println("edit list at start:\n " + editedProductsList);
-		editedProductsList.addAll(productsListView);
-		System.out.println("edit list after add the current gui list:\n " + editedProductsList);
+		editedProductsList.addAll((List<Product>) productsListView);
+		System.out.println("edit list after add the backup list:\n " + editedProductsList);
 		editedProductsList.removeAll(addProductsList);
-		System.out.println("edit list after removed the new products:\n " + editedProductsList);
-		edit = ClientHandleTransmission.EditProductsInCatalog(editedProductsList);
-		
-		if(add == true && remove == true && edit == true) {
-			successFailLbl.setText("Saved Changes Success");
-			successFailLbl.setTextFill(Color.GREEN);		
+		System.out.println("edit list after remove the removed products:\n " + editedProductsList);
+		if (!editedProductsList.isEmpty()) {
+			System.out.println("the edit list that sent to DB:\n " + editedProductsList);
+			edit = ClientHandleTransmission.EditProductsInCatalog(editedProductsList);
+			editedProductsList.clear();
 		}
-		else {
+		System.out.println("finish");
+		if (add == false || remove == false || edit == false) {
 			successFailLbl.setText("Saved Changes Failed");
 			successFailLbl.setTextFill(Color.RED);
+		} else {
+			successFailLbl.setText("Saved Changes Success");
+			successFailLbl.setTextFill(Color.GREEN);
+		}
+		/**
+		 * Third, we are sending all the products that we will add to the catalog to
+		 * the DB
+		 */
+		System.out.println("add list after press save\n" + addProductsList);
+		if (!addProductsList.isEmpty()) {
+			for (int i = 0; i < addProductsList.size(); i++) {
+				if (addProductsList.get(i).getName().equals("Name") || backUpList.contains(addProductsList.get(i))) {
+					productsListView.remove(addProductsList.get(i));
+					addProductsList.remove(addProductsList.get(i));
+				} else if (addProductsList.get(i).getPrice() == 0) {
+					System.out.println("price is 0.0");
+					productsListView.remove(addProductsList.get(i));
+					addProductsList.remove(addProductsList.get(i));
+
+				} else if (addProductsList.get(i).getItemType().equals("Type")) {
+					System.out.println("didnt chose type");
+					productsListView.remove(addProductsList.get(i));
+					addProductsList.remove(addProductsList.get(i));
+				} else {
+					System.out.println(addProductsList.get(i) + " is good product");
+				}
+			}
+			System.out.println("final add list:\n " + addProductsList);
+			add = ClientHandleTransmission.AddNewProductsToCatalog(addProductsList);
+			addProductsList.clear();
 		}
 		return;
 	}
 }
-
