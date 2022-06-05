@@ -2389,13 +2389,16 @@ public class ServerQuaries {
 		if (obj instanceof TransmissionPack) {
 			List<Product> productsToAdd = new ArrayList<>();
 			productsToAdd = (List<Product>) obj.getInformation();
-			int countRemoving = 0;
+			int countRemoving = 0, quantityInBranch, remaining;;
+			List<String> branchList = getAllBranchId(con);
+			List<ProductInBranch> productInBranchs = new ArrayList<>();
+			String updateBranchesSupply = "UPDATE zerli.productinbranch SET quantity= (?) WHERE branchID =(?) AND productID = (?);";
+			PreparedStatement pstmt, pstmt2;
 			try {
 				for (int i = 0; i < productsToAdd.size(); i++) {
 					String updateStatuses = "UPDATE zerli.product SET name=(?), price =(?), backGroundColor=(?), picture=(?), quantity=(?), itemType=(?), dominateColor=(?), isOnSale=(?), fixPrice=(?) WHERE productID='"
 							+ productsToAdd.get(i).getID() + "';";
-
-					PreparedStatement pstmt = con.prepareStatement(updateStatuses);
+					pstmt = con.prepareStatement(updateStatuses);
 					pstmt.setString(1, productsToAdd.get(i).getName());
 					pstmt.setDouble(2, productsToAdd.get(i).getPrice());
 					pstmt.setString(3, productsToAdd.get(i).getbackGroundColor());
@@ -2407,6 +2410,30 @@ public class ServerQuaries {
 					pstmt.setDouble(9, productsToAdd.get(i).getFixPrice());
 					if (pstmt.executeUpdate() != 0) {
 						countRemoving++;
+					}								
+					quantityInBranch = Integer.valueOf(productsToAdd.get(i).getQuantity()) / branchList.size();
+					remaining = Integer.valueOf(productsToAdd.get(i).getQuantity()) % branchList.size();
+					System.out.println("quantity: " + quantityInBranch);
+					System.out.println("remaining: " + remaining);
+					for(int j= 0; j < branchList.size(); j++) {
+						ProductInBranch p = new ProductInBranch(branchList.get(j),productsToAdd.get(i).getID() , quantityInBranch);
+						productInBranchs.add(p);
+						System.out.println(p);
+					}						
+					if(remaining > 0) { // if there is a remaining we give it to the first branch.
+						productInBranchs.get(0).setQuantity(productInBranchs.get(0).getQuantity() +remaining);
+					}					
+					for(int k = 0; k < productInBranchs.size(); k++) {
+						pstmt2 = con.prepareStatement(updateBranchesSupply);
+						pstmt2.setString(1,String.valueOf(productInBranchs.get(k).getQuantity()));
+						pstmt2.setString(2, productInBranchs.get(k).getBranchID());
+						pstmt2.setString(3, productInBranchs.get(k).getProductID());
+						System.out.println(productInBranchs.get(k));
+						if(pstmt2.executeUpdate() == 0) {
+							System.out.println("here2");
+							obj.setResponse(Response.EDIT_PRODUCTS_ON_THE_CATALOG_FAILED);
+							return;
+						}
 					}
 					if (countRemoving == productsToAdd.size()) {
 						obj.setResponse(Response.EDIT_PRODUCTS_ON_THE_CATALOG_SUCCESS);
@@ -2423,7 +2450,6 @@ public class ServerQuaries {
 		}
 
 	}
-
 	/**
 	 * in this method we remove the items that the marketingworker send to us ,by
 	 * the product id.
