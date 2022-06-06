@@ -14,7 +14,7 @@ import javafx.scene.control.Label;
  * This class constructs the UI for a chat client. It implements the chat
  * interface in order to activate the display() method. Warning: Some of the
  * code here is cloned in ServerConsole
- *
+ * @author mor ben haim
  */
 
 public class ClientController implements ChatIF {

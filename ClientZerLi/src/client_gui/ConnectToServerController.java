@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /** In this class we creating the connect to server controller , we handling with all the screen operations
@@ -50,6 +51,7 @@ public class ConnectToServerController {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/ConnectToServer.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("ZerLi Connect To Server");
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setResizable(false);
@@ -62,7 +64,7 @@ public class ConnectToServerController {
 			@Override
 			public void ipNotConfirmedForClient() {
 				//TBD: open pop up window
-				System.out.println("popup");
+			
 			}
 		});
 		

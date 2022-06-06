@@ -24,8 +24,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
+/**
+ * customer menu controller handle the options of customer in the gui , display catalog or his orders.
+ * @author almog madar
+ *
+ */
 public class CustomerPageController implements Initializable {
 
 
@@ -64,7 +69,7 @@ public class CustomerPageController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CustomerPage.fxml"));
 
 		Scene scene = new Scene(root);
-
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("Customer Menu");
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -110,7 +115,7 @@ public class CustomerPageController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
+	
 		
 		//timer on screen 
 		AnimationTimer time = new AnimationTimer() {
@@ -134,7 +139,7 @@ public class CustomerPageController implements Initializable {
 		});
 		
 		
-		if(((Customer) ClientController.user).getAccountStatus()==AccountStatus.FROZEN) {
+		if(((Customer) ClientController.user).getAccountStatus()==AccountStatus.FROZEN || ((Customer) ClientController.user).getAccountStatus()==AccountStatus.PENDING_APPROVAL) {
 			viewOrdersBtn.setDisable(true);
 		}
 		

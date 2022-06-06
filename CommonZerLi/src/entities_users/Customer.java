@@ -6,8 +6,10 @@ import entities_general.CreditCard;
 import enums.AccountStatus;
 
 /**
- * @author Omri Shalev
+ * class description : extends the user for customer 
+ * @author Omri Shalev 
  */
+
 @SuppressWarnings("serial")
 public class Customer extends User implements Serializable{
 

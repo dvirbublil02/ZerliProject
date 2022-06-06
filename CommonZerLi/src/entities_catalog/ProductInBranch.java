@@ -2,19 +2,22 @@ package entities_catalog;
 
 import java.io.Serializable;
 
-/* Product In Branch 
+/* this class represent a Product In Branch because any branch has different supplies management
  * @Author Almog Madar
  */
 
 public class ProductInBranch implements Serializable {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private String branchID;
 	private  String productID;
 	private int quantity;
-	
+	/**
+	 * 
+	 * @param branchID
+	 * @param productID
+	 * @param quantity
+	 */
 	public ProductInBranch(String branchID, String productID, int quantity) {
 		this.branchID = branchID;
 		this.productID = productID;

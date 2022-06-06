@@ -8,7 +8,7 @@ import entities_catalog.ProductInOrder;
 import enums.DeliveryStatus;
 
 /**
- * This class used for
+ * This class used for deliveries object
  * 
  * @author Omri Shalev
  *

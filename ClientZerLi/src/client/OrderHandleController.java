@@ -17,14 +17,25 @@ import entities_general.OrderCustomCartPreview;
 import entities_general.OrderPreview;
 import entities_users.Customer;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 
+/**
+ * Cancellation controller , branchmanager controller, customer controller ,catalog controller, (the logic controllers) are cancel and united to this class 
+ * this class is handling with the orders , here we handling with the
+ * invitations ,canaling . the main part of this class is to share common
+ * information between different screens
+ * 
+ * @author almog mader
+ *
+ */
 public class OrderHandleController implements nofityOrderListner {
 
 	// this table will handle only custom products.
 	private static Map<String, List<ProductInOrder>> customProductInOrder = new HashMap<>();
+	// every order have his products the map saves the custom product , key=
+	// customName , value=product
 	private static Map<String, List<ProductInOrder>> customProductInOrderFinallCart = new HashMap<>();
+	// the list saving the regular product
 	private static List<ProductInOrder> productInOrder = new ArrayList<>();
 	public static int quantityOfRegularProducts = 0;
 	public static int quantityOfCustomProducts = 0;
@@ -34,48 +45,54 @@ public class OrderHandleController implements nofityOrderListner {
 	private static boolean detailsAllreadyOpen = false;
 	private static boolean detailsAllreadyOpen2 = false;
 	private static boolean disableRemoveCustomButton = false;
-	private static double shippingPrice=20.55;
+	private static double shippingPrice = 20.55;
 	static DecimalFormat df = new DecimalFormat("#,###.##");
-	
+
 	/**
 	 * get product in branch view
 	 */
 	private static List<ProductInBranch> productInBranch = new ArrayList<ProductInBranch>();
 
-	
-	/**map to view quantity chosen by customer.
-	 * String nameProdcut(key) , List<Integer>=[productID,quantity]
+	/**
+	 * map to view quantity chosen by customer. String nameProdcut(key) ,
+	 * List<Integer>=[productID,quantity]
 	 */
-	private static Map<String,List<Integer>> quntityImageInBranch =  new HashMap<String, List<Integer>>();
+	private static Map<String, List<Integer>> quntityImageInBranch = new HashMap<String, List<Integer>>();
 	/**
 	 * set to view product with problematic bigger quantity -> <ProductID>
 	 */
 	private static Set<String> problemticProducts = new HashSet<>();
-	
+
 	/**
 	 * Massage note to user if there is problem with quantity.
 	 */
-	private static String msg ;
+	private static String msg;
 	/**
 	 * boolean eventToClose
 	 */
-	private static boolean closeEvent=false;
-	
+	private static boolean closeEvent = false;
 
+	/**
+	 * list of all ordinary orders that in pending status
+	 */
 	private static List<OrderPreview> ordersForBranchManager = new ArrayList<>();
+	/**
+	 * list of all order delivery that in pending status
+	 */
 	private static List<OrderPreview> ordersForBranchManagerD = new ArrayList<>();
+	/**
+	 * list of all order immediate delivery that in pending status
+	 */
 	private static List<OrderPreview> ordersForBranchManagerDI = new ArrayList<>();
-	
+	/**
+	 * list of all cancel ordinary orders that the customer ask to cancel
+	 */
 	private static List<OrderPreview> ordersForBranchManagerC = new ArrayList<>();
+	/**
+	 * list of all cancel delivery orders that the customer ask to cancel
+	 */
 	private static List<OrderPreview> ordersForBranchManagerCD = new ArrayList<>();
 	private static OrderPreview order;
-	
-
-	
-
-	
-	
-	
 
 	public static List<OrderPreview> getOrdersForBranchManagerDI() {
 		return ordersForBranchManagerDI;
@@ -109,31 +126,29 @@ public class OrderHandleController implements nofityOrderListner {
 		OrderHandleController.ordersForBranchManagerCD = ordersForBranchManagerCD;
 	}
 
-
 	/*
-	 *   cancellation orders preview for view on screen.  
+	 * cancellation orders preview for view on screen.
 	 */
 	private static List<Order> cancelationOrdersPreview = new ArrayList<>();
 	/*
-	 *   history orders preview for view on screen.
+	 * history orders preview for view on screen.
 	 */
 	private static List<Order> historyOrdersPreview = new ArrayList<>();
 	/*
-	 *   cancelRequesthistory orders preview for view on screen.
+	 * cancelRequesthistory orders preview for view on screen.
 	 */
 	private static List<Order> cancelRequestHistOrdersPreview = new ArrayList<>();
 	/*
-	 *  order view to pop up details screen . 
+	 * order view to pop up details screen .
 	 */
-	private static Order customerOrderView ;
+	private static Order customerOrderView;
 	/*
-	 *  order view for custom products to pop up details screen . 
+	 * order view for custom products to pop up details screen .
 	 */
 	private static Map<String, List<ProductInOrder>> customerOrderDetails = new HashMap<>();;
-	
-	
+
 	/*
-	 *  orderPreview used in screen details
+	 * orderPreview used in screen details
 	 */
 
 	public static OrderPreview getOrder() {
@@ -141,7 +156,7 @@ public class OrderHandleController implements nofityOrderListner {
 	}
 
 	/*
-	 *  orderPreview used in screen details
+	 * orderPreview used in screen details
 	 */
 	public static void setOrder(OrderPreview order) {
 		OrderHandleController.order = order;
@@ -154,32 +169,32 @@ public class OrderHandleController implements nofityOrderListner {
 	public static void setOrdersForBranchManager(List<OrderPreview> ordersForBranchManager) {
 		OrderHandleController.ordersForBranchManager = ordersForBranchManager;
 	}
-	
+
 	/**
-	 *  customer section method 
-	 * 		@return cancelationOrdersPreview to screen show . 
+	 * customer section method
+	 * 
+	 * @return cancelationOrdersPreview to screen show .
 	 */
 	public static List<Order> getCancelationOrdersPreview() {
 		return cancelationOrdersPreview;
 	}
 
 	/*
-	 *  @param - List<Order> cancelationOrdersPreview to screen show . 
+	 * @param - List<Order> cancelationOrdersPreview to screen show .
 	 */
 	public static void setCancelationOrdersPreview(List<Order> cancelationOrdersPreview) {
 		OrderHandleController.cancelationOrdersPreview = cancelationOrdersPreview;
 	}
 
 	/*
-	 * @param - List<Order> getHistoryOrdersPreview to screen show . 
+	 * @param - List<Order> getHistoryOrdersPreview to screen show .
 	 */
 	public static List<Order> getHistoryOrdersPreview() {
 		return historyOrdersPreview;
 	}
 
-
 	/*
-	 * @param - List<Order> getCancelRequestHistOrdersPreview to screen show . 
+	 * @param - List<Order> getCancelRequestHistOrdersPreview to screen show .
 	 */
 	public static List<Order> getCancelRequestHistOrdersPreview() {
 		return cancelRequestHistOrdersPreview;
@@ -213,11 +228,12 @@ public class OrderHandleController implements nofityOrderListner {
 		return customProductInOrderFinallCart;
 	}
 
-	
-	/** add temporary custom product to Final cart . 
+	/**
+	 * add temporary custom product to Final cart .
 	 * 
-	 * @param key - name of custom product 
-	 * @param customProductInOrderFinallCart - list of productInOrder To add to Final cart 
+	 * @param key                            - name of custom product
+	 * @param customProductInOrderFinallCart - list of productInOrder To add to
+	 *                                       Final cart
 	 * @author Almog-Madar
 	 */
 	public static void addCustomProductInOrderFinallCart(String key,
@@ -233,10 +249,10 @@ public class OrderHandleController implements nofityOrderListner {
 		OrderHandleController.customProductInOrder = customProductInOrder;
 	}
 
-	
-	
-	/** add productInOrder to specific custom.
-	 * @param key - name of custom 
+	/**
+	 * add productInOrder to specific custom.
+	 * 
+	 * @param key                - name of custom
 	 * @param productInOrderList - List of productInOrder added to custom product.
 	 * @author Almog-Madar
 	 */
@@ -252,10 +268,11 @@ public class OrderHandleController implements nofityOrderListner {
 	public static List<ProductInOrder> getProductInOrder() {
 		return productInOrder;
 	}
-	
-	
-	/** add productInOrder to regular List. 
-	 * @param productInOrder - add productInOrder to regular list. 
+
+	/**
+	 * add productInOrder to regular List.
+	 * 
+	 * @param productInOrder - add productInOrder to regular list.
 	 * @author Almog-Madar
 	 */
 	public static void addProductInOrder(ProductInOrder productInOrder) {
@@ -265,9 +282,11 @@ public class OrderHandleController implements nofityOrderListner {
 		priceLabel.setText(String.valueOf(totalPrice));
 	}
 
-	/** To manage the custom item HashMap 
-	 *  Add productInOrder to Custom product that exist.
-	 * @param key - name of custom
+	/**
+	 * To manage the custom item HashMap Add productInOrder to Custom product that
+	 * exist.
+	 * 
+	 * @param key            - name of custom
 	 * @param productInOrder - List of productInOrder added to custom product.
 	 */
 	public static void addToExistItemOnList(String key, ProductInOrder productInOrder) {
@@ -347,7 +366,7 @@ public class OrderHandleController implements nofityOrderListner {
 	public static void setNewCustomer(Label newCustomer) {
 		OrderHandleController.newCustomer = newCustomer;
 	}
-	
+
 	public static Label getPriceLabel() {
 		return priceLabel;
 	}
@@ -355,19 +374,18 @@ public class OrderHandleController implements nofityOrderListner {
 	public static void setPriceLabel(Label priceLabel) {
 		OrderHandleController.priceLabel = priceLabel;
 	}
-	
-	
 
 	public static int getCartCounter() {
 		return quantityOfRegularProducts + quantityOfCustomProducts;
 	}
 
-
 	/**
-	 *  remove Custom product on the screen , need to remove on the back side also (here back).
-	 *  product selected from screen and need to remove. 
-	 *  @param ObservableList<OrderCustomCartPreview> productSelected - product selected from screen .  
-	 *  @author Almog-Madar
+	 * remove Custom product on the screen , need to remove on the back side also
+	 * (here back). product selected from screen and need to remove.
+	 * 
+	 * @param ObservableList<OrderCustomCartPreview> productSelected - product
+	 *                                               selected from screen .
+	 * @author Almog-Madar
 	 */
 	@Override
 	public void removeFromOrderCustom(ObservableList<OrderCustomCartPreview> productSelected) {
@@ -383,9 +401,13 @@ public class OrderHandleController implements nofityOrderListner {
 
 	}
 
-	/** Remove regular product on the screen , need to remove on the back side also (here back).
-	 *  @param ObservableList<OrderCartPreview> productSelected - product selected from screen.
-	 *  @author Almog-Madar
+	/**
+	 * Remove regular product on the screen , need to remove on the back side also
+	 * (here back).
+	 * 
+	 * @param ObservableList<OrderCartPreview> productSelected - product selected
+	 *                                         from screen.
+	 * @author Almog-Madar
 	 */
 	@Override
 	public void removeFromOrderRegular(ObservableList<OrderCartPreview> productSelected) {
@@ -400,7 +422,7 @@ public class OrderHandleController implements nofityOrderListner {
 					System.out.println("here!!");
 					totalPrice -= ocp.getPrice() * ocp.getQuantity();
 					productInOrder.remove(pd);
-					quantityOfRegularProducts-=ocp.getQuantity();
+					quantityOfRegularProducts -= ocp.getQuantity();
 					break;
 				}
 
@@ -410,12 +432,14 @@ public class OrderHandleController implements nofityOrderListner {
 		System.out.println("remove listner regular list->" + productInOrder);
 	}
 
-	
-	/** remove productInOrder inside custom product on screen ,need to remove on the
-	 *  back side also (here back)
-	 *  @param ObservableList<ProductInOrder> productSelected - product selected from screen.
-	 *  @param String customName - name of custom product. 
-	 *  @author Almog-Madar
+	/**
+	 * remove productInOrder inside custom product on screen ,need to remove on the
+	 * back side also (here back)
+	 * 
+	 * @param ObservableList<ProductInOrder> productSelected - product selected from
+	 *                                       screen.
+	 * @param String                         customName - name of custom product.
+	 * @author Almog-Madar
 	 */
 	@Override
 	public void removeProductInOrderInsideCustom(ObservableList<ProductInOrder> productSelected, String customName) {
@@ -423,16 +447,16 @@ public class OrderHandleController implements nofityOrderListner {
 		List<ProductInOrder> customProducts = customProductInOrderFinallCart.get(customName);
 		List<ProductInOrder> productSelectedRegualrList = new ArrayList<ProductInOrder>();
 		/**
-		 *  change from ObservableList to List
+		 * change from ObservableList to List
 		 */
 		productSelectedRegualrList.addAll(productSelected);
 		/**
-		 *  remove on the back side it productInOrder inside custom
+		 * remove on the back side it productInOrder inside custom
 		 */
 		customProducts.removeAll(productSelectedRegualrList);
 
 		/**
-		 *  if we remove the last one in custom product
+		 * if we remove the last one in custom product
 		 */
 		if (customProducts.size() == 0) {
 			customProductInOrderFinallCart.remove(customName);
@@ -440,14 +464,14 @@ public class OrderHandleController implements nofityOrderListner {
 		}
 
 		/**
-		 *  calculate total price
+		 * calculate total price
 		 */
 		for (ProductInOrder p : productSelectedRegualrList) {
 			totalPrice -= p.getPrice() * (double) p.getProductQuantityInCart();
 			priceLabel.setText(String.valueOf(totalPrice));
 		}
 		/**
-		 *  testing print - need to remove
+		 * testing print - need to remove
 		 */
 		System.out.println("customProducts list->" + customProducts);
 		System.out.println("after remove deatails page ->" + customProductInOrderFinallCart.get(customName));
@@ -456,39 +480,36 @@ public class OrderHandleController implements nofityOrderListner {
 		System.out.println("totalPrice->" + totalPrice);
 	}
 
-	
 	/**
-	 * update label totalPrice on cartPage . 
+	 * update label totalPrice on cartPage .
 	 */
 	public static void updateTotalPrice() {
 		/**
-		 *  update price label after remove regular product
+		 * update price label after remove regular product
 		 */
-		if(((Customer) ClientController.user).getIsNewCustomer()) {
+		if (((Customer) ClientController.user).getIsNewCustomer()) {
 			System.out.println("here1");
 			newCustomer.setVisible(true);
-			
+
 			try {
-				priceLabel.setText(df.format(OrderHandleController.getTotalPrice()*0.8) + " ¤");
+				priceLabel.setText(df.format(OrderHandleController.getTotalPrice() * 0.8) + " ¤");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		}
-		else
-		{
+
+		} else {
 			System.out.println("here2");
 			newCustomer.setVisible(false);
-			
+
 			try {
-			priceLabel.setText(df.format(OrderHandleController.getTotalPrice())+ " ¤");
+				priceLabel.setText(df.format(OrderHandleController.getTotalPrice()) + " ¤");
 			} catch (Exception e) {
-			// TODO Auto-generated catch block
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
+
 		System.out.println("total price updated ->" + priceLabel.getText());
 		System.out.println(OrderHandleController.getTotalPrice());
 	}
@@ -500,7 +521,6 @@ public class OrderHandleController implements nofityOrderListner {
 	public static void setDetailsAllreadyOpen(boolean detailsAllreadyOpen) {
 		OrderHandleController.detailsAllreadyOpen = detailsAllreadyOpen;
 	}
-	
 
 	public static boolean isDetailsAllreadyOpen2() {
 		return detailsAllreadyOpen2;
@@ -509,7 +529,6 @@ public class OrderHandleController implements nofityOrderListner {
 	public static void setDetailsAllreadyOpen2(boolean detailsAllreadyOpen2) {
 		OrderHandleController.detailsAllreadyOpen2 = detailsAllreadyOpen2;
 	}
-	
 
 	public static boolean isDisableRemoveCustomButton() {
 		return disableRemoveCustomButton;
@@ -527,128 +546,124 @@ public class OrderHandleController implements nofityOrderListner {
 		OrderHandleController.productInBranch = productInBranch;
 	}
 
-	
 	/**
-	 *  check if order quantity is corrected by branch quantity.
-	 *  quntityImageInBranch - map to view quantity chosen by customer.
-	 *  problemticProducts - which product are problematic.
-	 *  @return boolean  - true if problemticProducts exist else false.  
-	 *  @author Almog-Madar
+	 * check if order quantity is corrected by branch quantity. quntityImageInBranch
+	 * - map to view quantity chosen by customer. problemticProducts - which product
+	 * are problematic.
+	 * 
+	 * @return boolean - true if problemticProducts exist else false.
+	 * @author Almog-Madar
 	 */
 	public static boolean checkQuantityInOrder() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("There was an exception in the stock.\n");
-		
+
 		/**
 		 * clear all information before run
 		 */
 		quntityImageInBranch.clear();
 		problemticProducts.clear();
-		
+
 		/*
 		 * collect total quantity MAP IMAGE for REGUALR.
 		 */
-		for(ProductInOrder productInOr :productInOrder)
-		{
+		for (ProductInOrder productInOr : productInOrder) {
 			addToMapQuntityInBranch(productInOr);
 		}
-		
+
 		/*
 		 * collect total quantity MAP IMAGE for CUSTOM.
 		 */
-		for(List<ProductInOrder> customProductList : customProductInOrderFinallCart.values())
-		{
-			for(ProductInOrder productInOr :customProductList)
-			{
+		for (List<ProductInOrder> customProductList : customProductInOrderFinallCart.values()) {
+			for (ProductInOrder productInOr : customProductList) {
 				addToMapQuntityInBranch(productInOr);
 			}
 		}
-		
-		
-		System.out.println("Map-view-> "+quntityImageInBranch);
-			
-		
+
+		System.out.println("Map-view-> " + quntityImageInBranch);
+
 		/*
-		 * check total quantity between mapQuntityInBranch and productInBranch 
+		 * check total quantity between mapQuntityInBranch and productInBranch
 		 */
 		Set<String> productsNames = quntityImageInBranch.keySet();
-		for(String productName : productsNames)
-		{
-			for(ProductInBranch productInB:productInBranch) {
+		for (String productName : productsNames) {
+			for (ProductInBranch productInB : productInBranch) {
 				/*
 				 * check if same productId
 				 */
-				String productID=String.valueOf(quntityImageInBranch.get(productName).get(0));  
-				int productQuantity=quntityImageInBranch.get(productName).get(1);
-				
-				if(productInB.getProductID().equals(productID))
-				{
-					//System.out.println("ProductInBranch-> " +productInB.getProductID());
-					//System.out.println("ProductIDInMap-> "  +productID);
-					
+				String productID = String.valueOf(quntityImageInBranch.get(productName).get(0));
+				int productQuantity = quntityImageInBranch.get(productName).get(1);
+
+				if (productInB.getProductID().equals(productID)) {
+					// System.out.println("ProductInBranch-> " +productInB.getProductID());
+					// System.out.println("ProductIDInMap-> " +productID);
+
 					/**
-					 * Quantity in branch is smaller then total Customer choose. 
+					 * Quantity in branch is smaller then total Customer choose.
 					 */
-					if(productInB.getQuantity()<productQuantity) {
-						
+					if (productInB.getQuantity() < productQuantity) {
+
 						/*
 						 * add to problematic productID set
 						 */
 						problemticProducts.add(productName);
-						System.out.println("problem-set:"+problemticProducts);
-						//System.out.println("QunitityInBranch-> " +productInB.getQuantity());
-						//System.out.println("CustomerTotalQuantity -> " +quntityImageInBranch.get(productID));
-						
+						System.out.println("problem-set:" + problemticProducts);
+						// System.out.println("QunitityInBranch-> " +productInB.getQuantity());
+						// System.out.println("CustomerTotalQuantity -> "
+						// +quntityImageInBranch.get(productID));
+
 						/*
-						 * build massage view 
+						 * build massage view
 						 */
-						sb.append("Total "+ productName+" in branch:\n");
-						sb.append(productInB.getQuantity()+"\n");
+						sb.append("Total " + productName + " in branch:\n");
+						sb.append(productInB.getQuantity() + "\n");
 						sb.append("You choose:\n");
-						sb.append(productQuantity+"\n");
-						sb.append("Please remove -> "+(productQuantity-productInB.getQuantity())+" product units."+"\n");
-							
+						sb.append(productQuantity + "\n");
+						sb.append("Please remove -> " + (productQuantity - productInB.getQuantity()) + " product units."
+								+ "\n");
+
 					}
 				}
 			}
 		}
-		
+
 		sb.append("Or another option is to change branch :)\n");
 		/**
 		 * set massage pop-up screen.
 		 */
-		msg=sb.toString();
-		
+		msg = sb.toString();
+
 		/**
 		 * if there is problem quantity.
 		 */
-		if(problemticProducts.size()!=0)
+		if (problemticProducts.size() != 0)
 			return false;
-		
+
 		return true;
 	}
 
-	
 	/**
 	 * add to map of quntityInBranch + set problemticProducts
-	 * @param productInOr - add product Map quantity choose of the customer. 
+	 * 
+	 * @param productInOr - add product Map quantity choose of the customer.
 	 * @author Almog-Madar
 	 */
 	private static void addToMapQuntityInBranch(ProductInOrder productInOr) {
 		int quntity;
-		
-		System.out.println("productInOr ProductID->"+productInOr.getName());
-		// if not inside the map 
-		if(!quntityImageInBranch.containsKey(productInOr.getName())) {
-			quntityImageInBranch.put(productInOr.getName(),Arrays.asList(Integer.parseInt(productInOr.getID()),productInOr.getProductQuantityInCart()));
-		}
-		else // inside the map need to add quantity to same item 
+
+		System.out.println("productInOr ProductID->" + productInOr.getName());
+		// if not inside the map
+		if (!quntityImageInBranch.containsKey(productInOr.getName())) {
+			quntityImageInBranch.put(productInOr.getName(),
+					Arrays.asList(Integer.parseInt(productInOr.getID()), productInOr.getProductQuantityInCart()));
+		} else // inside the map need to add quantity to same item
 		{
-			quntity=quntityImageInBranch.get(productInOr.getName()).get(1);
+			quntity = quntityImageInBranch.get(productInOr.getName()).get(1);
 			quntityImageInBranch.remove(productInOr.getName());
-			quntityImageInBranch.put(productInOr.getName(),Arrays.asList(Integer.parseInt(productInOr.getID()),quntity+productInOr.getProductQuantityInCart()));
-		}		
-		
+			quntityImageInBranch.put(productInOr.getName(), Arrays.asList(Integer.parseInt(productInOr.getID()),
+					quntity + productInOr.getProductQuantityInCart()));
+		}
+
 	}
 
 	public static String getMsg() {
@@ -659,23 +674,22 @@ public class OrderHandleController implements nofityOrderListner {
 		OrderHandleController.msg = msg;
 	}
 
-	
 	public static Set<String> getProblemticProducts() {
 		return problemticProducts;
-	}	
-	
-	
+	}
+
 	/**
 	 * Clear all dynamic data.
-	 * @author Almog-Madar. 
+	 * 
+	 * @author Almog-Madar.
 	 */
 	public static void clearAllOrderData() {
 		customProductInOrder.clear();
 		customProductInOrderFinallCart.clear();
 		productInOrder.clear();
-		quantityOfRegularProducts=0;
-		quantityOfCustomProducts=0;
-		totalPrice=0;
+		quantityOfRegularProducts = 0;
+		quantityOfCustomProducts = 0;
+		totalPrice = 0;
 		updateTotalPrice();
 	}
 
@@ -693,6 +707,6 @@ public class OrderHandleController implements nofityOrderListner {
 
 	public static void setShippingPrice(double shippingPrice) {
 		OrderHandleController.shippingPrice = shippingPrice;
-	}	
+	}
 
 }

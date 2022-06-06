@@ -1,8 +1,5 @@
 package enums;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Constant Enum that contain all the branches in Zerli with there identify
  * numbers

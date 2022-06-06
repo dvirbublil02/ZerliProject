@@ -33,6 +33,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -90,7 +91,7 @@ public class ComplaintOpenComplaintController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/ComplaintOpenComplaintControllerPage.fxml"));
 
 		Scene scene = new Scene(root);
-
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("Open Complaint Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();

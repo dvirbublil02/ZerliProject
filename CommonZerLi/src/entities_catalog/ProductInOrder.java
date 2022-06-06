@@ -1,10 +1,10 @@
 package entities_catalog;
 
+/**
+ * this class represent a product in order
+ */
 public class ProductInOrder extends Product {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String orderID;
@@ -12,8 +12,22 @@ public class ProductInOrder extends Product {
 	private String nameOfItem;
 	private int productQuantityInOrder;
 
-	// productID, orderID, nameOfproduct, price, backGroundColor, picture, quantity,
-	// itemType, dominateColor, productQuantityInOrder, nameOfItem
+	/**
+	 * 
+	 * @param productID
+	 * @param orderID
+	 * @param nameOfproduct
+	 * @param price
+	 * @param backGroundColor
+	 * @param imgSrc
+	 * @param quantity
+	 * @param itemType
+	 * @param dominateColor
+	 * @param productQuantityInOrder
+	 * @param nameOfItem
+	 * @param isOnSale
+	 * @param fixPrice
+	 */
 	public ProductInOrder(String productID, String orderID, String nameOfproduct, double price, String backGroundColor,
 			String imgSrc, int quantity, String itemType, String dominateColor, int productQuantityInOrder,
 			String nameOfItem, boolean isOnSale, double fixPrice) {

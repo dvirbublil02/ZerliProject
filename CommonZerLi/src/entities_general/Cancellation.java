@@ -19,7 +19,13 @@ public class Cancellation implements Serializable {
 	double expectedRefund;
 	private OrderStatus status;
 	
-	
+	/**
+	 * 
+	 * @param cancellationID
+	 * @param orderID
+	 * @param customerID
+	 * @param expectedRefund
+	 */
 	public Cancellation(int cancellationID, String orderID, String customerID, double expectedRefund) {
 		this.cancellationID = cancellationID;
 		this.orderID = orderID;

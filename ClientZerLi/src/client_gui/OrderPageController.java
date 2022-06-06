@@ -1,6 +1,5 @@
 package client_gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Time;
 import java.text.DateFormat;
@@ -10,22 +9,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import client.ClientController;
 import client.ClientHandleTransmission;
-import client.ClientUI;
 import client.OrderHandleController;
 import client.popMessageHandler;
 import entities_catalog.ProductInBranch;
-import entities_general.Branch;
-import entities_general.Order;
 import entities_users.Customer;
-import enums.AccountStatus;
 import enums.Branches;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
@@ -45,6 +39,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 /**
@@ -164,7 +159,7 @@ public class OrderPageController implements Initializable{
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/OrderPage.fxml"));
 
 		Scene scene = new Scene(root);
-
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("Order Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -174,6 +169,7 @@ public class OrderPageController implements Initializable{
 			});	
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		ClientController.initalizeUserDetails(employeeName, phoneNumber1, accountStatus,null, employeeType,
@@ -244,6 +240,7 @@ public class OrderPageController implements Initializable{
 		}
 		this.getBranchName.setItems(branchOptions);
 		this.getBranchName.setValue(Branches.KARMIEL);
+		
 	}
 	
 	
@@ -257,7 +254,10 @@ public class OrderPageController implements Initializable{
 	 */
 	@FXML
 	void confirm(ActionEvent event) {
-
+		if((!ImidiateOrderRadio.isSelected() && !takeAwayRadio.isSelected() && !deliveryRadio.isSelected()) ) {
+			OrderMassageLabel.setText("You should choose delivery method");
+			return;
+		}
 		//get product in branch and set on OrderHandleController .
 		List<ProductInBranch> productInBranch = ClientHandleTransmission.getProductInSpecificBranch(getBranchName.getValue());
 		System.out.println(productInBranch);
@@ -326,17 +326,15 @@ public class OrderPageController implements Initializable{
 						OrderMassageLabel.setText("No area code set , please write one");
 						return;
 					}
-					else if (phoneNumberStart.length()>3 || phoneNumberStart.length()<3) {
+					else if (phoneNumberStart.length()>3 || phoneNumberStart.length()<3 || !phoneNumberStart.matches("[0-9]+")) {
 						OrderMassageLabel.setText("Wrong area code , please write correct one");
 						return;
 					}
-					else if (phoneNumberEnd.length()>7 ||  phoneNumberEnd.length()<7) {
+					else if (phoneNumberEnd.length()>7 ||  phoneNumberEnd.length()<7 || !phoneNumberEnd.matches("[0-9]+")) {
 						OrderMassageLabel.setText("Wrong phone number , please write correct one");
 						return;
 					}
-					else {    // check time 
-						  
-					}
+					
 					
 					
 					if(deliveryRadio.isSelected()) 
@@ -387,7 +385,7 @@ public class OrderPageController implements Initializable{
 							System.out.println("problem with create delivery ");
 						}
 					}
-				
+				System.out.println("here " +orderID);
 								
 					progressIndicator.setProgress(1f);
 					//label order screen
@@ -410,7 +408,7 @@ public class OrderPageController implements Initializable{
 						((Customer) ClientController.user).setNewCustomer(false);
 					}
 				
-
+					OrderHandleController.clearAllOrderData();
 					//open Customer Main screen 
 					((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 					Stage primaryStage = new Stage();
@@ -464,6 +462,7 @@ public class OrderPageController implements Initializable{
 
     @FXML
     void ImidiateOrderSelected(ActionEvent event) {
+    	
     	//step progress 
     	progressIndicator.setProgress(0.92f);
     	
@@ -587,6 +586,7 @@ public class OrderPageController implements Initializable{
      * @param ObservableList<Time> orderTimesPickUp - list to add time Initialize
      * @author Almog-Madar
      */
+	@SuppressWarnings("deprecation")
 	private void timeInit8To20(ObservableList<Time> orderTimesPickUp) {
 		Time time;
 		int hours=8,min=0;

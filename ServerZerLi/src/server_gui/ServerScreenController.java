@@ -21,11 +21,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import server.ServerUI;
@@ -57,7 +59,8 @@ public class ServerScreenController implements Initializable {
 
 	@FXML
 	private PasswordField TxtPassword;
-
+	@FXML
+	private Label portLabel;
 	@FXML
 	private TextField TxtPort;
 
@@ -85,6 +88,7 @@ public class ServerScreenController implements Initializable {
 
 	private static boolean ifFirstConnector;
 	private static boolean ifFirstMsg;
+	
 	private List<String> data = new ArrayList<String>();
 	private static ObservableList<ClientDetails> clients = FXCollections.observableArrayList();
 	static ObservableList<msgClass> listView2 = FXCollections.observableArrayList();
@@ -99,12 +103,15 @@ public class ServerScreenController implements Initializable {
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/server_gui/ServerFXML.fxml"));
 		Scene scene = new Scene(root);
-
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("ZerLi Server");
 		primaryStage.setScene(scene);
 
 		primaryStage.show();
 		primaryStage.setResizable(false);
+		primaryStage.setOnCloseRequest(event -> {
+			System.exit(0);
+		});
 	}
 	
 
@@ -133,13 +140,11 @@ public class ServerScreenController implements Initializable {
 		data.add(TxtPassword.getText());
 	
 
-		System.out.println(data.toString());
 		p = getport();
 		if (p.trim().isEmpty()) {
-			System.out.println("You must enter a port number");
-
+			portLabel.setText("You must enter a port number");
 		} else {
-
+			portLabel.setText("");
 			if (ServerUI.runServer(p, data)) {
 				BTNConnect.setDisable(true);
 				BTNDisconnect.setDisable(false); // only if there is host connected he can press discon
@@ -191,7 +196,11 @@ public class ServerScreenController implements Initializable {
 
 	}
 
-	// to be continued
+	/**
+	 * In this method we handling with the import data from an external data base.
+	 * when the button import press , this method start the event.
+	 * @param event
+	 */
 	@FXML
 	void Import(ActionEvent event) {
 		

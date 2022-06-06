@@ -6,7 +6,8 @@ import java.io.Serializable;
  * to the client and also from the client to the server.
  * each instance will have a mission(from client) response(from the server) and information(the data that will
  * be pass between the server and the client)
- *
+ * this class implement command design pattern we will use it to transfer the data from the client to the server 
+ * @author mor ben haim
  *
  */
 public class TransmissionPack implements Serializable{

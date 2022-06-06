@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="ServerPane" prefHeight="614.0" prefWidth="842.0" styleClass="backgroundServerMainScreen" stylesheets="@ServerScreenDesign.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server_gui.ServerScreenController">
+<Pane fx:id="ServerPane" prefHeight="614.0" prefWidth="842.0" styleClass="backgroundServerMainScreen" stylesheets="@ServerScreenDesign.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server_gui.ServerScreenController">
    <children>
       <AnchorPane prefHeight="614.0" prefWidth="842.0">
          <children>
@@ -26,6 +26,7 @@
                   <Font name="Cambria Bold" size="48.0" />
                </font>
             </Label>
+            <Label fx:id="portLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="79.0" layoutY="475.0" prefHeight="17.0" prefWidth="202.0" textFill="RED" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="406.0" layoutY="358.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="245.0" prefWidth="429.0">

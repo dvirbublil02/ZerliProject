@@ -1,14 +1,14 @@
 package entities_reports;
 
 import java.io.Serializable;
-import java.sql.Blob;
-import java.sql.Date;
 import java.time.LocalDate;
 
 import enums.ReportDuration;
 import enums.ReportType;
 
 /**
+ * this class describes the report object
+ * 
  * @author Dvir Bublil
  */
 public class Report implements Serializable {
@@ -17,14 +17,45 @@ public class Report implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * every report has report id
+	 */
 	private String reportID;
+	/**
+	 * every report has report type
+	 */
 	private ReportType reportType;
+	/**
+	 * every report has branch id
+	 */
 	private String branchID;
+	/**
+	 * every report has report creator
+	 */
 	private String reportCreator;
+	/**
+	 * every report has report duration
+	 */
 	private ReportDuration reportDuration;
+	/**
+	 * every report has report date
+	 */
 	private LocalDate reportDate;
+	/**
+	 * every report is saved in DB as blob file .
+	 */
 	private byte[] blob;
 
+	/**
+	 * 
+	 * @param reportID
+	 * @param reportType
+	 * @param branchID
+	 * @param reportCreator
+	 * @param reportDuration
+	 * @param blob
+	 * @param reportDate
+	 */
 	public Report(String reportID, ReportType reportType, String branchID, String reportCreator,
 			ReportDuration reportDuration, byte[] blob, LocalDate reportDate) {
 		super();
@@ -34,20 +65,32 @@ public class Report implements Serializable {
 		this.reportCreator = reportCreator;
 		this.reportDuration = reportDuration;
 		this.blob = blob;
-		this.reportDate=reportDate;
+		this.reportDate = reportDate;
 
 	}
 
-	
-
+	/**
+	 * return report id
+	 * 
+	 * @return
+	 */
 	public String getReportID() {
 		return reportID;
 	}
 
+	/**
+	 * 
+	 * @param reportID
+	 */
 	public void setReportID(String reportID) {
 		this.reportID = reportID;
 	}
 
+	/**
+	 * return the reportType
+	 * 
+	 * @return
+	 */
 	public ReportType getReportType() {
 		return reportType;
 	}

@@ -3,9 +3,12 @@ package client_gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.OrderHandleController;
 import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
+import entities_users.Customer;
+import enums.AccountStatus;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -33,7 +36,9 @@ public class ItemInCatalogController {
    
     @FXML
     private void clickItem(MouseEvent mouseEvent) {
-    	myListener.onClickListener(item);	
+    	if(((Customer) ClientController.user).getAccountStatus()==AccountStatus.CONFIRMED) {
+    	myListener.onClickListener(item);
+    	}
     
     }
     

@@ -1,6 +1,7 @@
 package enums;
 
 /**
+ * in this class we define reports type enumus
  * @author Dvir bublil
  * */
 public enum ReportType {

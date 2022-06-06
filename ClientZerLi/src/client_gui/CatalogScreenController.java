@@ -39,10 +39,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+/**
+ * this controller handle with the catalog screen(gui) and all the catalog situation 
+ * @author almog madar
+ *
+ */
 public class CatalogScreenController implements Initializable {
-
-	private static final String Stage = null;
 
 	@FXML
 	private VBox ChosenItemCard;
@@ -85,9 +87,6 @@ public class CatalogScreenController implements Initializable {
 
 	@FXML
 	private TextField quantityTextLable;
-
-	@FXML
-	private Button searchBtn;
 
     @FXML
     private Button infoBtn;
@@ -134,7 +133,7 @@ public class CatalogScreenController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CatalogScreen.fxml"));
 
 		Scene scene = new Scene(root);
-
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("ZerLi Catalog");
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -175,13 +174,12 @@ public class CatalogScreenController implements Initializable {
 	 * initialize Screen and all Features to preview in start Catalog Products ,
 	 * ComboBox of filters , setChosenItemCard on left side
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// initialize setChosenItemCard
 		vboxAddToCustom.setVisible(false);
 		customTextField.setDisable(true);
-
+		quantityTextLable.setDisable(true);
 		System.out.println("cartCounter->" + OrderHandleController.getCartCounter());
 		cartCounter = OrderHandleController.getCartCounter();
 		cartItemCounter.setText("" + cartCounter);
@@ -381,7 +379,10 @@ public class CatalogScreenController implements Initializable {
 	 */
 	@FXML
 	void addToCart(ActionEvent event) {
-
+		if(!quantityTextLable.getText().matches("[0-9]+") || Integer.parseInt(quantityTextLable.getText())>99) {
+			quantityTextLable.setText("0");
+			return;
+		}
 		Integer howMuchQuantityToAdd = Integer.parseInt(quantityTextLable.getText());
 
 		if (howMuchQuantityToAdd > 0)
@@ -518,7 +519,10 @@ public class CatalogScreenController implements Initializable {
 	 */
 	@FXML
 	void addToCustom(ActionEvent event) {
-
+		if(!quantityTextLable.getText().matches("[0-9]+") || Integer.parseInt(quantityTextLable.getText())>99) {
+			quantityTextLable.setText("0");
+			return;
+		}
 		int customQuantity = Integer.valueOf(quantityTextLable.getText());
 
 		if (customQuantity > 0) {

@@ -13,7 +13,7 @@ import ocsf.client.AbstractClient;
 /**
  * This class overrides some of the methods defined in the abstract superclass
  * in order to give more functionality to the client.
- *
+ * @author mor ben haim
  * 
  */
 public class ChatClient extends AbstractClient {

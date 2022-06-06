@@ -26,7 +26,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
+import client.OrderHandleController;
 import client.ReportHandleController;
+import client.popMessageHandler;
 import communication.Mission;
 import communication.Response;
 import communication.TransmissionPack;
@@ -158,15 +160,36 @@ public class SurveyReportController implements Initializable {
 	    }
 	    in.close();
 
-		TransmissionPack tp=new TransmissionPack(Mission.INSERT_SURVEY_BY_EXPERT,null,baos.toByteArray());
+		List<Object> result=new ArrayList<>();
+		result.add(baos.toByteArray());
+		result.add((String)titleInfo.get(0));
+		TransmissionPack tp=new TransmissionPack(Mission.INSERT_SURVEY_BY_EXPERT,null,null);
+		tp.setInformation(result);
 		ClientUI.chat.accept(tp);
 		tp=ClientUI.chat.getObj();
 		if(tp.getResponse()==Response.INSERT_SURVEY_REPORT_SUCCESS) {
-   			ClientHandleTransmission.popUp("Report(PDF) store in the DataBase","Success create pdf");
+   			popMessageHandler.setMessage("Report(PDF) created and store in the DataBase");
+			popMessageHandler.setTitle("Report pdf creation");
+			
+			GenaralPopScroolBarUpController genaralPopScroolBarUpController = new GenaralPopScroolBarUpController();
+			try {
+				genaralPopScroolBarUpController.start(new Stage());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}else {
-   			ClientHandleTransmission.popUp("Faild to create the PDF file.","Faild To Create pdf");
-
+   			popMessageHandler.setMessage("Faild to create the PDF file.");
+			popMessageHandler.setTitle("Faild To Create pdf");
+			
+			GenaralPopScroolBarUpController genaralPopScroolBarUpController = new GenaralPopScroolBarUpController();
+			try {
+				genaralPopScroolBarUpController.start(new Stage());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

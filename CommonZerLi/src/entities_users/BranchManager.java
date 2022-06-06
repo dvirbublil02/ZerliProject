@@ -3,10 +3,11 @@ package entities_users;
 import java.io.Serializable;
 
 import enums.AccountStatus;
-
 /**
- * @author Omri Shalev
+ * class description : extends the user for branchManager 
+ * @author Omri Shalev 
  */
+
 
 @SuppressWarnings("serial")
 public class BranchManager extends User implements Serializable {

@@ -1,11 +1,20 @@
 package entities_general;
 
 import java.io.Serializable;
-
+/**
+ * class that representing the credit card object
+ * @author omri shalev
+ *
+ */
 @SuppressWarnings("serial")
 public class CreditCard implements Serializable{
 	String creditCardNumber, creditCardCvvCode, creditCardDateOfExpiration;
-
+/**
+ * 
+ * @param creditCardNumber
+ * @param creditCardCvvCode
+ * @param creditCardDateOfExpiration
+ */
 	public CreditCard(String creditCardNumber, String creditCardCvvCode, String creditCardDateOfExpiration) {
 		super();
 		this.creditCardNumber = creditCardNumber;

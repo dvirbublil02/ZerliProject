@@ -8,15 +8,33 @@ import enums.DeliveryStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-
+/**
+ * class for holding the delivery for presenting it into the screen
+ * it his subclass of the Order
+ * @author shir cohen , almog mader
+ *
+ */
 public class DeliveryPreview extends Deliveries implements Serializable {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private ComboBox<DeliveryStatus> deliveryStatus = new ComboBox<>();
-
+/**
+ * 
+ * @param deliveryID
+ * @param orderID
+ * @param branchID
+ * @param customerID
+ * @param price
+ * @param orderDate
+ * @param expectedDelivery
+ * @param arrivedDate
+ * @param receiverName
+ * @param address
+ * @param phoneNumber
+ * @param deliveryStatus
+ * @param orderProducts
+ */
 	public DeliveryPreview(int deliveryID, String orderID, String branchID, String customerID, double price,
 			String orderDate, String expectedDelivery, String arrivedDate, String receiverName, String address,
 			String phoneNumber, DeliveryStatus deliveryStatus, List<ProductInOrder> orderProducts) {

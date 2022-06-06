@@ -2,7 +2,7 @@ package communication;
 
 /**This is Mission enum class , that will contains all the client missions that he ask from the server
  * 
- *
+*@author mor ben haim , almog mader, shir choen , omri shalev , dvir bublil
  */
 public enum Mission {
 	GET_ORDER("GET_ORDER",0),

@@ -9,11 +9,30 @@ import entities_users.User;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Label;
-
+/**
+ * this class is handling with the reports , here we handling with the
+ * reports the main part of this class is to share common
+ * information between different screens
+ * 
+ * @author Dvir bublil
+ *
+ */
 public class ReportHandleController {
+	/**
+	 * this list holds the monthly report information
+	 */
 	private static List<List<String>> OrdersReportOnListMonth= new ArrayList<>();
+	/**
+	 * this list holds the quarter report information
+	 */
 	private static List<List<String>> OrdersReportOnListQuarter=new ArrayList<>();
+	/**
+	 * this list holds the monthly survey information
+	 */
 	private static List<List<String>> SurveyReportResult=new ArrayList<>();
+	/**
+	 * this list holds the monthly Complaints information
+	 */
 	private static List<List<String>> ComplaintsReportResult=new ArrayList<>();
 	private static User userReport;
 	private static boolean dualReport=false;
@@ -65,10 +84,20 @@ public class ReportHandleController {
 	public static void setUserReport(User user) {
 		ReportHandleController.userReport = user;
 	}
-	
-	@SuppressWarnings("unchecked")
+	/**
+	 * in this method we insert the quarterly report information into the chart and also initialize the right labels
+	 * also calculate the best month and the worst month , and setting the right title of the report according to the information we got.
+	 * @param worstMonth
+	 * @param bestMonth
+	 * @param incomeQuarterTitle
+	 * @param reportOnList
+	 * @param series
+	 * @param series2
+	 * @param series3
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void insertTheDeatilsForTheCartQurateryReport(Label worstMonth, Label bestMonth, Label incomeQuarterTitle, List<List<String>> reportOnList, Series series, Series series2, Series series3) {
-		List<String> reportInfo = new ArrayList();
+		List<String> reportInfo = new ArrayList<>();
 		reportInfo = reportOnList.get(0);
 		incomeQuarterTitle.setText("Zerli " + reportInfo.get(1) + "(" + reportInfo.get(0) + ") -"
 				+ reportInfo.get(2) + "st Quarter Income report "+reportInfo.get(3));
@@ -198,7 +227,15 @@ public class ReportHandleController {
 	
 
 	}
-
+/**
+ * in this method we insert the complaints report into the chart and also we insert data into the labels and to the title.
+ * @param satisfactionPercentage
+ * @param complaintsQuarterTitle
+ * @param reportOnList
+ * @param series
+ * @param series2
+ * @param series3
+ */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void insertTheDetailsForTheComplaintsReport(Label satisfactionPercentage,
 			Label complaintsQuarterTitle, List<List<String>> reportOnList, Series series, Series series2,

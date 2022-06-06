@@ -1,14 +1,14 @@
 package entities_users;
 
 import java.io.Serializable;
-import java.util.List;
-
 
 import enums.AccountStatus;
 
 /**
- * @author User Omri Shalev
+ * class description : extends the user for delieveryAgent 
+ * @author Omri Shalev 
  */
+
 @SuppressWarnings("serial")
 public class DeliveryAgent extends User implements Serializable{
 	/**

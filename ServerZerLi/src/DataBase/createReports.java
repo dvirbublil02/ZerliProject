@@ -1,13 +1,10 @@
 package DataBase;
 
-import java.sql.Connection;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import communication.Mission;
 import communication.TransmissionPack;
-import entities_reports.Report;
 import enums.ReportType;
 /**
  * this class handling with creating the reports 

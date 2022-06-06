@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -32,6 +33,7 @@ public class LoginController {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/LoginScreen.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("ZerLi Login");
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setResizable(false);

@@ -5,6 +5,11 @@ import java.io.Serializable;
 import enums.AccountStatus;
 import enums.ShopworkerRole;
 
+/**
+ * class description : extends the user for shopworker 
+ * @author Omri Shalev 
+ */
+
 @SuppressWarnings("serial")
 public class ShopWorker extends User implements Serializable{
 	/**

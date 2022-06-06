@@ -166,7 +166,7 @@ public class IncomeReportController implements Initializable {
 			}
 		}
 		calcAndShowTheBestAndWorst(amountsPerDay);
-
+	
 	}
 
 	private void calcAndShowTheBestAndWorst(double[] amountsPerDay) {

@@ -1,7 +1,7 @@
 package communication;
 /** This class is util class for TableView that will be on the server screen
  * The use for observable-list
- *
+ *@author shir choen
  */
 public class msgClass {
 	private String msg;

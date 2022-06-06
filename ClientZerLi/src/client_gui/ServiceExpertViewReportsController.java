@@ -95,7 +95,7 @@ public class ServiceExpertViewReportsController implements Initializable {
 
     @FXML
     void Submit(ActionEvent event) {
-    	if(PickBranch.getValue()!=null && pickYearCB.getValue() !=null &&pickMonthCB.getValue() != null&&pickSurveyCB.getValue()!=null) {
+    	if(String.valueOf(PickBranch.getValue().getNumber()) != null && pickYearCB.getValue() !=null &&pickMonthCB.getValue() != null&&pickSurveyCB.getValue()!=null) {
     	if (ClientHandleTransmission.getServiceReport(String.valueOf(PickBranch.getValue().getNumber()), pickYearCB.getValue(),pickMonthCB.getValue(),pickSurveyCB.getValue()))
     	{
 			((Node) event.getSource()).getScene().getWindow().hide(); // hiding window

@@ -7,14 +7,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.ImageView;
 
-//show total custom product on cart section 
+/**
+ * class for holding the Custom Orders for presenting it into the screen
+ * it his subclass of the Order
+ * @author shir cohen , almog mader
+ *
+ */
 public class OrderCustomCartPreview {
 	private ImageView imgSrc;
 	private String name;
 	private int quantity;
 	public double totalprice = 0;
 	private ObservableList<ProductInOrder> cartList = FXCollections.observableArrayList();
-
+/**
+ * 
+ * @param imgSrc
+ * @param name
+ * @param quantity
+ * @param price
+ * @param cartList
+ */
 	public OrderCustomCartPreview(ImageView imgSrc, String name, int quantity, double price,
 			List<ProductInOrder> cartList) {
 		this.imgSrc = imgSrc;

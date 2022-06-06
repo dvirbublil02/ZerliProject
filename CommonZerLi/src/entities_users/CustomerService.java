@@ -5,8 +5,10 @@ import java.io.Serializable;
 import enums.AccountStatus;
 
 /**
- * @author User Omri Shalev
+ * class description : extends the user for customerService 
+ * @author Omri Shalev 
  */
+
 @SuppressWarnings("serial")
 public class CustomerService extends User implements Serializable {
 	/**

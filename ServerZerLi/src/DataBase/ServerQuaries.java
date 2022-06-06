@@ -9,7 +9,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,189 +52,10 @@ import enums.ShopworkerRole;
  */
 public class ServerQuaries {
 
-	/**
-	 * In this method we Insert an order into the DB . (the order that we got from
-	 * the client, in the transmission information) and after that we success or
-	 * failed we setting the obj.Response
-	 * 
-	 * @param obj - the transmission that we got
-	 * @param con - the connection instance for the sql
-	 */
-//	public static void AddOrderToDB(TransmissionPack obj, Connection con) {
-//		if (obj.getInformation() != null) {
-//			if (obj instanceof TransmissionPack) {
-//				Order order = (Order) obj.getInformation();
-//				Statement stmt, stmt2;
-//				try {
-//					stmt2 = con.createStatement();
-//					ResultSet rs = stmt2.executeQuery("SELECT orderNumber FROM orders;");
-//					while (rs.next()) {
-//						if (order.getOrderNumber().equals(rs.getString(1)) || order.getOrderNumber().equals("")) {
-//							obj.setResponse(Response.INSERT_ORDER_FAILD);
-//							return;
-//						}
-//						if (order.getOrderNumber().equals("") || order.getPrice().equals("")
-//								|| order.getColor().equals("") || order.getShop().equals("")
-//								|| order.getDate().equals("") || order.getOrderDate().equals("")) {
-//							obj.setResponse(Response.INSERT_ORDER_FAILD);
-//							return;
-//						}
-//					}
-//					stmt = con.createStatement();
-//					stmt.executeUpdate(String.format(
-//							"INSERT INTO zerli.orders(orderNumber, price, greetingCard, color, dOrder, shop, date, orderDate) VALUES ('%s', '%s', '%s', '%s','%s', '%s', '%s', '%s');",
-//							order.getOrderNumber(), order.getPrice(), order.getGreetingCard(), order.getColor(),
-//							order.getDorder(), order.getShop(), order.getDate(), order.getOrderDate()));
-//
-//				} catch (SQLException e) {
-//					e.printStackTrace();
-//					obj.setResponse(Response.INSERT_ORDER_FAILD);
-//					return;
-//				}
-//				obj.setResponse(Response.INSERT_ORDER_SUCCESS);
-//			}
-//		} else
-//			obj.setResponse(Response.INSERT_ORDER_FAILD);
-//	}
-
-	/**
-	 * In this method we Edit an order in the DB . (the order and the details that
-	 * he want to edit) that we got from the client, (in the transmission
-	 * information) and after that we success or failed we setting the obj.Response
-	 * 
-	 * @param obj - the transmission that we got
-	 * @param con - the connection instance for the sql
-	 */
-//	public static void EditOrderOnDB(TransmissionPack obj, Connection con) {
-//		if (obj instanceof TransmissionPack) {
-//			Order order = (Order) obj.getInformation();
-//			try {
-//				if (order.getOrderNumber().equals("") || order.getColor().equals("") || order.getDate().equals("")) {
-//					obj.setResponse(Response.EDIT_ORDER_FAILD);
-//					return;
-//				}
-//				PreparedStatement pstmt = con
-//						.prepareStatement("UPDATE orders SET Color=? , Date=? WHERE OrderNumber=?;");
-//				pstmt.setString(1, order.getColor());
-//				pstmt.setString(2, order.getDate());
-//				pstmt.setString(3, order.getOrderNumber());
-//				if (pstmt.executeUpdate() == 0) {
-//					obj.setResponse(Response.EDIT_ORDER_FAILD);
-//					return;
-//				}
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//				obj.setResponse(Response.EDIT_ORDER_FAILD);
-//				return;
-//			}
-//			obj.setResponse(Response.EDIT_ORDER_SUCCESS);
-//		}
-//	}
-
-	/**
-	 * In this method we getting orders from the DB . we putting all the orders that
-	 * we taking from the DB into the obj.information. and after that we success or
-	 * failed we setting the obj.Response
-	 * 
-	 * @param obj - the transmission that we got
-	 * @param con - the connection instance for the sql
-	 */
-//	public static void GetOrderFromDB(TransmissionPack obj, Connection con) {
-//		if (obj instanceof TransmissionPack) {
-//			List<Order> list = new ArrayList<>();
-//			Statement stmt;
-//			try {
-//				stmt = con.createStatement();
-//				ResultSet rs = stmt.executeQuery("SELECT * FROM orders;");
-//				while (rs.next()) {
-//					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-//							rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8));
-//					list.add(order);
-//				}
-//
-//				obj.setInformation(list);
-//				rs.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//				obj.setResponse(Response.DIDNT_FOUND_ORDERS);
-//				return;
-//			}
-//			obj.setResponse(Response.FOUND_ORDERS);
-//		} else
-//			obj.setResponse(Response.DIDNT_FOUND_ORDERS);
-//	}
-
-//	public static ResultSet getUserLoginDetail(Connection con, Login login) throws SQLException {
-//
-//		ResultSet rs = null;
-//		PreparedStatement pstmt = null;
-//		;
-//
-//		String query = "SELECT * FROM zerli.login WHERE userName=" + "'" + login.getUserName() + "'" + " AND "
-//				+ "password=" + "'" + login.getPassword() + "'";
-//		System.out.println(query);
-//		pstmt = con.prepareStatement(query);
-//		rs = pstmt.executeQuery(query);
-//
-//		System.out.println("here2");
-//		return rs;
-//
-//	}
-//
-//	public static void getUser(TransmissionPack obj, Connection con) {
-//		System.out.println("here1");
-//		if (obj instanceof TransmissionPack) {
-//			Login user = (Login) obj.getInformation();
-//			Response response = null;
-//			try {
-//				ResultSet rs = getUserLoginDetail(con, user);
-//
-//				System.out.println("here3");
-//
-//				response = getUserLogInResponse(user, response, rs);
-//
-//				obj.setResponse(response);
-//				return;
-//
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//				obj.setResponse(Response.USER_NOT_EXIST);
-//				return;
-//			}
-//
-//		}
-//	}
-//
-//	/**
-//	 * get the response of the login from the details the user where sent to the db
-//	 */
-//	private static Response getUserLogInResponse(Login user, Response response, ResultSet rs) throws SQLException {
-//		while (rs.next()) {
-//			System.out.println(rs.getString(1));
-//			/** check if the user name or the password are incorrect */
-//			if (!(rs.getString(1).equals(user.getUserName())) || !(rs.getString(2).equals(user.getPassword()))) {
-//				System.out.println("here4");
-//				response = Response.USER_NAME_OR_PASSWORD_INCORRECT;
-//
-//			}
-//			if (rs.getString(1).equals(user.getUserName()) && rs.getString(2).equals(user.getPassword())) {
-//				System.out.println("here5");
-//				response = Response.USER_EXIST;
-//
-//			} else {
-//				response = Response.USER_NOT_EXIST;
-//			}
-//
-//		}
-//		System.out.println("here6");
-//		rs.close();
-//		return response;
-//	}
-
 	public static void Login(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			Login user = (Login) obj.getInformation();
-			Statement stmt, stmt2;
+			Statement stmt;
 			try {
 				stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT userName , password , userType, ID FROM login;");
@@ -243,7 +63,7 @@ public class ServerQuaries {
 					System.out.println(rs.getString(4));
 					if (user.getUserName().equals(rs.getString(1)) && user.getPassword().equals(rs.getString(2))) {
 						if (checkIfLoggedin(user, rs.getString(3), rs.getString(4), obj, con) == false) {
-							
+
 							obj.setResponse(Response.USER_EXIST);
 
 							return;
@@ -280,7 +100,7 @@ public class ServerQuaries {
 	 * @return
 	 * @throws SQLException
 	 */
-	@SuppressWarnings("resource")
+
 	public static boolean checkIfLoggedin(Login user, String type, String userID, TransmissionPack obj, Connection con)
 			throws SQLException {
 		boolean isLogin = false;
@@ -301,8 +121,10 @@ public class ServerQuaries {
 			pstmt2 = con.prepareStatement(updateSpecificRow);
 			pstmt2.setString(1, "1");
 			pstmt2.executeUpdate();
-			upadateUserInformation(type, userID, obj, pstmt);// Update the obj to specific userType and his specific
-																// information
+			/**
+			 * Update the obj to specific userType and his specific information
+			 */
+			upadateUserInformation(type, userID, obj, pstmt);
 
 		}
 
@@ -352,7 +174,7 @@ public class ServerQuaries {
 		}
 		case "deliveryagent": {
 			rs = getRowFromTable(userID, type, pstmt);
-			
+
 			DeliveryAgent deliveryagent = new DeliveryAgent(rs.getString(1), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
 					rs.getString(8));
@@ -396,7 +218,7 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * this method return specific row of user from his tale
+	 * this method return specific row of user from his table .
 	 * 
 	 * @param userID
 	 * @param type
@@ -412,6 +234,13 @@ public class ServerQuaries {
 		return rs;
 	}
 
+	/**
+	 * In this method we logout the user from the system , by changing his login
+	 * value to zero(our flag) on the DB.
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void logout(TransmissionPack obj, Connection con) {
 		ResultSet rs;
 		PreparedStatement pstmt;
@@ -426,7 +255,6 @@ public class ServerQuaries {
 
 			String query2 = "UPDATE" + " " + table + " SET isLoggedIn=? WHERE " + table2 + "='"
 					+ ((User) obj.getInformation()).getID() + "'";
-			System.out.println(query2);
 			pstmt = con.prepareStatement(query2);
 			pstmt.setString(1, "0");
 			pstmt.executeUpdate();
@@ -437,53 +265,61 @@ public class ServerQuaries {
 		}
 	}
 
+	/**
+	 * the method gets workers from the specific branch of the connected user(branch
+	 * manager), from DB
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void GetShopWorkersFromDB(TransmissionPack obj, Connection con) {
-		// the method gets workers from the specific branch of the connected user(branch
-		// manager), from DB
 		if (obj instanceof TransmissionPack) {
 			List<ShopWorker> list = new ArrayList<>();
 			Statement stmt;
-			User user = (User) obj.getInformation();// user=branch manager
+			User user = (User) obj.getInformation();
 			String branchID = getBranchId(user, con);
 			if (branchID == null) {
 				obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
 				return;
 			}
-
 			try {
 				stmt = con.createStatement();
 				ResultSet rs;
-				// String getColumns = "SELECT shopworkerID,firstName, lastName,accountStatus,
-				// branchID FROM shopworker;";
 				String getColumns = "SELECT * FROM zerli.shopworker WHERE branchID='" + branchID + "';";
 				rs = stmt.executeQuery(getColumns);
-
 				while (rs.next()) {
 					ShopWorker sw = new ShopWorker(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
 							rs.getString(5), (AccountStatus.valueOf(rs.getString(6))), rs.getBoolean(7),
 							rs.getString(8), ShopworkerRole.valueOf(rs.getString(9)));
-
 					list.add(sw);
 				}
+				rs.close();
 				if (list.size() > 0) {
 					obj.setResponse(Response.SHOP_WORKER_ARRIVED);
 					obj.setInformation(list);
 				} else
 					obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
-				rs.close();
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
+				return;
 			}
+		} else {
+			obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
 		}
 	}
 
-	// get products to catalog without filter .
+	/**
+	 * This method getting the products from the products table from our DB.
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void GetProducts(TransmissionPack obj, Connection con) {
 		// TODO Auto-generated method stub
 		if (obj instanceof TransmissionPack) {
 			List<Product> list = new ArrayList<>();
-
 			Statement stmt;
 			try {
 				stmt = con.createStatement();
@@ -492,15 +328,14 @@ public class ServerQuaries {
 					Product product = new Product(rs.getString(1), rs.getString(2), rs.getDouble(3), rs.getString(4),
 							rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8), rs.getBoolean(9),
 							rs.getDouble(10));
-
 					list.add(product);
 				}
+				rs.close();
 
 				if (list.size() == 0)
 					throw new SQLException();
 
 				obj.setInformation(list);
-				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 				obj.setResponse(Response.FAILD_DATA_PRODUCTS);
@@ -513,9 +348,14 @@ public class ServerQuaries {
 			obj.setResponse(Response.FAILD_DATA_PRODUCTS);
 	}
 
-	// get products by filter of color \ price \ type
+	/**
+	 * this method getting all the products from the DB , by specific filter(color ,
+	 * type, price)
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void GetProductsByFilter(TransmissionPack obj, Connection con) {
-
 		if (obj instanceof TransmissionPack) {
 			@SuppressWarnings("unchecked")
 			Map<String, String> filters = (Map<String, String>) obj.getInformation();
@@ -570,8 +410,6 @@ public class ServerQuaries {
 			else
 				query = "SELECT * FROM zerli.product WHERE itemType = '" + typeFilter + "' ;";
 
-			System.out.println(query);
-
 			Statement stmt;
 			try {
 
@@ -585,16 +423,17 @@ public class ServerQuaries {
 					products.add(product);
 				}
 
-				if (products.size() == 0)
-					throw new SQLException();
+				if (products.size() > 0) {
 				obj.setInformation(products);
+				obj.setResponse(Response.GET_DATA_PRODUCTS_BY_FILTER);
+				
+				}
 				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 				obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
 				return;
 			}
-			obj.setResponse(Response.GET_DATA_PRODUCTS_BY_FILTER);
 		} else
 			obj.setResponse(Response.FAILD_DATA_PRODUCTS_BY_FILTER);
 	}
@@ -627,7 +466,6 @@ public class ServerQuaries {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			System.out.println(colors.toString());
 			if (colors.size() > 0) {
 
 				obj.setInformation(colors);
@@ -648,7 +486,6 @@ public class ServerQuaries {
 	 * @param Connection       con - dataBase connection
 	 * @author Almog Madar , Mor Ben-Haim
 	 */
-	@SuppressWarnings("null")
 	public static void addOrderInDB(TransmissionPack obj, Connection con) {
 
 		if (obj instanceof TransmissionPack) {
@@ -672,19 +509,12 @@ public class ServerQuaries {
 					pstmt = con.prepareStatement(query);
 					pstmt.setString(1, null);
 					pstmt.setInt(2, Integer.parseInt(order.getCustomerID()));
-					// System.out.println(order.getCustomerID());
 					pstmt.setString(3, order.getBranchID());
-					// System.out.println(order.getBranchID());
 					pstmt.setString(4, String.valueOf(order.getPrice()));
-					// System.out.println(String.valueOf(order.getPrice()));
 					pstmt.setString(5, order.getGreetingCard());
-					// System.out.println(order.getGreetingCard());
 					pstmt.setString(6, order.getStatus().name());
-					// System.out.println(order.getStatus());
 					pstmt.setString(7, order.getOrderDate());
-					// System.out.println(order.getOrderDate());
 					pstmt.setString(8, order.getExpectedDelivery());
-					// System.out.println(order.getExpectedDelivery());
 					pstmt.executeUpdate();
 
 					// get orderID
@@ -736,32 +566,28 @@ public class ServerQuaries {
 
 	}
 
+	/**
+	 * In this method we getting all the orders that on pending or cancellation
+	 * status
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void getOrders(TransmissionPack obj, Connection con) {
-		System.out.println(6);
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs, rs2;
 			Statement stmt, stmt2;
-
 			List<Order> orders = new ArrayList<>();
-
 			String query = "SELECT * FROM zerli.order WHERE status='PENDING' OR status='PENDING_WITH_DELIVERY' OR status='CANCEL_ORDER_DELIVERY_BY_CUSTOMER' OR status='CANCEL_ORDER_BY_CUSTOMER' OR status='PENDING_WITH_IMIDATE_DELIVERY'";
-
 			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while (rs.next()) {
-
-					System.out.println("rs->>");
-
 					Map<String, List<ProductInOrder>> products = new HashMap<>();
-
 					stmt2 = con.createStatement();
-
 					rs2 = stmt2.executeQuery(query1 + rs.getString(1) + "'");
 					while (rs2.next()) {
-
-						System.out.println("rs2>>");
 						ProductInOrder newProduct = new ProductInOrder(rs2.getString(1), rs2.getString(2),
 								rs2.getString(3), rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7),
 								rs2.getString(8), rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0.0);
@@ -775,7 +601,6 @@ public class ServerQuaries {
 						}
 
 					}
-					System.out.println(products);
 					rs2.close();
 
 					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
@@ -784,9 +609,8 @@ public class ServerQuaries {
 
 					orders.add(order);
 				}
-
 				rs.close();
-//				System.out.println(orders);
+
 				if (orders.size() > 0) {
 					obj.setResponse(Response.FOUND_ORDER);
 					obj.setInformation(orders);
@@ -800,6 +624,13 @@ public class ServerQuaries {
 
 	}
 
+	/**
+	 * in this method we getting the branchID , by the user ID
+	 * 
+	 * @param user
+	 * @param con
+	 * @return
+	 */
 	protected static String getBranchId(User user, Connection con) {
 
 		ResultSet rs;
@@ -819,7 +650,7 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * <<<<<<< HEAD get all the branches ID for create the reports
+	 * in this method we getting all the branches ID
 	 * 
 	 * @param user
 	 * @param con
@@ -829,8 +660,6 @@ public class ServerQuaries {
 		ResultSet rs;
 		Statement stmt;
 		List<String> branchesId = new ArrayList<>();
-		;
-
 		String getBranchID = "SELECT branchID FROM zerli.branchs;";
 		try {
 			stmt = con.createStatement();
@@ -853,8 +682,6 @@ public class ServerQuaries {
 	 * 
 	 * @param con
 	 */
-
-	@SuppressWarnings("null")
 	public static void getPendingCustomersFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			List<Customer> PendingcustomersList = new ArrayList<Customer>();
@@ -865,18 +692,6 @@ public class ServerQuaries {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(getCustomers);
 				while (rs.next()) {
-					// print all the customers to check if we get them right
-					System.out.println(rs.getString(1));
-					System.out.println(rs.getString(2));
-					System.out.println(rs.getString(3));
-					System.out.println(rs.getString(4));
-					System.out.println(rs.getString(5));
-					System.out.println(AccountStatus.valueOf(rs.getString(6)));
-					System.out.println(rs.getBoolean(7));
-					System.out.println(rs.getString(8));
-					System.out.println(rs.getBoolean(9));
-					System.out.println(new CreditCard(rs.getString(10), null, null));
-
 					// create new customer with the details from DB
 					Customer customer = new Customer(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
 							rs.getString(5), AccountStatus.valueOf(rs.getString(6)), rs.getBoolean(7), rs.getString(8),
@@ -887,7 +702,6 @@ public class ServerQuaries {
 				rs.close();
 				obj.setInformation(PendingcustomersList);
 				obj.setResponse(Response.GET_PENDING_CUSTOMERS_SUCCESS);
-				System.out.println(PendingcustomersList);
 				return;
 			} catch (SQLException e) {
 				obj.setResponse(Response.GET_PENDING_CUSTOMERS_FAILED);
@@ -897,6 +711,12 @@ public class ServerQuaries {
 		obj.setResponse(Response.GET_PENDING_CUSTOMERS_FAILED);
 	}
 
+	/**
+	 * in this method we getting all the customer's creditCards from the Db
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void getCreditCardsFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs;
@@ -913,7 +733,6 @@ public class ServerQuaries {
 				rs.close();
 				obj.setInformation(cardsNumbers);
 				obj.setResponse(Response.GET_CREDIT_CARDS_SUCCESS);
-//				System.out.println(cardsNumbers);
 				return;
 			} catch (SQLException e) {
 				obj.setResponse(Response.GET_CREDIT_CARDS_FAILED);
@@ -923,6 +742,12 @@ public class ServerQuaries {
 		obj.setResponse(Response.GET_CREDIT_CARDS_FAILED);
 	}
 
+	/**
+	 * in this method we approve a new customer , and updating the DB.
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void approveNewCustomerToDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			Customer customer = (Customer) obj.getInformation(); // get the customer updated
@@ -932,16 +757,13 @@ public class ServerQuaries {
 					"INSERT INTO zerli.creditcards(creditCardNumber, creditCardCvvCode, creditCardDateOfExpiration) VALUES ('%s','%s', '%s');",
 					customer.getCreditCard().getCreditCardNumber(), customer.getCreditCard().getCreditCardCvvCode(),
 					customer.getCreditCard().getCreditCardDateOfExpiration());
-			System.out.println(addCreditCard); // check string
 			try {
 				PreparedStatement pstmt1 = con.prepareStatement(approveCuStomer);
 				PreparedStatement pstmt2 = con.prepareStatement(addCreditCard);
 				if (pstmt1.executeUpdate() == 0) { // check if the query failed
-					System.out.println("query 1 failed");
 					obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
 					return;
 				} else if (pstmt2.executeUpdate() == 0) { // check if the query failed
-					System.out.println("query 2 failed");
 					obj.setResponse(Response.APPROVE_NEW_CUSTOMER_FAILED);
 					return;
 				} else {
@@ -958,12 +780,16 @@ public class ServerQuaries {
 		}
 	}
 
-	public static void updateCustomersAfterEdit(TransmissionPack obj, Connection con) {// the method updates the
-																						// customers that are in the
-																						// list we got from obj's
-																						// information
+	/**
+	 * the method updates the customers that we got from the gui after that the
+	 * branchmanager edit them.
+	 * 
+	 * @param obj
+	 * @param con
+	 */
+	@SuppressWarnings("unchecked")
+	public static void updateCustomersAfterEdit(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-
 			PreparedStatement pstmt;
 			List<Customer> listAfterEdit = (ArrayList<Customer>) obj.getInformation();
 			try {
@@ -985,6 +811,14 @@ public class ServerQuaries {
 
 	}
 
+	/**
+	 * in this method updates the workers that we got from the gui after that the
+	 * branchmanager edit them.
+	 * 
+	 * @param obj
+	 * @param con
+	 */
+	@SuppressWarnings("unchecked")
 	public static void updateWorkersAfterEdit(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			PreparedStatement pstmt;
@@ -993,7 +827,6 @@ public class ServerQuaries {
 				for (ShopWorker sw : listAfterEdit) {
 					String getApprovedWorkers = "UPDATE zerli.shopworker SET acctivityStatus='" + sw.getActivityStatus()
 							+ "' WHERE shopworkerID='" + sw.getID() + "';";
-					System.out.println(getApprovedWorkers);
 					pstmt = con.prepareStatement(getApprovedWorkers);
 					pstmt.executeUpdate(getApprovedWorkers);
 				}
@@ -1008,13 +841,17 @@ public class ServerQuaries {
 		}
 	}
 
+	/**
+	 * this method gets workers from the specific branch of the connected
+	 * user(branch manager), from DB
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void GetCustomersFromDB(TransmissionPack obj, Connection con) {
-		// the method gets workers from the specific branch of the connected user(branch
-		// manager), from DB
 		if (obj instanceof TransmissionPack) {
 			List<Customer> listOfCustomers = new ArrayList<>();
 			Statement stmt;
-
 			try {
 				stmt = con.createStatement();
 				ResultSet rs;
@@ -1034,6 +871,7 @@ public class ServerQuaries {
 
 					listOfCustomers.add(customer);
 				}
+				rs.close();
 				if (listOfCustomers.size() > 0) {
 					obj.setResponse(Response.CUSTOMER_ARRIVED);
 					obj.setInformation(listOfCustomers);// updating the mission info to the wanted list of customers
@@ -1041,9 +879,6 @@ public class ServerQuaries {
 					obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
 					obj.setInformation(null);
 				}
-
-				rs.close();
-
 			} catch (SQLException e) {
 				obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
 				obj.setInformation(null);
@@ -1051,6 +886,13 @@ public class ServerQuaries {
 		}
 	}
 
+	/**
+	 * In this method we getting a credit card information ,by his number.
+	 * 
+	 * @param cardNum
+	 * @param con
+	 * @return
+	 */
 	private static CreditCard getCreditCard(String cardNum, Connection con) {
 		ResultSet rs;
 		Statement stmt;
@@ -1070,7 +912,9 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * update all the complaint status in the DB
+	 * in this method we update all the complaint status in the DB, and if its
+	 * necessary also his balance ( for refund and etc). we using an private method
+	 * that make this method more general.
 	 * 
 	 * @param obj
 	 * @param con
@@ -1078,18 +922,12 @@ public class ServerQuaries {
 	@SuppressWarnings("unchecked")
 	public static void updateComplaints(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-			ResultSet rs;
-			PreparedStatement pstmt, pstmt2, pstmt3;
-			System.out.println("here3->");
 			List<Complaint> complaintsToUpdate = (List<Complaint>) obj.getInformation();
-			System.out.println(obj.getInformation());
 			String updateSpecificRow = "UPDATE zerli.complaints SET status=? WHERE complaintID='";
 			for (Complaint c : complaintsToUpdate) {
 
 				try {
-
 					updateComlaint(con, updateSpecificRow, c);
-					System.out.println(c.getRefoundAmount());
 					if (c.getRefoundAmount() != null) {
 						insertNewRefund(con, c);
 						updateRefundInSpecificCustomer(con, c);
@@ -1103,12 +941,15 @@ public class ServerQuaries {
 			}
 			obj.setResponse(Response.COMPLAINTS_UPDATE_SUCCEED);
 
+		} else {
+			obj.setResponse(Response.COMPLAINTS_UPDATE_FAILED);
 		}
 
 	}
 
 	/**
-	 * update specific complaint row
+	 * in this method we updating the complaint in a specific row , by a complaint
+	 * ID.
 	 * 
 	 * @param con
 	 * @param updateSpecificRow
@@ -1116,7 +957,6 @@ public class ServerQuaries {
 	 * @throws SQLException
 	 */
 	private static void updateComlaint(Connection con, String updateSpecificRow, Complaint c) throws SQLException {
-		System.out.println("here4->");
 		PreparedStatement pstmt;
 		pstmt = con.prepareStatement(updateSpecificRow + c.getComplaintID() + "'");
 		pstmt.setString(1, c.getComplainState().name());
@@ -1124,7 +964,8 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * if there is refund in the complaint it will update the customer balance
+	 * in this method we update the customer balance with the refund if its
+	 * necessary.
 	 * 
 	 * @param con
 	 * @param c
@@ -1139,7 +980,8 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * if in the complaint have a refund it create new refund row in the refung row
+	 * this method open a new refund row on the refund table on our DB , in
+	 * situation that its needed.
 	 * 
 	 * @param con
 	 * @param c
@@ -1160,7 +1002,7 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * insert new complaint to the DB from
+	 * this method insert a new complaint to the DB
 	 * 
 	 * @param obj
 	 * @param con
@@ -1168,10 +1010,8 @@ public class ServerQuaries {
 	 */
 	public static void openComplaint(TransmissionPack obj, Connection con) throws ParseException {
 		if (obj instanceof TransmissionPack) {
-			System.out.println("here->Open");
 			Complaint c = (Complaint) obj.getInformation();
 			PreparedStatement pstmt;
-
 			try {
 				String query = "INSERT INTO zerli.complaints(complaintID, customerID, orderID, customerserviceID, description, branchID, complaintOpening, treatmentUntil, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				pstmt = con.prepareStatement(query);
@@ -1193,7 +1033,6 @@ public class ServerQuaries {
 				pstmt.setString(8, sdf.format(currentDatePlusOne));
 				pstmt.setString(9, c.getComplainState().name());
 				pstmt.executeUpdate();
-				System.out.println("here=->>OPenComplaint " + obj.getInformation());
 			} catch (SQLException e) {
 				obj.setResponse(Response.OPEN_COMPLAINT_FAILED);
 				e.printStackTrace();
@@ -1207,30 +1046,31 @@ public class ServerQuaries {
 
 	}
 
+	/**
+	 * in this method we getting the complaints from the db , by the
+	 * customerServiceID only if the complaints still open.
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void getComlaints(TransmissionPack obj, Connection con) {
-		System.out.println(6);
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs;
 			Statement stmt;
 			List<Complaint> complaints = new ArrayList<>();
-
 			String query = "SELECT * FROM zerli.complaints WHERE customerserviceID='" + obj.getInformation()
 					+ "' AND status='OPEN'";
-			System.out.println(query);
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while (rs.next()) {
-					System.out.println(rs.toString());
-
 					Complaint complaint = new Complaint(rs.getString(1), rs.getString(2), rs.getString(3),
 							rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
-							ComplaintsStatus.valueOf(rs.getString(9)), getSatus(rs.getString(7)));
+							ComplaintsStatus.valueOf(rs.getString(9)), getStatus(rs.getString(7)));
 
 					complaints.add(complaint);
 				}
 				rs.close();
-				System.out.println(complaints);
 				if (complaints.size() > 0) {
 					obj.setResponse(Response.FOUND_COMPLAINTS);
 					obj.setInformation(complaints);
@@ -1246,42 +1086,18 @@ public class ServerQuaries {
 		}
 	}
 
-	private static String complaintsHanldeTimeLimit(Date currentDate) {
-		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
-
-		dateFormat.format(currentDate);
-
-		// convert date to calendar
-		Calendar c = Calendar.getInstance();
-		c.setTime(currentDate);
-
-		// manipulate date
-
-		c.add(Calendar.DATE, 1); // same with c.add(Calendar.DAY_OF_MONTH, 1);
-
-		// convert calendar to date
-		Date currentDatePlusOne = c.getTime();
-		return dateFormat.format(currentDatePlusOne);
-	}
-
-	private static ComplaintsStatus getSatus(String start_date) {
+	/**
+	 * In this method we check if the complaint still opening after 24hrs.
+	 * 
+	 * @param start_date
+	 * @return
+	 */
+	private static ComplaintsStatus getStatus(String start_date) {
 		long difference_In_Days = 0;
-		// SimpleDateFormat converts the
-		// string format to date object
-
-		// Try Class
 		try {
-
 			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			// parse method is used to parse
-			// the text from a string to
-			// produce the date
 			Date d1 = sdf.parse(start_date);
 			Date d2 = Calendar.getInstance().getTime();
-			System.out.println(sdf.format(d1));
-
-			// Calucalte time difference
-			// in milliseconds
 			long difference_In_Time = d2.getTime() - d1.getTime();
 
 			difference_In_Days = TimeUnit.MILLISECONDS.toDays(difference_In_Time) % 365;
@@ -1290,9 +1106,6 @@ public class ServerQuaries {
 			e.printStackTrace();
 		}
 		if (difference_In_Days >= 1) {
-
-			System.out.println("here 'DELAY'");
-
 			return ComplaintsStatus.DELAY;
 		}
 
@@ -1300,7 +1113,7 @@ public class ServerQuaries {
 	}
 
 	/*
-	 * get all branches
+	 * In this method we getting all branches form the db.
 	 * 
 	 * @author Almog Madar
 	 */
@@ -1310,12 +1123,10 @@ public class ServerQuaries {
 			ResultSet rs;
 			Statement stmt;
 			List<Branches> branches = new ArrayList<>();
-
 			String query = "SELECT * FROM zerli.branchs;";
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-
 				while (rs.next()) {
 					branches.add(Branches.valueOf(rs.getString(3).toUpperCase()));
 				}
@@ -1336,7 +1147,7 @@ public class ServerQuaries {
 	}
 
 	/*
-	 * get product in specific branch
+	 * in this method we getting all the products of a specific branch, by branchID.
 	 * 
 	 * @author Almog Madar
 	 */
@@ -1347,14 +1158,10 @@ public class ServerQuaries {
 			Statement stmt;
 			Branches branch = (Branches) obj.getInformation();
 			List<ProductInBranch> productsInBranch = new ArrayList<>();
-
-			System.out.println(branch.getNumber());
 			String query = "SELECT * FROM zerli.productinbranch where branchID='" + branch.getNumber() + "';";
-			System.out.println(query);
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
-
 				while (rs.next()) {
 					ProductInBranch product = new ProductInBranch(rs.getString(1), rs.getString(2), rs.getInt(3));
 					productsInBranch.add(product);
@@ -1363,9 +1170,6 @@ public class ServerQuaries {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-			System.out.println(productsInBranch.toString());
-
 			if (productsInBranch.size() > 0) {
 				obj.setInformation(productsInBranch);
 				obj.setResponse(Response.FOUND_PRODUCT_IN_BRANCH);
@@ -1373,30 +1177,28 @@ public class ServerQuaries {
 				obj.setResponse(Response.NOT_FOUND_PRODUCT_IN_BRANCH);
 			}
 
+		} else {
+			obj.setResponse(Response.NOT_FOUND_PRODUCT_IN_BRANCH);
 		}
 
 	}
 
 	/*
-	 * add delivery of order and update order price = regular price + shipment price
-	 * .
+	 * in this method we adding delivery of order and update order price = regular
+	 * price + shipment price .
 	 * 
 	 * @ author Almog Madar
 	 */
 	public static void addDelivery(TransmissionPack obj, Connection con) {
-		// TODO Auto-generated method stub
 		if (obj instanceof TransmissionPack) {
 			if (obj.getInformation() instanceof Deliveries) {
-
 				Statement stmt1;
 				ResultSet rs1;
 				PreparedStatement pstmt;
 				Deliveries deliveries = (Deliveries) obj.getInformation();
 				String query = "INSERT INTO zerli.deliveries (deliveryID, orderID, branchID, customerID,price,orderDate, expectedDelivery, arrivedDate, receiverName, address, phoneNumber, status) "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ? , ? , ? , ? , ? , ? );";
-
 				try {
-					// insert order to database
 					pstmt = con.prepareStatement(query);
 					pstmt.setString(1, null);
 					pstmt.setString(2, deliveries.getOrderID());
@@ -1444,30 +1246,28 @@ public class ServerQuaries {
 			} else {
 				obj.setResponse(Response.FAILD_ADD_DELIVERY);
 			}
+		} else {
+			obj.setResponse(Response.FAILD_ADD_DELIVERY);
 		}
 	}
 
 	/**
-	 * get customer orders for cancellation process and products view of relevant
-	 * orders
+	 * in this method we getting customer orders for cancellation process and
+	 * products view of relevant orders
 	 * 
 	 * @param obj
 	 * @param con
 	 */
 	public static void getCustomerOrdersCancelation(TransmissionPack obj, Connection con) {
-		// TODO Auto-generated method stub
-
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs, rs2;
 			Statement stmt, stmt2;
 			List<Order> orders = new ArrayList<>();
 			String customerID;
-
 			if (obj.getInformation() == null)
 				throw new NullPointerException();
 			else
 				customerID = (String) obj.getInformation();
-
 			String query = "SELECT * FROM zerli.order  WHERE (customerID = '" + customerID
 					+ "') AND (status = 'PENDING') OR (status = 'PENDING_WITH_DELIVERY') OR (status = 'APPROVE_WITH_DELIVERY');";
 			String query1 = "SELECT * FROM zerli.productinorder WHERE orderID='";
@@ -1496,28 +1296,24 @@ public class ServerQuaries {
 
 					}
 					rs2.close();
-
 					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
 							rs.getString(5), rs.getString(7), rs.getString(8), products);
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
-
 					orders.add(order);
 				}
-
 				rs.close();
-				System.out.println(orders);
 				if (orders.size() > 0) {
 					obj.setInformation(orders);
 					obj.setResponse(Response.GET_CUSTOMER_ORDERS_SUCCESS);
 					return;
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 				obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
 				return;
 			} catch (NullPointerException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 				obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
 				return;
@@ -1528,14 +1324,13 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * get customer orders for history of orders and products view of relevant
-	 * orders
+	 * in this method we getting customer orders for history of orders and products
+	 * view of relevant orders
 	 * 
 	 * @param obj
 	 * @param con
 	 */
 	public static void getCustomerOrdersHistory(TransmissionPack obj, Connection con) {
-		// TODO Auto-generated method stub
 
 		if (obj instanceof TransmissionPack) {
 			ResultSet rs, rs2;
@@ -1556,11 +1351,8 @@ public class ServerQuaries {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while (rs.next()) {
-
 					Map<String, List<ProductInOrder>> products = new HashMap<>();
-
 					stmt2 = con.createStatement();
-
 					rs2 = stmt2.executeQuery(query1 + rs.getString(1) + "';");
 					while (rs2.next()) {
 
@@ -1577,16 +1369,12 @@ public class ServerQuaries {
 
 					}
 					rs2.close();
-
 					Order order = new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4),
 							rs.getString(5), rs.getString(7), rs.getString(8), products);
 					order.setStatus(OrderStatus.valueOf(rs.getString(6)));
-
 					orders.add(order);
 				}
-
 				rs.close();
-				System.out.println(orders);
 				if (orders.size() > 0) {
 					obj.setInformation(orders);
 					obj.setResponse(Response.GET_CUSTOMER_ORDERS_SUCCESS);
@@ -1609,44 +1397,7 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * this method notify all customerService that still have OPEN complaint after
-	 * 24 hours
-	 * 
-	 * @param obj
-	 * @param con
-	 */
-//	public static void notifyCustomerService(TransmissionPack obj, Connection con) {
-//		System.out.println("get to ->notifyCustomerService");
-//		if (obj instanceof TransmissionPack) {
-//			ResultSet rs;
-//			Statement stmt;
-//			String query = "SELECT complaintOpening FROM zerli.complaints WHERE status='OPEN'";
-//			try {
-//				if(con!=null) {
-//				stmt = con.createStatement();
-//				rs = stmt.executeQuery(query);
-//				while (rs.next()) {
-//					 if(getSatus(rs.getString(1))==ComplaintsStatus.DELAY) {
-//					obj.setResponse(Response.NOTIFY_CUSTOMER_SERVICE);
-//					System.out.println("here");
-//					ServerUI.sv.notifyCustomer(obj);
-//					 }
-//
-//				}
-//				}
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			
-//
-//		} else {
-//			obj.setResponse(null);
-//		}
-//	}
-
-	/**
-	 * update the order status in the DB
+	 * In this method we update the order status in the DB
 	 * 
 	 * @param obj
 	 * @param con
@@ -1655,9 +1406,6 @@ public class ServerQuaries {
 	public static void updateOrder(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			List<Order> order = (List<Order>) obj.getInformation();
-			Statement stmt;
-			PreparedStatement pstmt;
-			ResultSet rs;
 			String updateOrderID = "UPDATE zerli.order SET status=?, expectedDelivery=? WHERE orderID='";
 			String updateDeliveryStatus = "UPDATE zerli.deliveries SET status='READY_TO_GO' WHERE orderID='";
 			String getRefund = "SELECT expectedRefund FROM zerli.cancelation WHERE orderID='";
@@ -1684,8 +1432,8 @@ public class ServerQuaries {
 						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
 						break;
 					}
-					case APPROVE_WITH_IMIDATE_DELIVERY:{
-						Date d=new Date();
+					case APPROVE_WITH_IMIDATE_DELIVERY: {
+						Date d = new Date();
 						DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						try {
 							d = sdf.parse(o.getOrderDate());
@@ -1698,7 +1446,7 @@ public class ServerQuaries {
 						cl.add(Calendar.HOUR_OF_DAY, 3);
 						Date currentDatePlusOne = cl.getTime();
 						o.setExpectedDelivery(sdf.format(currentDatePlusOne));
-						
+
 						updateDelivryStatusToReadyToGo(con, updateDeliveryStatus, o);
 						updateOrderIDStatus(con, updateOrderID, o);
 						updateProducts(con, updateQuantityInAllZerLi, updateQuantityInBranch, o);
@@ -1765,6 +1513,7 @@ public class ServerQuaries {
 	 * @param obj
 	 * @param con
 	 */
+	@SuppressWarnings("unchecked")
 	public static void getCustomerDetailsForNotify(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			List<List<String>> cutomers = (List<List<String>>) obj.getInformation();
@@ -1789,7 +1538,6 @@ public class ServerQuaries {
 						obj.setResponse(Response.GET_ALL_CUTOMERS_TO_NOTIFIY_FAILED);
 						e.printStackTrace();
 					}
-					System.out.println(users);
 				}
 				cutomersCallBack.add(users);
 			}
@@ -1802,8 +1550,8 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * update the customer balance if the specific customer cancel request was
-	 * approve and he is deserves it
+	 * in this method we update the customer balance if the specific customer cancel
+	 * request was approve and he is deserves it
 	 * 
 	 * @param con
 	 * @param getRefund
@@ -1826,7 +1574,8 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * update the delivery status if the status was change from pending to cancel
+	 * in this method we update the delivery status if the status was change from
+	 * pending to cancel
 	 * 
 	 * @param con
 	 * @param updateDeliveryStatus
@@ -1835,16 +1584,14 @@ public class ServerQuaries {
 	 */
 	private static void updateDelivryStatus(Connection con, String updateDeliveryStatus, Order o) throws SQLException {
 		PreparedStatement pstmt1;
-
 		pstmt1 = con.prepareStatement(updateDeliveryStatus + o.getOrderID() + "'");
 		pstmt1.setString(1, o.getStatus().name());
-		
 		pstmt1.executeUpdate();
 	}
 
 	/**
-	 * if the order delivery was approve it change his status to ready to go for the
-	 * delivery agent
+	 * in this method we checking and updating if the order delivery was approve it
+	 * change his status to ready to go for the delivery agent
 	 * 
 	 * @param con
 	 * @param updateDeliveryStatus
@@ -1854,15 +1601,13 @@ public class ServerQuaries {
 	private static void updateDelivryStatusToReadyToGo(Connection con, String updateDeliveryStatus, Order o)
 			throws SQLException {
 		PreparedStatement pstmt1;
-
 		pstmt1 = con.prepareStatement(updateDeliveryStatus + o.getOrderID() + "'");
-
 		pstmt1.executeUpdate();
 	}
 
 	/**
-	 * Update the orders quantity if the orders was approve it update the product
-	 * quantity
+	 * in this method we Update the orders quantity if the orders was approve it
+	 * update the product quantity
 	 * 
 	 * @param con
 	 * @param updateQuantityInAllZerLi
@@ -1881,8 +1626,8 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * if the delivery request wasn't approve it delete the specific order from the
-	 * the delivery table
+	 * in this method we checking if the delivery request wasn't approve it delete
+	 * the specific order from the the delivery table
 	 * 
 	 * @param con
 	 * @param deleteProductformDelivery
@@ -1896,8 +1641,8 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * delete the product form the order if the branch meager cancel the customer
-	 * order
+	 * in this method we delete the product form the order if the branch meager
+	 * cancel the customer order
 	 * 
 	 * @param con
 	 * @param query3
@@ -1909,7 +1654,8 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * update quantity in the relevant table if the branch manager approve the order
+	 * this method update quantity in the relevant table if the branch manager
+	 * approve the order
 	 * 
 	 * @param con
 	 * @param query2
@@ -1924,7 +1670,7 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * update the order status according to the branch manager decision
+	 * this method update the order status according to the branch manager decision
 	 * 
 	 * @param con
 	 * @param query
@@ -1940,6 +1686,12 @@ public class ServerQuaries {
 		pstmt1.executeUpdate();
 	}
 
+	/**
+	 * in this method we getting the Survey questions from the DB, by the topic .
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void getSurvyQuestions(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			Statement stmt;
@@ -1954,17 +1706,14 @@ public class ServerQuaries {
 					Question question = new Question(rs.getString(1), rs.getInt(2), rs.getString(3));
 					questions.add(question);
 				}
-				System.out.println(questions);
 				rs.close();
 				if (questions.size() > 0) {
-					System.out.println("here question query");
 					obj.setInformation(questions);
 					obj.setResponse(Response.GET_SURVY_QUESTION_SUCCEED);
 				} else {
 					obj.setResponse(Response.GET_SURVY_QUESTION_FAILED);
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -1974,7 +1723,7 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * inert the survey result of the specific survey
+	 * in this method we insert the survey result of the specific survey
 	 * 
 	 * @param obj
 	 * @param con
@@ -1983,10 +1732,8 @@ public class ServerQuaries {
 	public static void insertSurvy(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			List<Question> questions = (List<Question>) obj.getInformation();
-
 			String query = "INSERT INTO zerli.surveys(surveysresultsID, branchID, topic, questionNumber1, questionNumber2, questionNumber3, questionNumber4, questionNumber5, questionNumber6, answerNumber1, answerNumber2, answerNumber3, answerNumber4, answerNumber5, answerNumber6, targetAudience, date) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			try {
-
 				insertSurveyResult(con, questions, query);
 				obj.setResponse(Response.ISERT_SURVEY_SUCCEED);
 
@@ -2002,7 +1749,7 @@ public class ServerQuaries {
 	}
 
 	/**
-	 * insert all the survey to the DB
+	 * in this method we insert all the survey to the DB
 	 * 
 	 * @param con
 	 * @param questions
@@ -2033,6 +1780,13 @@ public class ServerQuaries {
 		pstmt.executeUpdate();
 	}
 
+	/**
+	 * This method getting all the deliveries from the DB,only delivery's that are
+	 * ready(status) or approved by the manager
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void GetDeliveriesFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			String branchID = (String) obj.getInformation();
@@ -2054,7 +1808,6 @@ public class ServerQuaries {
 					deliveries.add(delivery);
 					String getProductsInOrder = "SELECT * FROM zerli.productInOrder WHERE orderID = '"
 							+ rs1.getString(2) + "';";
-					System.out.println(getProductsInOrder);
 					stmt2 = con.createStatement();
 					rs2 = stmt2.executeQuery(getProductsInOrder);
 					orderProducts = new ArrayList<>();
@@ -2062,16 +1815,13 @@ public class ServerQuaries {
 						ProductInOrder p = new ProductInOrder(rs2.getString(1), rs2.getString(2), rs2.getString(3),
 								rs2.getDouble(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7), rs2.getString(8),
 								rs2.getString(9), rs2.getInt(10), rs2.getString(11), false, 0);
-						System.out.println(p);
 						orderProducts.add(p);
 						delivery.setOrderProducts(orderProducts);
-						System.out.println(orderProducts);
 					}
 					rs2.close();
 				}
 				rs1.close();
 				obj.setInformation(deliveries);
-				System.out.println(deliveries);
 				obj.setResponse(Response.FOUND_DELIVERIES);
 				return;
 			} catch (Exception e) {
@@ -2083,18 +1833,22 @@ public class ServerQuaries {
 		obj.setResponse(Response.NOT_FOUND_DELIVERIES);
 	}
 
+	/**
+	 * in this method we updating that the delivery arrived to the customer/s .
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	@SuppressWarnings("unchecked")
 	public static void UpdateDeliveriesStatusesInDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			List<Deliveries> deliveries = (List<Deliveries>) obj.getInformation();
 			try {
 				for (Deliveries d : deliveries) {
-					System.out.println(d);
 					String updateStatuses = "UPDATE zerli.deliveries SET status=?, arrivedDate =? WHERE deliveryID='"
 							+ d.getDeliveryID() + "';";
 					String updateOrderArrived = "UPDATE zerli.order SET status=? WHERE orderID='" + d.getOrderID()
 							+ "';";
-					// if (d.getDeliveryStatus() == DeliveryStatus.ARRIVED) {
 					PreparedStatement pstmt1 = con.prepareStatement(updateStatuses);
 					pstmt1.setString(1, d.getDeliveryStatus().name());
 					pstmt1.setString(2, d.getArrivedDate());
@@ -2117,24 +1871,20 @@ public class ServerQuaries {
 		}
 	}
 
-
 	/**
-	 * request to cancel order by user , create cancellation and update order status
-	 * to CANCEL_ORDER_BY_CUSTOMER
+	 * this method request to cancel order by user , create cancellation and update
+	 * order status to CANCEL_ORDER_BY_CUSTOMER
 	 * 
 	 * @param obj
 	 * @param con
 	 */
 	public static void cancelOrderByCustomer(TransmissionPack obj, Connection con) {
-		// TODO Auto-generated method stub
 		if (obj instanceof TransmissionPack) {
 			if (obj.getInformation() instanceof Cancellation) {
 				PreparedStatement pstmt;
-				// Cancellation -> CancelationID, OrderID , CustomerID , expectedRefund
 				Cancellation info = (Cancellation) obj.getInformation();
 				String query = "UPDATE zerli.order SET status = ? WHERE orderID = ?;";
 				String query2 = "INSERT INTO zerli.cancelation (CancelationID, orderID,customerID,expectedRefund) VALUES (?,?,?,?);";
-
 				try {
 					// update order status
 					pstmt = con.prepareStatement(query);
@@ -2161,61 +1911,71 @@ public class ServerQuaries {
 			} else {
 				obj.setResponse(Response.CANCEL_ORDER_BY_CUSTOMER_FAILD);
 			}
+		} else {
+			obj.setResponse(Response.CANCEL_ORDER_BY_CUSTOMER_FAILD);
 		}
 
 	}
 
-	// get order on cancellation waiting progress - CANCEL_ORDER_BY_CUSTOMER.
+	/**
+	 * this method updating the DB, that the delivery was late.
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 
+	public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con) {
+		if (obj instanceof TransmissionPack) {
+			Deliveries deliveries = (Deliveries) obj.getInformation();
+			Statement stmt;
+			double currentBalance, newBalance;
+			String currBalance = null, getCurrentBalance;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs;
+				/**
+				 * get the current balance of the customer that we will be able to update it
+				 * correct
+				 */
+				getCurrentBalance = "SELECT balance FROM zerli.customer WHERE customerID='" + deliveries.getCustomerID()
+						+ "';";
+				rs = stmt.executeQuery(getCurrentBalance);
+				while (rs.next()) {
+					currBalance = rs.getString(1); /* the current balance of the customer */
+				}
+				rs.close();
+				currentBalance = Double.parseDouble(currBalance); /* parse the current balance to double */
+				newBalance = currentBalance + deliveries.getPrice(); /* the real new balance of the customer */
 
-public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con) {
-	if (obj instanceof TransmissionPack) {
-		Deliveries deliveries = (Deliveries) obj.getInformation();
-		Statement stmt;
-		double currentBalance, newBalance;
-		String currBalance = null, getCurrentBalance, updateRefundTable;
-		try {
-			stmt = con.createStatement();
-			ResultSet rs;
-			/*
-			 * get the current balance of the customer that we will be able to update it
-			 * correct
-			 */
-			getCurrentBalance = "SELECT balance FROM zerli.customer WHERE customerID='" + deliveries.getCustomerID()
-					+ "';";
-			System.out.println("query 1: " + getCurrentBalance);
-			rs = stmt.executeQuery(getCurrentBalance);
-			while (rs.next()) {
-				currBalance = rs.getString(1); /* the current balance of the customer */
-				System.out.println(currBalance);
+				/**
+				 * Update the customer table - add the amount of the refund to the balance of
+				 * the specific customer
+				 */
+				DeliveryLateRefundBalance(con, deliveries, newBalance);
+				/**
+				 * Update refund table with the refund details
+				 */
+				updateRefundsTable(con, deliveries);
+				obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_SUCCESS);
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+				obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_FAILED);
+				return;
 			}
-			rs.close();
-			currentBalance = Double.parseDouble(currBalance); /* parse the current balance to double */
-			System.out.println(currentBalance);
-			newBalance = currentBalance + deliveries.getPrice(); /* the real new balance of the customer */
-			System.out.println(newBalance);
-			/**
-			 * Update the customer table - add the amount of the refund to the balance of
-			 * the specific customer
-			 */
-			DeliveryLateRefundBalance(con, deliveries, newBalance);
-			/**
-			 * Update refund table with the refund details
-			 */
-			updateRefundsTable(con, deliveries);
-			obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_SUCCESS);
-			return;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
 			obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_FAILED);
 			return;
 		}
-	} else {
-		obj.setResponse(Response.UPDATE_DELIVERY_LATE_REFUND_FAILED);
-		return;
 	}
-}
 
+	/**
+	 * in this method we update the refund table
+	 * 
+	 * @param con
+	 * @param deliveries
+	 * @throws SQLException
+	 */
 	private static void updateRefundsTable(Connection con, Deliveries deliveries) throws SQLException {
 		String updateRefundTable;
 
@@ -2235,25 +1995,34 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 		pstmt.executeUpdate();
 	}
 
+	/**
+	 * in this method we update the balance on the customer table by the refund that
+	 * he deserve
+	 * 
+	 * @param con
+	 * @param deliveries
+	 * @param newBalance
+	 * @throws SQLException
+	 */
 	private static void DeliveryLateRefundBalance(Connection con, Deliveries deliveries, double newBalance)
 			throws SQLException {
 		String giveRefund;
-
 		giveRefund = "UPDATE zerli.customer SET balance=(?) WHERE customerID='" + deliveries.getCustomerID() + "';";
-
-		System.out.println("query 2: " + giveRefund);
-
 		PreparedStatement pstmt = con.prepareStatement(giveRefund);
 		pstmt.setString(1, String.valueOf(newBalance));
 		pstmt.executeUpdate();
 	}
 
-
+	/**
+	 * in this method we getting the customer information , that will be used for
+	 * the mail progress
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void getCustomerEmailAndPhoneFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
-			String customerID = (String)obj.getInformation();
-
-			System.out.println(customerID);
+			String customerID = (String) obj.getInformation();
 			List<String> details = new ArrayList<>();
 			Statement stmt;
 			try {
@@ -2270,7 +2039,6 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 
 				}
 				rs.close();
-				System.out.println(details);
 				obj.setInformation(details);
 
 				obj.setResponse(Response.GET_CUSTOMER_DETAILS_SUCCESS);
@@ -2286,8 +2054,8 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 	}
 
 	/**
-	 * Get the highest ID from the products we have.
-	 * 
+	 * In this method getting the customer orders that waiting for cancellation
+	 * approved by the manager.
 	 * 
 	 * @param obj
 	 * @param con
@@ -2313,11 +2081,8 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while (rs.next()) {
-
 					Map<String, List<ProductInOrder>> products = new HashMap<>();
-
 					stmt2 = con.createStatement();
-
 					rs2 = stmt2.executeQuery(query1 + rs.getString(1) + "';");
 					while (rs2.next()) {
 
@@ -2343,7 +2108,6 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 				}
 
 				rs.close();
-				System.out.println(orders);
 				if (orders.size() > 0) {
 					obj.setInformation(orders);
 					obj.setResponse(Response.GET_CUSTOMER_ORDERS_SUCCESS);
@@ -2365,6 +2129,12 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 		obj.setResponse(Response.GET_CUSTOMER_ORDERS_FAILD);
 	}
 
+	/**
+	 * in this method we getting the max product id from the DB .
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void getMaxProductIDFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			String maxID = null;
@@ -2391,9 +2161,8 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 		obj.setResponse(Response.GET_MAX_PRODUCT_ID_FAILED);
 	}
 
-
 	/**
-	 * in this method we editing an exist proudct on the catalog by his id
+	 * in this method we editing an exist product on the catalog, by its ID.
 	 * 
 	 * @param obj
 	 * @param con
@@ -2403,7 +2172,7 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 		if (obj instanceof TransmissionPack) {
 			List<Product> productsToAdd = new ArrayList<>();
 			productsToAdd = (List<Product>) obj.getInformation();
-			int countRemoving = 0, quantityInBranch, remaining;;
+			int countRemoving = 0, quantityInBranch, remaining;
 			List<String> branchList = getAllBranchId(con);
 			List<ProductInBranch> productInBranchs = new ArrayList<>();
 			String updateBranchesSupply = "UPDATE zerli.productinbranch SET quantity= (?) WHERE branchID =(?) AND productID = (?);";
@@ -2424,27 +2193,23 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 					pstmt.setDouble(9, productsToAdd.get(i).getFixPrice());
 					if (pstmt.executeUpdate() != 0) {
 						countRemoving++;
-					}								
+					}
 					quantityInBranch = Integer.valueOf(productsToAdd.get(i).getQuantity()) / branchList.size();
 					remaining = Integer.valueOf(productsToAdd.get(i).getQuantity()) % branchList.size();
-					System.out.println("quantity: " + quantityInBranch);
-					System.out.println("remaining: " + remaining);
-					for(int j= 0; j < branchList.size(); j++) {
-						ProductInBranch p = new ProductInBranch(branchList.get(j),productsToAdd.get(i).getID() , quantityInBranch);
+					for (int j = 0; j < branchList.size(); j++) {
+						ProductInBranch p = new ProductInBranch(branchList.get(j), productsToAdd.get(i).getID(),
+								quantityInBranch);
 						productInBranchs.add(p);
-						System.out.println(p);
-					}						
-					if(remaining > 0) { // if there is a remaining we give it to the first branch.
-						productInBranchs.get(0).setQuantity(productInBranchs.get(0).getQuantity() +remaining);
-					}					
-					for(int k = 0; k < productInBranchs.size(); k++) {
+					}
+					if (remaining > 0) { // if there is a remaining we give it to the first branch.
+						productInBranchs.get(0).setQuantity(productInBranchs.get(0).getQuantity() + remaining);
+					}
+					for (int k = 0; k < productInBranchs.size(); k++) {
 						pstmt2 = con.prepareStatement(updateBranchesSupply);
-						pstmt2.setString(1,String.valueOf(productInBranchs.get(k).getQuantity()));
+						pstmt2.setString(1, String.valueOf(productInBranchs.get(k).getQuantity()));
 						pstmt2.setString(2, productInBranchs.get(k).getBranchID());
 						pstmt2.setString(3, productInBranchs.get(k).getProductID());
-						System.out.println(productInBranchs.get(k));
-						if(pstmt2.executeUpdate() == 0) {
-							System.out.println("here2");
+						if (pstmt2.executeUpdate() == 0) {
 							obj.setResponse(Response.EDIT_PRODUCTS_ON_THE_CATALOG_FAILED);
 							return;
 						}
@@ -2464,7 +2229,6 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 		}
 
 	}
-	
 
 	/**
 	 * in this method we adding new products into the catalog, we getting them on
@@ -2475,21 +2239,17 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 	 * @throws SQLException
 	 */
 	@SuppressWarnings("unchecked")
-	public static void marketingWorkerAddToCatalog(TransmissionPack obj, Connection con)  {
+	public static void marketingWorkerAddToCatalog(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			List<Product> productsToAdd = new ArrayList<>();
 			productsToAdd = (List<Product>) obj.getInformation();
 			int countInseration = 0;
 			String insertNewItem = "INSERT INTO zerli.product(productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, isOnSale, fixPrice)VALUES(?,?,?,?,?,?,?,?,?,?);";
 			List<String> branchList = getAllBranchId(con);
-			System.out.println(branchList.get(0));
-			System.out.println(branchList.get(1));
-			System.out.println(branchList.get(2));
-
 			String divideProductsToBranches = "INSERT INTO zerli.productinbranch (branchID , productID, quantity) VALUES (?,?,?);";
 			int quantityInBranch, remaining;
 			List<ProductInBranch> productInBranchs = new ArrayList<>();
-			
+
 			try {
 				for (int i = 0; i < productsToAdd.size(); i++) {
 					PreparedStatement pstmt, pstmt2;
@@ -2506,30 +2266,25 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 					pstmt.setDouble(10, productsToAdd.get(i).getFixPrice());
 					if (pstmt.executeUpdate() != 0) {
 						countInseration++;
-						System.out.println(productsToAdd.get(i));
 					}
-				
+
 					quantityInBranch = Integer.valueOf(productsToAdd.get(i).getQuantity()) / branchList.size();
 					remaining = Integer.valueOf(productsToAdd.get(i).getQuantity()) % branchList.size();
-					System.out.println("quantity: " + quantityInBranch);
-					System.out.println("remaining: " + remaining);
-					for(int j= 0; j < branchList.size(); j++) {
-						ProductInBranch p = new ProductInBranch(branchList.get(j),productsToAdd.get(i).getID() , quantityInBranch);
+					for (int j = 0; j < branchList.size(); j++) {
+						ProductInBranch p = new ProductInBranch(branchList.get(j), productsToAdd.get(i).getID(),
+								quantityInBranch);
 						productInBranchs.add(p);
-						System.out.println(p);
-					}						
-					if(remaining > 0) { // if there is a remaining we give it to the first branch.
-						productInBranchs.get(0).setQuantity(productInBranchs.get(0).getQuantity() +remaining);
 					}
-					
-					for(int k = 0; k < productInBranchs.size(); k++) {
+					if (remaining > 0) { // if there is a remaining we give it to the first branch.
+						productInBranchs.get(0).setQuantity(productInBranchs.get(0).getQuantity() + remaining);
+					}
+
+					for (int k = 0; k < productInBranchs.size(); k++) {
 						pstmt2 = con.prepareStatement(divideProductsToBranches);
 						pstmt2.setString(1, productInBranchs.get(k).getBranchID());
 						pstmt2.setString(2, productInBranchs.get(k).getProductID());
-						pstmt2.setString(3,String.valueOf(productInBranchs.get(k).getQuantity()));
-						System.out.println(productInBranchs.get(k));
-						if(pstmt2.executeUpdate() == 0) {
-							System.out.println("here");
+						pstmt2.setString(3, String.valueOf(productInBranchs.get(k).getQuantity()));
+						if (pstmt2.executeUpdate() == 0) {
 							obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
 							return;
 						}
@@ -2548,8 +2303,9 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 			obj.setResponse(Response.ADDING_TO_THE_CATALOG_FAILED);
 		}
 	}
+
 	/**
-	 * in this method we remove the items that the marketingworker send to us ,by
+	 * in this method we remove the items that the marketing worker send to us ,by
 	 * the product id.
 	 * 
 	 * @param obj
@@ -2572,9 +2328,9 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 					}
 					pstmt2 = con.prepareStatement(removeProductsFromBranches);
 					pstmt2.setString(1, productsToRemove.get(i));
-					if(pstmt2.executeUpdate() == 0) {
+					if (pstmt2.executeUpdate() == 0) {
 						obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
-						return;						
+						return;
 					}
 					if (removeSucess == productsToRemove.size()) {
 						obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_SUCCESS);
@@ -2591,6 +2347,13 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 			obj.setResponse(Response.REMOVE_FROM_THE_CATALOG_FAILED);
 		}
 	}
+
+	/**
+	 * in this method we getting the customer phone , name, email .
+	 * 
+	 * @param obj
+	 * @param con
+	 */
 	public static void getCustomerDetailsFromDB(TransmissionPack obj, Connection con) {
 		if (obj instanceof TransmissionPack) {
 			String customerID = (String) obj.getInformation();
@@ -2622,5 +2385,5 @@ public static void UpdateDeliveryWasLateDB(TransmissionPack obj, Connection con)
 			obj.setResponse(Response.GET_CUSTOMER_DETAILS_FAILED);
 		}
 	}
-	
+
 }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import enums.AccountStatus;
 
 /**
+ * class description : user object for all users in the system
  * @author Omri Shalev 
  */
 

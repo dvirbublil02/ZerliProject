@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import communication.TransmissionPack;
- 
+ /**
+  * this class should be used for notify all the clients for specific action , but during the implementation we found out that 
+  * its more comftrable to us to work if different way. (using clientHandleTransmission and screen listeners)
+  * @author 
+  *
+  */
 public class MissionAnalyzeClient {
 	private static final List<zerliClientListeners> clientlisteners = new ArrayList<zerliClientListeners>();
 
@@ -24,7 +29,6 @@ public class MissionAnalyzeClient {
 			break;
 		}
 		case NOTIFY_CUSTOMER_SERVICE:{
-			System.out.println("get to -> NOTIFY_CUSTOMER_SERVICE");
 			for (zerliClientListeners client : clientlisteners) {
 				client.notifyCustomerService();
 			}
@@ -48,13 +52,12 @@ public class MissionAnalyzeClient {
 		}
 		case EDIT_ORDER_SUCCESS: {
 
-			// insert relevant method from the clientQuaries on the future
+			
 		}
 		case EDIT_ORDER_FAILD: {
-			// insert relevant method from the clientQuaries on the future
+			
 		}
 
-			return false;
 		case REMOVE_ORDER_FAILD:
 			break;
 		case REMOVE_ORDER_SUCCESS:
@@ -104,36 +107,7 @@ public class MissionAnalyzeClient {
 		}
 		break;
 		}
-////	case "Delivery Agent": {
-//		for (zerliClientListeners client : clientlisteners) {
-//			client.userIsDeliveryAgent();
-//		}
-////		break;
-////	}
-////	case "Marketing Worker": {
-//		for (zerliClientListeners client : clientlisteners) {
-//			client.userIsMarketingWorker();
-//		}
-////		break;
-////	}
-////	case "Network Manager": {
-//		for (zerliClientListeners client : clientlisteners) {
-//			client.userIsNetworkManager();
-//		}
-////		break;
-////	}
-////	case "Service Expert": {
-//		for (zerliClientListeners client : clientlisteners) {
-//			client.userIsServiceExpert();
-//		}
-////		break;
-////	}
-////	case "Shop Worker": {
-//		for (zerliClientListeners client : clientlisteners) {
-//			client.userIsShopWorker();
-//		}
-////		break;
-////	}
+
 		}
 	}
 

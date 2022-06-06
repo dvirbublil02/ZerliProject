@@ -1,12 +1,13 @@
 package entities_general;
 
-import java.util.List;
-
 import entities_catalog.ProductInOrder;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.image.ImageView;
-
+/**
+ * class for holding the regular products on the cart for presenting it into the screen
+ * it his subclass of the Order
+ * @author almog mader
+ *
+ */
 public class OrderCartPreview {
 	private ImageView imgSrc;
 	private String name;
@@ -14,7 +15,14 @@ public class OrderCartPreview {
 	private double price;
 	private ProductInOrder product;
 	public static double totalprice;
-	
+	/**
+	 * 
+	 * @param imgSrc
+	 * @param name
+	 * @param quantity
+	 * @param price
+	 * @param product
+	 */
 	public OrderCartPreview(ImageView imgSrc, String name, int quantity, double price,
 			ProductInOrder product) {
 		this.imgSrc = imgSrc;

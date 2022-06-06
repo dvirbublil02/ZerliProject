@@ -1,8 +1,4 @@
-/client/
 /client_gui/
-<<<<<<< HEAD
-/client/
-=======
 /client_gui_prototype/
 /entities/
->>>>>>> origin/dvir-01-06
+/client/

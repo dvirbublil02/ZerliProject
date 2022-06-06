@@ -18,11 +18,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<<<<<<< HEAD
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CustomerViewOrdersController">
-=======
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.CustomerViewOrdersController">
->>>>>>> origin/dvir-01-06
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -140,12 +136,9 @@
                                  <padding>
                                     <Insets left="5.0" />
                                  </padding>
-<<<<<<< HEAD
                                  <font>
                                     <Font name="Cambria Bold" size="12.0" />
                                  </font>
-=======
->>>>>>> origin/dvir-01-06
                               </Label>
                               <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
                            </children>
@@ -156,12 +149,9 @@
                                  <padding>
                                     <Insets left="5.0" />
                                  </padding>
-<<<<<<< HEAD
                                  <font>
                                     <Font name="Cambria Bold" size="12.0" />
                                  </font>
-=======
->>>>>>> origin/dvir-01-06
                               </Label>
                            </children>
                         </HBox>
@@ -172,7 +162,6 @@
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </Line>
-<<<<<<< HEAD
                               <Label prefHeight="17.0" prefWidth="88.0" text="View Orders" textFill="#cb0606">
                                  <padding>
                                     <Insets left="5.0" />
@@ -221,50 +210,19 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-=======
-                              <Label prefHeight="17.0" prefWidth="88.0" text="View Orders" textFill="RED">
-                                 <padding>
-                                    <Insets left="5.0" />
-                                 </padding>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="92.0" />
-                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="90.0" />
-                        <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="54.0" prefWidth="108.0">
-                                 <children>
-                                    <HBox alignment="CENTER" prefHeight="54.0" prefWidth="78.0" />
->>>>>>> origin/dvir-01-06
                                  </children>
                               </HBox>
                            </children>
                         </HBox>
-<<<<<<< HEAD
                      </children>
                   </HBox>
                   <HBox prefHeight="524.0" prefWidth="692.0">
-=======
-                        <HBox alignment="CENTER" prefHeight="65.0" prefWidth="232.0">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="446.0" prefWidth="692.0">
->>>>>>> origin/dvir-01-06
                      <children>
                         <HBox prefHeight="349.0" prefWidth="707.0">
                            <children>
                               <TabPane prefHeight="457.0" prefWidth="691.0" styleClass="tab2-pane" stylesheets="@Style.css" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
                                 <tabs>
-<<<<<<< HEAD
                                   <Tab text="Order History">
-=======
-                                  <Tab text="View Orders">
->>>>>>> origin/dvir-01-06
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
@@ -274,7 +232,6 @@
                                                          <children>
                                                             <TableView fx:id="tableViewOrder" prefHeight="345.0" prefWidth="684.0" stylesheets="@Style.css" VBox.vgrow="ALWAYS">
                                                                <columns>
-<<<<<<< HEAD
                                                                   <TableColumn fx:id="VieworderID" prefWidth="71.19994962215424" text="OrderID" />
                                                                   <TableColumn fx:id="ViewBranchID" prefWidth="84.00012969970703" text="Branch" />
                                                                   <TableColumn fx:id="viewStatus" prefWidth="102.400146484375" text="Status" />
@@ -282,14 +239,6 @@
                                                                   <TableColumn fx:id="VieworderDate" minWidth="0.0" prefWidth="145.5999755859375" text="Order Date" />
                                                                   <TableColumn fx:id="ViewExpectDel" prefWidth="146.39999389648438" text="expected Delivery" />
                                                                   <TableColumn fx:id="Viewshow" prefWidth="64.0" text="Show" />
-=======
-                                                                  <TableColumn fx:id="VieworderID" prefWidth="75.20007169246674" text="OrderID" />
-                                                                  <TableColumn fx:id="ViewBranchID" prefWidth="78.40015411376953" text="BranchID" />
-                                                                  <TableColumn fx:id="ViewPrice" minWidth="0.0" prefWidth="86.4000244140625" text="Price" />
-                                                                  <TableColumn fx:id="VieworderDate" minWidth="0.0" prefWidth="183.2000732421875" text="Order Date" />
-                                                                  <TableColumn fx:id="ViewExpectDel" prefWidth="165.60006713867188" text="expected Delivery" />
-                                                                  <TableColumn fx:id="Viewshow" prefWidth="88.800048828125" text="Show" />
->>>>>>> origin/dvir-01-06
                                                                </columns>
                                                             </TableView>
                                                          </children>
@@ -301,7 +250,6 @@
                                           </AnchorPane>
                                     </content>
                                   </Tab>
-<<<<<<< HEAD
                                     <Tab text="Order Cancel">
                                        <content>
                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -319,41 +267,15 @@
                                                                   <TableColumn fx:id="cancelOrderDate" minWidth="0.0" prefWidth="149.60009765625" text="Order Date" />
                                                                   <TableColumn fx:id="cancelExpectedDate" prefWidth="139.19992065429688" text="expected Delivery" />
                                                                   <TableColumn fx:id="cancelShow" prefWidth="76.0" text="Show" />
-=======
-                                    <Tab text="Cancel Orders">
-                                       <content>
-                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                             <children>
-                                                <VBox prefHeight="396.0" prefWidth="687.0">
-                                                   <children>
-                                                      <VBox prefHeight="367.0" prefWidth="687.0">
-                                                         <children>
-                                                            <TableView fx:id="tableCancelOrder" prefHeight="345.0" prefWidth="684.0" stylesheets="@Style.css" VBox.vgrow="ALWAYS">
-                                                               <columns>
-                                                                  <TableColumn fx:id="cancelOrderID" prefWidth="79.99999845027924" text="OrderID" />
-                                                                  <TableColumn fx:id="cancelBranchID" prefWidth="76.00000762939453" text="BranchID" />
-                                                                  <TableColumn fx:id="cancelPrice" minWidth="0.0" prefWidth="91.19992065429688" text="Price" />
-                                                                  <TableColumn fx:id="cancelOrderDate" minWidth="0.0" prefWidth="146.4000244140625" text="Order Date" />
-                                                                  <TableColumn fx:id="cancelExpectedDate" prefWidth="175.20004272460938" text="expected Delivery" />
-                                                                  <TableColumn fx:id="cancelShow" prefWidth="107.199951171875" text="Show" />
->>>>>>> origin/dvir-01-06
                                                                </columns>
                                                             </TableView>
                                                          </children>
                                                       </VBox>
-<<<<<<< HEAD
                                                       <HBox prefHeight="67.0" prefWidth="686.0">
                                                          <children>
                                                             <HBox alignment="CENTER" prefHeight="64.0" prefWidth="297.0" HBox.hgrow="ALWAYS">
                                                                <children>
                                                                   <Button fx:id="removeCancelOrderBTN" mnemonicParsing="false" onAction="#cancelOrder" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Order Cancel">
-=======
-                                                      <HBox prefHeight="100.0" prefWidth="200.0">
-                                                         <children>
-                                                            <HBox alignment="CENTER" prefHeight="64.0" prefWidth="297.0" HBox.hgrow="ALWAYS">
-                                                               <children>
-                                                                  <Button fx:id="removeCancelOrderBTN" mnemonicParsing="false" onAction="#cancelOrder" prefHeight="38.0" prefWidth="150.0" stylesheets="@Style.css" text="Remove">
->>>>>>> origin/dvir-01-06
                                                                      <font>
                                                                         <Font name="Candara Bold" size="18.0" />
                                                                      </font>
@@ -365,7 +287,6 @@
                                                                   </Button>
                                                                </children>
                                                             </HBox>
-<<<<<<< HEAD
                                                          </children>
                                                       </HBox>
                                                       <HBox alignment="CENTER" prefHeight="52.0" prefWidth="686.0">
@@ -375,20 +296,6 @@
                                                                   <Font name="Cambria Bold" size="16.0" />
                                                                </font>
                                                             </Label>
-=======
-                                                            <HBox alignment="CENTER" prefHeight="64.0" prefWidth="434.0" style="-fx-background-color: #8AA493; -fx-background-radius: 10;">
-                                                               <children>
-                                                                  <Label fx:id="massageLabelRemove" prefHeight="22.0" prefWidth="230.0" textFill="#cb0606">
-                                                                     <font>
-                                                                        <Font name="Cambria Bold" size="16.0" />
-                                                                     </font>
-                                                                  </Label>
-                                                               </children>
-                                                               <HBox.margin>
-                                                                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                               </HBox.margin>
-                                                            </HBox>
->>>>>>> origin/dvir-01-06
                                                          </children>
                                                       </HBox>
                                                    </children>
@@ -397,7 +304,6 @@
                                           </AnchorPane>
                                        </content>
                                     </Tab>
-<<<<<<< HEAD
                                     <Tab text="Cancel requests">
                                       <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -430,8 +336,6 @@
                                           </AnchorPane>
                                       </content>
                                     </Tab>
-=======
->>>>>>> origin/dvir-01-06
                                 </tabs>
                                  <HBox.margin>
                                     <Insets left="2.0" right="2.0" />
@@ -441,11 +345,7 @@
                         </HBox>
                      </children>
                   </HBox>
-<<<<<<< HEAD
                   <HBox prefHeight="19.0" prefWidth="692.0">
-=======
-                  <HBox prefHeight="100.0" prefWidth="200.0">
->>>>>>> origin/dvir-01-06
                      <children>
                         <HBox alignment="CENTER_RIGHT" prefHeight="96.0" prefWidth="328.0" />
                         <HBox prefHeight="96.0" prefWidth="466.0" HBox.hgrow="ALWAYS">

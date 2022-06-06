@@ -1,20 +1,12 @@
 package DataBase;
 
 import java.sql.Connection;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.sql.SQLException;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 
 import communication.TransmissionPack;
-import entities_catalog.Product;
-import ocsf.server.ConnectionToClient;
-
 import entities_users.User;
-import enums.ReportType;
 
 /**
  * In this class we analyze the mission that we got from the client , and then
@@ -31,17 +23,13 @@ public class MissionAnalyze {
 		case ADD_ORDER: {
 			ServerQuaries.addOrderInDB(obj, con);
 
-			// ServerQuaries.AddOrderToDB(obj, con);
 			break;
 		}
 		case EDIT_ORDER: {
-			// ServerQuaries.EditOrderOnDB(obj, con);
 			break;
 		}
 		case GET_ORDER: {
-			System.out.println(5);
 			ServerQuaries.getOrders(obj, con);
-
 			break;
 		}
 
@@ -57,8 +45,6 @@ public class MissionAnalyze {
 		}
 
 		case USER_LOGIN: {
-
-			// ServerQuaries.getUser(obj, con);
 			ServerQuaries.Login(obj, con);
 			break;
 		}
@@ -114,29 +100,21 @@ public class MissionAnalyze {
 			break;
 		}
 		case UPDATE_COMPLAINTS: {
-			System.out.println("here2->");
 			ServerQuaries.updateComplaints(obj, con);
 			break;
 		}
 
 		case OPEN_COMPLAINT: {
-
 			try {
 				ServerQuaries.openComplaint(obj, con);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
 
 		}
 		case GET_MONTHLY_REPORT: {
-
-			// ReportsQuaries.createQuarterReportInformation(tp);
 			ReportsQuaries.getMonthlyReport(obj, con);
-			// createReports.monthlyOrders("2525", "05","2022");
-			// createReports.monthlyIncome("2525","05","2022");
-
 			break;
 		}
 		case GET_QUARTER_INCOME_REPORT: {
@@ -158,10 +136,8 @@ public class MissionAnalyze {
 			try {
 				ReportsQuaries.getSurveyReport(obj, con);
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
@@ -194,12 +170,7 @@ public class MissionAnalyze {
 			ServerQuaries.updateOrder(obj, con);
 			break;
 		}
-//		case NOTIFY: {
-//			ServerQuaries.notifyCustomerService(obj, con);
-//			break;
-//		}
 		case GET_SURVEY_QUESTIONS: {
-			System.out.println("mission analyze step");
 			ServerQuaries.getSurvyQuestions(obj, con);
 			break;
 		}
@@ -252,8 +223,6 @@ public class MissionAnalyze {
 			break;
 		}
 
-
-
 		case CANCEL_ORDER_BY_CUSTOMER: {
 			ServerQuaries.cancelOrderByCustomer(obj, con);
 			break;
@@ -263,8 +232,6 @@ public class MissionAnalyze {
 
 			break;
 		}
-
-	
 
 
 		case GET_MAX_PRODUCT_ID:{

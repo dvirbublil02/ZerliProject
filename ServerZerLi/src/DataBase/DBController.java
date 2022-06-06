@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import communication.TransmissionPack;
-import ocsf.server.ConnectionToClient;
 import server_gui.ServerScreenController;
 
 /**

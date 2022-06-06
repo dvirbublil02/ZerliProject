@@ -1,12 +1,11 @@
 package entities_catalog;
 
 import java.io.Serializable;
-import java.util.Objects;
 
+/**
+ * This class represent product in the catalog 
+ */
 public class Product  implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String imgSrc;
@@ -19,7 +18,19 @@ public class Product  implements Serializable{
 	private boolean isOnSale;
 	private double fixPrice;
 	
-	//productID, name, price, backGroundColor, picture, quantity, itemType, dominateColor, isOnSale, fixPrice
+	/**
+	 * 
+	 * @param productID
+	 * @param name
+	 * @param price
+	 * @param backGroundColor
+	 * @param imgSrc
+	 * @param quantity
+	 * @param itemType
+	 * @param dominateColor
+	 * @param isOnSale
+	 * @param fixPrice
+	 */
 	public Product(String productID,String name, double price, String backGroundColor, String imgSrc,int quantity,
 			String itemType , String dominateColor,boolean isOnSale,double fixPrice ) {
 		this.productID=productID;
@@ -122,6 +133,10 @@ public class Product  implements Serializable{
 	public void setFixPrice(double fixPrice) {
 		this.fixPrice = fixPrice;
 	}
+
+
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -148,13 +163,6 @@ public class Product  implements Serializable{
 			return false;
 		return true;
 	}
-
-//	@Override
-//	public String toString() {
-//		return "Product [name=" + name + ", imgSrc=" + imgSrc + ", price=" + price + ", backGroundColor="
-//				+ backGroundColor + ", productID=" + productID + ", quantity=" + quantity + ", itemType=" + itemType
-//				+ ", dominateColor=" + dominateColor + ", isOnSale=" + isOnSale + ", fixPrice=" + fixPrice + "]";
-//	}
 
 	@Override
 	public String toString() {

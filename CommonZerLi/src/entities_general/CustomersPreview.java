@@ -5,7 +5,12 @@ import enums.AccountStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-
+/**
+ * class for holding the customers for presenting it into the screen
+ * it his subclass of the Order
+ * @author shir cohen , almog mader
+ *
+ */
 public class CustomersPreview extends Customer
 {
 

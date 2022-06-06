@@ -4,13 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import entities_catalog.Product;
 import entities_catalog.ProductInOrder;
 import enums.OrderStatus;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
 /**
+ * this class representing the order object
  * @author Omri Shalev
  */
 

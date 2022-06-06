@@ -1,5 +1,9 @@
 package enums;
-
+/**
+ * this class define the options for delivery status
+ * @author omri shalev 
+ *
+ */
 public enum DeliveryStatus {
 
 	READY_TO_GO("READY_TO_GO", 0),

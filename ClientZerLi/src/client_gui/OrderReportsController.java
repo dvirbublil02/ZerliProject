@@ -2,7 +2,6 @@ package client_gui;
 
 
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -12,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.imageio.ImageIO;
-
 import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ReportHandleController;
@@ -22,7 +19,6 @@ import entities_users.NetworkManager;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -31,14 +27,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -87,7 +81,7 @@ public class OrderReportsController implements Initializable {
 
 	private static final DecimalFormat df = new DecimalFormat("0.000");
 	List<List<String>> reportOnList = new ArrayList<>();
-	List<String> branchInfo = new ArrayList();
+	List<String> branchInfo = new ArrayList<>();
 
 	public void start(Stage stage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/OrderReportsPage.fxml"));
@@ -100,7 +94,6 @@ public class OrderReportsController implements Initializable {
 		stage.show();
 	}
 
-	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		AnimationTimer time = addingTimer();
@@ -133,6 +126,7 @@ public class OrderReportsController implements Initializable {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private void insertTheOrdersReportDetails(ObservableList<PieChart.Data> pieChartData,
 			ObservableList<PieChart.Data> pieChartData2) {
 		List<Double> amount = new ArrayList<>();
@@ -151,7 +145,7 @@ public class OrderReportsController implements Initializable {
 																		// chart
 		// in this loop we insert the data of the products , into the pie chart diagram.
 		for (int i = 1; i < reportOnList.size(); i++) {
-			List<String> productInfo = new ArrayList();
+			List<String> productInfo = new ArrayList<>();
 			productInfo = reportOnList.get(i);
 			if (productInfo.get(0).equals("product") ||productInfo.get(0).equals("Product")) {
 				StringBuilder name = new StringBuilder();
@@ -224,7 +218,7 @@ public class OrderReportsController implements Initializable {
 		StringBuilder bestSellerName = new StringBuilder();
 		StringBuilder worstSellerName = new StringBuilder();
 		for (int i = 1; i < reportOnList.size(); i++) {
-			List<String> productInfo = new ArrayList();
+			List<String> productInfo = new ArrayList<>();
 			productInfo = reportOnList.get(i);
 			if (Integer.parseInt(productInfo.get(1)) > bestSellerAmount) {
 				bestSellerAmount = Integer.parseInt(productInfo.get(1));
@@ -257,12 +251,11 @@ public class OrderReportsController implements Initializable {
 	 */
 	private List<Double> insertIntoChart(Double bouquet, Double single, XYChart.Series<String, Number> series1,
 			XYChart.Series<String, Number> series2) {
-		int j;
-
+		
 		List<Double> amount = new ArrayList<>();
 		for (int i = 1; i < reportOnList.size(); i++) {
 
-			List<String> productInfo = new ArrayList();
+			List<String> productInfo = new ArrayList<>();
 			productInfo = reportOnList.get(i);
 			if (productInfo.get(0).equals("product")||productInfo.get(0).equals("Product")) {
 				StringBuilder name = new StringBuilder();

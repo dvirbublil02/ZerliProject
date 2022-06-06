@@ -2,7 +2,11 @@
 package client;
 
 import javafx.scene.control.Label;
-
+/**
+ * this class using to handle generic pop up message 
+ * @author Dvir Bublil
+ *
+ */
 public class popMessageHandler {
 	static String message;
 	static String title;

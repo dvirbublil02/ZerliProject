@@ -251,13 +251,13 @@
                                        </tickLabelFont>
                                     </NumberAxis>
                                 </yAxis>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
                                  <styleClass>
                                     <String fx:value="chart" />
                                     <String fx:value="chart-plot-background" />
                                  </styleClass>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
                               </LineChart>
                            </children>
                            <padding>
