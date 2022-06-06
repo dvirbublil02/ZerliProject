@@ -179,22 +179,14 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="99.0">
-                                 <children>
-                                    <Button fx:id="info" mnemonicParsing="false" styleClass="handHover" stylesheets="@Style.css">
-                                       <graphic>
-                                          <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="99.0" />
                            </children>
                         </HBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="566.0" prefWidth="692.0">
                      <children>
-                        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+                        <TabPane prefHeight="200.0" prefWidth="200.0" stylesheets="@Style.css" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
                           <tabs>
                             <Tab text="edit worker">
                               <content>
@@ -220,7 +212,7 @@
                                                                   </HBox>
                                                                   <HBox prefHeight="362.0" prefWidth="600.0">
                                                                      <children>
-                                                                        <TableView fx:id="workers" prefHeight="338.0" prefWidth="507.0" HBox.hgrow="ALWAYS">
+                                                                        <TableView fx:id="workers" prefHeight="338.0" prefWidth="507.0" stylesheets="@Style.css" HBox.hgrow="ALWAYS">
                                                                            <columns>
                                                                               <TableColumn fx:id="shopWorkerIDCol" prefWidth="113.60003662109375" text="shop workerID" />
                                                                               <TableColumn fx:id="firstNameCol" prefWidth="96.0" text="first name" />
@@ -291,7 +283,7 @@
                                                                   </HBox>
                                                                   <HBox prefHeight="362.0" prefWidth="600.0">
                                                                      <children>
-                                                                        <TableView fx:id="customers" prefHeight="362.0" prefWidth="636.0" HBox.hgrow="ALWAYS">
+                                                                        <TableView fx:id="customers" prefHeight="362.0" prefWidth="636.0" stylesheets="@Style.css" HBox.hgrow="ALWAYS">
                                                                            <columns>
                                                                               <TableColumn fx:id="customerIDCol" prefWidth="113.60003662109375" text="customer ID" />
                                                                               <TableColumn fx:id="emailCol" prefWidth="184.00003814697266" text="email" />

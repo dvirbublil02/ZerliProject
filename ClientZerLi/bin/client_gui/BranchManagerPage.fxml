@@ -189,7 +189,6 @@
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -230,18 +229,22 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                                  <children>
-                                    <Button fx:id="createReportBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#createReport" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Create Report" textFill="WHITE">
-                                       <font>
-                                          <Font name="Calibri Bold Italic" size="14.0" />
-                                       </font>
-                                       <graphic>
-                                          <ImageView fitHeight="69.0" fitWidth="86.0">
-                                             <image>
-                                                <Image url="@../javafx_images/requestSpecialReport.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Button fx:id="editCustomerInfoBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#editCustomerInfo" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Edit User Inforamtion" textFill="WHITE">
+                                             <graphic>
+                                                <ImageView fitHeight="69.0" fitWidth="86.0">
+                                                   <image>
+                                                      <Image url="@../javafx_images/editCustomerInfo.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                             <font>
+                                                <Font name="Calibri Bold Italic" size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </HBox>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -257,22 +260,6 @@
                                              </image>
                                           </ImageView>
                                        </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
-                                 <children>
-                                    <Button fx:id="editCustomerInfoBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#editCustomerInfo" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Edit User Inforamtion" textFill="WHITE">
-                                       <graphic>
-                                          <ImageView fitHeight="69.0" fitWidth="86.0">
-                                             <image>
-                                                <Image url="@../javafx_images/editCustomerInfo.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                       <font>
-                                          <Font name="Calibri Bold Italic" size="14.0" />
-                                       </font>
                                     </Button>
                                  </children>
                               </HBox>

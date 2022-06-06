@@ -552,10 +552,15 @@ public class ClientHandleTransmission {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<ShopWorker> getShopWorkers() {
+		
 		TransmissionPack tp = new TransmissionPack(Mission.GET_SHOP_WORKERS, null, ClientController.user);
 		ClientUI.chat.accept(tp);// tp sent to server and list of workers in the specific branch enters the tp
 		tp = ClientUI.chat.getObj();
+		if(tp.getInformation() !=null)
 		return (List<ShopWorker>) tp.getInformation();
+		else {
+			return new ArrayList<>();
+		}
 	}
 
 	/**

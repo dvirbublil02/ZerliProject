@@ -23,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class BranchManagerPageController implements Initializable {
@@ -75,6 +76,7 @@ public class BranchManagerPageController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/BranchManagerPage.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Manager Menu");
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setResizable(false);
@@ -139,7 +141,7 @@ public class BranchManagerPageController implements Initializable {
 				((BranchManager) ClientController.user).toString());
 
 		branchID = ((BranchManager) ClientController.user).getBranchID();
-		branchName = ClientHandleTransmission.getBranchName(branchID);
+		branchName = ClientHandleTransmission.getBranchName(((BranchManager) ClientController.user).getBranchID().toString());
 		branchLbl.setText(" " + branchName + " (" + branchID + ")");
 
 		AnimationTimer time = new AnimationTimer() {
@@ -157,12 +159,7 @@ public class BranchManagerPageController implements Initializable {
 			viewReportsBtn.setDisable(true);
 		}
 
-//		info.setOnMouseMoved(event -> {	
-//			Tooltip tooltipCustom = new Tooltip("Dear Manager\n" + "Here You Can :\n" + "Approve new customers.");
-//			tooltipCustom.setStyle("-fx-font-size: 20");
-//			Tooltip.install(info, tooltipCustom);
-//
-//		});
+
 	}
 
 }

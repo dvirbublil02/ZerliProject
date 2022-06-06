@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import client_gui.CartPageController;
 import entities_catalog.ProductInBranch;
 import entities_catalog.ProductInOrder;
 import entities_general.Order;
@@ -237,8 +238,26 @@ public class OrderHandleController implements nofityOrderListner {
 	 * @author Almog-Madar
 	 */
 	public static void addCustomProductInOrderFinallCart(String key,
-			List<ProductInOrder> customProductInOrderFinallCart) {
-		OrderHandleController.customProductInOrderFinallCart.put(key, customProductInOrderFinallCart);
+			List<ProductInOrder> moveToCart) {
+		if(OrderHandleController.customProductInOrderFinallCart.containsKey(key)) {
+		List<ProductInOrder> temp=	OrderHandleController.customProductInOrderFinallCart.get(key);
+			for(int k =0;k<moveToCart.size();k++) {
+				if(temp.contains(moveToCart.get(k))) {
+					for(int j=0;j<temp.size();j++) {
+						if(temp.equals(moveToCart.get(k))) {
+							temp.get(j).setQuantity(temp.get(j).getQuantity()+moveToCart.get(k).getQuantity());
+							break;
+						}
+					}
+				}else {
+					temp.add(moveToCart.get(k));
+				}
+			}
+			
+			
+		}else {
+		OrderHandleController.customProductInOrderFinallCart.put(key, moveToCart);
+		}
 	}
 
 	public static Map<String, List<ProductInOrder>> getCustomProductInOrder() {
@@ -686,6 +705,7 @@ public class OrderHandleController implements nofityOrderListner {
 	public static void clearAllOrderData() {
 		customProductInOrder.clear();
 		customProductInOrderFinallCart.clear();
+		CartPageController.listViewCustom.clear();
 		productInOrder.clear();
 		quantityOfRegularProducts = 0;
 		quantityOfCustomProducts = 0;

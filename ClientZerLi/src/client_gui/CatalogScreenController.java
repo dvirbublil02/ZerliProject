@@ -379,7 +379,7 @@ public class CatalogScreenController implements Initializable {
 	 */
 	@FXML
 	void addToCart(ActionEvent event) {
-		if(!quantityTextLable.getText().matches("[0-9]+") || Integer.parseInt(quantityTextLable.getText())>99) {
+		if(!quantityTextLable.getText().matches("[0-9]+") || Integer.parseInt(quantityTextLable.getText())>99 || (customTextField.getText().isEmpty() && customClickRadioBtn.isSelected())) {
 			quantityTextLable.setText("0");
 			return;
 		}
@@ -394,7 +394,8 @@ public class CatalogScreenController implements Initializable {
 				// regular and exist
 				productInOrder.setProductQuantityInCart(Integer.valueOf(quantityTextLable.getText()));
 				System.out.println("regularInsideClickAddToCart->" + productInOrder);
-
+				System.out.println("here: "+OrderHandleController.getProductInOrder());
+				System.out.println("here2: "+productInOrder);
 				if (OrderHandleController.getProductInOrder().contains(productInOrder)) {
 					OrderHandleController.addToExistItemOnListNotCustom(productInOrder);
 				} else {
@@ -519,7 +520,7 @@ public class CatalogScreenController implements Initializable {
 	 */
 	@FXML
 	void addToCustom(ActionEvent event) {
-		if(!quantityTextLable.getText().matches("[0-9]+") || Integer.parseInt(quantityTextLable.getText())>99) {
+		if(!quantityTextLable.getText().matches("[0-9]+") || Integer.parseInt(quantityTextLable.getText())>99 ||customTextField.getText().isEmpty()) {
 			quantityTextLable.setText("0");
 			return;
 		}

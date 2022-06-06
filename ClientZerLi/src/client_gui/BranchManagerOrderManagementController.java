@@ -2,19 +2,25 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientController;
 import client.ClientHandleTransmission;
 import client.EmailSending;
 import client.OrderHandleController;
 import communication.Response;
 import entities_general.Order;
 import entities_general.OrderPreview;
+import entities_users.BranchManager;
+import entities_users.Customer;
 import entities_users.User;
 import enums.OrderStatus;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -202,11 +208,35 @@ public class BranchManagerOrderManagementController implements Initializable {
 
 	@FXML
 	private TableColumn<OrderPreview, Button> showColCD;
+	
+    @FXML
+    private Label timer;
 
 	@FXML
 	private TableColumn<OrderPreview, ComboBox<OrderStatus>> statusColCD;
 	@FXML
     private TabPane tabPane;
+	
+    @FXML
+    private Label accountStatus;
+    
+    @FXML
+    private Label branchLabel;
+    
+    @FXML
+    private Label employeeName;
+    
+    @FXML
+    private Label employeeType;
+    
+
+    @FXML
+    private Label entryGreeting;
+    
+    @FXML
+    private Label phoneNumber;
+    
+    
 
 	private ObservableList<OrderPreview> listViewCD = FXCollections.observableArrayList();
 	
@@ -237,23 +267,29 @@ public class BranchManagerOrderManagementController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		initOrdinaryOrderTable();
-
+		//timer on screen 
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		time.start();
 		
+		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
+				((BranchManager) ClientController.user).toString());
+		
+		String branchID = ((BranchManager) ClientController.user).getBranchID();
+		String branchName = ClientHandleTransmission.getBranchName(branchID);
+		branchLabel.setText(" " + branchName + " (" + branchID + ")");
+		
+		initOrdinaryOrderTable();
 		initDeliveryOrderTable();
 		initDeliveryImidateOrderTable();
-
-		
 		initCanelOrdersTable();
-
-		
-
 		initCancelDeliveryOrdersTable();
-		
 		addUpdateFeedBackRest();
 		
-
 
 	}
 	/**

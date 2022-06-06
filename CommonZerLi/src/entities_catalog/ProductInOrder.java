@@ -1,5 +1,7 @@
 package entities_catalog;
 
+import java.util.Objects;
+
 /**
  * this class represent a product in order
  */
@@ -65,9 +67,22 @@ public class ProductInOrder extends Product {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(nameOfItem, nameOfProduct, orderID, productQuantityInOrder);
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
-		ProductInOrder p = (ProductInOrder) obj;
-		return this.getID() != p.getID() ? false : this.getName() != p.getName() ? false : true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductInOrder other = (ProductInOrder) obj;
+		return Objects.equals(super.getID(), other.getID()) ;
+				
 	}
 
 	public String getNameOfproduct() {

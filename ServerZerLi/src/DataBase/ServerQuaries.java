@@ -297,16 +297,19 @@ public class ServerQuaries {
 				if (list.size() > 0) {
 					obj.setResponse(Response.SHOP_WORKER_ARRIVED);
 					obj.setInformation(list);
-				} else
+				} else {
 					obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
-
+				obj.setInformation(list);
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 				obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
+				obj.setInformation(list);
 				return;
 			}
 		} else {
 			obj.setResponse(Response.SHOP_WORKER_NOT_ARRIVED);
+			obj.setInformation(null);
 		}
 	}
 
@@ -877,12 +880,15 @@ public class ServerQuaries {
 					obj.setInformation(listOfCustomers);// updating the mission info to the wanted list of customers
 				} else {
 					obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
-					obj.setInformation(null);
+					obj.setInformation(listOfCustomers);
 				}
 			} catch (SQLException e) {
 				obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
-				obj.setInformation(null);
+				obj.setInformation(listOfCustomers);
 			}
+		}else {
+			obj.setResponse(Response.CUSTOMER_NOT_ARRIVED);
+			obj.setInformation(null);
 		}
 	}
 

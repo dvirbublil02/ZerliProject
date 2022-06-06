@@ -301,6 +301,7 @@ public class OrderPageController implements Initializable{
 					
 					if(deliveryRadio.isSelected())
 					{
+						expectedDelivery=new StringBuilder();
 						expectedDelivery.append(datePickUP.getValue().toString()+" ");
 						expectedDelivery.append(hoursPickUpComboBox.getValue().toString());
 					}
@@ -395,20 +396,21 @@ public class OrderPageController implements Initializable{
 						popMessageHandler.setMessage("Order("+ orderID +") accepted and waiting to approved \n"
 								+ "We let you know by Email when delivery on the way \n"
 								+ "Have a nice day :)");
-					else
+					else {
 						popMessageHandler.setMessage("Order("+ orderID +") accepted and waiting to approved \n"
 								+ "We let you know by Email when to pickup\n"
 								+ "Have a nice day :)");
+					}
 					
 					popMessageHandler.setTitle("Order Completed");
 					
+					OrderHandleController.clearAllOrderData();
 					
 					//next order without discount 
 					if(((Customer) ClientController.user).getIsNewCustomer()) {
 						((Customer) ClientController.user).setNewCustomer(false);
 					}
 				
-					OrderHandleController.clearAllOrderData();
 					//open Customer Main screen 
 					((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 					Stage primaryStage = new Stage();

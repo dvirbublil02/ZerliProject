@@ -31,6 +31,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class BranchManagerEditUserController implements Initializable {
@@ -126,7 +127,7 @@ public class BranchManagerEditUserController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/BranchManagerEditUserPage.fxml"));
 
 		Scene scene = new Scene(root);
-
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("edit user's deatails Page");
 		primaryStage.setScene(scene);
 
@@ -170,6 +171,10 @@ public class BranchManagerEditUserController implements Initializable {
 
 			workers.setItems(workersListView);// adding to the table view and display
 		}
+		else {
+			editResultWorkerLabel.setText("no workers");
+			approveWorkerEditBTN.setDisable(true);
+		}
 
 		// accountStatusCol.setCellFactory(
 
@@ -189,6 +194,10 @@ public class BranchManagerEditUserController implements Initializable {
 						customer.getIsNewCustomer(), customer.getCreditCard()));
 			}
 			customers.setItems(customersListView);
+		}
+		else {
+			editResultCustomerLabel.setText("no customers");
+			approveCustomerEditBTN.setDisable(true);
 		}
 	}
 

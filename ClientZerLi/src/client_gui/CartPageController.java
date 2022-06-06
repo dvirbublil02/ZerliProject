@@ -127,7 +127,7 @@ public class CartPageController implements Initializable {
     
 
     DecimalFormat df = new DecimalFormat("#,###.##");
-	static ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
+	public static ObservableList<OrderCustomCartPreview> listViewCustom = FXCollections.observableArrayList();
 	private ObservableList<OrderCartPreview> listViewRegular = FXCollections.observableArrayList();
 
 	//Cart is the publisher , orderHandelController is the subscriber
@@ -136,6 +136,7 @@ public class CartPageController implements Initializable {
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CartPage.fxml"));
 		Scene scene = new Scene(root);
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("Cart Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();

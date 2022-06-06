@@ -14,9 +14,9 @@
          <children>
             <HBox alignment="CENTER" prefHeight="38.0" prefWidth="600.0">
                <children>
-                  <Label text="Order Details">
+                  <Label text="Order Details" textFill="#11862a">
                      <font>
-                        <Font name="System Bold Italic" size="18.0" />
+                        <Font name="Cambria Bold" size="18.0" />
                      </font>
                   </Label>
                </children>

@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.ComplaintsPageController">
@@ -130,35 +129,36 @@
                      <children>
                         <HBox prefHeight="66.0" prefWidth="592.0">
                            <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="212.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="180.0">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="65.0" text="ZerLi Login">
+                                    <Label prefHeight="17.0" prefWidth="180.0" text="ZerLi Login - Customer Service -">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
-                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
-                                    <HBox alignment="CENTER" prefHeight="59.0" prefWidth="137.0">
-                                       <children>
-                                          <Label prefHeight="17.0" prefWidth="126.0" text="Customer Service Menu" textFill="#151515">
-                                             <HBox.margin>
-                                                <Insets left="5.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                       </children>
-                                    </HBox>
                                  </children>
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="13.0">
+                              <HBox alignment="CENTER" prefHeight="65.0" prefWidth="70.0">
                                  <children>
-                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
-                                 </children></HBox>
-                              <HBox alignment="CENTER" prefHeight="65.0" prefWidth="232.0">
+                                    <Label prefHeight="18.0" prefWidth="70.0" text="Complaits" textFill="#cb0606">
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font></Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="440.0">
                                  <children>
-                                    <Label prefHeight="18.0" prefWidth="230.0" text="Complaits" textFill="RED" />
+                                    <Label fx:id="timer">
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </HBox>
                            </children>
@@ -169,9 +169,9 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="50.0" prefWidth="698.0">
                                        <children>
-                                          <Label text="Complaints">
+                                          <Label text="Handle Complaints" textFill="#11862a">
                                              <font>
-                                                <Font name="System Bold" size="13.0" />
+                                                <Font name="Cambria Bold" size="21.0" />
                                              </font>
                                           </Label>
                                        </children>

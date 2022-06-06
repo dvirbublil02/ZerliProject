@@ -56,11 +56,6 @@
                                     <Font name="Corbel Bold Italic" size="16.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="welcomeUserNameLbl" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome" textFill="#3c3131">
-                                 <font>
-                                    <Font name="Cambria" size="16.0" />
-                                 </font>
-                              </Label>
                            </children>
                         </VBox>
                         <VBox prefHeight="199.0" prefWidth="308.0" styleClass="profile-details" stylesheets="@CustomerPageStyle.css">
@@ -178,15 +173,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="99.0">
-                                 <children>
-                                    <Button fx:id="info" mnemonicParsing="false" styleClass="handHover" stylesheets="@Style.css">
-                                       <graphic>
-                                          <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="99.0" />
                            </children>
                         </HBox>
                         <VBox prefHeight="62.0" prefWidth="692.0" VBox.vgrow="ALWAYS">
@@ -245,33 +232,31 @@
                                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                                    <children>
                                                       <TextField fx:id="creditCardNumTxt" prefWidth="140.0" />
-                                                      <Label fx:id="CreditCardNumberLbl" />
                                                    </children>
                                                 </HBox>
                                              </children>
                                           </VBox>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="50.0">
+                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="130.0">
                                              <children>
-                                                <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="25.0" text="?" />
+                                                <Label fx:id="CreditCardNumberLbl" />
                                              </children></HBox>
                                           <VBox alignment="CENTER" prefHeight="100.0" prefWidth="85.0">
                                              <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="150.0">
                                                    <children>
                                                       <Label text="Expiration Date" />
-                                                      <Label fx:id="ExpirationDateLbl" />
                                                    </children>
                                                 </HBox>
                                              </children>
                                           </VBox>
-                                          <VBox prefHeight="200.0" prefWidth="25.0" />
+                                          <VBox prefHeight="200.0" prefWidth="20.0" />
                                           <VBox alignment="CENTER" prefHeight="200.0" prefWidth="60.0">
                                              <children>
                                                 <Label text="Month" />
                                                 <ComboBox fx:id="MonthComboBox" prefWidth="150.0" />
                                              </children>
                                           </VBox>
-                                          <VBox prefHeight="200.0" prefWidth="25.0" />
+                                          <VBox prefHeight="200.0" prefWidth="20.0" />
                                           <VBox alignment="CENTER" prefHeight="200.0" prefWidth="90.0">
                                              <children>
                                                 <Label text="Year" />
@@ -291,32 +276,53 @@
                                                 <Label text="CVV" />
                                              </children>
                                           </VBox>
-                                          <VBox alignment="CENTER" prefHeight="50.0" prefWidth="140.0">
+                                          <VBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0">
                                              <children>
-                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="100.0">
                                                    <children>
-                                                      <TextField fx:id="CvvTxt" />
-                                                      <Label fx:id="CvvLbl" />
+                                                      <TextField fx:id="CvvTxt" prefWidth="100.0" />
                                                    </children>
                                                 </HBox>
                                              </children>
                                           </VBox>
-                                          <VBox alignment="CENTER" prefHeight="60.0" prefWidth="418.0">
+                                          <VBox alignment="CENTER" prefHeight="100.0" prefWidth="455.0">
                                              <children>
                                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                                    <children>
-                                                      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="225.0">
                                                          <children>
-                                                            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="50.0">
+                                                            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="225.0">
                                                                <children>
-                                                                  <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="25.0" text="?" />
+                                                                  <HBox prefHeight="60.0" prefWidth="225.0">
+                                                                     <children>
+                                                                        <HBox prefHeight="100.0" prefWidth="20.0" />
+                                                                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="205.0">
+                                                                           <children>
+                                                                              <Label fx:id="CvvLbl" />
+                                                                           </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                  </HBox>
                                                                </children>
                                                             </HBox>
                                                          </children>
                                                       </HBox>
-                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="225.0">
                                                          <children>
-                                                            <Label fx:id="SuccessFailedLbl" />
+                                                            <VBox prefHeight="100.0" prefWidth="225.0">
+                                                               <children>
+                                                                  <VBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="225.0">
+                                                                     <children>
+                                                                        <Label fx:id="ExpirationDateLbl" />
+                                                                     </children>
+                                                                  </VBox>
+                                                                  <VBox alignment="CENTER" prefHeight="30.0" prefWidth="225.0">
+                                                                     <children>
+                                                                        <Label fx:id="SuccessFailedLbl" />
+                                                                     </children>
+                                                                  </VBox>
+                                                               </children>
+                                                            </VBox>
                                                          </children>
                                                       </HBox>
                                                    </children>

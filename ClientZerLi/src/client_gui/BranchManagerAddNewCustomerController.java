@@ -29,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -202,18 +203,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		}
 		table.setItems(customers);
 		
-//		cvvInfo.setOnMouseMoved(event -> {	
-//			Tooltip tooltipCustom = new Tooltip("CVV 3 digits\n Back of the card.");
-//			Tooltip.install(cvvInfo, tooltipCustom);
-//
-//		});
-//		
-//		creditCardInfo.setOnMouseMoved(event -> {	
-//			Tooltip tooltipCustom = new Tooltip("Credit card number:\n 16 digits");
-//			tooltipCustom.setStyle("-fx-font-size: 20");
-//			Tooltip.install(creditCardInfo, tooltipCustom);
-//
-//		});
+
 	}
 
 	/**
@@ -226,6 +216,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/AddNewCustomerPage.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Add New Customer");
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setResizable(false);

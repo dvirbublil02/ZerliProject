@@ -1,6 +1,7 @@
 package entities_catalog;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /* this class represent a Product In Branch because any branch has different supplies management
  * @Author Almog Madar
@@ -8,6 +9,22 @@ import java.io.Serializable;
 
 public class ProductInBranch implements Serializable {
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(branchID, productID, quantity);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductInBranch other = (ProductInBranch) obj;
+		return Objects.equals(branchID, other.branchID) && Objects.equals(productID, other.productID)
+				&& quantity == other.quantity;
+	}
+
 	private static final long serialVersionUID = 1L;
 	private String branchID;
 	private  String productID;
