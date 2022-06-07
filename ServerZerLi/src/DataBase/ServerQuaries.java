@@ -1861,11 +1861,11 @@ public class ServerQuaries {
 					pstmt1.setString(1, d.getDeliveryStatus().name());
 					pstmt1.setString(2, d.getArrivedDate());
 					pstmt1.executeUpdate(); // check if the query failed
-
-					PreparedStatement pstmt2 = con.prepareStatement(updateOrderArrived);
-					pstmt2.setString(1, d.getDeliveryStatus().name());
-					pstmt2.executeUpdate(); // check if the query failed
-
+					if(d.getDeliveryStatus() == DeliveryStatus.ARRIVED) {	
+						PreparedStatement pstmt2 = con.prepareStatement(updateOrderArrived);
+						pstmt2.setString(1, d.getDeliveryStatus().name());
+						pstmt2.executeUpdate(); // check if the query failed
+					}
 				}
 				obj.setResponse(Response.UPDATE_DELIVERIES_STATUS_SUCCESS);
 			} catch (Exception e) {

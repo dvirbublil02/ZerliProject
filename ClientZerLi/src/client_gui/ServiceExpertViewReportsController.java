@@ -134,7 +134,7 @@ public class ServiceExpertViewReportsController implements Initializable {
 		}
 		pickMonthCB.setItems(monthList);
 		branchList = FXCollections.observableArrayList();
-		surveyList = FXCollections.observableArrayList("Cusromer Service","TBD");
+		surveyList = FXCollections.observableArrayList("Customer Service","TBD");
 		pickSurveyCB.setItems(surveyList);
 		
 		

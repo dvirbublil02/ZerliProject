@@ -115,7 +115,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 	}
 	
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/BranchManagerviewReportPage.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/BranchManagerViewReportPage.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("View Report Page");

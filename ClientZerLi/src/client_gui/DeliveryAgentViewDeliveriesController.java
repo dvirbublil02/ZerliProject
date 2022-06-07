@@ -306,7 +306,7 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 									/**
 									 * send email to the customer with apologizing message.
 									 */
-									EmailSending.sendMail("shalevomri10@gmail.com",
+									EmailSending.sendMail(customerDetails.get(1),
 											deliveriesList.get(i).getPhoneNumber(),
 											customerDetails.get(0)
 													+ " We are apologizing for the delivery was late.\n You will get full refund for this order\n. Total Refund: "
