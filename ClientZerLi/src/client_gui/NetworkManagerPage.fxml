@@ -54,7 +54,7 @@
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="welcome" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back Alice !" textFill="#3c3131">
+                        <Label fx:id="welcome" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome" textFill="#3c3131">
                            <font>
                               <Font name="Cambria" size="16.0" />
                            </font>

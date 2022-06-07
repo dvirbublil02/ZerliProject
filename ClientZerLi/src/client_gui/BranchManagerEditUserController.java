@@ -130,6 +130,7 @@ public class BranchManagerEditUserController implements Initializable {
 		primaryStage.setTitle("edit user's deatails Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event -> {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 		});

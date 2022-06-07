@@ -83,7 +83,7 @@ public class NetworkManagerPageController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, null,
+		ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, welcome,
 				userRole, ((NetworkManager) ClientController.user).toString());
 
 	}

@@ -58,11 +58,6 @@
                                                 <Font name="Corbel Bold Italic" size="16.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="welcomeBackUserName" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back" textFill="#3c3131">
-                                             <font>
-                                                <Font name="Cambria" size="16.0" />
-                                             </font>
-                                          </Label>
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="199.0" prefWidth="308.0" styleClass="profile-details" stylesheets="@CustomerPageStyle.css">

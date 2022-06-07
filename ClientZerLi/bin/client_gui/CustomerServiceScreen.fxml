@@ -190,7 +190,7 @@
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
-                                                <Image url="@../javafx_images/ViewMouthlyReport.png" />
+                                                <Image url="@../javafx_images/ViewComp.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -206,7 +206,7 @@
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
-                                                <Image url="@../javafx_images/ViewQuterlyReport.png" />
+                                                <Image url="@../javafx_images/compliantCustomer.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>

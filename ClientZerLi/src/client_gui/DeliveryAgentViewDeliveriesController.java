@@ -115,9 +115,6 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 	private Label userStatus;
 
 	@FXML
-	private Label welcomeBackUserName;
-
-	@FXML
     private Label branchDetails;
 	
 	@FXML
@@ -127,12 +124,7 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 
 	private ObservableList<DeliveryPreview> deliveriesView = FXCollections.observableArrayList();
 	private ObservableList<DeliveryPreview> dates = FXCollections.observableArrayList();
-
 	private List<DeliveryPreview> deliveriesList;
-//	private	List<ProductInOrder> orderProducts;
-
-//	private List<DeliveryPreview> updatedDeliveryPreviews;
-
 	private DeliveryPreview currDeliveryPreview = null;
 
 	String branchID, branchName, branchIDTitle;
@@ -159,7 +151,7 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ClientController.initalizeUserDetails(networkManagerName, phoneNumber, userStatus, welcomeBackUserName,
+		ClientController.initalizeUserDetails(networkManagerName, phoneNumber, userStatus, null,
 				userRole, ((DeliveryAgent) ClientController.user).toString());
 	
 		branchID = ((DeliveryAgent) ClientController.user).getBranchID();
@@ -249,11 +241,6 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 		for (DeliveryPreview dp : deliveriesView) {
 			dp.setDeliveryStatusComboBox(statusCol.getCellData(dp));
 			dp.setDeliveryStatus(dp.getDeliveryStatusComboBox().getValue());
-			/**
-			 * print to check if got the new status
-			 */
-			System.out.println(dp.getDeliveryStatus());
-			System.out.println(dp.getDeliveryStatusComboBox().getValue());
 		}
 		/**
 		 * update the list that we will send to the server with the delivery arrival
@@ -306,7 +293,6 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 
 					c1.setTime(arrivedDate);
 					c2.setTime(expecteDate);
-					System.out.println(c1 + "\n" + c2);
 
 					if (arrivedDate.after(expecteDate)) {
 						System.out.println(deliveriesList.get(i).getDeliveryStatus());
@@ -315,7 +301,6 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 
 							List<String> customerDetails = ClientHandleTransmission
 									.getCustomerDetails(deliveriesList.get(i).getCustomerID());
-							System.out.println(customerDetails);
 							if (customerDetails != null) {
 								try {
 									/**
@@ -363,12 +348,6 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 			DeliveriesController.setDelivery((DeliveryPreview) deliveriesTable.getSelectionModel().getSelectedItem());
 			currDeliveryPreview = DeliveriesController.getDelivery();
 			if (currDeliveryPreview != null && DeliveriesController.getDelivery().getOrderProducts()!=null) {
-
-				System.out.println("The items in order " + DeliveriesController.getDelivery().getOrderID());
-				System.out.println("order items: " + DeliveriesController.getDelivery().getOrderProducts());
-				for (ProductInOrder pio : DeliveriesController.getDelivery().getOrderProducts()) {
-					System.out.println(pio.getNameOfItem());
-				}
 				/**
 				 * lock order button and clear the products list
 				 */
@@ -388,9 +367,6 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 				 * update dates table
 				 */
 				dates.add(DeliveriesController.getDelivery());
-				for (DeliveryPreview dp : dates) {
-					System.out.println("dates of delivey with ID " + dp.getDeliveryID());
-				}
 				datesTable.setItems(dates);
 			}
 		} catch (Exception e) {

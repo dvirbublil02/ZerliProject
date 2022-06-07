@@ -60,7 +60,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 	private Label QuaterlyYearLabel;
 
 	@FXML
-	private Button VackButon;
+	private Button BackBtn;
 
 	@FXML
 	private Button ViewButton;
@@ -121,6 +121,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 		primaryStage.setTitle("View Report Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event -> {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 		});

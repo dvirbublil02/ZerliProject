@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.ShopWorkerSurveyPageController">
@@ -139,71 +138,30 @@
                      <children>
                         <HBox prefHeight="66.0" prefWidth="1147.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="97.0">
+                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="190.0">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="71.0" text="ZerLi Login">
+                                    <Label prefHeight="17.0" prefWidth="190.0" text="ZerLi Login - Shop Worker Menu -">
                                        <padding>
                                           <Insets left="5.0" />
                                        </padding>
-                                    </Label>
-                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0">
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </Line>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="116.0">
-                                 <children>
-                                    <Label prefHeight="17.0" prefWidth="98.0" text="Customer Menu">
-                                       <padding>
-                                          <Insets left="5.0" />
-                                       </padding>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="113.0">
-                                 <children>
-                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0">
-                                       <HBox.margin>
-                                          <Insets left="5.0" />
-                                       </HBox.margin>
-                                    </Line>
-                                    <Label prefHeight="17.0" prefWidth="88.0" text="ZerLi Catalog">
-                                       <padding>
-                                          <Insets left="5.0" />
-                                       </padding>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="92.0">
-                                 <children>
-                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0">
-                                       <HBox.margin>
-                                          <Insets left="5.0" />
-                                       </HBox.margin>
-                                    </Line>
-                                    <Label text="Cart Page">
-                                       <HBox.margin>
-                                          <Insets left="5.0" />
-                                       </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="100.0">
                                  <children>
-                                    <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0">
-                                       <HBox.margin>
-                                          <Insets left="5.0" />
-                                       </HBox.margin>
-                                    </Line>
-                                    <Label text="Order Page" textFill="RED">
+                                    <Label text="Survey" textFill="#cb0606">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
                                        <padding>
                                           <Insets left="5.0" />
                                        </padding>
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                                  <opaqueInsets>
