@@ -29,6 +29,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class BranchManagerViewReportPageController implements Initializable {
@@ -113,7 +114,7 @@ public class BranchManagerViewReportPageController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/BranchManagerviewReportPage.fxml"));
 
 		Scene scene = new Scene(root);
-
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("View Report Page");
 		primaryStage.setScene(scene);
 

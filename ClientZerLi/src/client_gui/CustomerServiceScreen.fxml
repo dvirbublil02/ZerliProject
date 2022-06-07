@@ -140,6 +140,9 @@
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="Cambria Bold" size="12.0" />
+                                 </font>
                               </Label>
                               <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
                               <HBox alignment="CENTER" prefHeight="59.0" prefWidth="149.0">
@@ -148,6 +151,9 @@
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
@@ -161,6 +167,11 @@
                               <HBox alignment="CENTER" prefHeight="66.0" prefWidth="144.0" />
                            </children>
                         </HBox>
+                        <Label fx:id="timer" prefHeight="59.0" prefWidth="231.0" text="Time:" textAlignment="CENTER">
+                           <font>
+                              <Font name="Calibri Bold" size="18.0" />
+                           </font>
+                        </Label>
                      </children>
                   </HBox>
                   <HBox prefHeight="492.0" prefWidth="676.0">
@@ -178,7 +189,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="viewcomplaintsBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewcomplaintsBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Viewc Complaints" textFill="WHITE">
+                                    <Button fx:id="viewcomplaintsBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#viewcomplaintsBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="View Complaints" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
@@ -194,7 +205,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
-                                    <Button fx:id="openComplaintBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#openComplaintBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="OpenComplaint" textFill="WHITE">
+                                    <Button fx:id="openComplaintBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#openComplaintBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Open Complaint" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>

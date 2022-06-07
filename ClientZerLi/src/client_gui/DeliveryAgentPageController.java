@@ -24,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class DeliveryAgentPageController implements Initializable{
@@ -62,6 +63,7 @@ public class DeliveryAgentPageController implements Initializable{
     	Parent root = FXMLLoader.load(getClass().getResource("/client_gui/DeliveryAgentPage.fxml"));
     	Scene scene = new Scene(root);
     	stage.setTitle("Delivery Agent Menu");
+    	stage.getIcons().add(new Image("/titleImg.jpg")); //main title
     	stage.setScene(scene);
     	stage.show();
     	stage.setResizable(false);

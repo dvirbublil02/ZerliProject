@@ -22,7 +22,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -31,8 +30,6 @@ public class BranchManagerPageController implements Initializable {
 	@FXML
 	private Button addNewCustomerBtn;
 
-	@FXML
-	private Button createReportBtn;
 
 	@FXML
 	private Button editCustomerInfoBtn;
@@ -93,10 +90,6 @@ public class BranchManagerPageController implements Initializable {
 		addNewCustomer.start(primaryStage);
 	}
 
-	@FXML
-	void createReport(ActionEvent event) {
-
-	}
 
 	@FXML
 	void editCustomerInfo(ActionEvent event) throws Exception {

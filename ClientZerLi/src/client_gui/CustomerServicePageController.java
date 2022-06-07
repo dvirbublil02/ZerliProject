@@ -2,6 +2,8 @@ package client_gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import client.ClientController;
@@ -13,6 +15,7 @@ import communication.Mission;
 import communication.TransmissionPack;
 
 import entities_users.CustomerService;
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,6 +27,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -44,7 +48,8 @@ public class CustomerServicePageController implements Initializable {
 	private Label phoneNumber;
 	@FXML
 	private Label employeeType;
-
+    @FXML
+    private Label timer;
 	@FXML
 	private Button viewcomplaintsBtn;
 
@@ -55,6 +60,7 @@ public class CustomerServicePageController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CustomerServiceScreen.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Customer Service Menu");
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(event -> {
@@ -128,10 +134,24 @@ public class CustomerServicePageController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		AnimationTimer time = addingTimer();
+		time.start();
 		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
 				((CustomerService) ClientController.user).toString());
 
+	}
+	/**
+	 * add Thread timer that give the current Time on the screen
+	 * @return
+	 */
+	private AnimationTimer addingTimer() {
+		AnimationTimer time = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				timer.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			}
+		};
+		return time;
 	}
 
 }

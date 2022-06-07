@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderManagementController">
+<AnchorPane prefWidth="999.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_gui.BranchManagerOrderManagementController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1006.0">
          <children>
@@ -55,11 +55,6 @@
                               <Label fx:id="employeeType" text="Branch Manager" textFill="#323232">
                                  <font>
                                     <Font name="Corbel Bold Italic" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="entryGreeting" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome " textFill="#3c3131">
-                                 <font>
-                                    <Font name="Cambria" size="16.0" />
                                  </font>
                               </Label>
                            </children>
@@ -147,7 +142,7 @@
                      <children>
                         <HBox prefHeight="66.0" prefWidth="592.0">
                            <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="224.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="81.0" prefWidth="256.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="65.0" text="ZerLi Login">
                                        <HBox.margin>
@@ -156,11 +151,14 @@
                                        <font>
                                           <Font name="Cambria Bold" size="12.0" />
                                        </font>
+                                       <padding>
+                                          <Insets right="2.0" />
+                                       </padding>
                                     </Label>
                                     <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
-                                    <HBox alignment="CENTER" prefHeight="59.0" prefWidth="137.0">
+                                    <HBox alignment="CENTER" prefHeight="66.0" prefWidth="142.0">
                                        <children>
-                                          <Label prefHeight="17.0" prefWidth="126.0" text="Branch Manager Menu" textFill="#cb0606">
+                                          <Label prefHeight="17.0" prefWidth="136.0" text="Branch Manager Menu ">
                                              <HBox.margin>
                                                 <Insets left="5.0" />
                                              </HBox.margin>
@@ -175,7 +173,15 @@
                                     <Insets left="5.0" />
                                  </HBox.margin>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="83.0" />
+                              <HBox alignment="CENTER" prefHeight="66.0" prefWidth="175.0">
+                                 <children>
+                                    <Line endX="-100.68052673339844" endY="0.150748610496521" startX="-103.97341918945312" startY="0.10050064325332642" />
+                                    <Label prefHeight="17.0" prefWidth="117.0" text="Branch Managment" textFill="#cb0606">
+                                       <padding>
+                                          <Insets left="4.0" />
+                                       </padding>
+                                    </Label>
+                                 </children></HBox>
                               <HBox alignment="CENTER" prefHeight="66.0" prefWidth="90.0" />
                               <HBox alignment="CENTER" prefHeight="64.0" prefWidth="104.0">
                                  <children>

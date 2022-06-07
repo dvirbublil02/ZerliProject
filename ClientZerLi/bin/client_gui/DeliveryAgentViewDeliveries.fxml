@@ -203,7 +203,7 @@
                                        <children>
                                           <VBox prefHeight="600.0" prefWidth="100.0">
                                              <children>
-                                                <TableView fx:id="deliveriesTable" onMouseClicked="#ChooseDelivery" prefHeight="234.0" prefWidth="500.0">
+                                                <TableView fx:id="deliveriesTable" onMouseClicked="#ChooseDelivery" prefHeight="234.0" prefWidth="500.0" stylesheets="@Style.css">
                                                    <columns>
                                                       <TableColumn fx:id="deliveryIDCol" text="deliveryID" />
                                                       <TableColumn fx:id="orderIDCol" text="orderID" />
@@ -224,7 +224,7 @@
                                                       <HBox prefHeight="100.0" prefWidth="150.0" />
                                                       <HBox prefHeight="75.0" prefWidth="364.0">
                                                          <children>
-                                                            <TableView fx:id="datesTable" prefHeight="75.0" prefWidth="361.0">
+                                                            <TableView fx:id="datesTable" prefHeight="75.0" prefWidth="361.0" stylesheets="@Style.css">
                                                               <columns>
                                                                   <TableColumn fx:id="deliveryIDdatesTable" prefWidth="75.0" text="deliveryID" />
                                                                   <TableColumn fx:id="orderDateCol" prefWidth="125.0" text="orderDate" />

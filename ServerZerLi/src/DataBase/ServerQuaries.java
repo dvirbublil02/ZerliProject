@@ -1833,10 +1833,12 @@ public class ServerQuaries {
 			} catch (Exception e) {
 				e.printStackTrace();
 				obj.setResponse(Response.NOT_FOUND_DELIVERIES);
+				obj.setInformation(deliveries);
 				return;
 			}
 		}
 		obj.setResponse(Response.NOT_FOUND_DELIVERIES);
+		obj.setInformation(null);
 	}
 
 	/**

@@ -38,6 +38,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -144,6 +145,7 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/DeliveryAgentViewDeliveries.fxml"));
 		Scene scene = new Scene(root);
 		stage.setTitle("Delivery Agent View Delivieries");
+		stage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		stage.setScene(scene);
 		stage.show();
     	stage.setResizable(false);
@@ -360,7 +362,7 @@ public class DeliveryAgentViewDeliveriesController implements Initializable {
 			 */
 			DeliveriesController.setDelivery((DeliveryPreview) deliveriesTable.getSelectionModel().getSelectedItem());
 			currDeliveryPreview = DeliveriesController.getDelivery();
-			if (currDeliveryPreview != null) {
+			if (currDeliveryPreview != null && DeliveriesController.getDelivery().getOrderProducts()!=null) {
 
 				System.out.println("The items in order " + DeliveriesController.getDelivery().getOrderID());
 				System.out.println("order items: " + DeliveriesController.getDelivery().getOrderProducts());

@@ -371,7 +371,7 @@ public class OrderPageController implements Initializable{
 					if(deliveryRadio.isSelected())
 					{
 						successCreateDeilivery = ClientHandleTransmission.addDelivery(0,orderID,getBranchName.getValue(),dateFormat.format(orderDate),expectedDelivery.toString()
-								,reciverName+reciverLastName,address,phoneNumberStart+phoneNumberEnd);
+								,reciverName+" "+reciverLastName,address,phoneNumberStart+phoneNumberEnd);
 						
 						if(!successCreateDeilivery) {
 							System.out.println("problem with create delivery ");
@@ -380,7 +380,7 @@ public class OrderPageController implements Initializable{
 					else if(ImidiateOrderRadio.isSelected())
 					{
 						successCreateDeilivery = ClientHandleTransmission.addDelivery(0,orderID,getBranchName.getValue(),dateFormat.format(d1),dateFormat.format(d2)
-								,reciverName+reciverLastName,address,phoneNumberStart+phoneNumberEnd);
+								,reciverName+" "+reciverLastName,address,phoneNumberStart+phoneNumberEnd);
 						
 						if(!successCreateDeilivery) {
 							System.out.println("problem with create delivery ");
