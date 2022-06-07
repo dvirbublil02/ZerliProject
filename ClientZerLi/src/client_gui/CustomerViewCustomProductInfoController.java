@@ -27,6 +27,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
@@ -65,10 +66,12 @@ public class CustomerViewCustomProductInfoController implements Initializable {
 	public void start(Stage primaryStage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CustomerViewCustomProductInfo.fxml"));
 		Scene scene = new Scene(root);
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); // main title
 		primaryStage.setTitle(customName+" - custom Product Details Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		
+		primaryStage.setResizable(false);
+
 		
 		//need to update list of product inside OrderHandleController 
 		primaryStage.setOnCloseRequest(event ->{

@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class DeliveryAgentViewOrderController implements Initializable {
@@ -56,6 +57,7 @@ public class DeliveryAgentViewOrderController implements Initializable {
 			Parent root = FXMLLoader.load(getClass().getResource("/client_gui/DeliveryAgentViewOrder.fxml"));
 			Scene scene = new Scene(root);
 			stage.setTitle("Delivery Agent View Order");
+			stage.getIcons().add(new Image("/titleImg.jpg")); //main title
 			stage.setScene(scene);
 			stage.show();
 	    	stage.setResizable(false);

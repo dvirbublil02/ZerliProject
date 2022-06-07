@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.ClientController;
+import client.ClientHandleTransmission;
 import client.ReportHandleController;
+import entities_users.BranchManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,9 +21,25 @@ import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class ComplaintsReportController implements Initializable {
+
+	@FXML
+	private Label accountStatus;
+
+	@FXML
+	private Label branch;
+
+	@FXML
+	private Label phoneNumber;
+
+	@FXML
+	private Label userName;
+
+	@FXML
+	private Label userRole;
 
 	@FXML
 	private Button BackBtn;
@@ -33,6 +52,8 @@ public class ComplaintsReportController implements Initializable {
 
 	@FXML
 	private Label satisfactionPercentage;
+
+	private String branchID, branchName;
 
 	@FXML
 	void back(ActionEvent event) {
@@ -68,16 +89,28 @@ public class ComplaintsReportController implements Initializable {
 	public void start(Stage stage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/ComplaintsReportPage.fxml"));
 		Scene scene = new Scene(root);
+		stage.getIcons().add(new Image("/titleImg.jpg")); // main title
 		stage.setTitle("Complaints Quarterly Report Page");
 		stage.setScene(scene);
 		stage.show();
+		stage.setOnCloseRequest(event -> {
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+		});
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	// @Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		ClientController.initalizeUserDetails(userName, phoneNumber, accountStatus, null, userRole,
+				((BranchManager) ClientController.user).toString());
+
+		branchID = ((BranchManager) ClientController.user).getBranchID();
+		branchName = ClientHandleTransmission.getBranchName(branchID);
+		branch.setText(" " + branchName + " (" + branchID + ")");
+
 		reportOnList = ReportHandleController.getComplaintsReportResult();
-		
+
 		// LineChart
 		XYChart.Series series = new XYChart.Series();
 		XYChart.Series series2 = new XYChart.Series();

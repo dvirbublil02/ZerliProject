@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class PopupSecondIncomeQuarterlyReportsController  implements Initializable {
@@ -35,11 +36,10 @@ public class PopupSecondIncomeQuarterlyReportsController  implements Initializab
 	List<String> reportInfo = new ArrayList();
     public void start(Stage primaryStage) throws IOException {
     	Parent root = FXMLLoader.load(getClass().getResource("/client_gui/SecondIncomeQuarterlyReportsPage.fxml"));
-    	
     	Scene scene = new Scene(root);
-    	
     	primaryStage.setTitle("Income second quarterly Report Page");
-    	
+    	primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
+    	primaryStage.setResizable(false);
     	primaryStage.setScene(scene);
     	primaryStage.show();
     	primaryStage.setOnCloseRequest(event -> {

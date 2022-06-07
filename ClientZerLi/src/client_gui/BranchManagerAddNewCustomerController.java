@@ -35,14 +35,15 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
- * This class is to GUI of add new customer from the branch manager side.
- * Here there is a table with the pending customer who wait for approval.
+ * This class is to GUI of add new customer from the branch manager side. Here
+ * there is a table with the pending customer who wait for approval.
+ * 
  * @author Omri Shalev
  */
 public class BranchManagerAddNewCustomerController implements Initializable {
-/**
- * those labels are to update the left side of the screen with the user details 
- */
+	/**
+	 * those labels are to update the left side of the screen with the user details
+	 */
 	@FXML
 	private Label accountStatusLbl;
 
@@ -51,10 +52,10 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 
 	@FXML
 	private Label branchManagerNameLbl;
-	
+
 	@FXML
 	private Label phoneNumberLbl;
-	
+
 	@FXML
 	private Label userRoleLbl;
 
@@ -75,21 +76,21 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 
 	@FXML
 	private Button BackBtn;
-	
+
 	@FXML
-    private Button creditCardInfo;
-	
+	private Button creditCardInfo;
+
 	@FXML
-    private Button cvvInfo;
+	private Button cvvInfo;
 
 	@FXML
 	private TextField CvvTxt;
 
 	@FXML
 	private Label SuccessFailedLbl;
-	
-    @FXML
-    private Label timer;
+
+	@FXML
+	private Label timer;
 
 	@FXML
 	private ComboBox<String> MonthComboBox;
@@ -144,14 +145,13 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	 * the list that will contain the customers from DB we will use this list to get
 	 * details from the DB and then send this details to an observable list.
 	 */
-	private	List<Customer> pendingCustomers; //
+	private List<Customer> pendingCustomers; //
 
-	private	Customer customer = null;
+	private Customer customer = null;
 
-	private	CreditCard cc = null;
-	
+	private CreditCard cc = null;
+
 	String branchID, branchName;
-
 
 	/**
 	 * initialize the page at the start create the pending customer table and fill
@@ -162,8 +162,8 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		/*
 		 * get the user details to the left side of the screen
 		 */
-		ClientController.initalizeUserDetails(branchManagerNameLbl, phoneNumberLbl, accountStatusLbl, welcomeUserNameLbl, userRoleLbl,
-				((BranchManager) ClientController.user).toString());
+		ClientController.initalizeUserDetails(branchManagerNameLbl, phoneNumberLbl, accountStatusLbl,
+				welcomeUserNameLbl, userRoleLbl, ((BranchManager) ClientController.user).toString());
 
 		branchID = ((BranchManager) ClientController.user).getBranchID();
 		branchName = ClientHandleTransmission.getBranchName(branchID);
@@ -182,7 +182,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		 * at start lock the remove product button
 		 */
 		ApproveBtn.setDisable(true);
-		
+
 		IDCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("ID"));
 		firstNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
 		lastNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
@@ -202,7 +202,6 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 			customers.add(customer);
 		}
 		table.setItems(customers);
-		
 
 	}
 
@@ -216,7 +215,7 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/AddNewCustomerPage.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Add New Customer");
-		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); // main title
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setResizable(false);
@@ -242,10 +241,8 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		creditCardCVV = CvvTxt.getText();
 		ExpirationMonth = MonthComboBox.getValue();
 		ExpirationYear = YearComboBox.getValue();
-		System.out.println(creditCardNumber + " " + creditCardCVV + " " + ExpirationMonth + " " + ExpirationYear); // check
 		List<String> cardsNumbers = ClientHandleTransmission.getCreditCards();
 		for (String card : cardsNumbers) {
-			System.out.println(card); // check cards list
 			if (card.equals(creditCardNumber)) {
 				CreditCardNumberLbl.setText("Credit Card Already Exist");
 				CreditCardNumberLbl.setTextFill(Color.RED);
@@ -254,7 +251,6 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 				return;
 			}
 		}
-		System.out.println("Card number is not exist in DB"); // check
 
 		// if one of the fields is empty we can not approve this account
 		if (creditCardNumTxt.getText().length() != 16) {
@@ -295,8 +291,6 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 		} else {
 			// create credit card
 			cc = new CreditCard(creditCardNumber, creditCardCVV, ExpirationMonth + "-" + ExpirationYear);
-			System.out.println("Credit Card: " + cc.getCreditCardNumber() + " " + cc.getCreditCardCvvCode() + " "
-					+ cc.getCreditCardDateOfExpiration());
 
 			// if every thing is OK so we approve the customer
 			customer.setCreditCard(cc);
@@ -345,23 +339,8 @@ public class BranchManagerAddNewCustomerController implements Initializable {
 	public void OnMouseClickChooseCustomer(MouseEvent event) {
 		try {
 			customer = table.getSelectionModel().getSelectedItem();
-			System.out.println("index " + table.getSelectionModel().getSelectedIndex());
 			if (customer != null)
 				ApproveBtn.setDisable(false);
-			// check the customer we point on
-//			System.out.println(customer.getID());
-//			System.out.println(customer.getFirstName());
-//			System.out.println(customer.getLastName());
-//			System.out.println(customer.getEmail());
-//			System.out.println(customer.getPhoneNumber());
-//			System.out.println(customer.getAccountStatus());
-//			System.out.println(customer.getBalance());
-//			System.out.println(customer.getIsLoggedIn());
-//			System.out.println(customer.getIsNewCustomer());
-//			System.out.println(customer.getCreditCard().getCreditCardNumber());
-//			System.out.println(customer.getCreditCard().getCreditCardCvvCode());
-//			System.out.println(customer.getCreditCard().getCreditCardDateOfExpiration());
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

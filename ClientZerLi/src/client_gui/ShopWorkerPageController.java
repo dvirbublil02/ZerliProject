@@ -10,7 +10,9 @@ import client.ClientUI;
 import client.SurveyHandle;
 import communication.Mission;
 import communication.TransmissionPack;
+import entities_users.DeliveryAgent;
 import entities_users.ShopWorker;
+import enums.AccountStatus;
 import enums.Branches;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 /**
  * class discrition:
@@ -47,18 +50,23 @@ public class ShopWorkerPageController implements Initializable{
     @FXML
     private Label branchName;
 
-	@FXML
-	private Button viewcomplaintsBtn;
+    @FXML
+    private Button branchSurveyBtn;
 
-	@FXML
-	private Button viewQuarterlyReportBtn;
+    @FXML
+    private Button customerServiceBtn;
+
+    @FXML
+    private Button SalesSurvey;
 
 	public void start(Stage primaryStage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/ShopWorkerPage.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Shop Worker Menu");
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event -> {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 		});
@@ -131,5 +139,10 @@ public class ShopWorkerPageController implements Initializable{
 		ClientController.initalizeUserDetails(employeeName, phoneNumber, accountStatus, entryGreeting, employeeType,
 				((ShopWorker) ClientController.user).toString());
 
+		if (((ShopWorker) ClientController.user).getAccountStatus() == AccountStatus.FROZEN) {
+			branchSurveyBtn.setDisable(true);
+			customerServiceBtn.setDisable(true);
+			SalesSurvey.setDisable(true);
+		}
 	}
 }

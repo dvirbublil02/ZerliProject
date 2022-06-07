@@ -109,12 +109,12 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="Branch Name">
+                        <Label text=" Branch Name">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="branchName" text="CONFIRMED" textFill="#9a9a9a">
+                        <Label fx:id="branchName" text=" CONFIRMED" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -150,14 +150,20 @@
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="Cambria Bold" size="12.0" />
+                                 </font>
                               </Label>
                               <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
                               <HBox alignment="CENTER" prefHeight="59.0" prefWidth="149.0">
                                  <children>
-                                    <Label prefHeight="18.0" prefWidth="138.0" text="Customer Service Menu" textFill="RED">
+                                    <Label prefHeight="18.0" prefWidth="138.0" text="Customer Service Menu" textFill="#cb0606">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
@@ -188,11 +194,11 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#CustomerServiceSurveyBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Customer Service Survey" textFill="WHITE">
+                                    <Button fx:id="customerServiceBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#CustomerServiceSurveyBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Customer Service Survey" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
-                                                <Image url="@../javafx_images/ViewMouthlyReport.png" />
+                                                <Image url="@../javafx_images/customerSurvey.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -204,11 +210,11 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
-                                    <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#SalsesSurveyBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Sales Survey" textFill="WHITE">
+                                    <Button fx:id="SalesSurvey" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#SalsesSurveyBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Sales Survey" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
-                                                <Image url="@../javafx_images/ViewMouthlyReport.png" />
+                                                <Image url="@../javafx_images/SalesSurvey.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -219,11 +225,11 @@
                                  </children></HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                                  <children>
-                                    <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#BranchSurveyBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Customer Service Survey" textFill="WHITE">
+                                    <Button fx:id="branchSurveyBtn" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#BranchSurveyBtn" prefHeight="175.0" prefWidth="198.0" styleClass="buttonMenu" stylesheets="@CustomerPageStyle.css" text="Specific Branch Survey" textFill="WHITE">
                                        <graphic>
                                           <ImageView fitHeight="69.0" fitWidth="86.0">
                                              <image>
-                                                <Image url="@../javafx_images/ViewMouthlyReport.png" />
+                                                <Image url="@../javafx_images/speicalSurvey.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>

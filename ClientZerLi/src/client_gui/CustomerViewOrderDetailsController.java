@@ -78,10 +78,11 @@ public class CustomerViewOrderDetailsController implements Initializable{
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/CustomerViewOrderDetails.fxml"));
 
 		Scene scene = new Scene(root);
-
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("Customer Order Details");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event -> {
 			OrderHandleController.setDetailsAllreadyOpen2(false);
 		});

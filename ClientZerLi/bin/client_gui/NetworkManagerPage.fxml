@@ -41,7 +41,7 @@
                               <Image url="@../javafx_images/userImageSideScreen.png" />
                            </image>
                         </ImageView>
-                        <Label text="Alice Smith" textFill="WHITE">
+                        <Label fx:id="userName" text="Alice Smith" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="2.0" />
                            </VBox.margin>
@@ -49,12 +49,12 @@
                               <Font name="Corbel Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label text="Manager" textFill="#323232">
+                        <Label fx:id="userRole" text="Manager" textFill="#323232">
                            <font>
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back Alice !" textFill="#3c3131">
+                        <Label fx:id="welcome" alignment="CENTER" prefHeight="79.0" prefWidth="207.0" text="Welcome Back Alice !" textFill="#3c3131">
                            <font>
                               <Font name="Cambria" size="16.0" />
                            </font>
@@ -85,7 +85,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="+972-524667888" textFill="#9a9a9a">
+                        <Label fx:id="phoneNumber" text="+972-524667888" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -101,7 +101,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="CONFIRMED" textFill="#9a9a9a">
+                        <Label fx:id="accountStatus" text="CONFIRMED" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -140,14 +140,20 @@
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="Cambria Bold" size="12.0" />
+                                 </font>
                               </Label>
                               <Line endX="-83.70710754394531" endY="0.050252676010131836" startX="-80.0" />
                               <HBox alignment="CENTER" prefHeight="59.0" prefWidth="91.0">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="117.0" text="Manager Menu" textFill="RED">
+                                    <Label prefHeight="17.0" prefWidth="117.0" text="Manager Menu" textFill="#cb0606">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>

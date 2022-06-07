@@ -33,6 +33,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -85,13 +86,15 @@ public class OrderReportsController implements Initializable {
 
 	public void start(Stage stage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/OrderReportsPage.fxml"));
-
 		Scene scene = new Scene(root);
-
 		stage.setTitle("Order Report Page");
-
+		stage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		stage.setScene(scene);
 		stage.show();
+    	stage.setResizable(false);
+    	stage.setOnCloseRequest(event -> {
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+		});
 	}
 
 	@Override

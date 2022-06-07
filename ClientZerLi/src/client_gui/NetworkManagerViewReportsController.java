@@ -7,7 +7,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
-
 import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
@@ -15,6 +14,7 @@ import client.ReportHandleController;
 import communication.TransmissionPack;
 import entities_reports.Report;
 import entities_users.BranchManager;
+import entities_users.DeliveryAgent;
 import entities_users.NetworkManager;
 import enums.Branches;
 import javafx.animation.AnimationTimer;
@@ -31,26 +31,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class NetworkManagerViewReportsController implements Initializable {
-	 @FXML
-	    private Label timer;
+	@FXML
+	private Label timer;
 
 	@FXML
 	private Button BackBtn;
 
 	@FXML
-	private Label accountStatusLbl;
-
-	@FXML
 	private CheckBox monthlyReportsRadioBtn;
-
-	@FXML
-	private Label networkManagerNameLbl;
-
-	@FXML
-	private Label phoneNumberLbl;
 
 	@FXML
 	private ComboBox<String> pickMonthMonthlyCB;
@@ -74,7 +66,6 @@ public class NetworkManagerViewReportsController implements Initializable {
 	@FXML
 	private ComboBox<String> pickYearQuarterlyCB;
 
-
 	@FXML
 	private CheckBox quarterlyReportsRadioBtn;
 
@@ -87,6 +78,15 @@ public class NetworkManagerViewReportsController implements Initializable {
 	@FXML
 	private Label welcomeBackUserNameLbl;
 
+	@FXML
+	private Label networkManagerNameLbl;
+
+	@FXML
+	private Label phoneNumberLbl;
+
+	@FXML
+	private Label accountStatusLbl;
+
 	/**
 	 * load the page to the screen
 	 * 
@@ -97,8 +97,13 @@ public class NetworkManagerViewReportsController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/NetworkManagerViewReports.fxml"));
 		Scene scene = new Scene(root);
 		stage.setTitle("Network Manager View Reports");
+		stage.getIcons().add(new Image("/titleImg.jpg")); // main title
 		stage.setScene(scene);
 		stage.show();
+		stage.setResizable(false);
+		stage.setOnCloseRequest(event -> {
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+		});
 	}
 
 	private ObservableList<String> reportTypeList;
@@ -111,9 +116,11 @@ public class NetworkManagerViewReportsController implements Initializable {
 	private ObservableList<String> quarterlyYearList;
 	private ObservableList<Branches> branchesObser;
 
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		ClientController.initalizeUserDetails(networkManagerNameLbl, phoneNumberLbl, accountStatusLbl, null,
+				userRoleLbl, ((NetworkManager) ClientController.user).toString());
+
 		AnimationTimer time = addingTimer();
 		time.start();
 		pickMonthMonthlyCB.setDisable(true);
@@ -124,11 +131,9 @@ public class NetworkManagerViewReportsController implements Initializable {
 		pickYearForMonthlyCB.setDisable(true);
 		pickYearQuarterlyCB.setDisable(true);
 
-
 		quarterlyReportsRadioBtn.setDisable(false);
 
 		monthlyReportsRadioBtn.setDisable(false);
-
 
 		reportTypeList = FXCollections.observableArrayList("Income", "Orders");
 		pickTypeMonthlyCB.setItems(reportTypeList);
@@ -164,12 +169,11 @@ public class NetworkManagerViewReportsController implements Initializable {
 		pickTypeQuarterly = FXCollections.observableArrayList("Income");
 		pickTypeQuarterlyCB.setItems(pickTypeQuarterly);
 		// need to add the branches after merge geting almog method.
-		List<Branches> brances=ClientHandleTransmission.getBranches();
-		if(brances.size() != 0) {
+		List<Branches> brances = ClientHandleTransmission.getBranches();
+		if (brances.size() != 0) {
 			branchesObser.addAll(brances);
 		}
 		PickBranch.setItems(branchesObser);
-
 
 	}
 
@@ -195,15 +199,11 @@ public class NetworkManagerViewReportsController implements Initializable {
 			pickYearForMonthlyCB.setDisable(false);
 			quarterlyReportsRadioBtn.setDisable(true);
 
-
-
 		} else {
 			pickMonthMonthlyCB.setDisable(true);
 			pickTypeMonthlyCB.setDisable(true);
 			pickYearForMonthlyCB.setDisable(true);
 			quarterlyReportsRadioBtn.setDisable(false);
-
-
 
 		}
 	}
@@ -224,8 +224,6 @@ public class NetworkManagerViewReportsController implements Initializable {
 			pickQuarterQuarterlyCB.setDisable(true);
 			monthlyReportsRadioBtn.setDisable(false);
 
-
-
 		}
 	}
 
@@ -233,8 +231,8 @@ public class NetworkManagerViewReportsController implements Initializable {
 
 	void Submit(ActionEvent event) throws IOException {
 		if (quarterlyReportsRadioBtn.isSelected()) {
-			if (ClientHandleTransmission.getQuarterIncomeReport(String.valueOf(PickBranch.getValue().getNumber()), pickYearQuarterlyCB.getValue(),
-					pickQuarterQuarterlyCB.getValue().toUpperCase())) {
+			if (ClientHandleTransmission.getQuarterIncomeReport(String.valueOf(PickBranch.getValue().getNumber()),
+					pickYearQuarterlyCB.getValue(), pickQuarterQuarterlyCB.getValue().toUpperCase())) {
 				((Node) event.getSource()).getScene().getWindow().hide(); // hiding window
 				Stage primaryStage = new Stage();
 				IncomeQuarterlyReportsController orderReport = new IncomeQuarterlyReportsController();
@@ -245,8 +243,8 @@ public class NetworkManagerViewReportsController implements Initializable {
 			}
 		} else {
 			if (monthlyReportsRadioBtn.isSelected()) {
-				if (ClientHandleTransmission.getMonthlyReport(String.valueOf(PickBranch.getValue().getNumber()), pickYearForMonthlyCB.getValue(),
-						pickMonthMonthlyCB.getValue(), pickTypeMonthlyCB.getValue())) {
+				if (ClientHandleTransmission.getMonthlyReport(String.valueOf(PickBranch.getValue().getNumber()),
+						pickYearForMonthlyCB.getValue(), pickMonthMonthlyCB.getValue(), pickTypeMonthlyCB.getValue())) {
 					TransmissionPack tp = ClientUI.chat.getObj();
 					Report returned = ((Report) tp.getInformation());
 					ReportHandleController.setUserReport((NetworkManager) ClientController.user); // down cast
@@ -272,8 +270,10 @@ public class NetworkManagerViewReportsController implements Initializable {
 
 		}
 	}
+
 	/**
 	 * add Thread timer that give the current Time on the screen
+	 * 
 	 * @return
 	 */
 	private AnimationTimer addingTimer() {

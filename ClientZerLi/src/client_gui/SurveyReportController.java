@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
@@ -26,7 +24,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import client.ClientController;
 import client.ClientHandleTransmission;
 import client.ClientUI;
-import client.OrderHandleController;
 import client.ReportHandleController;
 import client.popMessageHandler;
 import communication.Mission;
@@ -89,6 +86,10 @@ public class SurveyReportController implements Initializable {
 		stage.setTitle("Surver Report View Reports");
 		stage.setScene(scene);
 		stage.show();
+		stage.setResizable(false);
+		stage.setOnCloseRequest(event -> {
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+		});
 	}
 
 	@FXML

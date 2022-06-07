@@ -29,6 +29,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -94,6 +95,7 @@ public class ComplaintsPageController implements Initializable {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/ComplaintsPage.fxml"));
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Complaints");
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(event -> {

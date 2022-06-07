@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 /**
  * this class is presenting to the branch manager the relevant products in order 
@@ -31,8 +32,6 @@ public class BranchManagerOrderDetailsController implements Initializable{
 
     @FXML
     private TableView<ProductInOrder> Orders;
-
-   
 
     @FXML
     private TableColumn<ProductInOrder, String> nameCol;
@@ -59,6 +58,7 @@ public class BranchManagerOrderDetailsController implements Initializable{
 	public void start(Stage primaryStage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/BranchManagerOrderDetails.fxml"));
 		Scene scene = new Scene(root);
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("Order Details");
 		primaryStage.setScene(scene);
 		primaryStage.show();		

@@ -95,6 +95,7 @@ public class ComplaintOpenComplaintController implements Initializable {
 		primaryStage.setTitle("Open Complaint Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event -> {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 		});

@@ -31,6 +31,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -114,9 +115,11 @@ public class ShopWorkerSurveyPageController implements Initializable {
 
 		Scene scene = new Scene(root);
 
+		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("Insert Survey Answers Page");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(event -> {
 			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
 		});

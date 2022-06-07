@@ -125,13 +125,14 @@ public class BranchManagerEditUserController implements Initializable {
 
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/client_gui/BranchManagerEditUserPage.fxml"));
-
 		Scene scene = new Scene(root);
 		primaryStage.getIcons().add(new Image("/titleImg.jpg")); //main title
 		primaryStage.setTitle("edit user's deatails Page");
 		primaryStage.setScene(scene);
-
 		primaryStage.show();
+		primaryStage.setOnCloseRequest(event -> {
+			ClientHandleTransmission.DISCONNECT_FROM_SERVER();
+		});
 	}
 
 	@Override

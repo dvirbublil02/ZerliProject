@@ -41,7 +41,7 @@
                               <Image url="@../javafx_images/userImageSideScreen.png" />
                            </image>
                         </ImageView>
-                        <Label text="Eran Smith" textFill="WHITE">
+                        <Label fx:id="userName" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="2.0" />
                            </VBox.margin>
@@ -49,7 +49,7 @@
                               <Font name="Corbel Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label text=" Branch Manager" textFill="#323232">
+                        <Label fx:id="userRole" textFill="#323232">
                            <font>
                               <Font name="Corbel Bold Italic" size="16.0" />
                            </font>
@@ -80,7 +80,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="+972-524667888" textFill="#9a9a9a">
+                        <Label fx:id="phoneNumber" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -96,7 +96,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="CONFIRMED" textFill="#9a9a9a">
+                        <Label fx:id="accountStatus" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -112,7 +112,7 @@
                               <Insets left="5.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="&quot;Karmial&quot;, B.id 5" textFill="#9a9a9a">
+                        <Label fx:id="branch" textFill="#9a9a9a">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -153,6 +153,9 @@
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                                  <HBox.margin>
@@ -170,6 +173,9 @@
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
@@ -184,6 +190,9 @@
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font name="Cambria Bold" size="12.0" />
+                                       </font>
                                     </Label>
                                  </children>
                               </HBox>
@@ -196,10 +205,13 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="61.0" prefWidth="127.0">
                                        <children>
-                                          <Label prefHeight="18.0" prefWidth="129.0" text="July Income Report" textFill="RED">
+                                          <Label prefHeight="18.0" prefWidth="129.0" text="July Income Report" textFill="#cb0606">
                                              <HBox.margin>
                                                 <Insets left="5.0" />
                                              </HBox.margin>
+                                             <font>
+                                                <Font name="Cambria Bold" size="12.0" />
+                                             </font>
                                           </Label>
                                        </children>
                                     </HBox>
@@ -210,7 +222,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="57.0" prefWidth="692.0">
                            <children>
-                              <Label fx:id="complaintsQuarterTitle" text="Zerli Karmiel - 1st Quarter complaints report 2022" textFill="#434343">
+                              <Label fx:id="complaintsQuarterTitle" text="Zerli Karmiel - 1st Quarter complaints report 2022" textFill="#11862a">
                                  <font>
                                     <Font name="Cambria Bold" size="18.0" />
                                  </font>
